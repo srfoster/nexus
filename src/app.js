@@ -17,9 +17,9 @@ app.use(cors())
 
 // epStart = EndPointStart, this automatically changes the server test
 const epStart = '/';
-const subnauticaGreet = 'Welcome aboard Captain, all systems online.';
+const startupGreet = 'Welcome aboard Captain, all systems online.';
 app.get(epStart, (req, res) => {
-  res.send(subnauticaGreet)
+  res.send(startupGreet)
 })
 
 app.use(function errorHandler(error, req, res, next) {
@@ -33,4 +33,4 @@ app.use(function errorHandler(error, req, res, next) {
   res.status(500).json(response);
 });
 
-module.exports = { app, epStart, subnauticaGreet }
+module.exports = { app, epStart, startupGreet }
