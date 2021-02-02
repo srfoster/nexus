@@ -15,12 +15,17 @@ app.use(morgan(morganOption))
 app.use(helmet())
 app.use(cors())
 
-// epStart = EndPointStart, this automatically changes the server test
-const epStart = '/';
-const startupGreet = 'Welcome aboard Captain, all systems online.';
-app.get(epStart, (req, res) => {
-  res.send(startupGreet)
+let epHome = '/'
+let epLogin = '/login'
+let epSignup = '/signup'
+let epSpellIndex = '/spells'
+let epSpellView = '/spells/:id'
+
+app.get(epSpellIndex, (req, res) => {
+  res.send([])
 })
+
+
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
@@ -33,4 +38,4 @@ app.use(function errorHandler(error, req, res, next) {
   res.status(500).json(response);
 });
 
-module.exports = { app, epStart, startupGreet }
+module.exports = { app, epHome, epLogin, epSignup, epSpellIndex, epSpellView }
