@@ -1,3 +1,65 @@
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
+function makeUsersArray() {
+  let password = 'password';
+  return [
+    {
+      id: 1,
+      username: 'test-user-1',
+      password: bcrypt.hash(password, 12),
+      date_created: new Date('2029-01-22T16:28:32.615Z'),
+    },
+    {
+      id: 2,
+      username: 'test-user-2',
+      password: bcrypt.hash(password, 12),
+      date_created: new Date('2029-01-22T16:28:32.615Z'),
+    },
+    {
+      id: 3,
+      username: 'test-user-3',
+      password: bcrypt.hash(password, 12),
+      date_created: new Date('2029-01-22T16:28:32.615Z'),
+    },
+    {
+      id: 4,
+      username: 'test-user-4',
+      password: bcrypt.hash(password, 12),
+      date_created: new Date('2029-01-22T16:28:32.615Z'),
+    },
+  ]
+}
+
+function makeSpellsArray() {
+  return [
+    {
+      id: 1,
+      user_id: 1,
+      name: 'Apple Storm',
+      text: '(Hello World)',
+      description: 'Swirling storm of apples',
+      date_created: new Date('2029-01-22T16:28:32.615Z'),
+    },
+    {
+      id: 2,
+      user_id: 1,
+      name: 'Cozy Cabin',
+      text: '(Hello World)',
+      description: 'Summons a log cabin',
+      date_created: new Date('2029-01-22T16:28:32.615Z'),
+    },
+    {
+      id: 3,
+      user_id: 3,
+      name: 'Fire ball',
+      text: '(Hello World)',
+      description: 'Summons a log cabin',
+      date_created: new Date('2029-01-22T16:28:32.615Z'),
+    }
+  ]
+}
+
 function cleanTables(db) {
   return db.transaction(trx =>
     trx.raw(
@@ -17,6 +79,55 @@ function cleanTables(db) {
   )
 }
 
+function makeSpellFixtures() {
+  const testUsers = makeUsersArray()
+  const testSpells = makeSpellsArray()
+  return { testUsers, testSpells }
+}
+
+function seedUsers(db, users) {
+  const preppedUsers = users.map(user => ({
+    ...user,
+    // password: bcrypt.hashSync(user.password, 1)
+  }))
+  return db.into('users').insert(preppedUsers)
+    .then(() =>
+      // update the auto sequence to stay in sync
+      db.raw(
+        `SELECT setval('users_id_seq', ?)`,
+        [users[users.length - 1].id],
+      )
+    )
+}
+
+function seedSpells(db, spells) {
+  const preppedSpells = spells.map(spell => ({
+    ...spell
+  }))
+  return db.into('spells').insert(preppedSpells)
+    .then(() =>
+      // update the auto sequence to stay in sync
+      db.raw(
+        `SELECT setval('spells_id_seq', ?)`,
+        [spells[spells.length - 1].id],
+      )
+    )
+}
+
+function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+  const token = jwt.sign({ user_id: user.id }, secret, {
+    subject: user.username,
+    algorithm: 'HS256',
+  })
+  return `Bearer ${token}`
+}
+
 module.exports = {
+  makeUsersArray,
+  makeSpellsArray,
   cleanTables,
+  makeSpellFixtures,
+  seedUsers,
+  seedSpells,
+  makeAuthHeader
 }

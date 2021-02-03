@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
+const { requireAuth } = require('./middleware/jwt-auth')
 
 const app = express()
 
@@ -21,8 +22,12 @@ let epSignup = '/signup'
 let epSpellIndex = '/spells'
 let epSpellView = '/spells/:id'
 
-app.get(epSpellIndex, (req, res) => {
-  res.send([])
+app.get(epSpellIndex, requireAuth, (req, res) => {
+  req.app.get('db')('spells')
+    .where({user_id: req.user.id})
+    .then((displaySpells) => {
+        res.send(displaySpells)
+    })
 })
 
 
