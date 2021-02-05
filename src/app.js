@@ -5,6 +5,7 @@ const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
 const { requireAuth } = require('./middleware/jwt-auth')
+const jsonBodyParser = express.json()
 
 const app = express()
 
@@ -15,6 +16,7 @@ const morganOption = (NODE_ENV === 'production')
 app.use(morgan(morganOption))
 app.use(helmet())
 app.use(cors())
+app.use(jsonBodyParser)
 
 let epHome = '/'
 let epLogin = '/login'
@@ -30,6 +32,13 @@ app.get(epSpellIndex, requireAuth, (req, res) => {
     })
 })
 
+app.post(epLogin, (req, res) => {
+  req.app.get('db')('users')
+    .where({username: req.body.username})
+    .then((displayUsers) => {
+      console.log("User retrieved", displayUsers);
+    })
+})
 
 
 app.use(function errorHandler(error, req, res, next) {

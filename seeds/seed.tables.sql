@@ -7,6 +7,7 @@ TRUNCATE
 
 INSERT INTO users (username, password)
 VALUES
+  ('dunder', '$2a$12$lHK6LVpc15/ZROZcKU00QeiD.RyYq5dVlV/9m4kKYbGibkRc5l4Ne'),
   ('testUser1', 'password'),
   ('testUser2', 'password'),
   ('testUser3', 'password');

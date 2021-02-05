@@ -7,9 +7,7 @@ const helpers = require('./test-helpers')
   start of front end to display data from /spells
   front end wireframe
 */
-/*
-  Integrate passport.js
-*/
+
 
 describe('App', () => {
   let db
@@ -53,7 +51,6 @@ describe('App', () => {
         .get(epSpellIndex)
         .expect(401)
     })
-    // FIXME: Test should only return spells belonging to user
     it(`GET ${epSpellIndex} responds with 200 containing the logged in user's spells in the database`, () => {
       return supertest(app)
         .get(epSpellIndex)
