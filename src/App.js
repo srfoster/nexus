@@ -4,6 +4,7 @@ import { Switch, Route, Link } from "react-router-dom";
 import AuthApiService from './Services/auth-api-service';
 import TokenService from './Services/token-service'
 import config from './config'
+import {UnControlled as CodeMirror} from 'react-codemirror2'
 
 
 const LoginForm = (props) => {
@@ -23,6 +24,7 @@ const LoginForm = (props) => {
         username.value = ''
         password.value = ''
         // props.onLoginSuccess()
+        handleLoginSuccess()
       })
       .catch(res => {
         setError(res.error);
@@ -82,13 +84,20 @@ const SignupForm = (props) => {
         username.value = ''
         password.value = ''
         passwordVerify.value = ''
-        props.onSignupSuccess()
+        handleSignupSuccess()
       })
       .catch(res => {
         setError(res.error);
       })
     }
   
+    const handleSignupSuccess = () => {
+      const { history } = props
+      history.push('/spells')
+      // if(props.onLogin){
+      //   props.onLogin(true);
+      // }
+    }
 
     return (
     <>
@@ -162,7 +171,7 @@ const Header = (props) => {
   ) 
 }
 
-function SpellViewer() {
+function SpellIndex() {
   const [spells, setSpells] = useState([])
   
 
@@ -186,7 +195,57 @@ function SpellViewer() {
 
   return (
     <>
-      Spells: {spells.length}
+    {console.log(spells)}
+      Spells: {spells.length} <br/>
+      {/* {spells[0].name} */}
+      {spells.map(spell => {
+        return (
+          <div>
+            <Link to={`/spells/${spell.id}`}>{spell.name}</Link>
+            {spell.description}
+          </div>
+        )
+      })}
+    </>
+  )
+}
+
+function SpellShow(props) {
+  const [spell, setSpell] = useState()
+
+  useEffect(() => {
+    const { id } = props.match.params
+
+    return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+      
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+      .then(spell => setSpell(spell))
+  }, [])
+
+  return (
+    <>
+      Inside of SpellShow Component
+      {JSON.stringify(spell)}
+      <CodeMirror
+        value={(spell) ? spell.text : ''}
+        options={{
+          mode: 'xml',
+          theme: 'material',
+          lineNumbers: true
+        }}
+        onChange={(editor, data, value) => {
+        }}
+      />
     </>
   )
 }
@@ -212,9 +271,14 @@ function App() {
           component={LoginForm}
         />
         <Route
-          path={'/spells'}
-          component={SpellViewer}
+          path={'/spells/:id'}
+          component={SpellShow}
         />
+        <Route
+          path={'/spells'}
+          component={SpellIndex}
+        />
+
       </Switch>
     </div>
   );
