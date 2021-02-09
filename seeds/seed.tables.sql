@@ -13,9 +13,9 @@ VALUES
   ('testUser3', 'password');
 
 -- Create ship_parts that references tier, frame, engine, power core, etc.
-INSERT INTO spells (user_id, name, description)
+INSERT INTO spells (user_id, name, description, text)
 VALUES
-  (1, 'Apple Storm', 'Swirling storm of apples'),
-  (1, 'Cozy Cabin', 'Summons a log cabin');
+  (1, 'Apple Storm', 'Swirling storm of apples', '(displayln "Hello")'),
+  (1, 'Cozy Cabin', 'Summons a log cabin', '(displayln "Hello")');
 
 COMMIT;

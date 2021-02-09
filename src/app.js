@@ -35,14 +35,26 @@ app.get(epSpellIndex, requireAuth, (req, res) => {
     })
 })
 
+app.get(`${epSpellView}`, requireAuth, (req, res) => {
+  req.app.get('db')('spells')
+  .where({id: req.params.id})
+  .then((displaySpells) => {
+      res.send(displaySpells[0])
+  })
+})
+
 app.post(epLogin, (req, res) => {
   console.log("inside server endpoint");
+  if(!req.body.username){
+    return res.status(400).send({error: `Missing 'username' in request body`})
+  }
+
   req.app.get('db')('users')
     .where({username: req.body.username})
     .then(async (users) => {
       console.log("inside .then");
       let user = users[0]
-      if (!user){return res.send({message: "User not found"})}
+      if (!user){return res.status(400).send({error: "User not found"})}
       let passwordMatch = await bcrypt.compare(req.body.password, user.password)
       console.log(passwordMatch);
       if (passwordMatch) {
@@ -53,7 +65,7 @@ app.post(epLogin, (req, res) => {
         })
       })
       } else{
-        res.send({message: "Passwords do not match"})
+        res.send({error: "Passwords do not match"})
       }
       console.log("User retrieved", users);
     })
