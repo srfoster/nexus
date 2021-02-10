@@ -7,25 +7,25 @@ function makeUsersArray() {
     {
       id: 1,
       username: 'test-user-1',
-      password: bcrypt.hash(password, 12),
+      password: '$2a$12$uhrv0LeV/d887GRNCERPU.Cs1azOmVCEk8cBWRIFUMVfRWq37DLX6',
       date_created: new Date('2029-01-22T16:28:32.615Z'),
     },
     {
       id: 2,
       username: 'test-user-2',
-      password: bcrypt.hash(password, 12),
+      password: '$2a$12$uhrv0LeV/d887GRNCERPU.Cs1azOmVCEk8cBWRIFUMVfRWq37DLX6',
       date_created: new Date('2029-01-22T16:28:32.615Z'),
     },
     {
       id: 3,
       username: 'test-user-3',
-      password: bcrypt.hash(password, 12),
+      password: '$2a$12$uhrv0LeV/d887GRNCERPU.Cs1azOmVCEk8cBWRIFUMVfRWq37DLX6',
       date_created: new Date('2029-01-22T16:28:32.615Z'),
     },
     {
       id: 4,
       username: 'test-user-4',
-      password: bcrypt.hash(password, 12),
+      password: '$2a$12$uhrv0LeV/d887GRNCERPU.Cs1azOmVCEk8cBWRIFUMVfRWq37DLX6',
       date_created: new Date('2029-01-22T16:28:32.615Z'),
     },
   ]
