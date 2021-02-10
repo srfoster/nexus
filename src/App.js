@@ -5,24 +5,28 @@ import AuthApiService from './Services/auth-api-service';
 import TokenService from './Services/token-service'
 import config from './config'
 import {UnControlled as CodeMirror} from 'react-codemirror2'
+import Button from '@material-ui/core/Button';
 
 
 const LoginForm = (props) => {
+  let usernameInput = React.createRef()
+  let passwordInput = React.createRef()
+
   const [error, setError] = useState(null);
 
   const handleSubmitJwtAuth = (e) => {
     e.preventDefault()
 
-    const { username, password } = e.target;
-
+    // const { username, password } = e.target;
+    console.log(usernameInput);
     AuthApiService.postLogin({
-      username: username.value,
-      password: password.value,
+      username: usernameInput.current.value,
+      password: passwordInput.current.value,
     })
       .then(user => {
         // console.log("Existing user logging in");
-        username.value = ''
-        password.value = ''
+        usernameInput.current.value = ''
+        passwordInput.current.value = ''
         // props.onLoginSuccess()
         handleLoginSuccess()
       })
@@ -42,19 +46,21 @@ const LoginForm = (props) => {
     return (
     <>
       <div>
-        <form
+        {/* <form
           className="LoginForm"
           onSubmit={(e) => handleSubmitJwtAuth(e)}
-        >
+        > */}
           <label htmlFor="userName">Username: </label><br/>
-          <input className='username' type='text' required id='username'></input><br/>
+          <input className='username' type='text' required id='username' ref={usernameInput}></input><br/>
 
           <label htmlFor="password">Password:</label><br/>
-          <input className='password' type='password' required id='password'></input><br/>
+          <input className='password' type='password' required id='password' ref={passwordInput}></input><br/>
 
-          <input type="submit" value="Log In" className="formButton"/>
-        </form>
-
+          {/* <input type="submit" value="Log In" className="formButton"/> */}
+        {/* </form> */}
+        <Button variant="contained" color="primary" onClick={(e) => handleSubmitJwtAuth(e)}>
+          Submit
+        </Button>
       </div>
       <div role='alert'>
         {error ? <p className='red'>{error}</p> : null}
@@ -232,20 +238,42 @@ function SpellShow(props) {
       .then(spell => setSpell(spell))
   }, [])
 
+  const handleNewCode = (codeMirrorValue) => {
+    const { id } = props.match.params
+    console.log(codeMirrorValue);
+
+    return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+      body: JSON.stringify({
+        text: codeMirrorValue
+      })
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  }
+
   return (
     <>
       Inside of SpellShow Component
       {JSON.stringify(spell)}
-      <CodeMirror
-        value={(spell) ? spell.text : ''}
-        options={{
-          mode: 'xml',
-          theme: 'material',
-          lineNumbers: true
-        }}
-        onChange={(editor, data, value) => {
-        }}
-      />
+      <div className='CodeMirror'>
+        <CodeMirror
+          value={(spell) ? spell.text : ''}
+          options={{
+            mode: 'xml',
+            theme: 'material',
+            lineNumbers: true
+          }}
+          onChange={(editor, data, value) => handleNewCode(value)}
+        />
+      </div>
     </>
   )
 }
