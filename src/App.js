@@ -6,131 +6,14 @@ import TokenService from './Services/token-service'
 import config from './config'
 import {UnControlled as CodeMirror} from 'react-codemirror2'
 import Button from '@material-ui/core/Button';
-
-
-const LoginForm = (props) => {
-  let usernameInput = React.createRef()
-  let passwordInput = React.createRef()
-
-  const [error, setError] = useState(null);
-
-  const handleSubmitJwtAuth = (e) => {
-    e.preventDefault()
-
-    // const { username, password } = e.target;
-    console.log(usernameInput);
-    AuthApiService.postLogin({
-      username: usernameInput.current.value,
-      password: passwordInput.current.value,
-    })
-      .then(user => {
-        // console.log("Existing user logging in");
-        usernameInput.current.value = ''
-        passwordInput.current.value = ''
-        // props.onLoginSuccess()
-        handleLoginSuccess()
-      })
-      .catch(res => {
-        setError(res.error);
-      })
-    }
-
-    const handleLoginSuccess = () => {
-      const { history } = props
-      history.push('/spells')
-      // if(props.onLogin){
-      //   props.onLogin(true);
-      // }
-    }
-
-    return (
-    <>
-      <div>
-        {/* <form
-          className="LoginForm"
-          onSubmit={(e) => handleSubmitJwtAuth(e)}
-        > */}
-          <label htmlFor="userName">Username: </label><br/>
-          <input className='username' type='text' required id='username' ref={usernameInput}></input><br/>
-
-          <label htmlFor="password">Password:</label><br/>
-          <input className='password' type='password' required id='password' ref={passwordInput}></input><br/>
-
-          {/* <input type="submit" value="Log In" className="formButton"/> */}
-        {/* </form> */}
-        <Button variant="contained" color="primary" onClick={(e) => handleSubmitJwtAuth(e)}>
-          Submit
-        </Button>
-      </div>
-      <div role='alert'>
-        {error ? <p className='red'>{error}</p> : null}
-      </div>
-    </>
-  )
-};
-
-const SignupForm = (props) => {
-  const [error, setError] = useState(null);
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    const { username, password, passwordVerify } = e.target;
-
-    if(password.value !== passwordVerify.value){
-      setError("Password do not match");
-      return;
-    }
-
-    AuthApiService.postUser({
-      username: username.value,
-      password: password.value,
-    })
-      .then(user => {
-        // console.log("New user submitted");
-        username.value = ''
-        password.value = ''
-        passwordVerify.value = ''
-        handleSignupSuccess()
-      })
-      .catch(res => {
-        setError(res.error);
-      })
-    }
-  
-    const handleSignupSuccess = () => {
-      const { history } = props
-      history.push('/spells')
-      // if(props.onLogin){
-      //   props.onLogin(true);
-      // }
-    }
-
-    return (
-    <>
-      <div>
-        <form
-          className="SignupForm"
-          onSubmit={(e) => handleSubmit(e)}
-        >
-          <label htmlFor="userName">Username: </label><br/>
-          <input className='username' type='text' required id='username'></input><br/>
-
-          <label htmlFor="password">Password:</label><br/>
-          <input className='password' type='password' required id='password'></input><br/>
-
-          <label htmlFor="passwordVerify">Confirm Password:</label><br/>
-          <input className='passwordVerify' type='password' required id='passwordVerify'></input><br/>
-
-          <input type="submit" value="Sign Up" className="formButton"/>
-        </form>
-
-      </div>
-      <div role='alert'>
-        {error ? <p className='red'>{error}</p> : null}
-      </div>
-    </>
-  )
-}
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import LoginForm from './Components/LoginForm';
+import SignupForm from './Components/SignupForm';
+require('codemirror/mode/scheme/scheme');
 
 const LandingPage = (props) => {
   return (
@@ -154,42 +37,82 @@ const LandingPage = (props) => {
 }
 
 const Header = (props) => {
-  return props.isLoggedIn ? (
-    <div className="header">
-      <Link to='/hangar'>
-        My Hangar
-      </Link>
-      {" | "}
-      <Link to='/logout'>
-        Logout
-      </Link>
+  const header = useStyles(headerStyle);
+
+  const handleLoginClick = () => {
+    const { history } = props
+    history.push('/login')
+  }
+  const handleSignupClick = () => {
+    const { history } = props
+    history.push('/signup')
+  }
+
+  return (
+    <div className={header.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" onClick={() => handleSignupClick()}>Create Account</Button>
+          <Button color="inherit" onClick={() => handleLoginClick()}>Login</Button>
+        </Toolbar>
+      </AppBar>
     </div>
-  ) : (
-    <div className="header">
-      <Link to='/signup'>
-        Create Account
-      </Link>
-      {" | "}
-      <Link to='/login'>
-        Login
-      </Link>
-    </div>
-  ) 
+  )
+
+  // <div className={classes.root}>
+  //   <AppBar position="static">
+  //     <Toolbar>
+  //       <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+  //         <MenuIcon />
+  //       </IconButton>
+  //       <Typography variant="h6" className={classes.title}>
+  //         News
+  //       </Typography>
+  //       <Button color="inherit">Login</Button>
+  //     </Toolbar>
+  //   </AppBar>
+  // </div>
+
+  // return props.isLoggedIn ? (
+  //   <div className="header">
+  //     <Link to='/hangar'>
+  //       My Hangar
+  //     </Link>
+  //     {" | "}
+  //     <Link to='/logout'>
+  //       Logout
+  //     </Link>
+  //   </div>
+  // ) : (
+  //   <div className={header.root}>
+  //     <Link to='/signup'>
+  //       Create Account
+  //     </Link>
+  //     {" | "}
+  //     <Link to='/login'>
+  //       Login
+  //     </Link>
+  //   </div>
+  // ) 
 }
+
+// Header.defaultProps = {
+//   location: {},
+//   history: {
+//     push: () => {},
+//   },
+// }
 
 function SpellIndex() {
   const [spells, setSpells] = useState([])
   
-
   useEffect(() => {
-
     return fetch(`${config.API_ENDPOINT}/spells`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
-      
     })
       .then(res =>
         (!res.ok)
@@ -238,9 +161,16 @@ function SpellShow(props) {
       .then(spell => setSpell(spell))
   }, [])
 
+  let debounceTimer
+
+  const debounce = (func, delay) => { 
+    clearTimeout(debounceTimer) 
+    debounceTimer = setTimeout(() => func(), delay) 
+  }  
+
   const handleNewCode = (codeMirrorValue) => {
     const { id } = props.match.params
-    console.log(codeMirrorValue);
+    // console.log(codeMirrorValue);
 
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'POST',
@@ -267,11 +197,11 @@ function SpellShow(props) {
         <CodeMirror
           value={(spell) ? spell.text : ''}
           options={{
-            mode: 'xml',
+            mode: 'scheme',
             theme: 'material',
             lineNumbers: true
           }}
-          onChange={(editor, data, value) => handleNewCode(value)}
+          onChange={(editor, data, value) => debounce(() => handleNewCode(value), 3000)}
         />
       </div>
     </>
@@ -279,22 +209,28 @@ function SpellShow(props) {
 }
 
 function App() {
+  // const forms = useStyles(FormStyle);
   return (
     <div className="App">
-      <p/>
-      <header className="App_header">
+      {/* <header className="App_header">
         <Header />
-      </header>
+      </header> */}
+      <Route
+        path={'/'}
+        component={Header}
+      />
       <Switch>
         <Route
           exact path={'/'}
           component={LandingPage}
         />
         <Route
+          // className={forms.root}
           path={'/signup'}
           component={SignupForm}
         />
         <Route
+          // className={forms.root}
           path={'/login'}
           component={LoginForm}
         />
@@ -306,10 +242,31 @@ function App() {
           path={'/spells'}
           component={SpellIndex}
         />
-
       </Switch>
     </div>
   );
 }
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
+
+const headerStyle = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
 
 export default App;
