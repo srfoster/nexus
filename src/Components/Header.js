@@ -2,6 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 
 const Header = (props) => {
   const header = headerStyle();
@@ -19,6 +22,14 @@ const Header = (props) => {
     <div className={header.root}>
       <AppBar position="static">
         <Toolbar>
+          {/* <IconButton edge="start" className={header.menuButton} color="inherit" aria-label="menu">
+            <MenuIcon />
+          </IconButton> */}
+          <Typography variant="h6" className={header.title}>
+            
+          </Typography>
+          {/* <Button color="inherit">Login</Button> */}
+
           <Button color="inherit" onClick={() => handleSignupClick()}>Create Account</Button>
           <Button color="inherit" onClick={() => handleLoginClick()}>Login</Button>
         </Toolbar>
@@ -66,7 +77,6 @@ const headerStyle = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  // alignSelf: 'right'
 }));
 
 export default Header;

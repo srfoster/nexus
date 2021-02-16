@@ -32,10 +32,29 @@ function SpellIndex(props) {
 
   return (
     <div className={classes.root}>
-      <Accordion>
+      Total Spells: {spells.length} <br/>
+        {spells.map(spell => {return (
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+            <Typography>{spell.name}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                malesuada lacus ex, sit amet blandit leo lobortis eget.
+              </Typography>
+            </AccordionDetails>
+          </Accordion>
+        )}
+        )}
+      {/* <Accordion>
         {console.log(spells)}
         Total Spells: {spells.length} <br/>
-        {/* {spells[0].name} */}
+        {spells[0].name}
         {spells.sort((a,b) => a-b).map(spell => {
           return (
             <div>
@@ -56,7 +75,7 @@ function SpellIndex(props) {
             </div>
           )
         })}
-      </Accordion>
+      </Accordion> */}
     </div>
   )
 }
