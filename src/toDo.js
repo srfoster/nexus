@@ -1,7 +1,18 @@
 /* 2/15/20
   Make a styles helper file
+  >>> Look into Material-Ui best practice
 
-  Make a branch to refactor code into new files
+  --> Refactor code into new files
+
+  Change form behavior to allow enter press to submit
+  --> Add in spell list sorting on client
+  **SpellIndex accordion
+  **Right align Header
+  Fix DB date_modified functionality
+  Implement Typography anywhere there's text
+
+  Read and implement Material-Ui auth tracking
+  >>> Examples in App Bar
 
   >>> Search postgres ordering
   !!! Failing test is a timing issue that sometimes works

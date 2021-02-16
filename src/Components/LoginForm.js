@@ -3,32 +3,11 @@ import AuthApiService from '../Services/auth-api-service';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
-// const FormStyle = makeStyles((theme) => ({
-//   root: {
-//     display: 'flex',
-//     flexWrap: 'wrap',
-//     '& > *': {
-//       margin: theme.spacing(1),
-//       width: theme.spacing(150),
-//       height: theme.spacing(75),
-//     },
-//     justifyContent: 'center',
-//     textAlign: 'center'
-//   },
-// }));
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
-  },
-}));
+import Paper from '@material-ui/core/Paper';
 
 const LoginForm = (props) => {
   const classes = useStyles();
+  const papers = formPaper();
 
   let usernameInput = React.createRef()
   let passwordInput = React.createRef()
@@ -66,30 +45,55 @@ const LoginForm = (props) => {
 
     return (
     <>
-      <div>
-      <form className={classes.root} noValidate autoComplete="off">
-        <TextField id="outlined-basic" label="Username" variant="outlined" inputRef={usernameInput}/><br/>
-        <TextField id="outlined-password-input" label="Password" type="password" variant="outlined" inputRef={passwordInput}/><br/>
-        <Button variant="contained" color="primary" onClick={(e) => handleSubmitJwtAuth(e)}>
-          Submit
-        </Button>
-      </form>
-        
-      </div>
-      <div role='alert'>
-        {error ? <p className='red'>{error}</p> : null}
-      </div>
+    <h1>Login</h1>
+    <div className={papers.root}>
+      <Paper>
+        <div>
+        <form className={classes.root} noValidate autoComplete="off">
+          <TextField id="outlined-basic" label="Username" variant="outlined" inputRef={usernameInput}/><br/>
+          <TextField id="outlined-password-input" label="Password" type="password" variant="outlined" inputRef={passwordInput}/><br/>
+          <Button variant="contained" color="primary" onClick={(e) => handleSubmitJwtAuth(e)}>
+            Submit
+          </Button>
+        </form>
+          
+        </div>
+        <div role='alert'>
+          {error ? <p className='red'>{error}</p> : null}
+        </div>
+      </Paper>
+    </div>
     </>
   )
 };
 
-// LoginForm.defaultProps = {
-//   location: {},
-//   history: {
-//     push: () => {},
-//   },
-// }
+LoginForm.defaultProps = {
+  location: {},
+  history: {
+    push: () => {},
+  },
+}
 
+const formPaper = makeStyles((theme) => ({
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    '& > *': {
+      margin: theme.spacing(1),
+      width: theme.spacing(45),
+      height: theme.spacing(35),
+    },
+    justifyContent: 'center',
+  },
+}));
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: '25ch',
+    },
+  },
+}));
 
 export default LoginForm;
