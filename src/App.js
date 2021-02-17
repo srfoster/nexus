@@ -11,6 +11,9 @@ import SpellShow from './Components/SpellShow';
 import SimpleAccordion from './Components/DemoAccordion'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import DashDemo from './Templates/Dashboard/Dashboard';
+import LoginDemo from './Templates/Login';
+import SignupDemo from './Templates/Signup';
 require('codemirror/mode/scheme/scheme');
 
 function App() {
@@ -23,7 +26,7 @@ function App() {
         component={Header}
       />
       <div className={paper.root}>
-      <Paper >
+      {/* <Paper >
         <Switch>
           <Route
             exact path={'/'}
@@ -46,8 +49,22 @@ function App() {
             component={SpellAccordionTest}
           />
         </Switch>
-      </Paper>
+      </Paper> */}
       </div>
+      <Switch className='TemplateDemos'>
+        <Route 
+          path={'/dashDemo'}
+          component={DashDemo}
+        />
+        <Route 
+          path={'/loginDemo'}
+          component={LoginDemo}
+        />
+        <Route 
+          path={'/signupDemo'}
+          component={SignupDemo}
+        />
+      </Switch>
     </div>
   );
 }
