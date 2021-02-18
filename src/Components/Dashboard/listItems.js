@@ -10,43 +10,32 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import CodeIcon from '@material-ui/icons/Code';
 
-// const handleClick = () => {
-//   let history = useHistory();
-//   history.push('/spellIndex')
-// }
+export default function MainListItems() {
+  let history = useHistory();
 
-export const mainListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Orders (WIP)" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <PeopleIcon />
-      </ListItemIcon>
-      <ListItemText primary="Customers (WIP)" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <BarChartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Reports (WIP)" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <LayersIcon />
-      </ListItemIcon>
-      <ListItemText primary="Integrations (WIP)" />
-    </ListItem>
-  </div>
-);
+  const handleClickSpells = () => {
+    history.push('/spells')
+  }
+  const handleClickFriends = () => {
+    history.push('/friends')
+  }
+
+  return (
+    <div>
+      <ListItem button onClick={() => handleClickSpells()}>
+        <ListItemIcon>
+          <CodeIcon />
+        </ListItemIcon>
+        <ListItemText primary="Spells" />
+      </ListItem>
+      <ListItem button onClick={handleClickFriends}>
+        <ListItemIcon>
+          <PeopleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Friends" />
+      </ListItem>
+    </div>
+  )
+};

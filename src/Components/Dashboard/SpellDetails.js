@@ -6,6 +6,7 @@ import {UnControlled as CodeMirror} from 'react-codemirror2';
 import Title from './Title';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import SpellDashboard from './SpellDashboard';
 
 function preventDefault(event) {
   event.preventDefault();
@@ -81,22 +82,24 @@ export default function SpellDetails(props) {
   }
 
   return (
-    <React.Fragment>
-      <Title>{spell ? spell.name : ''}</Title>
-      <Typography>
-        {spell ? spell.description : ''}
-      </Typography>
-      <div className='CodeMirror'>
-        <CodeMirror
-          value={(spell) ? spell.text : ''}
-          options={{
-            mode: 'scheme',
-            theme: 'material',
-            lineNumbers: true
-          }}
-          onChange={(editor, data, value) => debounce(() => handleNewCode(value), 3000)}
-        />
-      </div>
-    </React.Fragment>
+    <SpellDashboard>
+      <React.Fragment>
+        <Title>{spell ? spell.name : ''}</Title>
+        <Typography>
+          {spell ? spell.description : ''}
+        </Typography>
+        <div className='CodeMirror'>
+          <CodeMirror
+            value={(spell) ? spell.text : ''}
+            options={{
+              mode: 'scheme',
+              theme: 'material',
+              lineNumbers: true
+            }}
+            onChange={(editor, data, value) => debounce(() => handleNewCode(value), 3000)}
+          />
+        </div>
+      </React.Fragment>
+    </SpellDashboard>
   );
 }

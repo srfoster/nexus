@@ -52,7 +52,7 @@ export default function SpellChart(props) {
         <TableBody>
           {props.spells.sort(byName).map((spell) => (
             <TableRow key={spell.id}>
-              <TableCell>{spell.date_created}</TableCell>
+              <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>
               <TableCell>{spell.name}</TableCell>
               <TableCell>{spell.description}</TableCell>
               <TableCell>{spell.text}</TableCell>
@@ -65,11 +65,6 @@ export default function SpellChart(props) {
           ))}
         </TableBody>
       </Table>
-      <div className={classes.seeMore}>
-        <Link color="primary" href="#" onClick={preventDefault}>
-          See more orders
-        </Link>
-      </div>
     </React.Fragment>
   );
 }

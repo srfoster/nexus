@@ -1,7 +1,14 @@
 /* 2/18/21
-  spellChart date_created doesn't work with toLocaleString()
-  Add button or link to listIem Dashboard
+  --> spellChart date_created doesn't work with toLocaleString()
+  --> Add button or link to listIem Dashboard
 
+  Give feedback that a save is occurring within SpellDetails
+  Give method of creating a new spell
+  Comment out bell alert
+  Method to log out
+  Make readme files relevant
+
+  Close tab confirmation window if save is occurring
 */
 
 /* 2/16/21

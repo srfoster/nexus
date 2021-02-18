@@ -14,6 +14,8 @@ import Paper from '@material-ui/core/Paper';
 import DashDemo from './Templates/Dashboard/Dashboard';
 import LoginDemo from './Templates/Login';
 import SignupDemo from './Templates/Signup';
+import SpellDetails from './Components/Dashboard/SpellDetails';
+import SpellDashboard from './Components/Dashboard/SpellDashboard';
 require('codemirror/mode/scheme/scheme');
 
 function App() {
@@ -37,11 +39,15 @@ function App() {
           />
           <Route
             path={'/spells/:id'}
-            component={SpellShow}
+            component={SpellDetails}
           />
           <Route
             path={'/spells'}
             component={SpellIndex}
+          />
+          <Route 
+            path={'/friends'}
+            component={(props) => <SpellDashboard><div>Coming Soon</div></SpellDashboard>}
           />
         </Switch>
       </div>
