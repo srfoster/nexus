@@ -1,4 +1,24 @@
-/* 2/15/20
+/* 2/18/21
+  spellChart date_created doesn't work with toLocaleString()
+  Add button or link to listIem Dashboard
+
+*/
+
+/* 2/16/21
+  Completed:
+  --> Login page template integrated
+  --> Signup page template integrate
+  -> Dashboard integration in progress
+
+  Todo:
+  Login page 
+  >needs link for 'Forgot password?'
+  >'Remember me' checkbox currently doesn't do anything
+
+
+*/
+
+/* 2/15/21
   Make a styles helper file
   >>> Look into Material-Ui best practice
 
@@ -18,7 +38,7 @@
   !!! Failing test is a timing issue that sometimes works
 */
 
-/* 2/11/20
+/* 2/11/21
   --> Fix text post into database
   --> Pull correct text from database on load
   >>> This was working. What's happening is the spell order is changing
@@ -37,7 +57,7 @@
   Make a branch to refactor code into new files
 */
 
-/* 2/10/20
+/* 2/10/21
   --> Debounce the code in the editor
   --> Add in material ui elements
 
@@ -51,7 +71,7 @@
   Material-ui text fields don't work with React refs
 */
 
-/* 2/9/20
+/* 2/9/21
   --> Make text not centered in codemirror
 
   - Make back-end tests pass (19 pass / 4 failing)

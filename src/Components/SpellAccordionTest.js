@@ -50,32 +50,7 @@ function SpellIndex(props) {
             </AccordionDetails>
           </Accordion>
         )}
-        )}
-      {/* <Accordion>
-        {console.log(spells)}
-        Total Spells: {spells.length} <br/>
-        {spells[0].name}
-        {spells.sort((a,b) => a-b).map(spell => {
-          return (
-            <div>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <Typography className={classes.heading}>{spell.name}</Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  {spell.description}
-                  <Link to={`/spells/${spell.id}`}>Edit</Link>
-                </Typography>
-              </AccordionDetails>
-
-            </div>
-          )
-        })}
-      </Accordion> */}
+      )}
     </div>
   )
 }

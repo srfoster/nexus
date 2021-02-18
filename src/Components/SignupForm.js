@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { Link, Route } from "react-router-dom";
 import AuthApiService from '../Services/auth-api-service';
+import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import { makeStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+// import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import Header from './Header';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
-  },
-}));
 
 const SignupForm = (props) => {
   const classes = useStyles();
-  const paper = formPaper();
 
   let usernameInput = React.createRef()
   let passwordInput = React.createRef()
@@ -59,27 +61,92 @@ const SignupForm = (props) => {
 
     return (
     <>
-    <h1>Create Account</h1>
-    <div className={paper.root}>
-      
-      <Paper>
-        <div>
-          
-          <form className={classes.root} noValidate autoComplete="off">
-            <TextField id="outlined-basic" label="Username" variant="outlined" inputRef={usernameInput}/><br/>
-            <TextField id="outlined-basic" label="Password" type="password" variant="outlined" inputRef={passwordInput}/><br/>
-            <TextField id="outlined-basic" label="Confirm Password" type="password" variant="outlined" inputRef={passConfirmInput}/><br/>
-            <Button variant="contained" color="primary" onClick={(e) => handleSubmit(e)}>
-              Submit
+      <Route
+        path={'/'}
+        component={Header}
+      />
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <form className={classes.form} noValidate>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="username"
+                  label="Username"
+                  name="username"
+                  autoComplete="username"
+                  inputRef={usernameInput}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  inputRef={passwordInput}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  name="confirm-password"
+                  label="Confirm Password"
+                  type="confirm-password"
+                  id="confirm-password"
+                  autoComplete="current-password"
+                  inputRef={passConfirmInput}
+                />
+              </Grid>
+              {/* <Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  label="I want to receive inspiration, marketing promotions and updates via email."
+                />
+              </Grid> */}
+            </Grid>
+            <div role='alert'>
+              {error ? <p className='red'>{error}</p> : null}
+            </div>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={(e) => handleSubmit(e)}
+            >
+              Sign Up
             </Button>
+            <Grid container justify="flex-end">
+              <Grid item>
+                <Link to={'/login'} variant="body2">
+                  Already have an account? Sign in
+                </Link>
+              </Grid>
+            </Grid>
           </form>
-
         </div>
-        <div role='alert'>
-          {error ? <p className='red'>{error}</p> : null}
-        </div>
-      </Paper>
-    </div>
+        {/* <Box mt={5}>
+          <Copyright />
+        </Box> */}
+      </Container>
     </>
   )
 }
@@ -91,16 +158,23 @@ SignupForm.defaultProps = {
   },
 }
 
-const formPaper = makeStyles((theme) => ({
-  root: {
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    marginTop: theme.spacing(8),
     display: 'flex',
-    flexWrap: 'wrap',
-    '& > *': {
-      margin: theme.spacing(1),
-      width: theme.spacing(45),
-      height: theme.spacing(35),
-    },
-    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  submit: {
+    margin: theme.spacing(3, 0, 2),
   },
 }));
 

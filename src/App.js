@@ -5,7 +5,7 @@ import LoginForm from './Components/LoginForm';
 import SignupForm from './Components/SignupForm';
 import LandingPage from './Components/LandingPage';
 import Header from './Components/Header';
-import SpellIndex from './Components/SpellIndex';
+import SpellIndex from './Components/Dashboard/SpellIndex';
 import SpellAccordionTest from './Components/SpellAccordionTest';
 import SpellShow from './Components/SpellShow';
 import SimpleAccordion from './Components/DemoAccordion'
@@ -21,12 +21,7 @@ function App() {
 
   return (
     <div className="App">
-      <Route
-        path={'/'}
-        component={Header}
-      />
-      <div className={paper.root}>
-      {/* <Paper >
+      <div >
         <Switch>
           <Route
             exact path={'/'}
@@ -46,12 +41,11 @@ function App() {
           />
           <Route
             path={'/spells'}
-            component={SpellAccordionTest}
+            component={SpellIndex}
           />
         </Switch>
-      </Paper> */}
       </div>
-      <Switch className='TemplateDemos'>
+      {/* <Switch className='TemplateDemos'>
         <Route 
           path={'/dashDemo'}
           component={DashDemo}
@@ -64,7 +58,7 @@ function App() {
           path={'/signupDemo'}
           component={SignupDemo}
         />
-      </Switch>
+      </Switch> */}
     </div>
   );
 }
