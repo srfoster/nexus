@@ -2,11 +2,24 @@
   --> spellChart date_created doesn't work with toLocaleString()
   --> Add button or link to listIem Dashboard
 
-  Give feedback that a save is occurring within SpellDetails
-  Give method of creating a new spell
-  Comment out bell alert
-  Method to log out
-  Make readme files relevant
+
+  - Need a method to edit the spell description and name
+  >> defaultValue doesn't work with a variable
+  - Give feedback that a save is occurring within SpellDetails
+
+  - Give method of creating a new spell
+  
+  --> Refactor handleClicks into single function
+  --> Comment out bell alert
+  --> Create logout button on sidebar
+  --> Logout needs to revoke auth
+  --> Trim lengthy text from SpellChart
+  --> Add logo and link to main site
+  --> Placeholder sidebar buttons
+
+  Dashboard should have conditional rendering if logged in or not
+  Clean up Material-Ui styles in React
+  Update Readme files
 
   Close tab confirmation window if save is occurring
 */

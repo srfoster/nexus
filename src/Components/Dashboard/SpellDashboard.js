@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route, Link } from "react-router-dom";
+// import { Switch, Route, Link } from "react-router-dom";
 import TokenService from '../../Services/token-service';
 import config from '../../config';
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,7 +21,8 @@ import Drawer from '@material-ui/core/Drawer';
 import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import clsx from 'clsx';
-
+import CodeSpells from '../../Assets/CodeSpells.png';
+import Link from '@material-ui/core/Link';
 
 function SpellDashboard(props) {
   const classes = useStyles();
@@ -51,11 +52,14 @@ function SpellDashboard(props) {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             
           </Typography>
-          <IconButton color="inherit">
+          {/* <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
             </Badge>
-          </IconButton>
+          </IconButton> */}
+          <Link href='https://codespells.org/index.html' align='right'>
+            <img src={CodeSpells} alt="CodeSpells" width="20%"></img>
+          </Link>
         </Toolbar>
       </AppBar>
       <Drawer

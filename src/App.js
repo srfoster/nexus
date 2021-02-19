@@ -16,6 +16,7 @@ import LoginDemo from './Templates/Login';
 import SignupDemo from './Templates/Signup';
 import SpellDetails from './Components/Dashboard/SpellDetails';
 import SpellDashboard from './Components/Dashboard/SpellDashboard';
+import CreateSpell from './Components/CreateSpell';
 require('codemirror/mode/scheme/scheme');
 
 function App() {
@@ -47,7 +48,15 @@ function App() {
           />
           <Route 
             path={'/friends'}
-            component={(props) => <SpellDashboard><div>Coming Soon</div></SpellDashboard>}
+            component={(props) => <SpellDashboard><div>Friends Coming Soon</div></SpellDashboard>}
+          />
+          <Route 
+            path={'/create'}
+            component={CreateSpell}
+          />
+          <Route 
+            path={'/gallery'}
+            component={(props) => <SpellDashboard><div>Gallery Coming Soon</div></SpellDashboard>}
           />
         </Switch>
       </div>

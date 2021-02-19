@@ -36,6 +36,14 @@ export default function SpellChart(props) {
     return 0;
   }
 
+  function textTrim(text, length){
+    if(text.length > length){
+      return text.slice(0, length) + '...';
+    } else { 
+      return text;
+    }
+  }
+
   return (
     <React.Fragment>
       <Title>Recent Spells</Title>
@@ -53,9 +61,9 @@ export default function SpellChart(props) {
           {props.spells.sort(byName).map((spell) => (
             <TableRow key={spell.id}>
               <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>
-              <TableCell>{spell.name}</TableCell>
-              <TableCell>{spell.description}</TableCell>
-              <TableCell>{spell.text}</TableCell>
+              <TableCell>{textTrim(spell.name, 15)}</TableCell>
+              <TableCell>{textTrim(spell.description, 30)}</TableCell>
+              <TableCell>{textTrim(spell.text, 85)}</TableCell>
               <TableCell align="right">
               <IconButton aria-label="edit" onClick={() => history.push(`/spells/${spell.id}`)}>
                 <EditIcon />
