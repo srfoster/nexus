@@ -46,13 +46,17 @@ app.get(`${epSpellView}`, requireAuth, (req, res) => {
 })
 
 app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
+  if (['description', 'name', 'text'].indexOf(req.body.column) < 0) {
+    return res.status(400).send({message: "Column must be valid"})
+  }
+  
   req.app.get('db')('spells')
   .where({id: req.params.id})
   .then((spells) => {
-      console.log(req.body.text);
+      console.log("Testing: ", req.body);
       if (spells.length === 0){
         req.app.get('db')('spells')
-        .insert({text: req.body.text})
+        .insert(req.body.column, req.body[req.body.column])
         .returning('*')
         .then((spell) => {
           res.send({message: "Saved new spell text"})
@@ -60,7 +64,7 @@ app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
       } else{
         req.app.get('db')('spells')
         .where({id: spells[0].id})
-        .update({text: req.body.text})
+        .update(req.body.column, req.body[req.body.column])
         .returning('*')
         .then((spell) => {
           res.send({message: "Saved new spell text"})
