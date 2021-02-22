@@ -57,25 +57,27 @@ export default function SpellDetails(props) {
     
   }  
 
-  const handleNewCode = (codeMirrorValue) => {
+  const handleNewCode = (keyDestination, codeMirrorValue) => {
     const { id } = props.match.params
     // console.log(codeMirrorValue);
 
-    // return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //     'authorization': `bearer ${TokenService.getAuthToken()}`,
-    //   },
-    //   body: JSON.stringify({
-    //     text: codeMirrorValue
-    //   })
-    // })
-    //   .then(res =>
-    //     (!res.ok)
-    //       ? res.json().then(e => Promise.reject(e))
-    //       : res.json()
-    //   )
+    let payload = {}
+    payload[keyDestination] = codeMirrorValue;
+    payload['column'] = keyDestination;
+
+    return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
   }
 
   const handleNewText = (keyDestination, newText) => {
@@ -87,19 +89,19 @@ export default function SpellDetails(props) {
     payload[keyDestination] = newText;
     payload['column'] = keyDestination;
 
-    // return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'content-type': 'application/json',
-    //     'authorization': `bearer ${TokenService.getAuthToken()}`,
-    //   },
-    //   body: JSON.stringify(payload)
-    // })
-    //   .then(res =>
-    //     (!res.ok)
-    //       ? res.json().then(e => Promise.reject(e))
-    //       : res.json()
-    //   )
+    return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
   }
 
   function byName( a, b ) {
@@ -145,7 +147,7 @@ export default function SpellDetails(props) {
               theme: 'material',
               lineNumbers: true
             }}
-            onChange={(editor, data, value) => debounce(() => handleNewCode(value), 3000)}
+            onChange={(editor, data, value) => debounce(() => handleNewCode('text', value), 3000)}
           />
         </div>
       </React.Fragment>

@@ -1,3 +1,18 @@
+/* 2/22/21
+  --> Fixed SpellDetails crash error
+
+  - Need a method to edit the spell description and name
+  - Give feedback that a save is occurring within SpellDetails
+
+  - Give method of creating a new spell
+
+  Dashboard should have conditional rendering if logged in or not
+  Clean up Material-Ui styles in React
+  Update Readme files
+
+  Close tab confirmation window if save is occurring
+*/
+
 /* 2/18/21
   --> spellChart date_created doesn't work with toLocaleString()
   --> Add button or link to listIem Dashboard
