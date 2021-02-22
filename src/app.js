@@ -26,6 +26,7 @@ let epLogin = '/login'
 let epSignup = '/signup'
 let epSpellIndex = '/spells'
 let epSpellView = '/spells/:id'
+let epSpellCreate = '/create'
 
 app.get(epSpellIndex, requireAuth, (req, res) => {
   req.app.get('db')('spells')
@@ -70,13 +71,19 @@ app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
           res.send({message: "Saved new spell text"})
         })
       }
-
-
-
       // res.send({message: "Received"})
   })
-
 })
+
+app.post(`${epSpellIndex}`, requireAuth, (req, res, next) => { 
+  req.app.get('db')('spells')
+  .insert({user_id: req.user.id, name: 'New Spell', description: 'Spell Description', text: 'Hello World'})
+  .returning('*')
+  .then((spells) => {
+    res.send(spells[0])
+  })
+})
+
 
 app.post(epLogin, (req, res) => {
   if(!req.body.username){
