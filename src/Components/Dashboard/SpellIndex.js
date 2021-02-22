@@ -25,6 +25,11 @@ import { mainListItems } from './listItems';
 import SpellChart from './SpellChart';
 import SpellDetails from './SpellDetails';
 import SpellDashboard from './SpellDashboard';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import NavigationIcon from '@material-ui/icons/Navigation';
 
 function SpellIndex() {
   const [spells, setSpells] = useState([])
@@ -44,12 +49,37 @@ function SpellIndex() {
       )
       .then(spells => setSpells(spells))
   }, [])
+  
+  function createSpell(event) {
+    // event.preventDefault();
+    // console.log(event);
+    setSpells([...spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
+    // console.log(spells);
+
+    fetch(`${config.API_ENDPOINT}/spells`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+      .then(spell => {
+        console.log(spell);
+        setSpells([...spells, spell])
+      })
+  }
 
   return (
-    <SpellDashboard>
+    <SpellDashboard fabContent={<IconButton onClick={createSpell}><AddIcon /></IconButton>}>
       <SpellChart 
         spells={spells}
       />
+
     </SpellDashboard>
 
   )

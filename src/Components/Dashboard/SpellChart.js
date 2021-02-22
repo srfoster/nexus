@@ -12,16 +12,6 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 
-function preventDefault(event) {
-  event.preventDefault();
-}
-
-const useStyles = makeStyles((theme) => ({
-  seeMore: {
-    marginTop: theme.spacing(3),
-  },
-}));
-
 export default function SpellChart(props) {
   const classes = useStyles();
   let history = useHistory();
@@ -37,6 +27,8 @@ export default function SpellChart(props) {
   }
 
   function textTrim(text, length){
+    if (!text) return '';
+    
     if(text.length > length){
       return text.slice(0, length) + '...';
     } else { 
@@ -73,6 +65,13 @@ export default function SpellChart(props) {
           ))}
         </TableBody>
       </Table>
+
     </React.Fragment>
   );
 }
+
+const useStyles = makeStyles((theme) => ({
+  seeMore: {
+    marginTop: theme.spacing(3),
+  },
+}));

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, useHistory } from "react-router-dom";
 import TokenService from '../Services/token-service';
 import config from '../config';
 import clsx from 'clsx';
@@ -24,113 +24,115 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 // import { mainListItems } from './listItems';
 import SpellDetails from './Dashboard/SpellDetails';
 import SpellDashboard from './Dashboard/SpellDashboard';
+import {UnControlled as CodeMirror} from 'react-codemirror2';
+import Title from './Dashboard/Title';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
-function SpellIndex() {
-  const [spells, setSpells] = useState([])
-  
-  useEffect(() => {
-    return fetch(`${config.API_ENDPOINT}/spells`, {
+export default function CreateSpell(props) {
+  const classes = useStyles();
+  let history = useHistory();
+
+  const [spell, setSpell] = useState()
+
+  const [nameText, setNameText] = useState('Empty')
+  const [descText, setDescText] = useState('Empty')
+  const [codeText, setCodeText] = useState('Empty')
+
+  // useEffect(() => {
+  //   return fetch(`${config.API_ENDPOINT}/create`, {
+  //     method: 'GET',
+  //     headers: {
+  //       'content-type': 'application/json',
+  //       'authorization': `bearer ${TokenService.getAuthToken()}`,
+  //     },
+      
+  //   })
+  //     .then(res =>
+  //       (!res.ok)
+  //         ? res.json().then(e => Promise.reject(e))
+  //         : res.json()
+  //     )
+  // }, [])
+
+  const handleCreateSpell = () => {
+
+    // let payload = {}
+    // payload[keyDestination] = newText;
+    // payload['column'] = keyDestination;
+
+    let payload = {
+      'name': nameText,
+      'description': descText,
+      'text': codeText
+    }
+
+    return fetch(`${config.API_ENDPOINT}/create`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
+      body: JSON.stringify(payload)
     })
       .then(res =>
         (!res.ok)
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       )
-      .then(spells => setSpells(spells))
-  }, [])
+      // .then(
+      //   history.push('/spells')
+      // )
+  }
 
+  const testClick = (print) => {
+    // console.log("Test: ", print)
+    console.log("Click State", nameText, descText, codeText);
+  }
+  
   return (
     <SpellDashboard>
-      <h1>Hello Create Page</h1>
+      <React.Fragment>
+        <Title>
+          <TextField className={classes.margin} id="Name"
+            label="Name"
+            // onChange={(event) => handleNewText('name', event.target.value)}
+            onChange={(event) => setNameText(event.target.value)}
+          />
+        </Title>
+        {/* <Button variant="contained" onClick={() => handleCreateSpell()}>Create Spell</Button> */}
+        <Typography>
+          <TextField className={classes.margin}
+            label="Description"
+            // variant="outlined" 
+            // defaultValue='Test' 
+            fullWidth
+            // onChange={(event) => handleNewText('description', event.target.value)}
+            onChange={(event) => setDescText(event.target.value)}
+          />
+        </Typography>
+        <div className='CodeMirror'>
+          <CodeMirror
+            value={''}
+            options={{
+              mode: 'scheme',
+              theme: 'material',
+              lineNumbers: true
+            }}
+            // onChange={(editor, data, value) => handleNewText('text', value)}
+            onChange={(editor, data, value) => setCodeText(value)}
+          />
+        </div>
+      </React.Fragment>
     </SpellDashboard>
-
-  )
+  );
 }
 
-const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
+  seeMore: {
+    marginTop: theme.spacing(3),
   },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: 240,
+  margin: {
+    margin: theme.spacing(1),
   },
 }));
-
-export default SpellIndex;

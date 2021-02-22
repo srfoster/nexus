@@ -1,10 +1,15 @@
 /* 2/22/21
   --> Fixed SpellDetails crash error
-
-  - Need a method to edit the spell description and name
-  - Give feedback that a save is occurring within SpellDetails
+  --> Need a method to edit the spell description and name
 
   - Give method of creating a new spell
+  Color CreateSpell icon
+  Delete method for spells
+
+  - Give feedback that a save is occurring within SpellDetails
+
+
+  Console error about <div> as child of <p>
 
   Dashboard should have conditional rendering if logged in or not
   Clean up Material-Ui styles in React

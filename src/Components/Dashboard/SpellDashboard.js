@@ -23,6 +23,11 @@ import AppBar from '@material-ui/core/AppBar';
 import clsx from 'clsx';
 import CodeSpells from '../../Assets/CodeSpells.png';
 import Link from '@material-ui/core/Link';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import NavigationIcon from '@material-ui/icons/Navigation';
 
 function SpellDashboard(props) {
   const classes = useStyles();
@@ -91,6 +96,9 @@ function SpellDashboard(props) {
               </Paper>
             </Grid>
           </Grid>
+          <Fab color="primary" aria-label="add" className={classes.fab}>
+            {props.fabContent}
+          </Fab>
         </Container>
       </main>
     </div>
@@ -175,6 +183,11 @@ const useStyles = makeStyles((theme) => ({
   },
   fixedHeight: {
     height: 240,
+  },
+  fab: {
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
   },
 }));
 

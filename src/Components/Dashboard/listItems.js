@@ -36,12 +36,12 @@ export default function MainListItems() {
           <ListItemText primary="My Spells" />
         </ListItem>
 
-        <ListItem button onClick={() => handleClickButton('/create')}>
+        {/* <ListItem button onClick={() => handleClickButton('/create')}>
           <ListItemIcon>
             <AddIcon />
           </ListItemIcon>
           <ListItemText primary="New Spell" />
-        </ListItem>
+        </ListItem> */}
 
         <ListItem button onClick={() => handleClickButton('/friends')}>
           <ListItemIcon>
