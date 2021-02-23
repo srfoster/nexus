@@ -10,7 +10,6 @@ import SpellDashboard from './SpellDashboard';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-
 export default function SpellDetails(props) {
   const classes = useStyles();
   let history = useHistory();
@@ -39,7 +38,7 @@ export default function SpellDetails(props) {
   let debounceTimer
 
   const debounce = (func, delay) => { 
-    // placeHolder = <CircularProgress />
+    placeHolder = <div className={classes.spinner}><CircularProgress /></div>
     clearTimeout(debounceTimer) 
     debounceTimer = setTimeout(() => func(), delay) 
     
@@ -48,7 +47,7 @@ export default function SpellDetails(props) {
   const handleNewText = (keyDestination, newText) => {
     const { id } = props.match.params
 
-    console.log(newText);
+    // console.log(newText);
 
     let payload = {}
     payload[keyDestination] = newText;
@@ -75,9 +74,6 @@ export default function SpellDetails(props) {
     <SpellDashboard>
       <React.Fragment>
         <Title>
-          {/* <TextField className={classes.margin}
-            label="Name"
-          /> */}
           {spell ? 
           <TextField className={classes.margin}
             label="Name"
@@ -85,21 +81,22 @@ export default function SpellDetails(props) {
             onChange={(event) => debounce(() => handleNewText('name', event.target.value), 3000)}
           /> : 
           'Empty'}
-        
-        </Title>
-        <Typography>
-          {spell ?           
-          <TextField className={classes.margin}
-            label="Description"
-            // variant="outlined" 
-            // defaultValue='Test' 
-            defaultValue={spell.description}
-            fullWidth
-            onChange={(event) => debounce(() => handleNewText('description', event.target.value), 3000)}
-          /> : 
-          'Empty'}
-        </Typography>
+        </Title> 
         {placeHolder}
+        {/* <div className={classes.spinner}>
+          <CircularProgress />
+        </div> */}
+
+        {spell ?           
+        <TextField className={classes.margin}
+          label="Description"
+          // variant="outlined" 
+          // defaultValue='Test' 
+          defaultValue={spell.description}
+          fullWidth
+          onChange={(event) => debounce(() => handleNewText('description', event.target.value), 3000)}
+        /> : 
+        'Empty'}
         <div className='CodeMirror'>
           <CodeMirror
             value={(spell) ? spell.text : ''}
@@ -122,5 +119,11 @@ const useStyles = makeStyles((theme) => ({
   },
   margin: {
     margin: theme.spacing(1),
+  },
+  spinner: {
+    display: 'flex',
+    '& > * + *': {
+      marginRight: theme.spacing(2),
+    },
   },
 }));

@@ -11,6 +11,9 @@ import Title from './Title';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import TokenService from '../../Services/token-service';
+import config from '../../config';
 
 export default function SpellChart(props) {
   const classes = useStyles();
@@ -36,9 +39,27 @@ export default function SpellChart(props) {
     }
   }
 
+  function deleteSpell(id){
+    // console.log("Clicked delete", id);
+
+    return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+      // body: JSON.stringify(payload)
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  }
+
   return (
     <React.Fragment>
-      <Title>Recent Spells</Title>
+      <Title>My Spells</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
@@ -46,7 +67,8 @@ export default function SpellChart(props) {
             <TableCell>Name</TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Code</TableCell>
-            <TableCell align="right">Actions</TableCell>
+            <TableCell align="right">Edit</TableCell>
+            <TableCell align="right">Delete</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -55,11 +77,16 @@ export default function SpellChart(props) {
               <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>
               <TableCell>{textTrim(spell.name, 15)}</TableCell>
               <TableCell>{textTrim(spell.description, 30)}</TableCell>
-              <TableCell>{textTrim(spell.text, 85)}</TableCell>
+              <TableCell>{textTrim(spell.text, 65)}</TableCell>
               <TableCell align="right">
-              <IconButton aria-label="edit" onClick={() => history.push(`/spells/${spell.id}`)}>
-                <EditIcon />
-              </IconButton>
+                <IconButton aria-label="edit" onClick={() => history.push(`/spells/${spell.id}`)}>
+                  <EditIcon />
+                </IconButton>
+              </TableCell>
+              <TableCell align="right">
+                <IconButton aria-label="edit" onClick={() => deleteSpell(spell.id)}>
+                  <DeleteForeverIcon />
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}

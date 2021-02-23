@@ -51,10 +51,6 @@ function App() {
             component={(props) => <SpellDashboard><div>Friends Coming Soon</div></SpellDashboard>}
           />
           <Route 
-            path={'/create'}
-            component={CreateSpell}
-          />
-          <Route 
             path={'/gallery'}
             component={(props) => <SpellDashboard><div>Gallery Coming Soon</div></SpellDashboard>}
           />

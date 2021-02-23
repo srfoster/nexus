@@ -96,6 +96,7 @@ function SpellDashboard(props) {
               </Paper>
             </Grid>
           </Grid>
+          {/* FIXME: <button> cannot appear as a descendant of <button> */}
           <Fab color="primary" aria-label="add" className={classes.fab}>
             {props.fabContent}
           </Fab>

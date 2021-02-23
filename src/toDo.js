@@ -1,10 +1,37 @@
+/* 2/23/21
+  >> Refactoring code question
+
+  - Changes to SpellDetails only save the last thing altered, not all text fields
+
+  - Delete method for spells
+  >> Delete from database or flag it?
+  >> Delete works. Need a method of forcing a refresh
+  >> Delete confirmation pop-up if on SpellIndex
+
+  - Give feedback that a save is occurring within SpellDetails
+
+  - Color CreateSpell icon
+  >> Button can't be descendant of button (SpellIndex / Dashboard)
+  --> Console error about <div> as child of <p> (SpellDetails)
+
+  Dashboard should have conditional rendering if logged in or not
+  Clean up Material-Ui styles in React
+  Update Readme files
+
+  Close tab confirmation window if save is occurring
+
+  Rename files to be more accurate. SpellDashboard shouldn't have the word 'spell' in it anymore
+  Delete unused files
+*/
+
 /* 2/22/21
   --> Fixed SpellDetails crash error
   --> Need a method to edit the spell description and name
 
-  - Give method of creating a new spell
+  --> Give method of creating a new spell
   Color CreateSpell icon
   Delete method for spells
+  >> Delete from database or flag it?
 
   - Give feedback that a save is occurring within SpellDetails
 
