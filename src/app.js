@@ -26,7 +26,6 @@ let epLogin = '/login'
 let epSignup = '/signup'
 let epSpellIndex = '/spells'
 let epSpellView = '/spells/:id'
-let epSpellCreate = '/create'
 
 app.get(epSpellIndex, requireAuth, (req, res) => {
   req.app.get('db')('spells')
@@ -47,9 +46,7 @@ app.get(`${epSpellView}`, requireAuth, (req, res) => {
 })
 
 app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
-  if (['description', 'name', 'text'].indexOf(req.body.column) < 0) {
-    return res.status(400).send({message: "Column must be valid"})
-  }
+  // TODO: Verify the object keys are what we want to receive!!!
   
   req.app.get('db')('spells')
   .where({id: req.params.id})
@@ -57,7 +54,7 @@ app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
       console.log("Testing: ", req.body);
       if (spells.length === 0){
         req.app.get('db')('spells')
-        .insert(req.body.column, req.body[req.body.column])
+        .insert(req.body)
         .returning('*')
         .then((spell) => {
           res.send({message: "Saved new spell text"})
@@ -65,7 +62,7 @@ app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
       } else{
         req.app.get('db')('spells')
         .where({id: spells[0].id})
-        .update(req.body.column, req.body[req.body.column])
+        .update(req.body)
         .returning('*')
         .then((spell) => {
           res.send({message: "Saved new spell text"})
@@ -73,6 +70,17 @@ app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
       }
       // res.send({message: "Received"})
   })
+})
+
+app.delete(`${epSpellView}`, requireAuth, (req, res) => {
+  // console.log('Inside /spell/:id server delete');
+
+  req.app.get('db')('spells')
+    .where({id: req.params.id})
+    .delete()
+    .then((spells) => {
+      res.send({message: "Spell deleted"})
+    })
 })
 
 app.post(`${epSpellIndex}`, requireAuth, (req, res, next) => { 
