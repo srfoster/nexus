@@ -40,6 +40,30 @@ function SpellDashboard(props) {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  function createSpell(event) {
+    // event.preventDefault();
+    // console.log(event);
+    props.setSpells([...props.spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
+    // console.log(spells);
+
+    fetch(`${config.API_ENDPOINT}/spells`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+      .then(spell => {
+        console.log(spell);
+        props.setSpells([...props.spells, spell])
+      })
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -96,9 +120,10 @@ function SpellDashboard(props) {
               </Paper>
             </Grid>
           </Grid>
+          {/* <p></p> */}
           {/* FIXME: <button> cannot appear as a descendant of <button> */}
-          <Fab color="primary" aria-label="add" className={classes.fab}>
-            {props.fabContent}
+          <Fab color="primary" aria-label="add" className={classes.fab} onClick={createSpell}>
+            <AddIcon />
           </Fab>
         </Container>
       </main>
@@ -187,8 +212,8 @@ const useStyles = makeStyles((theme) => ({
   },
   fab: {
     position: 'absolute',
-    bottom: theme.spacing(2),
-    right: theme.spacing(2),
+    bottom: theme.spacing(4),
+    right: theme.spacing(4),
   },
 }));
 

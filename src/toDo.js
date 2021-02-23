@@ -1,22 +1,26 @@
 /* 2/23/21
+  TODO: Verify the object keys are what we want to receive!!!
+
   >> Refactoring code question
 
   - Changes to SpellDetails only save the last thing altered, not all text fields
 
-  - Delete method for spells
+  --> Delete method for spells
   >> Delete from database or flag it?
   >> Delete works. Need a method of forcing a refresh
   >> Delete confirmation pop-up if on SpellIndex
 
   - Give feedback that a save is occurring within SpellDetails
 
-  - Color CreateSpell icon
-  >> Button can't be descendant of button (SpellIndex / Dashboard)
+  --> Color CreateSpell icon
+  --> Button can't be descendant of button (SpellIndex / Dashboard)
   --> Console error about <div> as child of <p> (SpellDetails)
 
   Dashboard should have conditional rendering if logged in or not
-  Clean up Material-Ui styles in React
+  Clean up Material-Ui styles
   Update Readme files
+
+  Password confirmation on create page should be hidden
 
   Close tab confirmation window if save is occurring
 

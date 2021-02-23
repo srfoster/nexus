@@ -44,14 +44,13 @@ export default function SpellDetails(props) {
     
   }  
 
-  const handleNewText = (keyDestination, newText) => {
+  const handleNewText = () => {
     const { id } = props.match.params
 
     // console.log(newText);
 
-    let payload = {}
-    payload[keyDestination] = newText;
-    payload['column'] = keyDestination;
+    let payload = spell
+    console.log(payload);
 
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'POST',
@@ -105,7 +104,10 @@ export default function SpellDetails(props) {
               theme: 'material',
               lineNumbers: true
             }}
-            onChange={(editor, data, value) => debounce(() => handleNewText('text', value), 3000)}
+            onChange={(editor, data, value) => {
+              setSpell({...spell, text: value})
+              debounce(() => handleNewText(), 3000)
+            }}
           />
         </div>
       </React.Fragment>
