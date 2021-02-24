@@ -46,15 +46,16 @@ app.get(`${epSpellView}`, requireAuth, (req, res) => {
 })
 
 app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
-  // TODO: Verify the object keys are what we want to receive!!!
+
+  const { name, description, text } = req.body;
   
   req.app.get('db')('spells')
   .where({id: req.params.id})
   .then((spells) => {
-      console.log("Testing: ", req.body);
+      // console.log("Testing: ", req.body);
       if (spells.length === 0){
         req.app.get('db')('spells')
-        .insert(req.body)
+        .insert({name, description, text})
         .returning('*')
         .then((spell) => {
           res.send({message: "Saved new spell text"})
@@ -62,7 +63,7 @@ app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
       } else{
         req.app.get('db')('spells')
         .where({id: spells[0].id})
-        .update(req.body)
+        .update({name, description, text})
         .returning('*')
         .then((spell) => {
           res.send({message: "Saved new spell text"})

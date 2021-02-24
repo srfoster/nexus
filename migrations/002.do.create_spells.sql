@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS spells (
   name TEXT NOT NULL,
   description TEXT,
   text TEXT,
+  is_public TEXT NOT NULL DEFAULT false,
   date_created TIMESTAMP DEFAULT now() NOT NULL,
   date_modified TIMESTAMP,
   CONSTRAINT fk_user
