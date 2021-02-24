@@ -10,11 +10,14 @@ import SpellDashboard from './SpellDashboard';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+let debounceTimer
+
 export default function SpellDetails(props) {
   const classes = useStyles();
   let history = useHistory();
 
   const [spell, setSpell] = useState()
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     const { id } = props.match.params
@@ -35,19 +38,16 @@ export default function SpellDetails(props) {
       .then(spell => setSpell(spell))
   }, [])
 
-  let debounceTimer
-
   const debounce = (func, delay) => { 
-    placeHolder = <div className={classes.spinner}><CircularProgress /></div>
+    setIsSaving(true);
+
     clearTimeout(debounceTimer) 
     debounceTimer = setTimeout(() => func(), delay) 
     
   }  
 
-  const handleNewText = () => {
+  const handleNewText = (spell) => {
     const { id } = props.match.params
-
-    // console.log(newText);
 
     let payload = spell
     console.log(payload);
@@ -65,6 +65,7 @@ export default function SpellDetails(props) {
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       )
+      .then(() => setIsSaving(false))
   }
   
   let placeHolder = '';
@@ -77,11 +78,19 @@ export default function SpellDetails(props) {
           <TextField className={classes.margin}
             label="Name"
             defaultValue={spell.name}
-            onChange={(event) => debounce(() => handleNewText('name', event.target.value), 3000)}
+            onChange={(event) => {
+              console.log(event.target.value);
+              setSpell({...spell, name: event.target.value})
+              debounce(() => handleNewText({...spell, name: event.target.value}), 3000)
+            }}
           /> : 
           'Empty'}
         </Title> 
-        {placeHolder}
+        {/* {placeHolder} */}
+        
+        {isSaving ? <div className={classes.spinner}>
+          <CircularProgress />
+        </div> : ''}
         {/* <div className={classes.spinner}>
           <CircularProgress />
         </div> */}
@@ -93,7 +102,10 @@ export default function SpellDetails(props) {
           // defaultValue='Test' 
           defaultValue={spell.description}
           fullWidth
-          onChange={(event) => debounce(() => handleNewText('description', event.target.value), 3000)}
+          onChange={(event) => {
+            setSpell({...spell, description: event.target.value})
+            debounce(() => handleNewText({...spell, description: event.target.value}), 3000)
+          }}
         /> : 
         'Empty'}
         <div className='CodeMirror'>
@@ -106,7 +118,7 @@ export default function SpellDetails(props) {
             }}
             onChange={(editor, data, value) => {
               setSpell({...spell, text: value})
-              debounce(() => handleNewText(), 3000)
+              debounce(() => handleNewText({...spell, text: value}), 3000)
             }}
           />
         </div>

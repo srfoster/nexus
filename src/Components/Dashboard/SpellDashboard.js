@@ -43,25 +43,28 @@ function SpellDashboard(props) {
   function createSpell(event) {
     // event.preventDefault();
     // console.log(event);
-    props.setSpells([...props.spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
+    if (props.spells){
+      props.setSpells([...props.spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
+    
     // console.log(spells);
 
-    fetch(`${config.API_ENDPOINT}/spells`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'authorization': `bearer ${TokenService.getAuthToken()}`,
-      },
-    })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
-          : res.json()
-      )
-      .then(spell => {
-        console.log(spell);
-        props.setSpells([...props.spells, spell])
+      fetch(`${config.API_ENDPOINT}/spells`, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'authorization': `bearer ${TokenService.getAuthToken()}`,
+        },
       })
+        .then(res =>
+          (!res.ok)
+            ? res.json().then(e => Promise.reject(e))
+            : res.json()
+        )
+        .then(spell => {
+          console.log(spell);
+          props.setSpells([...props.spells, spell])
+        })
+    }
   }
 
   return (

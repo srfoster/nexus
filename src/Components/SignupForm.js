@@ -108,7 +108,7 @@ const SignupForm = (props) => {
                   fullWidth
                   name="confirm-password"
                   label="Confirm Password"
-                  type="confirm-password"
+                  type="password"
                   id="confirm-password"
                   autoComplete="current-password"
                   inputRef={passConfirmInput}

@@ -74,7 +74,7 @@ export default function SpellChart(props) {
         </TableHead>
         <TableBody>
           {props.spells.sort(byName).map((spell) => (
-            <TableRow key={spell.id}>
+            <TableRow key={"Key: " + spell.id}>
               <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>
               <TableCell>{textTrim(spell.name, 15)}</TableCell>
               <TableCell>{textTrim(spell.description, 30)}</TableCell>

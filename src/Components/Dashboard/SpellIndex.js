@@ -49,45 +49,10 @@ function SpellIndex() {
       )
       .then(spells => setSpells(spells))
   }, [])
-  
-  function createSpell(event) {
-    // event.preventDefault();
-    // console.log(event);
-    setSpells([...spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
-    // console.log(spells);
-
-    fetch(`${config.API_ENDPOINT}/spells`, {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'authorization': `bearer ${TokenService.getAuthToken()}`,
-      },
-    })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
-          : res.json()
-      )
-      .then(spell => {
-        console.log(spell);
-        setSpells([...spells, spell])
-      })
-  }
-
-//   var heroes = [
-//     {name: “Batman”, franchise: “DC”},
-//     {name: “Ironman”, franchise: “Marvel”},
-//     {name: “Thor”, franchise: “Marvel”},
-//     {name: “Superman”, franchise: “DC”}
-  // ];
-
-  // var marvelHeroes =  heroes.filter(function(hero) {
-  //     return hero.franchise == “Marvel”;
-  // });
 
   return (
     // fabContent={<IconButton onClick={createSpell}><AddIcon /></IconButton>}
-    <SpellDashboard >
+    <SpellDashboard spells={spells} setSpells={setSpells}>
       <SpellChart 
         spells={spells}
         onDelete={(deletedSpellID) => setSpells(spells.filter(spell => spell.id !== deletedSpellID))}

@@ -1,3 +1,38 @@
+/* 2/24/21
+  >> Refactoring code question
+
+  Line up spell name with description
+
+  Public/Private toggle button
+  Display eye icon on spells that are flagged public
+  Dashboard should have conditional rendering if logged in or not
+
+  Deleting a spell should have confirmation pop-up if on SpellIndex
+
+  Dashboard should have conditional rendering if logged in or not
+  Clean up Material-Ui styles
+  Update Readme files
+
+  Close tab confirmation window if save is occurring
+
+  Rename files to be more accurate. SpellDashboard shouldn't have the word 'spell' in it anymore
+  Delete unused files
+  Add in the "forgot password" functionality on login page
+
+  Fix auth token test randomly failing
+
+  **FINISHED**
+  --> Bug fix the create spell button not working
+  --> Fix console errors about unique key prop
+  --> Password confirmation on create page should be hidden
+  --> Changes to spell text fields are not being recognized
+  --> The prop `to` is marked as required in `Link`, but its value is `undefined` (LoginPage)
+  --> TODO: Verify the object keys are what we want to receive!!!
+  --> Final character any changes in SpellDetails isn't updated in state
+  --> Give feedback that a save is occurring within SpellDetails
+  --> Debounce has timing issues
+*/
+
 /* 2/23/21
   TODO: Verify the object keys are what we want to receive!!!
 
@@ -5,16 +40,10 @@
 
   - Changes to SpellDetails only save the last thing altered, not all text fields
 
-  --> Delete method for spells
-  >> Delete from database or flag it?
-  >> Delete works. Need a method of forcing a refresh
-  >> Delete confirmation pop-up if on SpellIndex
+  Delete confirmation pop-up if on SpellIndex
 
   - Give feedback that a save is occurring within SpellDetails
 
-  --> Color CreateSpell icon
-  --> Button can't be descendant of button (SpellIndex / Dashboard)
-  --> Console error about <div> as child of <p> (SpellDetails)
 
   Dashboard should have conditional rendering if logged in or not
   Clean up Material-Ui styles
@@ -26,19 +55,21 @@
 
   Rename files to be more accurate. SpellDashboard shouldn't have the word 'spell' in it anymore
   Delete unused files
+
+  **FINISHED**
+  --> Color CreateSpell icon
+  --> Button can't be descendant of button (SpellIndex / Dashboard)
+  --> Console error about <div> as child of <p> (SpellDetails)
+  --> Delete method for spells
+
 */
 
 /* 2/22/21
-  --> Fixed SpellDetails crash error
-  --> Need a method to edit the spell description and name
-
-  --> Give method of creating a new spell
   Color CreateSpell icon
   Delete method for spells
   >> Delete from database or flag it?
 
   - Give feedback that a save is occurring within SpellDetails
-
 
   Console error about <div> as child of <p>
 
@@ -47,6 +78,12 @@
   Update Readme files
 
   Close tab confirmation window if save is occurring
+
+  **FINISHED**
+  --> Fixed SpellDetails crash error
+  --> Need a method to edit the spell description and name
+
+  --> Give method of creating a new spell
 */
 
 /* 2/18/21
