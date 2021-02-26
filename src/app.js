@@ -41,13 +41,14 @@ app.get(`${epSpellView}`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
   .where({id: req.params.id})
   .then((displaySpells) => {
+    console.log(displaySpells[0]);
       res.send(displaySpells[0])
   })
 })
 
 app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
 
-  const { name, description, text } = req.body;
+  const { name, description, text, is_public } = req.body;
   
   req.app.get('db')('spells')
   .where({id: req.params.id})
@@ -55,7 +56,7 @@ app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
       // console.log("Testing: ", req.body);
       if (spells.length === 0){
         req.app.get('db')('spells')
-        .insert({name, description, text})
+        .insert({name, description, text, is_public})
         .returning('*')
         .then((spell) => {
           res.send({message: "Saved new spell text"})
@@ -63,10 +64,10 @@ app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
       } else{
         req.app.get('db')('spells')
         .where({id: spells[0].id})
-        .update({name, description, text})
+        .update({name, description, text, is_public})
         .returning('*')
         .then((spell) => {
-          res.send({message: "Saved new spell text"})
+          res.send(spell[0])
         })
       }
       // res.send({message: "Received"})
@@ -82,6 +83,24 @@ app.delete(`${epSpellView}`, requireAuth, (req, res) => {
     .then((spells) => {
       res.send({message: "Spell deleted"})
     })
+})
+
+app.put(`${epSpellView}`, requireAuth, (req, res, next) => {
+
+  const { is_public } = req.body;
+  
+  req.app.get('db')('spells')
+  .where({id: req.params.id})
+  .then((spells) => {
+    req.app.get('db')('spells')
+    .where({id: spells[0].id})
+    .update({is_public})
+    .returning('*')
+    .then((spell) => {
+      res.send({message: "Saved new is_public"})
+    })
+      // res.send({message: "Received"})
+  })
 })
 
 app.post(`${epSpellIndex}`, requireAuth, (req, res, next) => { 
