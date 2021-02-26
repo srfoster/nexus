@@ -7,15 +7,12 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-// import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Header from './Header';
-
 
 const LoginForm = (props) => {
   const classes = useStyles();
@@ -46,9 +43,6 @@ const LoginForm = (props) => {
     const handleLoginSuccess = () => {
       const { history } = props
       history.push('/spells')
-      // if(props.onLogin){
-      //   props.onLogin(true);
-      // }
     }
 
     return (
@@ -91,10 +85,10 @@ const LoginForm = (props) => {
               autoComplete="current-password"
               inputRef={passwordInput}
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <div role='alert'>
               {error ? <p className='red'>{error}</p> : null}
             </div>

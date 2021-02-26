@@ -8,28 +8,22 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import MainListItems from './listItems';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import clsx from 'clsx';
 import CodeSpells from '../../Assets/CodeSpells.png';
 import Link from '@material-ui/core/Link';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import NavigationIcon from '@material-ui/icons/Navigation';
 
-function SpellDashboard(props) {
+function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -39,6 +33,8 @@ function SpellDashboard(props) {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  console.log(TokenService.hasAuthToken());
 
   function createSpell(event) {
     // event.preventDefault();
@@ -61,13 +57,14 @@ function SpellDashboard(props) {
             : res.json()
         )
         .then(spell => {
-          console.log(spell);
+          // console.log(spell);
           props.setSpells([...props.spells, spell])
         })
     }
   }
 
   return (
+    TokenService.hasAuthToken() ?
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -84,14 +81,12 @@ function SpellDashboard(props) {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             
           </Typography>
-          {/* <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton> */}
-          <Link href='https://codespells.org/index.html' align='right'>
+          <IconButton color="inherit" >
             <img src={CodeSpells} alt="CodeSpells" width="20%"></img>
-          </Link>
+          </IconButton>
+          {/* <Link href='https://codespells.org/index.html' align='right'>
+            <img src={CodeSpells} alt="CodeSpells" width="20%"></img>
+          </Link> */}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -124,13 +119,13 @@ function SpellDashboard(props) {
             </Grid>
           </Grid>
           {/* <p></p> */}
-          {/* FIXME: <button> cannot appear as a descendant of <button> */}
           <Fab color="primary" aria-label="add" className={classes.fab} onClick={createSpell}>
             <AddIcon />
           </Fab>
         </Container>
       </main>
     </div>
+    : <div>Not logged in</div>
   )
 }
 
@@ -220,4 +215,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default SpellDashboard;
+export default Dashboard;

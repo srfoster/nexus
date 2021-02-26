@@ -10,14 +10,32 @@ import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import TokenService from '../../Services/token-service';
 import config from '../../config';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 export default function SpellChart(props) {
   const classes = useStyles();
   let history = useHistory();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   function byName( a, b ) {
     if ( a.name < b.name ){
@@ -41,6 +59,7 @@ export default function SpellChart(props) {
 
   function deleteSpell(id){
     // console.log("Clicked delete", id);
+    
 
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'DELETE',
@@ -70,6 +89,7 @@ export default function SpellChart(props) {
             <TableCell>Code</TableCell>
             <TableCell align="right">Edit</TableCell>
             <TableCell align="right">Delete</TableCell>
+            <TableCell align="right">Public</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -85,9 +105,41 @@ export default function SpellChart(props) {
                 </IconButton>
               </TableCell>
               <TableCell align="right">
-                <IconButton aria-label="edit" onClick={() => deleteSpell(spell.id)}>
+                <IconButton aria-label="edit" 
+                  // onClick={() => deleteSpell(spell.id)}
+                  onClick={handleClickOpen}
+                >
                   <DeleteForeverIcon />
                 </IconButton>
+
+                {/* Dialog confirmation */}
+                <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">{"Delete spell?"}</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                      Are you sure you would like to delete this spell?
+                    </DialogContentText>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={() => {handleClose(); deleteSpell(spell.id)}} color="primary">
+                      Delete
+                    </Button>
+                    <Button onClick={handleClose} color="primary" autoFocus>
+                      Keep
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+
+              </TableCell>
+              <TableCell align="right">
+                <Icon aria-label="edit">
+                  {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </Icon>
               </TableCell>
             </TableRow>
           ))}

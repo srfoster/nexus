@@ -1,3 +1,59 @@
+/* 2/26/21
+  Set up the all public spells view page
+
+  - Dashboard should have conditional rendering if logged in or not
+
+  Fix the SpellDetails isPublic button
+  Fix the loading indicator placement
+  Fix the SpellChart icon column spacing
+    
+  CodeSpells image link is far larger than the image itself -- turn it into an onClick
+
+  If auth token, either redirect to spells from landing, or make landing look like dashboard
+  Add delete method to SpellDetails
+
+  Update Readme files
+  Close tab confirmation window if save is occurring
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+
+  **FINISHED**
+  --> Set a full page SpellDetails ternary render instead of a bunch of smaller ternaries
+  --> Clean up Material-Ui styles
+  --> Rename files to be more accurate. SpellDashboard shouldn't have the word 'spell' in it anymore
+  --> Delete unused files
+  --> Signup should work and direct user to login
+  --> Clean up unused imports
+  --> Public/Private toggle button
+  --> Deleting a spell should have confirmation pop-up if on SpellIndex
+*/
+
+/* 2/25/21
+  - Public/Private toggle button
+
+  Set a full page SpellDetails ternary render instead of a bunch of smaller ternaries
+  
+  Dashboard should have conditional rendering if logged in or not
+
+  Deleting a spell should have confirmation pop-up if on SpellIndex
+
+  Clean up Material-Ui styles
+  Update Readme files
+
+  Close tab confirmation window if save is occurring
+
+  Rename files to be more accurate. SpellDashboard shouldn't have the word 'spell' in it anymore
+  Delete unused files
+  Add in the "forgot password" functionality on login page
+
+  Fix auth token test randomly failing
+
+  **FINISHED**
+  --> Line up spell name with description
+  --> Give feedback that a save is occurring within SpellDetails
+  --> Display eye icon on spells that are flagged public
+*/
+
 /* 2/24/21
   >> Refactoring code question
 
@@ -9,7 +65,6 @@
 
   Deleting a spell should have confirmation pop-up if on SpellIndex
 
-  Dashboard should have conditional rendering if logged in or not
   Clean up Material-Ui styles
   Update Readme files
 
