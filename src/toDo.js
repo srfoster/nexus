@@ -1,3 +1,26 @@
+/* 3/1/21
+  PublicSpells code accordion opens all albums at once
+  PublicSpells cards only fill a single column
+
+  - Dashboard should have conditional rendering if logged in or not
+
+  Fix the SpellDetails isPublic button
+  Fix the loading indicator placement
+  Fix the SpellChart icon column spacing
+    
+  If auth token, either redirect to spells from landing, or make landing look like dashboard
+  Add delete method to SpellDetails
+
+  Update Readme files
+  Close tab confirmation window if save is occurring
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+
+  **FINISHED**
+  --> CodeSpells image link is far larger than the image itself -- turn it into an onClick
+  --> Set up the all public spells view page
+*/
+
 /* 2/26/21
   Set up the all public spells view page
 

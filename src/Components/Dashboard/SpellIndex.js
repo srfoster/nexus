@@ -38,6 +38,4 @@ function SpellIndex(props) {
   )
 }
 
-const drawerWidth = 240;
-
 export default SpellIndex;

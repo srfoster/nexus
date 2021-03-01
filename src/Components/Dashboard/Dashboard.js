@@ -78,15 +78,16 @@ function Dashboard(props) {
           >
             <MenuIcon />
           </IconButton>
+          
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            
           </Typography>
-          <IconButton color="inherit" >
+
+          {/* <IconButton color="inherit" >
             <img src={CodeSpells} alt="CodeSpells" width="20%"></img>
-          </IconButton>
-          {/* <Link href='https://codespells.org/index.html' align='right'>
-            <img src={CodeSpells} alt="CodeSpells" width="20%"></img>
-          </Link> */}
+          </IconButton> */}
+          <Link href='https://codespells.org/index.html' className={classes.link}>
+            <img src={CodeSpells} alt="CodeSpells" width="100%"></img>
+          </Link>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -213,6 +214,9 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(4),
     right: theme.spacing(4),
   },
+  link: {
+    width: '10%',
+  }
 }));
 
 export default Dashboard;

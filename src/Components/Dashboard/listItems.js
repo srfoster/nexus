@@ -47,7 +47,7 @@ export default function MainListItems() {
           <ListItemIcon>
             <PhotoAlbumIcon />
           </ListItemIcon>
-          <ListItemText primary="All Spells" />
+          <ListItemText primary="Public Spells" />
         </ListItem>
       </div>
       <Divider />
