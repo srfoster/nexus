@@ -65,6 +65,7 @@ function Dashboard(props) {
 
   return (
     TokenService.hasAuthToken() ?
+    // Private only display
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -126,7 +127,69 @@ function Dashboard(props) {
         </Container>
       </main>
     </div>
-    : <div>Not logged in</div>
+    : 
+    // Public display
+    <div className={classes.root}>
+    <CssBaseline />
+    <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+      <Toolbar className={classes.toolbar}>
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+        >
+          <MenuIcon />
+        </IconButton>
+        
+        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+        </Typography>
+
+        {/* <IconButton color="inherit" >
+          <img src={CodeSpells} alt="CodeSpells" width="20%"></img>
+        </IconButton> */}
+        <Link href='https://codespells.org/index.html' className={classes.link}>
+          <img src={CodeSpells} alt="CodeSpells" width="100%"></img>
+        </Link>
+      </Toolbar>
+    </AppBar>
+    <Drawer
+      variant="permanent"
+      classes={{
+        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+      }}
+      open={open}
+    >
+      <div className={classes.toolbarIcon}>
+        <IconButton onClick={handleDrawerClose}>
+          <ChevronLeftIcon />
+        </IconButton>
+      </div>
+      <Divider />
+      <List>
+        <MainListItems/>
+        {/* {mainListItems} */}
+      </List>
+    </Drawer>
+    <main className={classes.content}>
+      <div className={classes.appBarSpacer} />
+      <Container maxWidth="lg" className={classes.container}>
+        <Grid container spacing={3}>
+          {/* Spell List */}
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              {props.children}
+            </Paper>
+          </Grid>
+        </Grid>
+        {/* <p></p> */}
+        <Fab color="primary" aria-label="add" className={classes.fab} onClick={createSpell}>
+          <AddIcon />
+        </Fab>
+      </Container>
+    </main>
+  </div>
   )
 }
 

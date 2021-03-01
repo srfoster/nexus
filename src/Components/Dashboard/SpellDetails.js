@@ -22,6 +22,9 @@ export default function SpellDetails(props) {
   const [spell, setSpell] = useState();
   const [isSaving, setIsSaving] = useState(false);
 
+  const [spellText, setSpellText] = useState(undefined)
+  // let spellText = undefined;
+
   useEffect(() => {
     const { id } = props.match.params
 
@@ -41,6 +44,7 @@ export default function SpellDetails(props) {
       .then(spell => {
         setSpell(spell)
         // setIsPublic(spell.is_public)
+        setSpellText(spell.text);
       })
   }, [])
 
@@ -110,8 +114,10 @@ export default function SpellDetails(props) {
           }}
         />
         <div className='CodeMirror'>
+          {spellText ?
           <CodeMirror
-            value={spell.text}
+            value={spellText}
+            // value={'Bogus stuff'}
             options={{
               mode: 'scheme',
               theme: 'material',
@@ -122,6 +128,7 @@ export default function SpellDetails(props) {
               debounce(() => updateSpell({...spell, text: value}), 3000)
             }}
           />
+          : ''}
         </div>
         {isSaving ? <div className={classes.spinner}>
           <CircularProgress size={30} />

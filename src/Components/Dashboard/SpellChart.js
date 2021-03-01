@@ -28,13 +28,16 @@ export default function SpellChart(props) {
   let history = useHistory();
 
   const [open, setOpen] = React.useState(false);
+  const [spellToDelete, setSpellToDelete] = React.useState(undefined);
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpen = (id) => {
+    // setOpen(true);
+    setSpellToDelete(id);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleClose = (id) => {
+    // setOpen(false);
+    setSpellToDelete(undefined);
   };
 
   function byName( a, b ) {
@@ -106,16 +109,17 @@ export default function SpellChart(props) {
               </TableCell>
               <TableCell align="right">
                 <IconButton aria-label="edit" 
-                  // onClick={() => deleteSpell(spell.id)}
-                  onClick={handleClickOpen}
+                  onClick={() => handleClickOpen(spell.id)}
+                  // onClick={handleClickOpen}
                 >
                   <DeleteForeverIcon />
                 </IconButton>
 
                 {/* Dialog confirmation */}
                 <Dialog
-                  open={open}
-                  onClose={handleClose}
+                  // open={open}
+                  open={spellToDelete === spell.id}
+                  onClose={() => handleClose(spell.id)}
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                 >
@@ -126,7 +130,7 @@ export default function SpellChart(props) {
                     </DialogContentText>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={() => {handleClose(); deleteSpell(spell.id)}} color="primary">
+                    <Button onClick={() => {handleClose(); deleteSpell(spell.id)}} color="secondary">
                       Delete
                     </Button>
                     <Button onClick={handleClose} color="primary" autoFocus>

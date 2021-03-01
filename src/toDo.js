@@ -1,25 +1,57 @@
 /* 3/1/21
+  Change spell deletion to flagging as deleted
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
   PublicSpells code accordion opens all albums at once
-  PublicSpells cards only fill a single column
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
 
-  - Dashboard should have conditional rendering if logged in or not
+  Seed file should contain a few spells with the public flag 
 
-  Fix the SpellDetails isPublic button
-  Fix the loading indicator placement
-  Fix the SpellChart icon column spacing
-    
-  If auth token, either redirect to spells from landing, or make landing look like dashboard
+  **Dashboard**
+  Change the public Dashboard display and list items
+  Hide the plus button if not relevant to that page or move render to sub-component
+
+  **Deletion**
   Add delete method to SpellDetails
 
-  Update Readme files
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+
+  **Visuals**
+  - Fix the SpellDetails isPublic button placement
+  Fix the SpellDetails loading indicator placement
+  Fix the SpellChart icon column spacing
+    
+  **User Flow**
+  If auth token, either redirect to spells from landing, or make landing look like dashboard
   Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Update Readme files
   Add in the "forgot password" functionality on login page
   Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  Deploy database for joint efforts and creating spells
+  *Revise the SpellDetails workaround to not re-render CodeMirror
 
-  **FINISHED**
+  ***FINISHED***
+  --> Dashboard should have conditional rendering if logged in or not
   --> CodeSpells image link is far larger than the image itself -- turn it into an onClick
   --> Set up the all public spells view page
+  --> PublicSpells cards only fill a single column
+  --> PublicSpells needs to only display spells with the public flag
+  --> Delete spell dialogue box currently blacks out the entire screen
+  --> CodeMirror text bug & debounce occurring too soon
 */
+
+
 
 /* 2/26/21
   Set up the all public spells view page
@@ -50,6 +82,8 @@
   --> Public/Private toggle button
   --> Deleting a spell should have confirmation pop-up if on SpellIndex
 */
+
+
 
 /* 2/25/21
   - Public/Private toggle button
