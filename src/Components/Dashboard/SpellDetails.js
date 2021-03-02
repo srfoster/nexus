@@ -12,6 +12,14 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 
 let debounceTimer
 
@@ -24,6 +32,19 @@ export default function SpellDetails(props) {
 
   const [spellText, setSpellText] = useState(undefined)
   // let spellText = undefined;
+
+  const [open, setOpen] = React.useState(false);
+  const [spellToDelete, setSpellToDelete] = React.useState(undefined);
+
+  const handleClickOpen = (id) => {
+    // setOpen(true);
+    setSpellToDelete(id);
+  };
+
+  const handleClose = (id) => {
+    // setOpen(false);
+    setSpellToDelete(undefined);
+  };
 
   useEffect(() => {
     const { id } = props.match.params
@@ -49,7 +70,7 @@ export default function SpellDetails(props) {
   }, [])
 
   const debounce = (func, delay) => { 
-    setIsSaving(true);
+    // setIsSaving(true);
 
     clearTimeout(debounceTimer) 
     debounceTimer = setTimeout(() => func(), delay) 
@@ -57,13 +78,15 @@ export default function SpellDetails(props) {
   }  
 
   const updateSpell = (spell) => {
+    setIsSaving(true);
+
     const { id } = props.match.params
 
     let payload = spell
     console.log(payload);
 
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,
@@ -80,30 +103,99 @@ export default function SpellDetails(props) {
         setSpell(spell)
       })
   }
-  
+
+  function deleteSpell(id){
+    // console.log("Clicked delete", id);
+    
+    return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+      // body: JSON.stringify(payload)
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  }
+
   return (
     <Dashboard>
       {spell ? 
       <React.Fragment>
-        <Title>
-          {spell.name}
-        </Title> 
-        <TextField className={classes.title}
-          label="Name"
-          defaultValue={spell.name}
-          onChange={(event) => {
-            // console.log(event.target.value);
-            setSpell({...spell, name: event.target.value})
-            debounce(() => updateSpell({...spell, name: event.target.value}), 3000)
-          }}
-        />
-          <IconButton aria-label="edit" onClick={() => {
-            setSpell({...spell, is_public: !spell.is_public})
-            debounce(() => updateSpell({...spell, is_public: !spell.is_public}), 3000)
-          }}>
-            {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
-          </IconButton> 
-        
+        <div className={classes.titleRow}>
+          <div className={classes.metaTitle}></div>
+          <div className={classes.metaTitle}>
+            <Title className={classes.titleDisplay}>
+              {spell.name}
+            </Title> 
+          </div>
+          <div className={classes.metaSpinner}>
+            {isSaving ? <div className={classes.spinner}>
+              <CircularProgress size={30} />
+            </div> : <div className={classes.spinner}></div>}
+          </div>
+        </div>
+
+        <div className={classes.iconRow}>
+          <TextField className={classes.title}
+            label="Name"
+            defaultValue={spell.name}
+            onChange={(event) => {
+              // console.log(event.target.value);
+              setSpell({...spell, name: event.target.value})
+              debounce(() => updateSpell({...spell, name: event.target.value}), 3000)
+            }}
+          />
+
+          <div className={classes.icons}>
+            <Tooltip title="Public status" placement="top-end">
+              <IconButton className={classes.icons} aria-label="isPublic" onClick={() => {
+                setSpell({...spell, is_public: !spell.is_public})
+                debounce(() => updateSpell({...spell, is_public: !spell.is_public}), 3000)
+              }}>
+                {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
+              </IconButton> 
+            </Tooltip>
+
+            <Tooltip title="Delete" placement="top-end">
+              <IconButton className={classes.icons} aria-label="delete" 
+                onClick={() => handleClickOpen(spell.id)}
+                // onClick={handleClickOpen}
+              >
+                <DeleteForeverIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
+        </div>
+
+        {/* Dialog confirmation */}
+        <Dialog
+          // open={open}
+          open={spellToDelete === spell.id}
+          onClose={() => handleClose(spell.id)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Delete spell?"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you would like to delete this spell?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => {handleClose(); deleteSpell(spell.id); history.push('/spells')}} color="secondary">
+              Delete
+            </Button>
+            <Button onClick={handleClose} color="primary" autoFocus>
+              Keep
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         <TextField className={classes.margin}
           label="Description"
           defaultValue={spell.description}
@@ -113,6 +205,10 @@ export default function SpellDetails(props) {
             debounce(() => updateSpell({...spell, description: event.target.value}), 3000)
           }}
         />
+        <p></p>
+        {/* <Typography align='left'>
+          Code:
+        </Typography> */}
         <div className='CodeMirror'>
           {spellText ?
           <CodeMirror
@@ -130,9 +226,6 @@ export default function SpellDetails(props) {
           />
           : ''}
         </div>
-        {isSaving ? <div className={classes.spinner}>
-          <CircularProgress size={30} />
-        </div> : <p></p>}
       </React.Fragment>
       : <div>Spell is loading</div>}
     </Dashboard>
@@ -146,7 +239,8 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     margin: theme.spacing(1),
-    width: '30%'
+    width: '30%',
+    justifyContent: 'left'
   },
   spinner: {
     display: 'flex',
@@ -155,4 +249,27 @@ const useStyles = makeStyles((theme) => ({
     },
     // justifyContent: 'right',
   },
+  icons: {
+    justifyContent: 'right'
+  },
+  iconRow: {
+    display: 'flex',
+    // alignContent: 'left'
+    justifyContent: 'space-between'
+  },
+  titleRow: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  titleDisplay: {
+    // justifyContent: 'center',
+  },
+  metaSpinner: {
+    width: '33%',
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
+  metaTitle: {
+    width: '33%',
+  }
 }));

@@ -29,7 +29,9 @@ function SpellIndex(props) {
   return (
     <Dashboard spells={spells} setSpells={setSpells}>
       <SpellChart 
-        spells={spells}
+        spells={spells} 
+        // setSpells={setSpells}
+        onChange={(changedSpell) => setSpells(spells.map(spell => changedSpell.id === spell.id ? changedSpell : spell))}
         onDelete={(deletedSpellID) => setSpells(spells.filter(spell => spell.id !== deletedSpellID))}
       />
 

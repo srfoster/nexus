@@ -63,7 +63,6 @@ export default function SpellChart(props) {
   function deleteSpell(id){
     // console.log("Clicked delete", id);
     
-
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'DELETE',
       headers: {
@@ -80,19 +79,44 @@ export default function SpellChart(props) {
       .then(() => props.onDelete(id))
   }
 
+  const updateSpell = (spell) => {
+    const { id } = spell
+
+    let payload = spell
+    console.log(payload);
+
+    return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+      .then((spell) => {
+        // props.setSpells({...spell, is_public: !spell.is_public})
+        props.onChange(spell)
+      })
+  }
+
   return (
     <React.Fragment>
       <Title>My Spells</Title>
-      <Table size="small">
+      <Table size="small" padding="none">
         <TableHead>
           <TableRow>
             <TableCell>Created</TableCell>
             <TableCell>Name</TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Code</TableCell>
-            <TableCell align="right">Edit</TableCell>
-            <TableCell align="right">Delete</TableCell>
-            <TableCell align="right">Public</TableCell>
+            <TableCell className={classes.icons} >Edit</TableCell>
+            <TableCell className={classes.icons}>Delete</TableCell>
+            <TableCell className={classes.icons}>Public</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -101,14 +125,14 @@ export default function SpellChart(props) {
               <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>
               <TableCell>{textTrim(spell.name, 15)}</TableCell>
               <TableCell>{textTrim(spell.description, 30)}</TableCell>
-              <TableCell>{textTrim(spell.text, 65)}</TableCell>
-              <TableCell align="right">
+              <TableCell width='40%'>{textTrim(spell.text, 65)}</TableCell>
+              <TableCell className={classes.icons}>
                 <IconButton aria-label="edit" onClick={() => history.push(`/spells/${spell.id}`)}>
                   <EditIcon />
                 </IconButton>
               </TableCell>
-              <TableCell align="right">
-                <IconButton aria-label="edit" 
+              <TableCell className={classes.icons}>
+                <IconButton aria-label="delete" 
                   onClick={() => handleClickOpen(spell.id)}
                   // onClick={handleClickOpen}
                 >
@@ -140,10 +164,13 @@ export default function SpellChart(props) {
                 </Dialog>
 
               </TableCell>
-              <TableCell align="right">
-                <Icon aria-label="edit">
+              <TableCell className={classes.icons}>
+                <IconButton aria-label="isPublic" onClick={() => {
+                  // setSpell({...spell, is_public: !spell.is_public})
+                  updateSpell({...spell, is_public: !spell.is_public})
+                }}>
                   {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                </Icon>
+                </IconButton>
               </TableCell>
             </TableRow>
           ))}
@@ -157,5 +184,10 @@ export default function SpellChart(props) {
 const useStyles = makeStyles((theme) => ({
   seeMore: {
     marginTop: theme.spacing(3),
+  },
+  icons: {
+    align: 'right',
+    textAlign: 'center',
+    width: '5%'
   },
 }));
