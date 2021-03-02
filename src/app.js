@@ -29,7 +29,7 @@ let epSpellView = '/spells/:id'
 
 app.get(epSpellIndex, requireAuth, (req, res) => {
   req.app.get('db')('spells')
-    .where({user_id: req.user.id})
+    .where({user_id: req.user.id, is_deleted: false})
     .then((displaySpells) => {
         res.send(displaySpells)
     })
@@ -39,47 +39,31 @@ app.get(`${epSpellView}`, requireAuth, (req, res) => {
   console.log('Inside /spell/:id server');
 
   req.app.get('db')('spells')
-  .where({id: req.params.id})
+  .where({user_id: req.user.id, id: req.params.id})
   .then((displaySpells) => {
     console.log(displaySpells[0]);
       res.send(displaySpells[0])
   })
 })
 
-app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
+// app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
 
-  const { name, description, text, is_public } = req.body;
+//   // const { name, description, text, is_public } = req.body;
   
-  req.app.get('db')('spells')
-  .where({id: req.params.id})
-  .then((spells) => {
-      // console.log("Testing: ", req.body);
-      if (spells.length === 0){
-        req.app.get('db')('spells')
-        .insert({name, description, text, is_public})
-        .returning('*')
-        .then((spell) => {
-          res.send({message: "Saved new spell text"})
-        })
-      } else{
-        req.app.get('db')('spells')
-        .where({id: spells[0].id})
-        .update({name, description, text, is_public})
-        .returning('*')
-        .then((spell) => {
-          res.send(spell[0])
-        })
-      }
-      // res.send({message: "Received"})
-  })
-})
+//   req.app.get('db')('spells')
+//   .insert({user_id: req.user.id})
+//   .returning('*')
+//   .then((spell) => {
+//     res.send(spell[0])
+//   })
+// })
 
 app.delete(`${epSpellView}`, requireAuth, (req, res) => {
   // console.log('Inside /spell/:id server delete');
 
   req.app.get('db')('spells')
-    .where({id: req.params.id})
-    .delete()
+    .where({user_id: req.user.id, id: req.params.id})
+    .update({is_deleted: true})
     .then((spells) => {
       res.send({message: "Spell deleted"})
     })
@@ -87,25 +71,26 @@ app.delete(`${epSpellView}`, requireAuth, (req, res) => {
 
 app.put(`${epSpellView}`, requireAuth, (req, res, next) => {
 
-  const { is_public } = req.body;
+  const { name, description, text, is_public } = req.body;
   
   req.app.get('db')('spells')
-  .where({id: req.params.id})
+  .where({user_id: req.user.id, id: req.params.id})
   .then((spells) => {
     req.app.get('db')('spells')
     .where({id: spells[0].id})
-    .update({is_public})
+    .update({name, description, text, is_public})
     .returning('*')
     .then((spell) => {
-      res.send({message: "Saved new is_public"})
+      res.send(spell[0])
     })
       // res.send({message: "Received"})
   })
 })
 
+// Create a new spell with default values
 app.post(`${epSpellIndex}`, requireAuth, (req, res, next) => { 
   req.app.get('db')('spells')
-  .insert({user_id: req.user.id, name: 'New Spell', description: 'Spell Description', text: 'Hello World'})
+  .insert({user_id: req.user.id, name: 'New Spell', description: 'Spell Description', text: '(displayln "Hello")'})
   .returning('*')
   .then((spells) => {
     res.send(spells[0])
