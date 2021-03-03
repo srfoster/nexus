@@ -25,8 +25,10 @@ let epHome = '/'
 let epLogin = '/login'
 let epSignup = '/signup'
 let epSpellIndex = '/spells'
-let epSpellView = '/spells/:id'
+let epSpellDetails = '/spells/:id'
+let epPublicSpells = '/gallery'
 
+// Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, (req, res) => {
   req.app.get('db')('spells')
     .where({user_id: req.user.id, is_deleted: false})
@@ -35,9 +37,17 @@ app.get(epSpellIndex, requireAuth, (req, res) => {
     })
 })
 
-app.get(`${epSpellView}`, requireAuth, (req, res) => {
-  console.log('Inside /spell/:id server');
+// Retrieve all public spells
+app.get(epPublicSpells, (req, res) => {
+  req.app.get('db')('spells')
+    .where({is_public: true, is_deleted: false})
+    .then((displaySpells) => {
+        res.send(displaySpells)
+    })
+})
 
+// Retrieve specific spell information
+app.get(`${epSpellDetails}`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
   .where({user_id: req.user.id, id: req.params.id})
   .then((displaySpells) => {
@@ -46,31 +56,18 @@ app.get(`${epSpellView}`, requireAuth, (req, res) => {
   })
 })
 
-// app.post(`${epSpellView}`, requireAuth, (req, res, next) => {
-
-//   // const { name, description, text, is_public } = req.body;
-  
-//   req.app.get('db')('spells')
-//   .insert({user_id: req.user.id})
-//   .returning('*')
-//   .then((spell) => {
-//     res.send(spell[0])
-//   })
-// })
-
-app.delete(`${epSpellView}`, requireAuth, (req, res) => {
-  // console.log('Inside /spell/:id server delete');
-
+// Flag spell as deleted and hide it from client
+app.delete(`${epSpellDetails}`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
     .where({user_id: req.user.id, id: req.params.id})
-    .update({is_deleted: true})
+    .update({is_deleted: true, date_modified: new Date()})
     .then((spells) => {
       res.send({message: "Spell deleted"})
     })
 })
 
-app.put(`${epSpellView}`, requireAuth, (req, res, next) => {
-
+// Update user changes to a specific spell's information
+app.put(`${epSpellDetails}`, requireAuth, (req, res, next) => {
   const { name, description, text, is_public } = req.body;
   
   req.app.get('db')('spells')
@@ -78,12 +75,11 @@ app.put(`${epSpellView}`, requireAuth, (req, res, next) => {
   .then((spells) => {
     req.app.get('db')('spells')
     .where({id: spells[0].id})
-    .update({name, description, text, is_public})
+    .update({name, description, text, is_public, date_modified: new Date()})
     .returning('*')
     .then((spell) => {
       res.send(spell[0])
     })
-      // res.send({message: "Received"})
   })
 })
 
@@ -115,7 +111,6 @@ app.post(epLogin, (req, res) => {
       let passwordMatch = await bcrypt.compare(req.body.password, user.password)
       if (!passwordMatch){return res.status(400).send({error: "Invalid password"})}
 
-      // console.log(user);
       if (passwordMatch) {
         res.send({message: "Passwords match", 
           authToken: jwt.sign({user_id: user.id}, config.JWT_SECRET, {
@@ -127,14 +122,10 @@ app.post(epLogin, (req, res) => {
       } else{
         res.send({error: "Passwords do not match"})
       }
-      // console.log("User retrieved", users);
     })
 })
 
 app.post(epSignup, (req, res, next) => {
-  console.log("Inside signup");
-  console.log(req.body);
-
   if (!req.body.username){return res.status(400).send({error: `Missing 'username' in request body`})}
   if (!req.body.password){return res.status(400).send({error: `Missing 'password' in request body`})}
   
@@ -179,4 +170,4 @@ app.use(function errorHandler(error, req, res, next) {
   res.status(500).json(response);
 });
 
-module.exports = { app, epHome, epLogin, epSignup, epSpellIndex, epSpellView }
+module.exports = { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails }

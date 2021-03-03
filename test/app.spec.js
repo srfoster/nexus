@@ -1,7 +1,7 @@
 const knex = require('knex')
 const { expect } = require('chai')
 const jwt = require('jsonwebtoken')
-const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellView } = require('../src/app')
+const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails } = require('../src/app')
 const helpers = require('./test-helpers')
 const config = require('../src/config')
 const bcrypt = require('bcryptjs')
@@ -276,7 +276,7 @@ describe('App', () => {
     })
   })
 
-  describe(`POST ${epSpellView}`, () => {
+  describe(`POST ${epSpellDetails}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -290,7 +290,7 @@ describe('App', () => {
       )
     )
 
-    it(`GET ${epSpellView} responds with 401 if not logged in`, () => {
+    it(`GET ${epSpellDetails} responds with 401 if not logged in`, () => {
       return supertest(app)
         .get(epSpellIndex)
         .expect(401)
