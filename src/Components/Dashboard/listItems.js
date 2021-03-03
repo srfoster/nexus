@@ -9,8 +9,10 @@ import Divider from '@material-ui/core/Divider';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
 import TokenService from '../../Services/token-service';
+import PersonIcon from '@material-ui/icons/Person';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 
-export default function MainListItems() {
+export function PublicListItems() {
   let history = useHistory();
 
   const handleClickButton = (path) => {
@@ -28,13 +30,6 @@ export default function MainListItems() {
           </ListItemIcon>
           <ListItemText primary="My Spells" />
         </ListItem>
-
-        {/* <ListItem button onClick={() => handleClickButton('/create')}>
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-          <ListItemText primary="New Spell" />
-        </ListItem> */}
 
         <ListItem button onClick={() => handleClickButton('/friends')}>
           <ListItemIcon>
@@ -63,3 +58,41 @@ export default function MainListItems() {
     </>
   )
 };
+
+export function PrivateListItems() {
+  let history = useHistory();
+
+  const handleClickButton = (path) => {
+    history.push(path)
+    if(path === '/login') TokenService.clearAuthToken();
+  }
+
+  return (
+    <>
+      <div>
+        <ListItem button onClick={() => handleClickButton('/gallery')}>
+          <ListItemIcon>
+            <PhotoAlbumIcon />
+          </ListItemIcon>
+          <ListItemText primary="Public Spells" />
+        </ListItem>
+      </div>
+
+      <Divider />
+      <div>
+        <ListItem button onClick={() => history.push('/login')}>
+          <ListItemIcon>
+            <PersonIcon />
+          </ListItemIcon>
+          <ListItemText primary="Login" />
+        </ListItem>
+        <ListItem button onClick={() => history.push('/signup')}>
+          <ListItemIcon>
+            <PersonAddIcon />
+          </ListItemIcon>
+          <ListItemText primary="Signup" />
+        </ListItem>
+      </div>
+    </>
+  )
+}

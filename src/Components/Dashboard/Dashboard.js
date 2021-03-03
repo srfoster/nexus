@@ -13,7 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import MainListItems from './listItems';
+import {PublicListItems, PrivateListItems} from './ListItems';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
@@ -22,6 +22,7 @@ import CodeSpells from '../../Assets/CodeSpells.png';
 import Link from '@material-ui/core/Link';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import Tooltip from '@material-ui/core/Tooltip';
 
 function Dashboard(props) {
   const classes = useStyles();
@@ -34,13 +35,11 @@ function Dashboard(props) {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  console.log(TokenService.hasAuthToken());
-
   function createSpell(event) {
     // event.preventDefault();
     // console.log(event);
     if (props.spells){
-      props.setSpells([...props.spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
+      // props.setSpells([...props.spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
     
     // console.log(spells);
 
@@ -65,7 +64,7 @@ function Dashboard(props) {
 
   return (
     TokenService.hasAuthToken() ?
-    // Private only display
+    // >> Private only display <<
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -105,8 +104,7 @@ function Dashboard(props) {
         </div>
         <Divider />
         <List>
-          <MainListItems/>
-          {/* {mainListItems} */}
+          <PublicListItems/>
         </List>
       </Drawer>
       <main className={classes.content}>
@@ -121,14 +119,16 @@ function Dashboard(props) {
             </Grid>
           </Grid>
           {/* <p></p> */}
-          <Fab color="primary" aria-label="add" className={classes.fab} onClick={createSpell}>
-            <AddIcon />
-          </Fab>
+          <Tooltip title="New Spell" placement="top">
+            <Fab color="primary" aria-label="add" className={classes.fab} onClick={createSpell}>
+              <AddIcon />
+            </Fab>
+          </Tooltip>
         </Container>
       </main>
-    </div>
-    : 
-    // Public display
+    </div> : 
+    
+    // >> Public display <<
     <div className={classes.root}>
     <CssBaseline />
     <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -146,9 +146,6 @@ function Dashboard(props) {
         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
         </Typography>
 
-        {/* <IconButton color="inherit" >
-          <img src={CodeSpells} alt="CodeSpells" width="20%"></img>
-        </IconButton> */}
         <Link href='https://codespells.org/index.html' className={classes.link}>
           <img src={CodeSpells} alt="CodeSpells" width="100%"></img>
         </Link>
@@ -168,8 +165,7 @@ function Dashboard(props) {
       </div>
       <Divider />
       <List>
-        <MainListItems/>
-        {/* {mainListItems} */}
+        <PrivateListItems/>
       </List>
     </Drawer>
     <main className={classes.content}>
@@ -183,10 +179,6 @@ function Dashboard(props) {
             </Paper>
           </Grid>
         </Grid>
-        {/* <p></p> */}
-        <Fab color="primary" aria-label="add" className={classes.fab} onClick={createSpell}>
-          <AddIcon />
-        </Fab>
       </Container>
     </main>
   </div>

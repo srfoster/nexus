@@ -22,8 +22,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Tooltip from '@material-ui/core/Tooltip';
 
 export default function SpellChart(props) {
+
   const classes = useStyles();
   let history = useHistory();
 
@@ -86,7 +88,7 @@ export default function SpellChart(props) {
     console.log(payload);
 
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,
@@ -111,6 +113,7 @@ export default function SpellChart(props) {
         <TableHead>
           <TableRow>
             <TableCell>Created</TableCell>
+            <TableCell>Modified</TableCell>
             <TableCell>Name</TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Code</TableCell>
@@ -122,7 +125,12 @@ export default function SpellChart(props) {
         <TableBody>
           {props.spells.sort(byName).map((spell) => (
             <TableRow key={"Key: " + spell.id}>
-              <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>
+              <Tooltip title={new Date(Date.parse(spell.date_created)).toLocaleTimeString()} arrow placement="bottom-start">
+                <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>
+              </Tooltip>
+              <Tooltip title={new Date(Date.parse(spell.date_modified)).toLocaleTimeString()} arrow placement="bottom-start">
+                <TableCell>{new Date(Date.parse(spell.date_modified)).toLocaleDateString()}</TableCell>
+              </Tooltip>
               <TableCell>{textTrim(spell.name, 15)}</TableCell>
               <TableCell>{textTrim(spell.description, 30)}</TableCell>
               <TableCell width='40%'>{textTrim(spell.text, 65)}</TableCell>
@@ -190,4 +198,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     width: '5%'
   },
+  header: {
+    stickyHeader: true,
+  }
 }));

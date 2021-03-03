@@ -35,11 +35,11 @@ export default function PublicSpells() {
   useEffect(() => {
     // console.log(spells);
 
-    return fetch(`${config.API_ENDPOINT}/spells?public=true`, {
+    return fetch(`${config.API_ENDPOINT}/gallery`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
-        'authorization': `bearer ${TokenService.getAuthToken()}`,
+        // 'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
     })
       .then(res =>
@@ -56,8 +56,7 @@ export default function PublicSpells() {
       <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={4}>
           {spells.map((spell) => (
-            spell.is_public ?
-            <Grid item key={spell} xs={12} sm={6} md={4}>
+            <Grid item key={spell.id} xs={12} sm={6} md={4}>
               <Card className={classes.card}>
               <CardHeader
                 avatar={
@@ -111,7 +110,6 @@ export default function PublicSpells() {
                 </Collapse>
               </Card>
             </Grid>
-            : ''
           ))}
         </Grid>
       </Container>

@@ -30,8 +30,8 @@ export default function SpellDetails(props) {
   const [spell, setSpell] = useState();
   const [isSaving, setIsSaving] = useState(false);
 
+  // FIXME: CodeMirror re-render workaround. Needs revision
   const [spellText, setSpellText] = useState(undefined)
-  // let spellText = undefined;
 
   const [open, setOpen] = React.useState(false);
   const [spellToDelete, setSpellToDelete] = React.useState(undefined);

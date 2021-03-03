@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, useHistory } from "react-router-dom";
 import TokenService from '../../Services/token-service';
 import config from '../../config';
 import SpellChart from './SpellChart';
@@ -7,10 +7,11 @@ import Dashboard from './Dashboard';
 
 function SpellIndex(props) {
   const [spells, setSpells] = useState([])
+  let history = useHistory();
   
   useEffect(() => {
     // console.log(spells);
-
+    // if(!TokenService.hasAuthToken()){history.push('/gallery')}
     return fetch(`${config.API_ENDPOINT}/spells`, {
       method: 'GET',
       headers: {
@@ -20,7 +21,11 @@ function SpellIndex(props) {
     })
       .then(res =>
         (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
+          ? res.json().then(e => {
+            // TODO: Check error message and act accordingly
+            history.push('/gallery')
+            // return Promise.reject(e)
+          })
           : res.json()
       )
       .then(spells => setSpells(spells))
