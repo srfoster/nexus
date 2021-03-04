@@ -1,22 +1,18 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Switch, Route } from "react-router-dom";
+import AuthApiService from './Services/auth-api-service';
+import IdleService from './Services/idle-service';
+import TokenService from './Services/token-service';
 import LoginForm from './Components/LoginForm';
 import SignupForm from './Components/SignupForm';
 import LandingPage from './Components/LandingPage';
-import Header from './Components/Header';
 import SpellIndex from './Components/Dashboard/SpellIndex';
-import SpellAccordionTest from './Components/SpellAccordionTest';
-import SpellShow from './Components/SpellShow';
-import SimpleAccordion from './Components/DemoAccordion'
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import DashDemo from './Templates/Dashboard/Dashboard';
-import LoginDemo from './Templates/Login';
-import SignupDemo from './Templates/Signup';
 import SpellDetails from './Components/Dashboard/SpellDetails';
-import SpellDashboard from './Components/Dashboard/SpellDashboard';
-import CreateSpell from './Components/CreateSpell';
+import Dashboard from './Components/Dashboard/Dashboard';
+import PublicSpells from './Components/PublicSpells';
+import UserProfile from './Components/UserProfile';
 require('codemirror/mode/scheme/scheme');
 
 function App() {
@@ -48,28 +44,18 @@ function App() {
           />
           <Route 
             path={'/friends'}
-            component={(props) => <SpellDashboard><div>Friends Coming Soon</div></SpellDashboard>}
+            component={(props) => <Dashboard><div>Friends Coming Soon</div></Dashboard>}
           />
           <Route 
             path={'/gallery'}
-            component={(props) => <SpellDashboard><div>Gallery Coming Soon</div></SpellDashboard>}
+            component={(props) => <Dashboard><PublicSpells /></Dashboard>}
+          />
+          <Route
+            path={'/profile/:id'}
+            component={(props) => <Dashboard><UserProfile /></Dashboard>}
           />
         </Switch>
       </div>
-      {/* <Switch className='TemplateDemos'>
-        <Route 
-          path={'/dashDemo'}
-          component={DashDemo}
-        />
-        <Route 
-          path={'/loginDemo'}
-          component={LoginDemo}
-        />
-        <Route 
-          path={'/signupDemo'}
-          component={SignupDemo}
-        />
-      </Switch> */}
     </div>
   );
 }
@@ -83,7 +69,6 @@ const outerPaper = makeStyles((theme) => ({
       width: theme.spacing(50),
       height: theme.spacing(50),
     },
-
   },
 }));
 

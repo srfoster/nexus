@@ -1,3 +1,289 @@
+/* 3/2/21
+
+  Implement React Redux
+  
+  Implement profile page, avatars, and public profile
+
+  - Fix the redirect error for non-auth users from /spells to /gallery
+
+  Create spinner for SpellChart while a spell is being created
+
+  SpellChart table borders for smaller columns
+  Implement sticky header on SpellChart table
+
+  Implement a NotFound page
+  
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
+  PublicSpells code accordion opens all albums at once
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
+
+  Seed file should contain a few spells with the public flag 
+
+  **Dashboard**
+  Hide the plus button if not relevant to that page or move render to sub-component
+  Scroll bar should not go under the header bar
+
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+
+  **Visuals**
+  Fix CodeMirror height to fill more of the screen
+    
+  **User Flow**
+  If auth token, either redirect to spells from landing, or make landing look like dashboard
+  Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Update Readme files
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  Deploy database for joint efforts and creating spells
+  *Revise the SpellDetails workaround to not re-render CodeMirror
+  *Revise the SpellIndex history.push to accommodate server errors
+
+  ***FINISHED***
+
+*/
+
+
+
+/* 3/2/21
+  **Question**
+  X>> Should expected changes on SpellDetails be sent to SpellChart to render if it they haven't been sent to server yet?
+  >> Dates in database and user timezone
+
+  Implement profile page, avatars, and public profile
+
+  - Fix the redirect error for non-auth users from /spells to /gallery
+
+  Create spinner for SpellChart while a spell is being created
+
+  - Creating a new spell causes the dialogue box to flicker briefly
+  - SpellChart table borders for smaller columns
+  - Implement sticky header on SpellChart table
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
+  PublicSpells code accordion opens all albums at once
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
+
+  Seed file should contain a few spells with the public flag 
+
+  **Dashboard**
+  Hide the plus button if not relevant to that page or move render to sub-component
+
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+
+  **Visuals**
+  Fix CodeMirror height to fill more of the screen
+    
+  **User Flow**
+  If auth token, either redirect to spells from landing, or make landing look like dashboard
+  Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Update Readme files
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  Deploy database for joint efforts and creating spells
+  *Revise the SpellDetails workaround to not re-render CodeMirror
+  *Revise the SpellIndex history.push to accommodate server errors
+
+  ***FINISHED***
+  --> Database DateModified is not being filled in.
+  --> SpellChart dateModified
+  --> SpellChart date created and modified, tooltip hover with more exact timing
+  --> Public toggle on SpellChart stopped functioning
+  --> Deliver public spells to users that are not logged in
+  --> Tooltip on new spell icon isn't showing
+  --> Change the public Dashboard display and list items
+  --> Move public_spell checks from PublicSpells to server side
+*/
+
+
+
+/* 3/2/21
+  - Database DateModified is not being filled in.
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
+  PublicSpells code accordion opens all albums at once
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
+
+  Seed file should contain a few spells with the public flag 
+
+  **Dashboard**
+  Change the public Dashboard display and list items
+  Hide the plus button if not relevant to that page or move render to sub-component
+
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+
+  **Visuals**
+  Fix CodeMirror height to fill more of the screen
+    
+  **User Flow**
+  If auth token, either redirect to spells from landing, or make landing look like dashboard
+  Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Update Readme files
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  Deploy database for joint efforts and creating spells
+  *Revise the SpellDetails workaround to not re-render CodeMirror
+
+  ***FINISHED***
+  --> Add delete method to SpellDetails
+  --> Fix the SpellDetails isPublic button placement
+  --> Fix the SpellDetails delete button placement
+  --> Fix the SpellDetails loading indicator placement
+  --> Add tooltip to icons on SpellDetails
+  --> Fix the SpellChart icon column spacing
+  - Change SpellDetails spinner to only show as save is occurring, not while debounce is waiting
+  - Add isPublic functionality to SpellChart
+  - Change spell deletion to flagging as deleted
+*/
+
+
+
+/* 3/1/21
+  Change spell deletion to flagging as deleted
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
+  PublicSpells code accordion opens all albums at once
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
+
+  Seed file should contain a few spells with the public flag 
+
+  **Dashboard**
+  Change the public Dashboard display and list items
+  Hide the plus button if not relevant to that page or move render to sub-component
+
+  **Deletion**
+  Add delete method to SpellDetails
+
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+
+  **Visuals**
+  - Fix the SpellDetails isPublic button placement
+  Fix the SpellDetails loading indicator placement
+  Fix the SpellChart icon column spacing
+    
+  **User Flow**
+  If auth token, either redirect to spells from landing, or make landing look like dashboard
+  Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Update Readme files
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  Deploy database for joint efforts and creating spells
+  *Revise the SpellDetails workaround to not re-render CodeMirror
+
+  ***FINISHED***
+  --> Dashboard should have conditional rendering if logged in or not
+  --> CodeSpells image link is far larger than the image itself -- turn it into an onClick
+  --> Set up the all public spells view page
+  --> PublicSpells cards only fill a single column
+  --> PublicSpells needs to only display spells with the public flag
+  --> Delete spell dialogue box currently blacks out the entire screen
+  --> CodeMirror text bug & debounce occurring too soon
+*/
+
+
+
+/* 2/26/21
+  Set up the all public spells view page
+
+  - Dashboard should have conditional rendering if logged in or not
+
+  Fix the SpellDetails isPublic button
+  Fix the loading indicator placement
+  Fix the SpellChart icon column spacing
+    
+  CodeSpells image link is far larger than the image itself -- turn it into an onClick
+
+  If auth token, either redirect to spells from landing, or make landing look like dashboard
+  Add delete method to SpellDetails
+
+  Update Readme files
+  Close tab confirmation window if save is occurring
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+
+  **FINISHED**
+  --> Set a full page SpellDetails ternary render instead of a bunch of smaller ternaries
+  --> Clean up Material-Ui styles
+  --> Rename files to be more accurate. SpellDashboard shouldn't have the word 'spell' in it anymore
+  --> Delete unused files
+  --> Signup should work and direct user to login
+  --> Clean up unused imports
+  --> Public/Private toggle button
+  --> Deleting a spell should have confirmation pop-up if on SpellIndex
+*/
+
+
+
+/* 2/25/21
+  - Public/Private toggle button
+
+  Set a full page SpellDetails ternary render instead of a bunch of smaller ternaries
+  
+  Dashboard should have conditional rendering if logged in or not
+
+  Deleting a spell should have confirmation pop-up if on SpellIndex
+
+  Clean up Material-Ui styles
+  Update Readme files
+
+  Close tab confirmation window if save is occurring
+
+  Rename files to be more accurate. SpellDashboard shouldn't have the word 'spell' in it anymore
+  Delete unused files
+  Add in the "forgot password" functionality on login page
+
+  Fix auth token test randomly failing
+
+  **FINISHED**
+  --> Line up spell name with description
+  --> Give feedback that a save is occurring within SpellDetails
+  --> Display eye icon on spells that are flagged public
+*/
+
 /* 2/24/21
   >> Refactoring code question
 
@@ -9,7 +295,6 @@
 
   Deleting a spell should have confirmation pop-up if on SpellIndex
 
-  Dashboard should have conditional rendering if logged in or not
   Clean up Material-Ui styles
   Update Readme files
 

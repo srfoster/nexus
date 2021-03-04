@@ -8,28 +8,23 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import MainListItems from './listItems';
+import {PublicListItems, PrivateListItems} from './ListItems';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
-import Box from '@material-ui/core/Box';
 import AppBar from '@material-ui/core/AppBar';
 import clsx from 'clsx';
 import CodeSpells from '../../Assets/CodeSpells.png';
 import Link from '@material-ui/core/Link';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import NavigationIcon from '@material-ui/icons/Navigation';
+import Tooltip from '@material-ui/core/Tooltip';
 
-function SpellDashboard(props) {
+function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -44,7 +39,7 @@ function SpellDashboard(props) {
     // event.preventDefault();
     // console.log(event);
     if (props.spells){
-      props.setSpells([...props.spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
+      // props.setSpells([...props.spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
     
     // console.log(spells);
 
@@ -61,13 +56,15 @@ function SpellDashboard(props) {
             : res.json()
         )
         .then(spell => {
-          console.log(spell);
+          // console.log(spell);
           props.setSpells([...props.spells, spell])
         })
     }
   }
 
   return (
+    TokenService.hasAuthToken() ?
+    // >> Private only display <<
     <div className={classes.root}>
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -81,16 +78,15 @@ function SpellDashboard(props) {
           >
             <MenuIcon />
           </IconButton>
+          
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            
           </Typography>
-          {/* <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton> */}
-          <Link href='https://codespells.org/index.html' align='right'>
+
+          {/* <IconButton color="inherit" >
             <img src={CodeSpells} alt="CodeSpells" width="20%"></img>
+          </IconButton> */}
+          <Link href='https://codespells.org/index.html' className={classes.link}>
+            <img src={CodeSpells} alt="CodeSpells" width="100%"></img>
           </Link>
         </Toolbar>
       </AppBar>
@@ -108,8 +104,7 @@ function SpellDashboard(props) {
         </div>
         <Divider />
         <List>
-          <MainListItems/>
-          {/* {mainListItems} */}
+          <PublicListItems/>
         </List>
       </Drawer>
       <main className={classes.content}>
@@ -124,13 +119,69 @@ function SpellDashboard(props) {
             </Grid>
           </Grid>
           {/* <p></p> */}
-          {/* FIXME: <button> cannot appear as a descendant of <button> */}
-          <Fab color="primary" aria-label="add" className={classes.fab} onClick={createSpell}>
-            <AddIcon />
-          </Fab>
+          <Tooltip title="New Spell" placement="top">
+            <Fab color="primary" aria-label="add" className={classes.fab} onClick={createSpell}>
+              <AddIcon />
+            </Fab>
+          </Tooltip>
         </Container>
       </main>
-    </div>
+    </div> : 
+    
+    // >> Public display <<
+    <div className={classes.root}>
+    <CssBaseline />
+    <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
+      <Toolbar className={classes.toolbar}>
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
+        >
+          <MenuIcon />
+        </IconButton>
+        
+        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+        </Typography>
+
+        <Link href='https://codespells.org/index.html' className={classes.link}>
+          <img src={CodeSpells} alt="CodeSpells" width="100%"></img>
+        </Link>
+      </Toolbar>
+    </AppBar>
+    <Drawer
+      variant="permanent"
+      classes={{
+        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+      }}
+      open={open}
+    >
+      <div className={classes.toolbarIcon}>
+        <IconButton onClick={handleDrawerClose}>
+          <ChevronLeftIcon />
+        </IconButton>
+      </div>
+      <Divider />
+      <List>
+        <PrivateListItems/>
+      </List>
+    </Drawer>
+    <main className={classes.content}>
+      <div className={classes.appBarSpacer} />
+      <Container maxWidth="lg" className={classes.container}>
+        <Grid container spacing={3}>
+          {/* Spell List */}
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              {props.children}
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+    </main>
+  </div>
   )
 }
 
@@ -218,6 +269,9 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(4),
     right: theme.spacing(4),
   },
+  link: {
+    width: '10%',
+  }
 }));
 
-export default SpellDashboard;
+export default Dashboard;
