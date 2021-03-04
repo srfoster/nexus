@@ -11,13 +11,14 @@ import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
 import TokenService from '../../Services/token-service';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
-export function PublicListItems() {
+export function PublicListItems(props) {
   let history = useHistory();
 
   const handleClickButton = (path) => {
-    history.push(path)
     if(path === '/login') TokenService.clearAuthToken();
+    history.push(path)
   }
 
   return (
@@ -47,7 +48,14 @@ export function PublicListItems() {
       </div>
       <Divider />
       <div>
-        {/* <ListSubheader inset>Secondary header</ListSubheader> */}
+        <ListItem button 
+          // onClick={() => handleClickButton('/login')}
+          >
+          <ListItemIcon>
+            <AccountCircleIcon />
+          </ListItemIcon>
+          <ListItemText primary="My Account" />
+        </ListItem>
         <ListItem button onClick={() => handleClickButton('/login')}>
           <ListItemIcon>
             <PowerSettingsNewIcon />
