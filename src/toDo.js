@@ -1,7 +1,8 @@
 /* 3/2/21
 
+  Server readme updates: Assumes postgres database, user named admin, no password
   Implement React Redux
-  
+
   Implement profile page, avatars, and public profile
 
   - Fix the redirect error for non-auth users from /spells to /gallery
