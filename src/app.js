@@ -27,6 +27,7 @@ let epSignup = '/signup'
 let epSpellIndex = '/spells'
 let epSpellDetails = '/spells/:id'
 let epPublicSpells = '/gallery'
+let epWizardDetails = '/wizards/:id'
 
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, (req, res) => {
@@ -51,8 +52,21 @@ app.get(`${epSpellDetails}`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
   .where({user_id: req.user.id, id: req.params.id})
   .then((displaySpells) => {
-    console.log(displaySpells[0]);
-      res.send(displaySpells[0])
+    // console.log(displaySpells[0]);
+    res.send(displaySpells[0])
+  })
+})
+
+// Retrieve specific user information
+app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
+  req.app.get('db')('users')
+  .where({id: req.user.id})
+  .then((users) => {
+    req.app.get('db')('spells')
+    .where({user_id: req.user.id})
+    .then((spells) => {
+      res.send({...users[0], spells})
+    })
   })
 })
 
