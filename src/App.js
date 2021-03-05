@@ -51,8 +51,8 @@ function App() {
             component={(props) => <Dashboard><PublicSpells /></Dashboard>}
           />
           <Route
-            path={'/profile/:id'}
-            component={(props) => <Dashboard><UserProfile /></Dashboard>}
+            path={'/wizards/:id'}
+            component={(props) => <Dashboard><UserProfile match={props.match}/></Dashboard>}
           />
         </Switch>
       </div>
