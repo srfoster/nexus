@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import SpellDetails from './Components/Dashboard/SpellDetails';
 import Dashboard from './Components/Dashboard/Dashboard';
 import PublicSpells from './Components/PublicSpells';
-import UserProfile from './Components/UserProfile';
+// import UserProfile from './Components/UserProfile';
 require('codemirror/mode/scheme/scheme');
 
 function App() {
@@ -42,18 +42,15 @@ function App() {
             path={'/spells'}
             component={SpellIndex}
           />
-          <Route 
+          <Route
             path={'/friends'}
             component={(props) => <Dashboard><div>Friends Coming Soon</div></Dashboard>}
           />
-          <Route 
+          <Route
             path={'/gallery'}
             component={(props) => <Dashboard><PublicSpells /></Dashboard>}
           />
-          <Route
-            path={'/profile/:id'}
-            component={(props) => <Dashboard><UserProfile /></Dashboard>}
-          />
+
         </Switch>
       </div>
     </div>
