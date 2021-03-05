@@ -4,11 +4,14 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {SpellContextProvider} from './Components/Context';
 
 ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <SpellContextProvider>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </SpellContextProvider>,
   document.getElementById('root')
 );
 

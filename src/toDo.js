@@ -1,4 +1,65 @@
 /* 3/2/21
+  Implement React Context
+  >> Doing an update fetch to a context?
+
+
+  Server readme updates: Assumes postgres database, user named admin, no password
+
+  Implement profile page, avatars, and public profile
+
+  - Fix the redirect error for non-auth users from /spells to /gallery
+
+  Create spinner for SpellChart while a spell is being created
+
+  SpellChart table borders for smaller columns
+  Implement sticky header on SpellChart table
+
+  Implement a NotFound page
+  
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
+  PublicSpells code accordion opens all albums at once
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
+
+  Seed file should contain a few spells with the public flag 
+
+  **Dashboard**
+  Hide the plus button if not relevant to that page or move render to sub-component
+  Scroll bar should not go under the header bar
+
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+
+  **Visuals**
+  Fix CodeMirror height to fill more of the screen
+    
+  **User Flow**
+  If auth token, either redirect to spells from landing, or make landing look like dashboard
+  Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Update Readme files
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  Deploy database for joint efforts and creating spells
+  *Revise the SpellDetails workaround to not re-render CodeMirror
+  *Revise the SpellIndex history.push to accommodate server errors
+
+  ***FINISHED***
+  --> SpellChart should sort by name, followed by date
+*/
+
+
+
+/* 3/2/21
 
   Server readme updates: Assumes postgres database, user named admin, no password
   Implement React Redux

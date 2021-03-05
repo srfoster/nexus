@@ -21,6 +21,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Title from './Dashboard/Title';
+import {useContext} from './Context';
 
 export default function PublicSpells() {
   const classes = useStyles();
