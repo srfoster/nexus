@@ -23,6 +23,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Tooltip from '@material-ui/core/Tooltip';
+import {useSpellContext} from '../Context';
 
 export default function SpellChart(props) {
 
@@ -42,11 +43,18 @@ export default function SpellChart(props) {
     setSpellToDelete(undefined);
   };
 
-  function byName( a, b ) {
+  function byNameAndModified( a, b ) {
     if ( a.name < b.name ){
       return -1;
     }
     if ( a.name > b.name ){
+      return 1;
+    }
+
+    if (a.date_modified > b.date_modified){
+      return -1;
+    }
+    if (a.date_modified < b.date_modified){
       return 1;
     }
     return 0;
@@ -103,8 +111,16 @@ export default function SpellChart(props) {
       .then((spell) => {
         // props.setSpells({...spell, is_public: !spell.is_public})
         props.onChange(spell)
+// onChange={(changedSpell) => setSpells(spells.map(spell => changedSpell.id === spell.id ? changedSpell : spell))}
+
       })
   }
+
+  const spellContext = useSpellContext();
+  
+  // if (spellContext.userSpells) {
+  //   console.log(spellContext.userSpells);
+  // }
 
   return (
     <React.Fragment>
@@ -123,7 +139,7 @@ export default function SpellChart(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.spells.sort(byName).map((spell) => (
+          {spellContext.userSpells.sort(byNameAndModified).map((spell) => (
             <TableRow key={"Key: " + spell.id}>
               <Tooltip title={new Date(Date.parse(spell.date_created)).toLocaleTimeString()} arrow placement="bottom-start">
                 <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>
