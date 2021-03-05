@@ -11,7 +11,7 @@
     "start": "node src/server.js",
     "predeploy": "npm audit",
     "deploy": "git push heroku master",
-    "seed": "psql -U admin -d spells -f ./seeds/seed.tables.sql"
+	    "seed": "psql spells -f ./seeds/seed.tables.sql"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +22,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "helmet": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.17",
     "morgan": "^1.10.0",
     "pg": "^8.5.1",
