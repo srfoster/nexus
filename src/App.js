@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import SpellDetails from './Components/Dashboard/SpellDetails';
 import Dashboard from './Components/Dashboard/Dashboard';
 import PublicSpells from './Components/PublicSpells';
-// import UserProfile from './Components/UserProfile';
+import UserProfile from './Components/UserProfile';
 require('codemirror/mode/scheme/scheme');
 
 function App() {
@@ -50,7 +50,10 @@ function App() {
             path={'/gallery'}
             component={(props) => <Dashboard><PublicSpells /></Dashboard>}
           />
+<<<<<<< HEAD
 
+=======
+>>>>>>> 60ad3fbc74ed9134105f7da97fbb805891e1deec
           <Route
             path={'/wizards/:id'}
             component={(props) => <Dashboard><UserProfile match={props.match}/></Dashboard>}
