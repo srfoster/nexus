@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link, useHistory } from "react-router-dom";
 import Header from './Header';
+import TokenService from '../Services/token-service';
 
 
 const LandingPage = (props) => {
+  let history = useHistory();
+
   return (
+    // If user has an auth token, send them to dashboard
+    // TokenService.hasAuthToken() ?
+    //   history.push('/spells')
+    // :
     <>
       <Route
         path={'/'}

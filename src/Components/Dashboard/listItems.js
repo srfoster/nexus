@@ -49,7 +49,7 @@ export function PublicListItems(props) {
       <Divider />
       <div>
         <ListItem button
-          // onClick={() => handleClickButton('/login')}
+          onClick={() => handleClickButton('/wizards/me')}
           >
           <ListItemIcon>
             <AccountCircleIcon />

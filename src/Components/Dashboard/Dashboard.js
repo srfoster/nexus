@@ -23,6 +23,7 @@ import Link from '@material-ui/core/Link';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
+import SpellsApiService from '../../Services/spells-api-service';
 
 function Dashboard(props) {
   const classes = useStyles();
@@ -40,9 +41,9 @@ function Dashboard(props) {
     // console.log(event);
     if (props.spells){
       // props.setSpells([...props.spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
-    
-    // console.log(spells);
+      // console.log(spells);
 
+      // FIXME: SpellsApiService.postNewSpell() doesn't work here
       fetch(`${config.API_ENDPOINT}/spells`, {
         method: 'POST',
         headers: {

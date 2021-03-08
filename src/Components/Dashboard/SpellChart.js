@@ -24,6 +24,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Tooltip from '@material-ui/core/Tooltip';
 import {useSpellContext} from '../Context';
+import SpellsApiService from '../../Services/spells-api-service';
 
 export default function SpellChart(props) {
 
@@ -70,22 +71,8 @@ export default function SpellChart(props) {
     }
   }
 
-  function deleteSpell(id){
-    // console.log("Clicked delete", id);
-    
-    return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'content-type': 'application/json',
-        'authorization': `bearer ${TokenService.getAuthToken()}`,
-      },
-      // body: JSON.stringify(payload)
-    })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
-          : res.json()
-      )
+  function deleteSpell(id){    
+    SpellsApiService.deleteSpell(id)
       .then(() => props.onDelete(id))
   }
 
@@ -95,32 +82,12 @@ export default function SpellChart(props) {
     let payload = spell
     console.log(payload);
 
-    return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
-      method: 'PUT',
-      headers: {
-        'content-type': 'application/json',
-        'authorization': `bearer ${TokenService.getAuthToken()}`,
-      },
-      body: JSON.stringify(payload)
-    })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
-          : res.json()
-      )
+    SpellsApiService.updateSpell(payload, id)
       .then((spell) => {
         // props.setSpells({...spell, is_public: !spell.is_public})
         props.onChange(spell)
-// onChange={(changedSpell) => setSpells(spells.map(spell => changedSpell.id === spell.id ? changedSpell : spell))}
-
       })
   }
-
-  const spellContext = useSpellContext();
-  
-  // if (spellContext.userSpells) {
-  //   console.log(spellContext.userSpells);
-  // }
 
   return (
     <React.Fragment>
@@ -139,7 +106,7 @@ export default function SpellChart(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {spellContext.userSpells.sort(byNameAndModified).map((spell) => (
+          {props.spells.sort(byNameAndModified).map((spell) => (
             <TableRow key={"Key: " + spell.id}>
               <Tooltip title={new Date(Date.parse(spell.date_created)).toLocaleTimeString()} arrow placement="bottom-start">
                 <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>

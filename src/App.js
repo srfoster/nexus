@@ -13,6 +13,7 @@ import SpellDetails from './Components/Dashboard/SpellDetails';
 import Dashboard from './Components/Dashboard/Dashboard';
 import PublicSpells from './Components/PublicSpells';
 import UserProfile from './Components/UserProfile';
+import NotFound from './Components/NotFound';
 require('codemirror/mode/scheme/scheme');
 
 function App() {
@@ -53,6 +54,9 @@ function App() {
           <Route
             path={'/wizards/:id'}
             component={(props) => <Dashboard><UserProfile match={props.match}/></Dashboard>}
+          />
+          <Route
+            component={NotFound}
           />
         </Switch>
       </div>
