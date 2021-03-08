@@ -11,7 +11,8 @@
     "start": "node src/server.js",
     "predeploy": "npm audit",
     "deploy": "git push heroku master",
-	    "seed": "psql spells -f ./seeds/seed.tables.sql"
+	  "seed": "psql spells -f ./seeds/seed.tables.sql",
+    "betterSeed": "psql -U admin -d spells -f ./seeds/seed.tables.sql"
   },
   "keywords": [],
   "author": "",

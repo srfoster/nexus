@@ -59,16 +59,34 @@ app.get(`${epSpellDetails}`, requireAuth, (req, res) => {
 
 // Retrieve specific user information
 app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
+  let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+
   req.app.get('db')('users')
-  .where({id: req.user.id})
+  .where({id: userId})
   .then((users) => {
+    delete users[0].password;
+    
     req.app.get('db')('spells')
-    .where({user_id: req.user.id})
+    .where({user_id: userId})
     .then((spells) => {
       res.send({...users[0], spells})
     })
   })
 })
+
+// Retrieve specific user information
+// app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
+//   req.app.get('db')('users')
+//   .join('spells', 'spells.user_id', 'users.id')
+//   .select('*')
+//   // .where({id: req.user.id})
+//   .where('users.id', req.user.id)
+//   .then((results) => {
+//     console.log(results);
+//     let user = {...req.user, spells: results}
+//     res.send(user)
+//   })
+// })
 
 // Flag spell as deleted and hide it from client
 app.delete(`${epSpellDetails}`, requireAuth, (req, res) => {
