@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken')
 const config = require('./config')
 
 const app = express()
-
+// testing branches
 const morganOption = (NODE_ENV === 'production')
   ? 'tiny'
   : 'common';
@@ -34,7 +34,9 @@ app.get(epSpellIndex, requireAuth, (req, res) => {
   req.app.get('db')('spells')
     .where({user_id: req.user.id, is_deleted: false})
     .then((displaySpells) => {
+        delete displaySpells[0].is_deleted
         res.send(displaySpells)
+
     })
 })
 
@@ -52,6 +54,7 @@ app.get(`${epSpellDetails}`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
   .where({user_id: req.user.id, id: req.params.id})
   .then((displaySpells) => {
+    delete displaySpells[0].is_deleted
     // console.log(displaySpells[0]);
     res.send(displaySpells[0])
   })
@@ -65,9 +68,9 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
   .where({id: userId})
   .then((users) => {
     delete users[0].password;
-    
+
     req.app.get('db')('spells')
-    .where({user_id: userId})
+    .where({user_id: userId, is_deleted: false})
     .then((spells) => {
       res.send({...users[0], spells})
     })
@@ -101,7 +104,7 @@ app.delete(`${epSpellDetails}`, requireAuth, (req, res) => {
 // Update user changes to a specific spell's information
 app.put(`${epSpellDetails}`, requireAuth, (req, res, next) => {
   const { name, description, text, is_public } = req.body;
-  
+
   req.app.get('db')('spells')
   .where({user_id: req.user.id, id: req.params.id})
   .then((spells) => {
@@ -116,9 +119,10 @@ app.put(`${epSpellDetails}`, requireAuth, (req, res, next) => {
 })
 
 // Create a new spell with default values
-app.post(`${epSpellIndex}`, requireAuth, (req, res, next) => { 
+app.post(`${epSpellIndex}`, requireAuth, (req, res, next) => {
   req.app.get('db')('spells')
-  .insert({user_id: req.user.id, name: 'New Spell', description: 'Spell Description', text: '(displayln "Hello")', date_created: new Date()})
+  .insert({user_id: req.user.id, name: 'New Spell', description: 'Spell Description',
+            text: '(displayln "Hello")', date_created: new Date(), date_modified: new Date()})
   .returning('*')
   .then((spells) => {
     res.send(spells[0])
@@ -144,7 +148,7 @@ app.post(epLogin, (req, res) => {
       if (!passwordMatch){return res.status(400).send({error: "Invalid password"})}
 
       if (passwordMatch) {
-        res.send({message: "Passwords match", 
+        res.send({message: "Passwords match",
           authToken: jwt.sign({user_id: user.id}, config.JWT_SECRET, {
             subject: user.username,
             expiresIn: config.JWT_EXPIRY,
@@ -160,7 +164,7 @@ app.post(epLogin, (req, res) => {
 app.post(epSignup, (req, res, next) => {
   if (!req.body.username){return res.status(400).send({error: `Missing 'username' in request body`})}
   if (!req.body.password){return res.status(400).send({error: `Missing 'password' in request body`})}
-  
+
   req.app.get('db')('users')
     .where({username: req.body.username})
     .then(async (usersWithUsername) => {
