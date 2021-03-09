@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import TokenService from '../Services/token-service';
 import config from '../config';
 import Title from './Dashboard/Title';
-
-// Make this page work for any user
-// Inside the endpoint, look up how to do a join query and combine user and spells
+import SpellsApiService from '../Services/spells-api-service';
+import Spellbook from './Spellbook';
 
 const UserProfile = (props) => {
   const [user, setUser] = useState(undefined)
@@ -12,20 +11,9 @@ const UserProfile = (props) => {
   useEffect(() => {
     const { id } = props.match.params
 
-    return fetch(`${config.API_ENDPOINT}/wizards/${id}`, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        'authorization': `bearer ${TokenService.getAuthToken()}`,
-      },
-      
-    })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
-          : res.json()
-      )
+    SpellsApiService.getUserById(id)
       .then(user => {
+        console.log(user);
         setUser(user)
       })
 
@@ -35,9 +23,12 @@ const UserProfile = (props) => {
     user ?
     <React.Fragment>
       <Title>My Profile</Title>
-      <p>{user.username}</p>
-      <p>{user.spells.length}</p>
-
+      <p>Username: {user.username}</p>
+      <p>Spells created: {user.spells.length}</p>
+      <p>User since: {new Date(Date.parse(user.date_created)).toLocaleDateString()}</p>
+      <p>Users public spells: 
+        <Spellbook spells={user.spells}/>
+      </p>    
 
     </React.Fragment>
     : ''
