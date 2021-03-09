@@ -70,7 +70,7 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
     delete users[0].password;
 
     req.app.get('db')('spells')
-    .where({user_id: userId, is_deleted: false})
+    .where({user_id: userId, is_deleted: false, is_public: true})
     .then((spells) => {
       res.send({...users[0], spells})
     })
@@ -93,11 +93,19 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
 
 // Flag spell as deleted and hide it from client
 app.delete(`${epSpellDetails}`, requireAuth, (req, res) => {
+  console.log('Params: ', req.params);
+  console.log('User: ', req.user);
   req.app.get('db')('spells')
     .where({user_id: req.user.id, id: req.params.id})
-    .update({is_deleted: true, date_modified: new Date()})
+    .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
     .then((spells) => {
-      res.send({message: "Spell deleted"})
+      console.log('Spells: ', spells);
+      if(spells.length){
+        res.send(spells[0])
+      } else {
+        console.log('Inside else');
+        res.status(401).send({error: 'Spell is not yours! Go away!'})
+      }
     })
 })
 
@@ -206,4 +214,13 @@ app.use(function errorHandler(error, req, res, next) {
   res.status(500).json(response);
 });
 
-module.exports = { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails }
+module.exports = { 
+  app, 
+  epHome, 
+  epLogin, 
+  epSignup, 
+  epSpellIndex, 
+  epSpellDetails, 
+  epPublicSpells, 
+  epWizardDetails 
+}

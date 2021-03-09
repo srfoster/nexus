@@ -40,6 +40,7 @@ function makeSpellsArray() {
       text: '(Hello World)',
       description: 'Swirling storm of apples',
       date_created: new Date('2029-01-22T16:28:32.615Z'),
+      is_public: false,
     },
     {
       id: 2,
@@ -48,6 +49,7 @@ function makeSpellsArray() {
       text: '(Hello World)',
       description: 'Summons a log cabin',
       date_created: new Date('2029-01-22T16:28:32.615Z'),
+      is_public: true,
     },
     {
       id: 3,
@@ -56,6 +58,8 @@ function makeSpellsArray() {
       text: '(Hello World)',
       description: 'Summons a log cabin',
       date_created: new Date('2029-01-22T16:28:32.615Z'),
+      is_public: true,
+      is_deleted: true,
     }
   ]
 }

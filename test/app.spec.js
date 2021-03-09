@@ -1,10 +1,11 @@
 const knex = require('knex')
 const { expect } = require('chai')
 const jwt = require('jsonwebtoken')
-const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails } = require('../src/app')
+const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epWizardDetails } = require('../src/app')
 const helpers = require('./test-helpers')
 const config = require('../src/config')
 const bcrypt = require('bcryptjs')
+const supertest = require('supertest')
 
 
 describe('App', () => {
@@ -276,7 +277,7 @@ describe('App', () => {
     })
   })
 
-  describe(`POST ${epSpellDetails}`, () => {
+  describe(`GET ${epSpellDetails}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -292,11 +293,109 @@ describe('App', () => {
 
     it(`GET ${epSpellDetails} responds with 401 if not logged in`, () => {
       return supertest(app)
-        .get(epSpellIndex)
+        .get(epSpellDetails)
         .expect(401)
     })
+    // it.skip(`updates a spell's data with new information`, () => {
+    //   return supertest(app)
+    //     .get(epSpellDetails)
+    //     .expect(200)
+    // })
+  })
 
+  describe(`DELETE ${epSpellDetails}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+    // TODO: 
+    // Can't delete another user's spells
+
+    it(`flags deleted spells as deleted if the user is logged in`, () => {
+      return supertest(app)
+        .delete('/spells/1')
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .then((res) => {
+          // expect(res.body.length).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id).length)
+          db
+          .from('spells')
+          .select('*')
+          .where({ id: res.body.id })
+          .first()
+          .then(row => {
+            expect(row.is_deleted).to.eql(true)
+          })
+        })
+    })
+    it(`responds 401 if not logged in`, () => {
+      return supertest(app)
+        .delete('/spells/1')
+        .expect(401)
+    })
+    it.only(`responds 401 if trying to delete another user's spell`, () => {
+      return supertest(app)
+        .delete('/spells/3')
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(401)
+    })
+  })
+
+  describe.only(`POST ${epPublicSpells}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    it(`GET ${epPublicSpells} responds with 200`, () => {
+      return supertest(app)
+        .get(epPublicSpells)
+        .expect(200)
+    })
+    // it.skip(`does not show any spells with the deleted flag`, () => {
+    //   return supertest(app)
+    //     .get(epPublicSpells)
+    //     .where()
+    //     .expect(200)
+    // })
 
   })
 
+  describe(`POST ${epWizardDetails}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    it(`GET ${epWizardDetails} responds with 401 if not logged in`, () => {
+      return supertest(app)
+        .get(epWizardDetails)
+        .expect(401)
+    })
+
+  })
 })
