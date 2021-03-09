@@ -118,7 +118,7 @@ app.put(`${epSpellDetails}`, requireAuth, (req, res, next) => {
 // Create a new spell with default values
 app.post(`${epSpellIndex}`, requireAuth, (req, res, next) => { 
   req.app.get('db')('spells')
-  .insert({user_id: req.user.id, name: 'New Spell', description: 'Spell Description', text: '(displayln "Hello")'})
+  .insert({user_id: req.user.id, name: 'New Spell', description: 'Spell Description', text: '(displayln "Hello")', date_created: new Date()})
   .returning('*')
   .then((spells) => {
     res.send(spells[0])
