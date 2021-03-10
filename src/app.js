@@ -53,10 +53,11 @@ app.get(epPublicSpells, (req, res) => {
 app.get(`${epSpellDetails}`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
   .where({user_id: req.user.id, id: req.params.id})
-  .then((displaySpells) => {
-    delete displaySpells[0].is_deleted
+  .first()
+  .then((displaySpell) => {
+    delete displaySpell.is_deleted
     // console.log(displaySpells[0]);
-    res.send(displaySpells[0])
+    res.send(displaySpell)
   })
 })
 
@@ -66,13 +67,14 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
 
   req.app.get('db')('users')
   .where({id: userId})
-  .then((users) => {
-    delete users[0].password;
+  .first()
+  .then((user) => {
+    delete user.password;
 
     req.app.get('db')('spells')
     .where({user_id: userId, is_deleted: false, is_public: true})
     .then((spells) => {
-      res.send({...users[0], spells})
+      res.send({...user, spells})
     })
   })
 })
@@ -200,13 +202,13 @@ app.use(function errorHandler(error, req, res, next) {
   res.status(500).json(response);
 });
 
-module.exports = { 
-  app, 
-  epHome, 
-  epLogin, 
-  epSignup, 
-  epSpellIndex, 
-  epSpellDetails, 
-  epPublicSpells, 
-  epWizardDetails 
+module.exports = {
+  app,
+  epHome,
+  epLogin,
+  epSignup,
+  epSpellIndex,
+  epSpellDetails,
+  epPublicSpells,
+  epWizardDetails
 }
