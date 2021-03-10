@@ -1,11 +1,124 @@
+/* 3/10/21
+  - Update tests to check for any new features
+  
+  User timeouts should redirect them to a new page and change the UI render to be logged out
+
+  ? Server readme updates: Assumes postgres database, user named admin, no password
+
+  Implement profile page, avatars, and public profile
+  - Fix the redirect error for non-auth users from /spells to /gallery
+  Create spinner for SpellChart while a spell is being created
+  SpellChart table borders for smaller columns
+  Implement sticky header on SpellChart table
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
+  PublicSpells code accordion opens all albums at once
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
+
+  Seed file should contain a few spells with the public flag 
+
+  **Dashboard**
+  Hide the plus button if not relevant to that page or move render to sub-component
+  Scroll bar should not go under the header bar
+
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+
+  **Visuals**
+  Fix CodeMirror height to fill more of the screen
+    
+  **User Flow**
+  - If auth token, either redirect to spells from landing, or make landing look like dashboard
+  Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Update Readme files
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  Deploy database for joint efforts and creating spells
+  *Revise the SpellDetails workaround to not re-render CodeMirror
+  *Revise the SpellIndex history.push to accommodate server errors
+
+  ***FINISHED***
+  --> Refactor back end code with res[0] to use knex .first()
+*/
+
+
+
+/* 3/8/21
+  - Update tests to check for any new features
+
+  - API refactor of Dashboard post doesn't work
+
+  Refactor back end code with res[0] to use knex .first()
+
+  ? Server readme updates: Assumes postgres database, user named admin, no password
+
+  Implement profile page, avatars, and public profile
+  - Fix the redirect error for non-auth users from /spells to /gallery
+  Create spinner for SpellChart while a spell is being created
+  SpellChart table borders for smaller columns
+  Implement sticky header on SpellChart table
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
+  PublicSpells code accordion opens all albums at once
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
+
+  Seed file should contain a few spells with the public flag 
+
+  **Dashboard**
+  Hide the plus button if not relevant to that page or move render to sub-component
+  Scroll bar should not go under the header bar
+
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+
+  **Visuals**
+  Fix CodeMirror height to fill more of the screen
+    
+  **User Flow**
+  - If auth token, either redirect to spells from landing, or make landing look like dashboard
+  Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Update Readme files
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  Deploy database for joint efforts and creating spells
+  *Revise the SpellDetails workaround to not re-render CodeMirror
+  *Revise the SpellIndex history.push to accommodate server errors
+
+  ***FINISHED***
+  --> LocaleTime of spells created is not correct
+  --> Add in js custom date_created when creating a new table item
+  --> On server side, remove any data we don't want sent to client within fetches
+*/
+
+
 /* 3/8/21
   *** Seed command doesn't work 
 
-  On server side, remove any data we don't want sent to client within fetches
+  --> On server side, remove any data we don't want sent to client within fetches
   Update tests to check for any new features
 
-  LocaleTime of spells created is not correct
-  - Add in js custom date_created when creating a new table item
+  --> LocaleTime of spells created is not correct
+  --> Add in js custom date_created when creating a new table item
 
   - Inside the endpoint, look up how to do a join query and combine user and spells
   >> Is there a way to do multiple .wheres?
@@ -16,8 +129,8 @@
 
   Make UserProfile page work for any user
 
-  ? Hide is_deleted flag from client calls
-  User DateModified need to be updated
+  --> Hide is_deleted flag from client calls
+  --> User DateModified need to be updated
 
   ? Server readme updates: Assumes postgres database, user named admin, no password
 

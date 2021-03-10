@@ -66,7 +66,7 @@ const SpellsApiService = {
       )
   },
   postNewSpell(){
-    fetch(`${config.API_ENDPOINT}/spells`, {
+    return fetch(`${config.API_ENDPOINT}/spells`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
