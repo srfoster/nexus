@@ -4,8 +4,10 @@ import config from '../config';
 import Title from './Dashboard/Title';
 import SpellsApiService from '../Services/spells-api-service';
 import Spellbook from './Spellbook';
+import { makeStyles } from '@material-ui/core/styles';
 
 const UserProfile = (props) => {
+  const classes = useStyles();
   const [user, setUser] = useState(undefined)
 
   useEffect(() => {
@@ -23,16 +25,23 @@ const UserProfile = (props) => {
     user ?
     <React.Fragment>
       <Title>My Profile</Title>
-      <p>Username: {user.username}</p>
-      <p>Spells created: {user.spells.length}</p>
-      <p>User since: {new Date(Date.parse(user.date_created)).toLocaleDateString()}</p>
-      <p>Users public spells: 
+      <p className={classes.name}>Username: {user.username}</p>
+      <p className={classes.name}>Spells created: {user.spells.length}</p>
+      <p className={classes.name}>User since: {new Date(Date.parse(user.date_created)).toLocaleDateString()}</p>
+      <p className={classes.name}>Users public spells:
         <Spellbook spells={user.spells}/>
-      </p>    
+      </p>
 
     </React.Fragment>
     : ''
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+name: {
+  textAlign: "left",
+}
+
+}));
 
 export default UserProfile;

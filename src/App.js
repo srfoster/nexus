@@ -51,6 +51,7 @@ function App() {
             path={'/gallery'}
             component={(props) => <Dashboard><PublicSpells /></Dashboard>}
           />
+
           <Route
             path={'/wizards/:id'}
             component={(props) => <Dashboard><UserProfile match={props.match}/></Dashboard>}
