@@ -7,7 +7,6 @@ const config = require('../src/config')
 const bcrypt = require('bcryptjs')
 const supertest = require('supertest')
 
-
 describe('App', () => {
   let db
 
@@ -31,7 +30,7 @@ describe('App', () => {
 
   afterEach('cleanup', () => helpers.cleanTables(db))
 
-  describe(`POST ${epSpellIndex}`, () => {
+  describe(`GET ${epSpellIndex}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -59,9 +58,245 @@ describe('App', () => {
           expect(res.body.length).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id).length)
         })
     })
+    // It does not provide spells owned by another user
   })
 
-  describe(`POST ${epLogin}`, () => {
+  describe(`GET ${epPublicSpells}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    // This should also send back a list of spell tagged public
+    it(`GET ${epPublicSpells} responds with 200`, () => {
+      return supertest(app)
+        .get(epPublicSpells)
+        .expect(200)
+    })
+
+    // Callback for checking that no deleted flags are included
+    // it.only(`does not show any spells with the deleted flag`, () => {
+    //   return db('spells')
+    //   .where({id: 1})
+    //   .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
+    //   .then(rows => {
+    //     console.log("Row: ", rows[0]);
+    //     expect(rows[0].is_deleted).to.eql(true)
+
+    //     return supertest(app)
+    //     .get(epPublicSpells)
+    //     .expect(200)
+    //     .then((res) => {
+    //       console.log("Res: ", res.body);
+    //       expect(res.body.map(spell => spell.id)).to.not.include(1)
+    //     })
+    //   })
+    // })
+
+    // Async/await for checking no deleted flags are included
+    it(`does not show any spells with the deleted flag`, async () => {
+      await db('spells')
+      .where({id: 1})
+      .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
+      .then(rows => {
+        console.log("Row: ", rows[0]);
+        expect(rows[0].is_deleted).to.eql(true)
+      })
+
+      await supertest(app)
+      .get(epPublicSpells)
+      .expect(200)
+      .then((res) => {
+        console.log("Res: ", res.body);
+        expect(res.body.map(spell => spell.id)).to.not.include(1)
+      })
+    })
+
+    // It does not show any spells with the private flag
+
+  })
+
+  describe(`GET ${epSpellDetails}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    // should also send back spell information
+    it(`GET ${epSpellDetails} responds with 200 if logged in`, () => {
+      return supertest(app)
+        .get('/spells/1')
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+    })
+
+    it(`GET ${epSpellDetails} responds with 401 if not logged in`, () => {
+      return supertest(app)
+        .get(epSpellDetails)
+        .expect(401)
+    })
+
+    // It only provides the details of the selected spell
+
+    it(`does not allow access to a spell the user does not own`, () => {
+      return supertest(app)
+        .get('/spells/3')
+        .expect(401)
+    })
+  })
+
+  describe(`GET ${epWizardDetails}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    // TODO: Wizard profile should be publicly accessible 
+    it(`GET ${epWizardDetails} responds with 401 if not logged in`, () => {
+      return supertest(app)
+        .get(epWizardDetails)
+        .expect(401)
+    })
+
+    // should also send back wizard info
+    it(`GET ${epWizardDetails} responds with 200 if logged in`, () => {
+      return supertest(app)
+        .get('/wizards/1')
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+    })
+
+  })
+
+  describe(`DELETE ${epSpellDetails}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    it(`flags deleted spells as deleted if the user is logged in`, () => {
+      return supertest(app)
+        .delete('/spells/1')
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .then((res) => {
+          db
+          .from('spells')
+          .select('*')
+          .where({ id: res.body.id })
+          .first()
+          .then(row => {
+            expect(row.is_deleted).to.eql(true)
+          })
+        })
+    })
+    it(`responds 401 if not logged in`, () => {
+      return supertest(app)
+        .delete('/spells/1')
+        .expect(401)
+    })
+    it(`responds 401 if trying to delete another user's spell`, () => {
+      return supertest(app)
+        .delete('/spells/3')
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(401)
+    })
+  })
+
+  describe(`PUT ${epSpellDetails}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    // should also respond with new spell data
+    it(`responds 200 and changes the spell data`, () => {
+      return supertest(app)
+      .put('/spells/1')
+      // .send({})
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then((res) => {
+        expect(res.body)
+      })
+    })
+
+    it(`responds 401 if trying to alter another user's spell`, () => {
+      return supertest(app)
+        .put('/spells/3')
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(401)
+    })
+
+  })
+
+  describe(`POST ${epSpellIndex}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    //FIXME: needs post data
+    it(`responds 200 if user is logged in`, () => {
+      return supertest(app)
+      .post(epSpellIndex)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+    })
+    // It only posts to the account of the current user
+    // It does not post anything other than the default data
+
+  })
+
+  describe(`GET ${epLogin}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -130,7 +365,7 @@ describe('App', () => {
     })
   })
 
-  describe(`POST ${epSignup}`, () => {
+  describe(`GET ${epSignup}`, () => {
     context(`User Validation`, () => {
       beforeEach('insert users', () =>
         helpers.seedUsers(
@@ -275,127 +510,5 @@ describe('App', () => {
         })
       })
     })
-  })
-
-  describe(`GET ${epSpellDetails}`, () => {
-    beforeEach('insert users', () =>
-      helpers.seedUsers(
-        db,
-        testUsers,
-      )
-    )
-    beforeEach('insert spells', () =>
-      helpers.seedSpells(
-        db,
-        testSpells,
-      )
-    )
-
-    it(`GET ${epSpellDetails} responds with 401 if not logged in`, () => {
-      return supertest(app)
-        .get(epSpellDetails)
-        .expect(401)
-    })
-    // it.skip(`updates a spell's data with new information`, () => {
-    //   return supertest(app)
-    //     .get(epSpellDetails)
-    //     .expect(200)
-    // })
-  })
-
-  describe(`DELETE ${epSpellDetails}`, () => {
-    beforeEach('insert users', () =>
-      helpers.seedUsers(
-        db,
-        testUsers,
-      )
-    )
-    beforeEach('insert spells', () =>
-      helpers.seedSpells(
-        db,
-        testSpells,
-      )
-    )
-    // TODO: 
-    // Can't delete another user's spells
-
-    it(`flags deleted spells as deleted if the user is logged in`, () => {
-      return supertest(app)
-        .delete('/spells/1')
-        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-        .expect(200)
-        .then((res) => {
-          // expect(res.body.length).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id).length)
-          db
-          .from('spells')
-          .select('*')
-          .where({ id: res.body.id })
-          .first()
-          .then(row => {
-            expect(row.is_deleted).to.eql(true)
-          })
-        })
-    })
-    it(`responds 401 if not logged in`, () => {
-      return supertest(app)
-        .delete('/spells/1')
-        .expect(401)
-    })
-    it.only(`responds 401 if trying to delete another user's spell`, () => {
-      return supertest(app)
-        .delete('/spells/3')
-        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-        .expect(401)
-    })
-  })
-
-  describe.only(`POST ${epPublicSpells}`, () => {
-    beforeEach('insert users', () =>
-      helpers.seedUsers(
-        db,
-        testUsers,
-      )
-    )
-    beforeEach('insert spells', () =>
-      helpers.seedSpells(
-        db,
-        testSpells,
-      )
-    )
-
-    it(`GET ${epPublicSpells} responds with 200`, () => {
-      return supertest(app)
-        .get(epPublicSpells)
-        .expect(200)
-    })
-    // it.skip(`does not show any spells with the deleted flag`, () => {
-    //   return supertest(app)
-    //     .get(epPublicSpells)
-    //     .where()
-    //     .expect(200)
-    // })
-
-  })
-
-  describe(`POST ${epWizardDetails}`, () => {
-    beforeEach('insert users', () =>
-      helpers.seedUsers(
-        db,
-        testUsers,
-      )
-    )
-    beforeEach('insert spells', () =>
-      helpers.seedSpells(
-        db,
-        testSpells,
-      )
-    )
-
-    it(`GET ${epWizardDetails} responds with 401 if not logged in`, () => {
-      return supertest(app)
-        .get(epWizardDetails)
-        .expect(401)
-    })
-
   })
 })

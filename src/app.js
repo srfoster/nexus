@@ -77,20 +77,6 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
   })
 })
 
-// Retrieve specific user information
-// app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
-//   req.app.get('db')('users')
-//   .join('spells', 'spells.user_id', 'users.id')
-//   .select('*')
-//   // .where({id: req.user.id})
-//   .where('users.id', req.user.id)
-//   .then((results) => {
-//     console.log(results);
-//     let user = {...req.user, spells: results}
-//     res.send(user)
-//   })
-// })
-
 // Flag spell as deleted and hide it from client
 app.delete(`${epSpellDetails}`, requireAuth, (req, res) => {
   console.log('Params: ', req.params);
@@ -115,14 +101,14 @@ app.put(`${epSpellDetails}`, requireAuth, (req, res, next) => {
 
   req.app.get('db')('spells')
   .where({user_id: req.user.id, id: req.params.id})
-  .then((spells) => {
-    req.app.get('db')('spells')
-    .where({id: spells[0].id})
-    .update({name, description, text, is_public, date_modified: new Date()})
-    .returning('*')
-    .then((spell) => {
-      res.send(spell[0])
-    })
+  .update({name, description, text, is_public, date_modified: new Date()})
+  .returning('*')
+  .then((row) => {
+    if (row.length){
+      res.send(row)
+    } else {
+      res.status(401).send({error: "You don't own that!"})
+    }
   })
 })
 
