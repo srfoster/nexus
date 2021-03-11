@@ -79,6 +79,20 @@ const SpellsApiService = {
           : res.json()
       )
   },
+  forkSpellById(id){
+    return fetch(`${config.API_ENDPOINT}/spells/${id}/fork`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
   deleteSpell(id){
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'DELETE',
