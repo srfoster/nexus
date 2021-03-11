@@ -49,16 +49,31 @@ describe('App', () => {
         .get(epSpellIndex)
         .expect(401)
     })
+
     it(`GET ${epSpellIndex} responds with 200 containing the logged in user's spells in the database`, () => {
       return supertest(app)
         .get(epSpellIndex)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then((res) => {
-          expect(res.body.length).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id).length)
+          console.log(res.body);
+          expect(res.body.length).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
         })
     })
-    // It does not provide spells owned by another user
+
+    it(`does not provide spells owned by another user`, () => {
+      return supertest(app)
+        .get(epSpellIndex)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .then((res) => {
+          for (let i=0; i<res.body.length; i++){
+            expect(res.body[i].user_id).to.equal(testUsers[0].id)
+          }
+          
+        })
+    })
+
   })
 
   describe(`GET ${epPublicSpells}`, () => {
@@ -75,39 +90,18 @@ describe('App', () => {
       )
     )
 
-    // This should also send back a list of spell tagged public
-    it.only(`GET ${epPublicSpells} responds with 200`, () => {
+    it(`GET ${epPublicSpells} responds with 200`, () => {
       return supertest(app)
         .get(epPublicSpells)
         .expect(200)
         .then((res) => {
-          console.log("Res: ", res.body);
-          // expect(res.body.map(spell => spell.id)).to.not.include(1)
-          console.log(testSpells.map(spell => (spell.is_public === true && spell.is_deleted === false) ? spell : "")
-          .filter(spell => spell !== ""))
-          expect(res.body).to.equal(testSpells.map(spell => spell.is_public === true && spell.is_deleted === false ? spell : "")
-          .filter(spell => spell !== ""))
+          expect(JSON.stringify(res.body.map(spell => spell.id).sort((a,b) => a-b)))
+            .to.equal(JSON.stringify(testSpells
+              .map(spell => spell.is_public === true && spell.is_deleted === false ? spell.id : "")
+              .filter(spell => spell !== "")
+              .sort((a,b) => a-b)))
         })
     })
-
-    // Callback for checking that no deleted flags are included
-    // it.only(`does not show any spells with the deleted flag`, () => {
-    //   return db('spells')
-    //   .where({id: 1})
-    //   .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
-    //   .then(rows => {
-    //     console.log("Row: ", rows[0]);
-    //     expect(rows[0].is_deleted).to.eql(true)
-
-    //     return supertest(app)
-    //     .get(epPublicSpells)
-    //     .expect(200)
-    //     .then((res) => {
-    //       console.log("Res: ", res.body);
-    //       expect(res.body.map(spell => spell.id)).to.not.include(1)
-    //     })
-    //   })
-    // })
 
     // Async/await for checking no deleted flags are included
     it(`does not show any spells with the deleted flag`, async () => {
@@ -128,7 +122,15 @@ describe('App', () => {
       })
     })
 
-    // It does not show any spells with the private flag
+    it(`only shows spells tagged as public`, async () => {
+      await supertest(app)
+      .get(epPublicSpells)
+      .expect(200)
+      .then((res) => {
+        console.log("Res: ", res.body);
+        expect(res.body.map(spell => spell.id)).to.not.include(1)
+      })
+    })
 
   })
 
@@ -146,12 +148,15 @@ describe('App', () => {
       )
     )
 
-    // should also send back spell information
-    it(`GET ${epSpellDetails} responds with 200 if logged in`, () => {
+    it(`GET ${epSpellDetails} responds with 200 if logged in and sends spell data`, () => {
       return supertest(app)
-        .get('/spells/1')
+        .get(`/spells/${testSpells[0].id}`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
+        .then((res) => {
+          console.log(res.body);
+          expect(res.body.id).to.equal(testSpells[0].id)
+        })
     })
 
     it(`GET ${epSpellDetails} responds with 401 if not logged in`, () => {
@@ -160,7 +165,17 @@ describe('App', () => {
         .expect(401)
     })
 
-    // It only provides the details of the selected spell
+    it(`GET ${epSpellDetails} does not respond with data from any other spell`, () => {
+      return supertest(app)
+        .get(`/spells/${testSpells[0].id}`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .then((res) => {
+          console.log(res.body);
+          expect(res.body.id).to.deep.equal(testSpells[0].id)
+          // expect(res.body.id.toString()).to.not.equal(/[1]/)
+        })
+    })
 
     it(`does not allow access to a spell the user does not own`, () => {
       return supertest(app)
@@ -190,12 +205,14 @@ describe('App', () => {
         .expect(401)
     })
 
-    // should also send back wizard info
     it(`GET ${epWizardDetails} responds with 200 if logged in`, () => {
       return supertest(app)
-        .get('/wizards/1')
+        .get(`/wizards/${testUsers[0].id}`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
+        .then((res) => {
+          expect(res.body.id).to.deep.equal(testUsers[0].id)
+        })
     })
 
   })
@@ -257,15 +274,14 @@ describe('App', () => {
       )
     )
 
-    // should also respond with new spell data
     it(`responds 200 and changes the spell data`, () => {
       return supertest(app)
       .put('/spells/1')
-      // .send({})
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .send({name: "Test Replacement"})
       .expect(200)
       .then((res) => {
-        expect(res.body)
+        expect(res.body.name).to.equal("Test Replacement")
       })
     })
 
@@ -292,15 +308,66 @@ describe('App', () => {
       )
     )
 
-    //FIXME: needs post data
-    it(`responds 200 if user is logged in`, () => {
+    // FIXME: double naming
+    it(`responds 200 if user is logged in and sends default spell data`, () => {
       return supertest(app)
       .post(epSpellIndex)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
+      .then((res) => {
+        // console.log("Res: ", res.body);
+        expect(res.body.name).to.equal("New Spell")
+        expect(res.body.description).to.equal('Spell Description')
+        expect(res.body.text).to.equal('(displayln "Hello")')
+      })
     })
-    // It only posts to the account of the current user
-    // It does not post anything other than the default data
+
+    it(`responds 200 if user is logged in and sends default spell data`, () => {
+      return supertest(app)
+      .post(epSpellIndex)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then((res) => {
+        // console.log("Res: ", res.body);
+        expect(res.body.user_id).to.equal(testUsers[0].id)
+      })
+    })
+
+  })
+
+  //TODO:
+  describe(`POST /spells/:id/fork`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    it(`responds 200 if user is logged`, () => {
+
+    })
+
+    it(`responds 401 if user is not logged`, () => {
+
+    })
+
+    it(`creates a new spell, with the given spell's information`, () => {
+      // User 1 has x spells
+      // User 1 tries to fork one of user 3's spells
+        // (post to /spells/3/fork)
+      // User 1 has x + 1 spells
+    })
+
+    it(`does not fork a private spell unless owned by that user`, () => {
+
+    })
 
   })
 

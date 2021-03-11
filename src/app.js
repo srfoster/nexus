@@ -105,8 +105,9 @@ app.put(`${epSpellDetails}`, requireAuth, (req, res, next) => {
   .where({user_id: req.user.id, id: req.params.id})
   .update({name, description, text, is_public, date_modified: new Date()})
   .returning('*')
-  .then((row) => {
-    if (row.length){
+  .then((rows) => {
+    let row = rows[0]
+    if (row){
       res.send(row)
     } else {
       res.status(401).send({error: "You don't own that!"})
