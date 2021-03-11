@@ -39,8 +39,9 @@ function makeSpellsArray() {
       name: 'Apple Storm',
       text: '(Hello World)',
       description: 'Swirling storm of apples',
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
+      // date_created: new Date('2029-01-22T16:28:32.615Z'),
       is_public: false,
+      is_deleted: false,
     },
     {
       id: 2,
@@ -48,8 +49,9 @@ function makeSpellsArray() {
       name: 'Cozy Cabin',
       text: '(Hello World)',
       description: 'Summons a log cabin',
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
+      // date_created: new Date('2029-01-22T16:28:32.615Z'),
       is_public: true,
+      is_deleted: false,
     },
     {
       id: 3,
@@ -57,7 +59,7 @@ function makeSpellsArray() {
       name: 'Fire ball',
       text: '(Hello World)',
       description: 'Summons a log cabin',
-      date_created: new Date('2029-01-22T16:28:32.615Z'),
+      // date_created: new Date('2029-01-22T16:28:32.615Z'),
       is_public: true,
       is_deleted: true,
     }

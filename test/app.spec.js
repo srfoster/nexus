@@ -76,10 +76,18 @@ describe('App', () => {
     )
 
     // This should also send back a list of spell tagged public
-    it(`GET ${epPublicSpells} responds with 200`, () => {
+    it.only(`GET ${epPublicSpells} responds with 200`, () => {
       return supertest(app)
         .get(epPublicSpells)
         .expect(200)
+        .then((res) => {
+          console.log("Res: ", res.body);
+          // expect(res.body.map(spell => spell.id)).to.not.include(1)
+          console.log(testSpells.map(spell => (spell.is_public === true && spell.is_deleted === false) ? spell : "")
+          .filter(spell => spell !== ""))
+          expect(res.body).to.equal(testSpells.map(spell => spell.is_public === true && spell.is_deleted === false ? spell : "")
+          .filter(spell => spell !== ""))
+        })
     })
 
     // Callback for checking that no deleted flags are included
@@ -175,7 +183,7 @@ describe('App', () => {
       )
     )
 
-    // TODO: Wizard profile should be publicly accessible 
+    // TODO: Wizard profile should be publicly accessible
     it(`GET ${epWizardDetails} responds with 401 if not logged in`, () => {
       return supertest(app)
         .get(epWizardDetails)
@@ -402,7 +410,7 @@ describe('App', () => {
             .send(userShortPassword)
             .expect(400, { error: `Password must be longer than 7 characters` })
         })
-  
+
         it(`responds 400 'Password must be less than 73 characters' when long password`, () => {
           const userLongPassword = {
             username: 'testUsername',
@@ -424,7 +432,7 @@ describe('App', () => {
             .send(userPasswordStartsSpaces)
             .expect(400, { error: `Password must not start or end with empty spaces` })
         })
-  
+
         it(`responds 400 error when password ends with spaces`, () => {
           const userPasswordEndsSpaces = {
             username: 'testUsername',
@@ -446,7 +454,7 @@ describe('App', () => {
             .send(userPasswordNotComplex)
             .expect(400, { error: `Password must contain one upper case, lower case, number and special character` })
         })
-  
+
         it(`responds 400 'User name already taken' when username isn't unique`, () => {
           const duplicateUser = {
             username: testUser.username,
@@ -500,7 +508,7 @@ describe('App', () => {
                   // const expectedDate = new Date().toLocaleString('en', { timeZone: 'UTC' })
                   // const actualDate = new Date(row.date_created).toLocaleString()
                   // expect(actualDate).to.eql(expectedDate)
-  
+
                   return bcrypt.compare(newUser.password, row.password)
                 })
                 .then(compareMatch => {
