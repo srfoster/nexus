@@ -28,6 +28,7 @@ let epSpellIndex = '/spells'
 let epSpellDetails = '/spells/:id'
 let epPublicSpells = '/gallery'
 let epWizardDetails = '/wizards/:id'
+let epSpellsFork = '/spells/:id/fork'
 
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, (req, res) => {
@@ -126,6 +127,24 @@ app.post(`${epSpellIndex}`, requireAuth, (req, res, next) => {
   })
 })
 
+app.post(`${epSpellsFork}`, requireAuth, (req, res, next) =>{
+  req.app.get('db')('spells')
+  .where({id: req.params.id})
+  .first()
+  .then((displaySpell) => {
+    const {name, description, text} = displaySpell
+    // console.log(displaySpell);
+    // res.send(displaySpell)
+      req.app.get('db')('spells')
+      .insert({user_id: req.user.id, name: name, description: description,
+                text: text, date_created: new Date(), date_modified: new Date()})
+      .returning('*')
+      .then((spells) => {
+        res.send(spells[0])
+      })
+  })
+})
+
 
 app.post(epLogin, (req, res) => {
   if(!req.body.username){
@@ -211,5 +230,6 @@ module.exports = {
   epSpellIndex,
   epSpellDetails,
   epPublicSpells,
-  epWizardDetails
+  epWizardDetails,
+  epSpellsFork
 }

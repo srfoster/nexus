@@ -1,7 +1,7 @@
 const knex = require('knex')
 const { expect } = require('chai')
 const jwt = require('jsonwebtoken')
-const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epWizardDetails } = require('../src/app')
+const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epWizardDetails, epSpellsFork } = require('../src/app')
 const helpers = require('./test-helpers')
 const config = require('../src/config')
 const bcrypt = require('bcryptjs')
@@ -70,7 +70,7 @@ describe('App', () => {
           for (let i=0; i<res.body.length; i++){
             expect(res.body[i].user_id).to.equal(testUsers[0].id)
           }
-          
+
         })
     })
 
@@ -351,23 +351,41 @@ describe('App', () => {
     )
 
     it(`responds 200 if user is logged`, () => {
-
+      return supertest(app)
+      .post("/spells/4/fork")
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
     })
 
     it(`responds 401 if user is not logged`, () => {
-
+      return supertest(app)
+      .post("/spells/4/fork")
+      .expect(401)
     })
 
-    it(`creates a new spell, with the given spell's information`, () => {
+    it.only(`creates a new spell, with the given spell's information`, () => {
+      // const spellCount = testUsers[0].spells.length
+      return supertest(app)
+      .post("/spells/4/fork")
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then((res) => {
+        console.log("count", testUsers[0])
+        console.log(res.body)
+        // expect(res.body).to.equal(spellCount + 1)
+      })
       // User 1 has x spells
       // User 1 tries to fork one of user 3's spells
         // (post to /spells/3/fork)
       // User 1 has x + 1 spells
     })
 
-    it(`does not fork a private spell unless owned by that user`, () => {
-
-    })
+    // it(`does not fork a private spell unless owned by that user`, () => {
+    //   return supertest(app)
+    //   .post("/spells/4/fork")
+    //   .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+    //   .expect(200)
+    // })
 
   })
 
