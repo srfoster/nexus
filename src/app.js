@@ -127,14 +127,18 @@ app.post(`${epSpellIndex}`, requireAuth, (req, res, next) => {
   })
 })
 
+// Creates a new spell with the forked spell's information
 app.post(`${epSpellsFork}`, requireAuth, (req, res, next) =>{
+  // console.log("Req: ", req.spells);
+  // let public = user_id === req.user.id ? is_public: true : is_public: false;
+
   req.app.get('db')('spells')
-  .where({id: req.params.id})
+  //FIXME: currently blocks all private spells, even if owned by that user
+  .where({id: req.params.id, is_public: true})
   .first()
   .then((displaySpell) => {
-    const {name, description, text} = displaySpell
-    // console.log(displaySpell);
-    // res.send(displaySpell)
+    if(displaySpell){
+      const {name, description, text} = displaySpell
       req.app.get('db')('spells')
       .insert({user_id: req.user.id, name: name, description: description,
                 text: text, date_created: new Date(), date_modified: new Date()})
@@ -142,6 +146,9 @@ app.post(`${epSpellsFork}`, requireAuth, (req, res, next) =>{
       .then((spells) => {
         res.send(spells[0])
       })
+    } else{
+      res.status(401).send({error: 'That spell is private'})
+    }
   })
 })
 

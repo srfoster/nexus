@@ -365,27 +365,34 @@ describe('App', () => {
 
     it.only(`creates a new spell, with the given spell's information`, () => {
       // const spellCount = testUsers[0].spells.length
+      const spellCount = testSpells
+        .map(spell => spell.user_id === testUsers[0].id ? spell.id : '')
+        .filter(spells => spells)
+        .length
+
       return supertest(app)
       .post("/spells/4/fork")
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then((res) => {
-        console.log("count", testUsers[0])
-        console.log(res.body)
-        // expect(res.body).to.equal(spellCount + 1)
+        console.log("Spell Count: ", spellCount);
+        db
+        .from('spells')
+        .select('*')
+        .where({ user_id: testUsers[0].id })
+        .then(rows => {
+          expect(rows.length).to.equal(spellCount + 1)
+        })
+        
       })
-      // User 1 has x spells
-      // User 1 tries to fork one of user 3's spells
-        // (post to /spells/3/fork)
-      // User 1 has x + 1 spells
     })
 
-    // it(`does not fork a private spell unless owned by that user`, () => {
-    //   return supertest(app)
-    //   .post("/spells/4/fork")
-    //   .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //   .expect(200)
-    // })
+    it.only(`does not fork a private spell unless owned by that user`, () => {
+      return supertest(app)
+      .post("/spells/3/fork")
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(401)
+    })
 
   })
 
