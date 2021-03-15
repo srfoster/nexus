@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import TokenService from '../Services/token-service';
 import config from '../config';
@@ -28,6 +29,7 @@ import CallSplitIcon from '@material-ui/icons/CallSplit';
 
 const Spellbook = (props) => {
   const classes = useStyles();
+  let history = useHistory();
 
   const [expanded, setExpanded] = React.useState(false);
 
@@ -37,7 +39,9 @@ const Spellbook = (props) => {
 
   const clickForkIcon = (id) => {
     SpellsApiService.forkSpellById(id)
-
+    .then((spell) => {
+      history.push(`/spells/${spell.id}`)
+    })
   }
 
   return (
