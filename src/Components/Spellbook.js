@@ -44,6 +44,16 @@ const Spellbook = (props) => {
     })
   }
 
+  function textTrim(text, length){
+    if (!text) return '';
+
+    if(text.length > length){
+      return text.slice(0, length) + '...';
+    } else {
+      return text;
+    }
+  }
+
   return (
     <Container className={classes.cardGrid} maxWidth="md">
     <Grid container spacing={4}>
@@ -100,7 +110,7 @@ const Spellbook = (props) => {
               <CardContent>
                 <Typography paragraph>Code:</Typography>
                 <Typography paragraph>
-                  {spell.text}
+                  {textTrim(spell.text, 200)}
                 </Typography>
               </CardContent>
             </Collapse>
