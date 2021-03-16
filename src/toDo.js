@@ -1,6 +1,10 @@
 /* 3/15/21
 
+  Implement .env on client
+  Download/Backup spells feature 
+
   Tagging spells feature
+
   Normalize CodeMirror dialog size
 
   Add image feature to spells
