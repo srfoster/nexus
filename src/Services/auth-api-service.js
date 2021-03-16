@@ -1,6 +1,6 @@
 import config from '../config'
 import TokenService from './token-service'
-import IdleService from './idle-service'
+// import IdleService from './idle-service'
 
 const AuthApiService = {
   postUser(user) {
@@ -38,7 +38,7 @@ const AuthApiService = {
           3. queue a call to the refresh endpoint based on the JWT's exp value
         */
         TokenService.saveAuthToken(res.authToken)
-        IdleService.registerIdleTimerResets()
+        // IdleService.registerIdleTimerResets()
         TokenService.queueCallbackBeforeExpiry(() => {
           AuthApiService.postRefreshToken()
         })

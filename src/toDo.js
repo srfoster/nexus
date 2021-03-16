@@ -1,5 +1,10 @@
 /* 3/15/21
+  >> Timeout crash
+  >> My Profile UI
+
   Add image feature to spells
+
+  Spell card accordion fix
 
   User timeouts should redirect them to a new page and change the UI render to be logged out
 

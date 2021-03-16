@@ -24,13 +24,14 @@ const UserProfile = (props) => {
   return (
     user ?
     <React.Fragment>
-      <Title>My Profile</Title>
-      <p className={classes.name}>Username: {user.username}</p>
+      <Title>{`Spellbook of ${user.username}`}</Title>
+      {/* <p className={classes.name}>Username: {user.username}</p>
       <p className={classes.name}>Spells created: {user.spells.length}</p>
-      <p className={classes.name}>User since: {new Date(Date.parse(user.date_created)).toLocaleDateString()}</p>
-      <p className={classes.name}>Users public spells:
-        <Spellbook spells={user.spells}/>
-      </p>
+      <p className={classes.name}>User since: {new Date(Date.parse(user.date_created)).toLocaleDateString()}</p> */}
+      {/* <p className={classes.name}>Users public spells:
+        
+      </p> */}
+      <Spellbook spells={user.spells}/>
 
     </React.Fragment>
     : ''

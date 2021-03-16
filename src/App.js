@@ -2,7 +2,7 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import { Switch, Route } from "react-router-dom";
 import AuthApiService from './Services/auth-api-service';
-import IdleService from './Services/idle-service';
+// import IdleService from './Services/idle-service';
 import TokenService from './Services/token-service';
 import LoginForm from './Components/LoginForm';
 import SignupForm from './Components/SignupForm';

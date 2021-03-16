@@ -1,6 +1,6 @@
 import config from '../config'
 import TokenService from './token-service'
-import IdleService from './idle-service'
+// import IdleService from './idle-service'
 
 const SpellsApiService = {
   getPublicSpells(){
