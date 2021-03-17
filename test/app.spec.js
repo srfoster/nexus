@@ -1,7 +1,7 @@
 const knex = require('knex')
 const { expect } = require('chai')
 const jwt = require('jsonwebtoken')
-const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epWizardDetails, epSpellsFork } = require('../src/app')
+const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epWizardDetails, epSpellsFork, epSpellTags } = require('../src/app')
 const helpers = require('./test-helpers')
 const config = require('../src/config')
 const bcrypt = require('bcryptjs')
@@ -217,6 +217,44 @@ describe('App', () => {
 
   })
 
+  describe.only(`POST ${epSpellTags}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    it(`responds 200 if user is logged in and sends back tag data`, () => {
+      return supertest(app)
+      .post('/spells/2/tag')
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then((res) => {
+        // console.log("Res: ", res.body);
+
+      })
+    })
+
+    it(`responds 401 if user is not logged in`, () => {
+      return supertest(app)
+      .post('/spells/2/tag')
+      .expect(401)
+    })
+
+    // only allows authorized tags?
+
+    // User1 posts a tag to spell 2
+    // endpoint send back all tags for that spell with new tag added
+
+  })
+
   describe(`DELETE ${epSpellDetails}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
@@ -335,7 +373,6 @@ describe('App', () => {
 
   })
 
-  //TODO:
   describe(`POST /spells/:id/fork`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
@@ -363,7 +400,7 @@ describe('App', () => {
       .expect(401)
     })
 
-    it.only(`creates a new spell, with the given spell's information`, () => {
+    it(`creates a new spell, with the given spell's information`, () => {
       // const spellCount = testUsers[0].spells.length
       const spellCount = testSpells
         .map(spell => spell.user_id === testUsers[0].id ? spell.id : '')
@@ -387,7 +424,7 @@ describe('App', () => {
       })
     })
 
-    it.only(`does not fork a private spell unless owned by that user`, () => {
+    it(`does not fork a private spell unless owned by that user`, () => {
       return supertest(app)
       .post("/spells/3/fork")
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
