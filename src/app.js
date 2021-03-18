@@ -29,7 +29,7 @@ let epSpellDetails = '/spells/:id'
 let epPublicSpells = '/gallery'
 let epWizardDetails = '/wizards/:id'
 let epSpellsFork = '/spells/:id/fork'
-let epSpellTags = '/spells/:id/tag'
+let epSpellTags = '/spells/:id/tag/:tag'
 
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, (req, res) => {
@@ -92,14 +92,14 @@ app.get(`${epSpellTags}`, (req, res) => {
 
 // Post new tag to specific spell
 app.post(`${epSpellTags}`, requireAuth, (req, res) => {
-  // const { tag } = req.body
+  const { tag } = req.body
 
-  // req.app.get('db')('spells')
-  // .insert({tag})
-  // .returning('*')
-  // .then((spells) => {
-  //   res.send(spells[0])
-  // })
+  req.app.get('db')('tags')
+  .insert({tag})
+  .returning('*')
+  .then((tags) => {
+    res.send(tags[0])
+  })
 })
 
 // Flag spell as deleted and hide it from client
