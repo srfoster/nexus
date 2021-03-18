@@ -261,8 +261,8 @@ describe('App', () => {
       .select('*')
       .where({ spell_id: 2 })
       .then(rows => {
-        const tagcount = rows.length
-        console.log("tag count", tagcount)
+        const tagCount = rows.length
+        console.log("tag count", tagCount)
       })
 
       return supertest(app)
@@ -277,14 +277,14 @@ describe('App', () => {
         .where({ spell_id: 2 })
         .then(rows => {
           console.log("rows", rows.length)
-          expect(rows.length).to.equal(tagcount + 1)
+          expect(rows.length).to.equal(tagCount + 1)
         })
       })
     })
 
     it(`responds 401 if user is not logged in`, () => {
       return supertest(app)
-      .post('/spells/2/tag/fire_magic')
+      .post('/spells/2/tags/fire_magic')
       .expect(401)
     })
 
@@ -383,8 +383,7 @@ describe('App', () => {
       )
     )
 
-    // FIXME: double naming
-    it(`responds 200 if user is logged in and sends default spell data`, () => {
+    it.only(`responds 200 if user is logged in and sends default spell data`, () => {
       return supertest(app)
       .post(epSpellIndex)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -394,16 +393,6 @@ describe('App', () => {
         expect(res.body.name).to.equal("New Spell")
         expect(res.body.description).to.equal('Spell Description')
         expect(res.body.text).to.equal('(displayln "Hello")')
-      })
-    })
-
-    it(`responds 200 if user is logged in and sends default spell data`, () => {
-      return supertest(app)
-      .post(epSpellIndex)
-      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-      .expect(200)
-      .then((res) => {
-        // console.log("Res: ", res.body);
         expect(res.body.user_id).to.equal(testUsers[0].id)
       })
     })

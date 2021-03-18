@@ -29,7 +29,7 @@ let epSpellDetails = '/spells/:id'
 let epPublicSpells = '/gallery'
 let epWizardDetails = '/wizards/:id'
 let epSpellsFork = '/spells/:id/fork'
-let epSpellTags = '/spells/:id/tag/:tag'
+let epSpellTags = '/spells/:id/tags/:tag'
 
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, (req, res) => {
