@@ -1,8 +1,8 @@
 /* 3/15/21
 
   Implement .env on client
-  Client prebuild line
-  Download/Backup spells feature 
+  Server heroku
+  heroku run npm run migrate
 
   Tagging spells feature
 
