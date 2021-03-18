@@ -231,27 +231,64 @@ describe('App', () => {
       )
     )
 
+    // it(`creates a new spell, with the given spell's information`, () => {
+    //   // const spellCount = testUsers[0].spells.length
+    //   const spellCount = testSpells
+    //     .map(spell => spell.user_id === testUsers[0].id ? spell.id : '')
+    //     .filter(spells => spells)
+    //     .length
+    //
+    //   return supertest(app)
+    //   .post("/spells/4/fork")
+    //   .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+    //   .expect(200)
+    //   .then((res) => {
+    //     console.log("Spell Count: ", spellCount);
+    //     db
+    //     .from('spells')
+    //     .select('*')
+    //     .where({ user_id: testUsers[0].id })
+    //     .then(rows => {
+    //       expect(rows.length).to.equal(spellCount + 1)
+    //     })
+    //
+    //   })
+    // })
+
     it(`responds 200 if user is logged in and sends back tag data`, () => {
+      db
+      .from('tags')
+      .select('*')
+      .where({ spell_id: 2 })
+      .then(rows => {
+        const tagcount = rows.length
+        console.log("tag count", tagcount)
+      })
+
       return supertest(app)
       .post('/spells/2/tags/fire_magic')
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then((res) => {
         // console.log("Res: ", res.body);
-
+        db
+        .from('tags')
+        .select('*')
+        .where({ spell_id: 2 })
+        .then(rows => {
+          console.log("rows", rows.length)
+          expect(rows.length).to.equal(tagcount + 1)
+        })
       })
     })
 
     it(`responds 401 if user is not logged in`, () => {
       return supertest(app)
-      .post('/spells/2/tag')
+      .post('/spells/2/tag/fire_magic')
       .expect(401)
     })
 
     // only allows authorized tags?
-
-    // User1 posts a tag to spell 2
-    // endpoint send back all tags for that spell with new tag added
 
   })
 
@@ -420,7 +457,7 @@ describe('App', () => {
         .then(rows => {
           expect(rows.length).to.equal(spellCount + 1)
         })
-        
+
       })
     })
 
