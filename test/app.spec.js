@@ -233,7 +233,7 @@ describe('App', () => {
 
     it(`responds 200 if user is logged in and sends back tag data`, () => {
       return supertest(app)
-      .post('/spells/2/tag')
+      .post('/spells/2/tags/fire_magic')
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then((res) => {
