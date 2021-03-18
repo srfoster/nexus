@@ -54,7 +54,7 @@ export function PublicListItems(props) {
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
-          <ListItemText primary="My Account" />
+          <ListItemText primary="My Profile" />
         </ListItem>
         <ListItem button onClick={() => handleClickButton('/login')}>
           <ListItemIcon>
