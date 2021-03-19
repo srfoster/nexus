@@ -86,6 +86,16 @@ function makeSpellsArray() {
   ]
 }
 
+function makeTagsArray() {
+  return [
+    {
+      id: 1,
+      spell_id: 1,
+      name: 'fire_magic',
+    }
+  ]
+}
+
 function cleanTables(db) {
   return db.transaction(trx =>
     trx.raw(
@@ -111,7 +121,8 @@ function cleanTables(db) {
 function makeSpellFixtures() {
   const testUsers = makeUsersArray()
   const testSpells = makeSpellsArray()
-  return { testUsers, testSpells }
+  const testTags = makeTagsArray()
+  return { testUsers, testSpells, testTags }
 }
 
 function seedUsers(db, users) {
@@ -143,6 +154,20 @@ function seedSpells(db, spells) {
     )
 }
 
+function seedTags(db, tags) {
+  const preppedTags = tags.map(tag => ({
+    ...tag
+  }))
+  return db.into('tags').insert(preppedTags)
+    .then(() =>
+      // update the auto sequence to stay in sync
+      db.raw(
+        `SELECT setval('tags_id_seq', ?)`,
+        [tags[tags.length - 1].id],
+      )
+    )
+}
+
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
   const token = jwt.sign({ user_id: user.id }, secret, {
     subject: user.username,
@@ -158,5 +183,6 @@ module.exports = {
   makeSpellFixtures,
   seedUsers,
   seedSpells,
+  seedTags,
   makeAuthHeader
 }

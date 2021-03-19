@@ -30,6 +30,7 @@ let epPublicSpells = '/gallery'
 let epWizardDetails = '/wizards/:id'
 let epSpellsFork = '/spells/:id/fork'
 let epSpellTags = '/spells/:id/tags/:tag'
+let epSpellTagsIndex = '/spells/:id/tags'
 
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, (req, res) => {
@@ -82,9 +83,10 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
 })
 
 // Get all tags on specific spell
-app.get(`${epSpellTags}`, (req, res) => {
-  req.app.get('db')('spells')
-  .where({user_id: req.user.id, id: req.params.id})
+app.get(`${epSpellTagsIndex}`, requireAuth, (req, res) => {
+  console.log("ID: ", req.params.id);
+  req.app.get('db')('tags')
+  .where({spell_id: req.params.id})
   .then((displayTags) => {
     res.send(displayTags)
   })
@@ -98,6 +100,16 @@ app.post(`${epSpellTags}`, requireAuth, (req, res) => {
   .then((tags) => {
     res.send(tags[0])
   })
+})
+
+// Delete a tag from a spell
+app.delete(`${epSpellTags}`, requireAuth, (req, res) => {
+  // req.app.get('db')('tags')
+  //   .where({user_id: req.user.id, id: req.params.id})
+  //   .delete({})
+  //   .then((tags) => {
+  //     res.send(tags)
+  //   })
 })
 
 // Flag spell as deleted and hide it from client
@@ -259,5 +271,6 @@ module.exports = {
   epPublicSpells,
   epWizardDetails,
   epSpellsFork,
-  epSpellTags
+  epSpellTags,
+  epSpellTagsGet: epSpellTagsIndex
 }

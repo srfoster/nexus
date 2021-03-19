@@ -1,7 +1,7 @@
 const knex = require('knex')
 const { expect } = require('chai')
 const jwt = require('jsonwebtoken')
-const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epWizardDetails, epSpellsFork, epSpellTags } = require('../src/app')
+const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epWizardDetails, epSpellsFork, epSpellTags, epSpellTagsGet } = require('../src/app')
 const helpers = require('./test-helpers')
 const config = require('../src/config')
 const bcrypt = require('bcryptjs')
@@ -13,6 +13,7 @@ describe('App', () => {
   const {
     testUsers,
     testSpells,
+    testTags,
   } = helpers.makeSpellFixtures()
   const testUser = testUsers[0]
 
@@ -217,7 +218,7 @@ describe('App', () => {
 
   })
 
-  describe.only(`GET ${epSpellTags}`, () => {
+  describe.only(`GET ${epSpellTagsGet}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -230,37 +231,26 @@ describe('App', () => {
         testSpells,
       )
     )
-
-    // return supertest(app)
-    //   .get(`/spells/${testSpells[0].id}`)
-    //   .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //   .expect(200)
-    //   .then((res) => {
-    //     console.log(res.body);
-    //     expect(res.body.id).to.equal(testSpells[0].id)
+    beforeEach('insert tags', () =>
+      helpers.seedTags(
+        db,
+        testTags,
+      )
+    )
 
     it(`responds 200 if user is logged in and sends back tag data`, () => {
-      let tagsList = []
-
       return supertest(app)
-      .get('/spells/${testSpells[0].id}/tags')
+      .get(`/spells/${testSpells[0].id}/tags`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then((res) => {
-        db
-        .from('tags')
-        .select('*')
-        .where({ spell_id: 2 })
-        .then(rows => {
-          return rows
-        })
-        expect(rows[0].spell_id).to.equal(res.body.spspell_id)
+        expect(res.body.length).to.be.greaterThan(0)
       })
     })
 
-    it(`responds 401 if user is not logged in`, () => {
+    it.only(`responds 401 if user is not logged in`, () => {
       return supertest(app)
-      .get(epSpellTags)
+      .get(`/spells/${testSpells[0].id}/tags`)
       .expect(401)
     })
   })
@@ -278,30 +268,6 @@ describe('App', () => {
         testSpells,
       )
     )
-
-    // it(`creates a new spell, with the given spell's information`, () => {
-    //   // const spellCount = testUsers[0].spells.length
-    //   const spellCount = testSpells
-    //     .map(spell => spell.user_id === testUsers[0].id ? spell.id : '')
-    //     .filter(spells => spells)
-    //     .length
-    //
-    //   return supertest(app)
-    //   .post("/spells/4/fork")
-    //   .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-    //   .expect(200)
-    //   .then((res) => {
-    //     console.log("Spell Count: ", spellCount);
-    //     db
-    //     .from('spells')
-    //     .select('*')
-    //     .where({ user_id: testUsers[0].id })
-    //     .then(rows => {
-    //       expect(rows.length).to.equal(spellCount + 1)
-    //     })
-    //
-    //   })
-    // })
 
     it(`responds 200 if user is logged in and sends back tag data`, async () => {
       let tagCount = 0
@@ -336,6 +302,52 @@ describe('App', () => {
 
     // only allows authorized tags?
 
+  })
+
+  // TODO:
+  describe.skip(`DELETE ${epSpellTags}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    it(`flags deleted spells as deleted if the user is logged in`, () => {
+      return supertest(app)
+        .delete('/spells/1')
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .then((res) => {
+          db
+          .from('spells')
+          .select('*')
+          .where({ id: res.body.id })
+          .first()
+          .then(row => {
+            expect(row.is_deleted).to.eql(true)
+          })
+        })
+    })
+
+    it(`responds 401 if not logged in`, () => {
+      return supertest(app)
+        .delete('/spells/1')
+        .expect(401)
+    })
+
+    it(`responds 401 if trying to delete another user's tag`, () => {
+      return supertest(app)
+        .delete('/spells/3')
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(401)
+    })
   })
 
   describe(`DELETE ${epSpellDetails}`, () => {
@@ -445,7 +457,7 @@ describe('App', () => {
 
   })
 
-  describe(`POST /spells/:id/fork`, () => {
+  describe(`POST ${epSpellsFork}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
