@@ -92,10 +92,8 @@ app.get(`${epSpellTags}`, (req, res) => {
 
 // Post new tag to specific spell
 app.post(`${epSpellTags}`, requireAuth, (req, res) => {
-  const { tag } = req.body
-
   req.app.get('db')('tags')
-  .insert({tag})
+  .insert({name: req.params.tag, spell_id: req.params.id})
   .returning('*')
   .then((tags) => {
     res.send(tags[0])

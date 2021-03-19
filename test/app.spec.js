@@ -255,28 +255,26 @@ describe('App', () => {
     //   })
     // })
 
-    it(`responds 200 if user is logged in and sends back tag data`, () => {
-      db
+    it(`responds 200 if user is logged in and sends back tag data`, async () => {
+      let tagCount = 0
+      await db
       .from('tags')
       .select('*')
       .where({ spell_id: 2 })
       .then(rows => {
-        const tagCount = rows.length
-        console.log("tag count", tagCount)
+        tagCount = rows.length
       })
 
       return supertest(app)
       .post('/spells/2/tags/fire_magic')
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
-      .then((res) => {
-        // console.log("Res: ", res.body);
-        db
+      .then(async (res) => {
+        await db
         .from('tags')
         .select('*')
         .where({ spell_id: 2 })
         .then(rows => {
-          console.log("rows", rows.length)
           expect(rows.length).to.equal(tagCount + 1)
         })
       })
