@@ -83,11 +83,11 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
 
 // Get all tags on specific spell
 app.get(`${epSpellTags}`, (req, res) => {
-  // req.app.get('db')('spells')
-  // .where({user_id: req.user.id, id: req.params.id})
-  // .then((displayTags) => {
-  //   res.send(displayTags)
-  // })
+  req.app.get('db')('spells')
+  .where({user_id: req.user.id, id: req.params.id})
+  .then((displayTags) => {
+    res.send(displayTags)
+  })
 })
 
 // Post new tag to specific spell
