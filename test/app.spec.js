@@ -217,7 +217,55 @@ describe('App', () => {
 
   })
 
-  describe.only(`POST ${epSpellTags}`, () => {
+  describe.only(`GET ${epSpellTags}`, () => {
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+
+    // return supertest(app)
+    //   .get(`/spells/${testSpells[0].id}`)
+    //   .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+    //   .expect(200)
+    //   .then((res) => {
+    //     console.log(res.body);
+    //     expect(res.body.id).to.equal(testSpells[0].id)
+
+    it(`responds 200 if user is logged in and sends back tag data`, () => {
+      let tagsList = []
+
+      return supertest(app)
+      .get('/spells/${testSpells[0].id}/tags')
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then((res) => {
+        db
+        .from('tags')
+        .select('*')
+        .where({ spell_id: 2 })
+        .then(rows => {
+          return rows
+        })
+        expect(rows[0].spell_id).to.equal(res.body.spspell_id)
+      })
+    })
+
+    it(`responds 401 if user is not logged in`, () => {
+      return supertest(app)
+      .get(epSpellTags)
+      .expect(401)
+    })
+  })
+
+  describe(`POST ${epSpellTags}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -383,7 +431,7 @@ describe('App', () => {
       )
     )
 
-    it.only(`responds 200 if user is logged in and sends default spell data`, () => {
+    it(`responds 200 if user is logged in and sends default spell data`, () => {
       return supertest(app)
       .post(epSpellIndex)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
