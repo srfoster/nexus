@@ -93,8 +93,13 @@ app.get(`${epSpellTagsIndex}`, requireAuth, (req, res) => {
 })
 
 // Post new tag to specific spell
-app.post(`${epSpellTags}`, requireAuth, (req, res) => {
-  req.app.get('db')('tags')
+app.post(`${epSpellTags}`, requireAuth, async (req, res) => {
+  let spells = await req.app.get('db')('spells')
+    .where({id: req.params.id, user_id: req.user.id})
+
+  if (spells.length === 0){return res.sendStatus(401)}
+
+  await req.app.get('db')('tags')
   .insert({name: req.params.tag, spell_id: req.params.id})
   .returning('*')
   .then((tags) => {
@@ -103,13 +108,18 @@ app.post(`${epSpellTags}`, requireAuth, (req, res) => {
 })
 
 // Delete a tag from a spell
-app.delete(`${epSpellTags}`, requireAuth, (req, res) => {
-  // req.app.get('db')('tags')
-  //   .where({user_id: req.user.id, id: req.params.id})
-  //   .delete({})
-  //   .then((tags) => {
-  //     res.send(tags)
-  //   })
+app.delete(`${epSpellTags}`, requireAuth, async (req, res) => {
+  let spells = await req.app.get('db')('spells')
+    .where({id: req.params.id, user_id: req.user.id})
+
+  if (spells.length === 0){return res.sendStatus(401)}
+
+  await req.app.get('db')('tags')
+    .where({name: req.params.tag, spell_id: req.params.id})
+    .delete({})
+    .then((tags) => {
+      res.send({tags})
+    })
 })
 
 // Flag spell as deleted and hide it from client

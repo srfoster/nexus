@@ -92,6 +92,11 @@ function makeTagsArray() {
       id: 1,
       spell_id: 1,
       name: 'fire_magic',
+    },
+    {
+      id: 2,
+      spell_id: 3,
+      name: 'ice_magic',
     }
   ]
 }

@@ -183,6 +183,8 @@ describe('App', () => {
         .get('/spells/3')
         .expect(401)
     })
+
+    // it does not show the is_deleted section of the spell data
   })
 
   describe(`GET ${epWizardDetails}`, () => {
@@ -216,9 +218,11 @@ describe('App', () => {
         })
     })
 
+    // it does not show the password portion of the user data
+
   })
 
-  describe.only(`GET ${epSpellTagsGet}`, () => {
+  describe(`GET ${epSpellTagsGet}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -248,7 +252,7 @@ describe('App', () => {
       })
     })
 
-    it.only(`responds 401 if user is not logged in`, () => {
+    it(`responds 401 if user is not logged in`, () => {
       return supertest(app)
       .get(`/spells/${testSpells[0].id}/tags`)
       .expect(401)
@@ -266,6 +270,12 @@ describe('App', () => {
       helpers.seedSpells(
         db,
         testSpells,
+      )
+    )
+    beforeEach('insert tags', () =>
+      helpers.seedTags(
+        db,
+        testTags,
       )
     )
 
@@ -300,12 +310,20 @@ describe('App', () => {
       .expect(401)
     })
 
+    it.only(`responds 401 if trying to post tags to another user's spell`, () => {
+      return supertest(app)
+        .post(`/spells/3/tags/wind_magic`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(401)
+    })
+
     // only allows authorized tags?
+
+    // Does not allow repeat tags
 
   })
 
-  // TODO:
-  describe.skip(`DELETE ${epSpellTags}`, () => {
+  describe(`DELETE ${epSpellTags}`, async () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -318,33 +336,52 @@ describe('App', () => {
         testSpells,
       )
     )
+    beforeEach('insert tags', () =>
+      helpers.seedTags(
+        db,
+        testTags,
+      )
+    )
 
-    it(`flags deleted spells as deleted if the user is logged in`, () => {
-      return supertest(app)
-        .delete('/spells/1')
+    it(`if the user is logged in, deletes selected tag from the spell`, async () => {
+      let seededRows = '';
+
+      await supertest(app)
+        .post('/spells/2/tags/fire_magic')
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
-        .then((res) => {
-          db
-          .from('spells')
-          .select('*')
-          .where({ id: res.body.id })
-          .first()
-          .then(row => {
-            expect(row.is_deleted).to.eql(true)
-          })
+
+      await db
+        .from('tags')
+        .select('*')
+        .where({ spell_id: 2 })
+        .then(rows => {
+          seededRows = rows.length;
+        })
+
+      await supertest(app)
+        .delete(`/spells/2/tags/fire_magic`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+
+      await db
+        .from('tags')
+        .select('*')
+        .where({ spell_id: 2 })
+        .then(rows => {
+          expect(rows.length).to.eql(seededRows - 1)
         })
     })
 
     it(`responds 401 if not logged in`, () => {
       return supertest(app)
-        .delete('/spells/1')
+        .delete(`/spells/2/tags/fire_magic`)
         .expect(401)
     })
 
-    it(`responds 401 if trying to delete another user's tag`, () => {
+    it(`responds 401 if trying to delete tags from another user's spell`, () => {
       return supertest(app)
-        .delete('/spells/3')
+        .delete(`/spells/3/tags/ice_magic`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(401)
     })
