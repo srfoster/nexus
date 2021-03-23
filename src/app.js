@@ -60,7 +60,13 @@ app.get(`${epSpellDetails}`, requireAuth, (req, res) => {
   .then((displaySpell) => {
     delete displaySpell.is_deleted
     // console.log(displaySpells[0]);
-    res.send(displaySpell)
+
+    req.app.get('db')('tags')
+    .where({spell_id: displaySpell.id})
+    .then(tags => {
+      displaySpell.tags = tags
+      res.send(displaySpell)
+    })
   })
 })
 
@@ -88,6 +94,7 @@ app.get(`${epSpellTagsIndex}`, requireAuth, (req, res) => {
   req.app.get('db')('tags')
   .where({spell_id: req.params.id})
   .then((displayTags) => {
+    console.log(displayTags)
     res.send(displayTags)
   })
 })
