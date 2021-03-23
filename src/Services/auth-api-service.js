@@ -18,7 +18,6 @@ const AuthApiService = {
       )
   },
   postLogin({ username, password }) {
-    console.log(config.SSL_STATUS);
 
     return fetch(`${config.API_ENDPOINT}/login`, {
       method: 'POST',
