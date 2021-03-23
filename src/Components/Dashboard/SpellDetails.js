@@ -58,13 +58,15 @@ export default function SpellDetails(props) {
       })
   }, [])
 
-  const debounce = (func, delay) => { 
+  const debounce = (func, delay) => {
     // setIsSaving(true);
 
-    clearTimeout(debounceTimer) 
-    debounceTimer = setTimeout(() => func(), delay) 
-    
-  }  
+    clearTimeout(debounceTimer)
+    debounceTimer = setTimeout(() => func(), delay)
+
+  }
+
+  let [spellTag, setSpellTag] = useState("");
 
   const updateSpell = (spell) => {
     setIsSaving(true);
@@ -95,7 +97,7 @@ export default function SpellDetails(props) {
 
   function deleteSpell(id){
     // console.log("Clicked delete", id);
-    
+
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'DELETE',
       headers: {
@@ -111,16 +113,37 @@ export default function SpellDetails(props) {
       )
   }
 
+  function addTagToSpell(id,tag){
+
+    return fetch(`${config.API_ENDPOINT}/spells/${id}/tags/${tag}`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+      // body: JSON.stringify(payload)
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+      .then((tag) => {
+        setIsSaving(false)
+        setSpell({...spell, tags:[...spell.tags, tag]})
+      })
+  }
+
   return (
     <Dashboard>
-      {spell ? 
+      {spell ?
       <React.Fragment>
         <div className={classes.titleRow}>
           <div className={classes.metaTitle}></div>
           <div className={classes.metaTitle}>
             <Title className={classes.titleDisplay}>
               {spell.name}
-            </Title> 
+            </Title>
           </div>
           <div className={classes.metaSpinner}>
             {isSaving ? <div className={classes.spinner}>
@@ -140,6 +163,7 @@ export default function SpellDetails(props) {
             }}
           />
 
+
           <div className={classes.icons}>
             <Tooltip title="Public status" placement="top-end">
               <IconButton className={classes.icons} aria-label="isPublic" onClick={() => {
@@ -147,11 +171,11 @@ export default function SpellDetails(props) {
                 debounce(() => updateSpell({...spell, is_public: !spell.is_public}), 3000)
               }}>
                 {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
-              </IconButton> 
+              </IconButton>
             </Tooltip>
 
             <Tooltip title="Delete" placement="top-end">
-              <IconButton className={classes.icons} aria-label="delete" 
+              <IconButton className={classes.icons} aria-label="delete"
                 onClick={() => handleClickOpen(spell.id)}
                 // onClick={handleClickOpen}
               >
@@ -160,6 +184,27 @@ export default function SpellDetails(props) {
             </Tooltip>
           </div>
         </div>
+
+        <div>
+
+          {spell.tags.map(t => t.name)}
+
+          <TextField className={classes.iconRow}
+            value = {spellTag}
+            label="Spell Tags"
+            // defaultValue={""}
+            onChange={(event) => {
+              setSpellTag(event.target.value)
+            }}
+          />
+
+          <Button variant="contained" onClick={(event) => {
+            console.log(spellTag)
+            addTagToSpell(spell.id, spellTag)
+            setSpellTag("")
+          }}>Add Tag</Button>
+        </div>
+
 
         {/* Dialog confirmation */}
         <Dialog
