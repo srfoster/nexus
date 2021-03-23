@@ -196,6 +196,8 @@ app.post(`${epSpellsFork}`, requireAuth, (req, res, next) =>{
 
 
 app.post(epLogin, (req, res) => {
+  // console.log(req.header.SSL_STATUS);
+
   if(!req.body.username){
     return res.status(400).send({error: `Missing 'username' in request body`})
   }
