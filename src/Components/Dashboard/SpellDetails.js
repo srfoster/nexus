@@ -53,9 +53,10 @@ export default function SpellDetails(props) {
     SpellsApiService.getSpellById(id)
       .then(spell => {
         setSpell(spell)
-        // setIsPublic(spell.is_public)
         setSpellText(spell.text);
       })
+
+
   }, [])
 
   const debounce = (func, delay) => {
@@ -192,15 +193,16 @@ export default function SpellDetails(props) {
           <TextField className={classes.iconRow}
             value = {spellTag}
             label="Spell Tags"
-            // defaultValue={""}
             onChange={(event) => {
               setSpellTag(event.target.value)
             }}
           />
 
           <Button variant="contained" onClick={(event) => {
-            console.log(spellTag)
-            addTagToSpell(spell.id, spellTag)
+            if(spellTag){
+              addTagToSpell(spell.id, spellTag)
+              console.log(spellTag)
+            }
             setSpellTag("")
           }}>Add Tag</Button>
         </div>
