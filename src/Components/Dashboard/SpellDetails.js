@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import TokenService from '../../Services/token-service';
 import config from '../../config';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
@@ -21,6 +21,9 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import SpellsApiService from '../../Services/spells-api-service';
+import Chip from '@material-ui/core/Chip';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+// import { Autocomplete } from "@material-ui/lab";
 
 let debounceTimer
 
@@ -47,16 +50,15 @@ export default function SpellDetails(props) {
     setSpellToDelete(undefined);
   };
 
+  const { id } = useParams();
   useEffect(() => {
-    const { id } = props.match.params
-
+    // const { id } = props.match.params
+    
     SpellsApiService.getSpellById(id)
       .then(spell => {
         setSpell(spell)
         setSpellText(spell.text);
       })
-
-
   }, [])
 
   const debounce = (func, delay) => {
@@ -69,10 +71,24 @@ export default function SpellDetails(props) {
 
   let [spellTag, setSpellTag] = useState("");
 
+  const tagWhitelist = [
+  { title: 'Fire'},
+  { title: 'Ice'},
+  { title: 'Water'},
+  { title: 'Deception'},
+  { title: 'Plant'},
+  { title: "Rock"},
+  { title: 'Pet'},
+  { title: 'Parasite'},
+  { title: 'Electric'},
+  { title: 'Attack'},
+  { title: 'Heal'}
+  ]
+
   const updateSpell = (spell) => {
     setIsSaving(true);
 
-    const { id } = props.match.params
+    // const { id } = props.match.params
 
     let payload = spell
     console.log(payload);
@@ -135,8 +151,39 @@ export default function SpellDetails(props) {
       })
   }
 
+  //Press enter to save tag
+  function handleKeyUp(event) {
+    if(event.keyCode === 13 && spellTag) {
+        addTagToSpell(spell.id, spellTag)
+        console.log(spellTag)
+        setSpellTag("")
+    }
+  }
+
+  function removeTagFromSpell(id,tag_name){
+    return fetch(`${config.API_ENDPOINT}/spells/${id}/tags/${tag_name}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+      // body: JSON.stringify(payload)
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+      .then((tag) => {
+        setIsSaving(false)
+        setSpell({...spell, tags: spell.tags.filter(t => {
+          return t.name !== tag_name
+        })})
+      })
+  }
+
   return (
-    <Dashboard>
+    <>
       {spell ?
       <React.Fragment>
         <div className={classes.titleRow}>
@@ -188,9 +235,18 @@ export default function SpellDetails(props) {
 
         <div>
 
-          {spell.tags.map(t => t.name)}
+        {spell.tags.map(t => (
+          <Button
+          variant="contained"
+          onClick={(event) => {
+            removeTagFromSpell(spell.id, t.name)
+            console.log(t.name)
+          }}>{t.name}</Button>
+        ))}
 
           <TextField className={classes.iconRow}
+            placeholder="Tag"
+            onKeyUp={handleKeyUp}
             value = {spellTag}
             label="Spell Tags"
             onChange={(event) => {
@@ -198,13 +254,40 @@ export default function SpellDetails(props) {
             }}
           />
 
-          <Button variant="contained" onClick={(event) => {
+          <Button
+          variant="contained"
+          onClick={(event) => {
             if(spellTag){
               addTagToSpell(spell.id, spellTag)
               console.log(spellTag)
             }
             setSpellTag("")
           }}>Add Tag</Button>
+
+{/*
+          <Autocomplete
+            onChange={(event) => {
+              setSpellTag(event.target.value)
+            }}
+            className={classes.iconRow}
+            multiple id="tags-outlined"
+            options={tagWhitelist.map((option) => option.title)}
+            freeSolo
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+              ))
+            }
+            renderInput={(params) => (
+              <TextField {...params}
+                defaultValue={spell.tags.map(t => (t.name))}
+                variant="outlined"
+                label="Spell Tags"
+                placeholder="Tag"
+                onKeyUp={handleKeyUp} />
+            )}
+          />
+          */}
         </div>
 
 
@@ -264,7 +347,7 @@ export default function SpellDetails(props) {
         </div>
       </React.Fragment>
       : <div>Spell is loading</div>}
-    </Dashboard>
+    </>
   );
 }
 
