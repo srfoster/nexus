@@ -1,3 +1,60 @@
+/* 3/24/21
+
+  Server tag endpoint, don't allow repeat tags
+
+  Solve random white screen error from the stream
+
+  Normalize CodeMirror dialog size
+  Fix CodeMirror height to fill more of the screen on SpellDetails
+
+  There are rendering issues if someone without auth token tries going directly to a private page
+  
+  Option to manually resize SpellChart column widths
+
+  Add image feature to spells
+
+  ? Server readme updates: Assumes postgres database, user named admin, no password
+
+  Implement profile page, avatars, and public profile
+  Create spinner for SpellChart while a spell is being created
+  SpellChart table borders for smaller columns
+  Implement sticky header on SpellChart table
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
+  PublicSpells code accordion opens all albums at once
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
+
+  **Dashboard**
+  Scroll bar should not go under the header bar
+
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+    
+  **User Flow**
+  Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  *Revise the SpellDetails workaround to not re-render CodeMirror
+  *Revise the SpellIndex history.push to accommodate server errors
+
+  ***FINISHED***
+  --> If auth token, either redirect to spells from landing, or make landing look like dashboard
+  --> Hide the plus button if not relevant to that page or move render to sub-component
+  --> Fix console errors about button nesting and unique keys for spellcards
+  --> Give forked spells an indicator in the title that they were forked
+*/
+
+
 /* 3/15/21
 
   Implement .env on client

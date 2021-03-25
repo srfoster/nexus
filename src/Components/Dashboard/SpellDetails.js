@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import TokenService from '../../Services/token-service';
 import config from '../../config';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
@@ -22,7 +22,8 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import SpellsApiService from '../../Services/spells-api-service';
 import Chip from '@material-ui/core/Chip';
-import { Autocomplete } from "@material-ui/lab";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+// import { Autocomplete } from "@material-ui/lab";
 
 let debounceTimer
 
@@ -49,16 +50,15 @@ export default function SpellDetails(props) {
     setSpellToDelete(undefined);
   };
 
+  const { id } = useParams();
   useEffect(() => {
-    const { id } = props.match.params
-
+    // const { id } = props.match.params
+    
     SpellsApiService.getSpellById(id)
       .then(spell => {
         setSpell(spell)
         setSpellText(spell.text);
       })
-
-
   }, [])
 
   const debounce = (func, delay) => {
@@ -90,6 +90,7 @@ export default function SpellDetails(props) {
 
     const { id } = props.match.params
     // console.log(spell)
+
     let payload = spell
     // console.log(payload);
 
@@ -186,7 +187,7 @@ export default function SpellDetails(props) {
   }
 
   return (
-    <Dashboard>
+    <>
       {spell ?
       <React.Fragment>
         <div className={classes.titleRow}>
@@ -356,7 +357,7 @@ export default function SpellDetails(props) {
         </div>
       </React.Fragment>
       : <div>Spell is loading</div>}
-    </Dashboard>
+    </>
   );
 }
 
