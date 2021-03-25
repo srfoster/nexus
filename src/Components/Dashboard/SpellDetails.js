@@ -22,8 +22,8 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import SpellsApiService from '../../Services/spells-api-service';
 import Chip from '@material-ui/core/Chip';
-// import Autocomplete from '@material-ui/lab/Autocomplete';
-import { Autocomplete } from "@material-ui/lab";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+// import { Autocomplete } from "@material-ui/lab";
 
 let debounceTimer
 
