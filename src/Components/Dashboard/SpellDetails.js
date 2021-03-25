@@ -88,13 +88,10 @@ export default function SpellDetails(props) {
   const updateSpell = (spell) => {
     setIsSaving(true);
 
-    const { id } = props.match.params
-    // console.log(spell)
+    // const { id } = props.match.params
 
     let payload = spell
-    // console.log(payload);
-
-    let tags=spell.tags
+    console.log(payload);
 
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'PUT',
@@ -111,8 +108,7 @@ export default function SpellDetails(props) {
       )
       .then((spell) => {
         setIsSaving(false)
-        setSpell({...spell, tags})
-        // setSpell({...spell, tags:[...spell.tags, tag]})
+        setSpell(spell)
       })
   }
 
@@ -159,7 +155,7 @@ export default function SpellDetails(props) {
   function handleKeyUp(event) {
     if(event.keyCode === 13 && spellTag) {
         addTagToSpell(spell.id, spellTag)
-        // console.log(spellTag)
+        console.log(spellTag)
         setSpellTag("")
     }
   }
@@ -209,7 +205,7 @@ export default function SpellDetails(props) {
             label="Name"
             defaultValue={spell.name}
             onChange={(event) => {
-              // console.log(spell.tags);
+              // console.log(event.target.value);
               setSpell({...spell, name: event.target.value})
               debounce(() => updateSpell({...spell, name: event.target.value}), 3000)
             }}
@@ -237,10 +233,18 @@ export default function SpellDetails(props) {
           </div>
         </div>
 
-        <div className={classes.iconRow}>
+        <div>
 
-          <TextField
-            className={classes.title}
+        {spell.tags.map(t => (
+          <Button
+          variant="contained"
+          onClick={(event) => {
+            removeTagFromSpell(spell.id, t.name)
+            console.log(t.name)
+          }}>{t.name}</Button>
+        ))}
+
+          <TextField className={classes.iconRow}
             placeholder="Tag"
             onKeyUp={handleKeyUp}
             value = {spellTag}
@@ -251,20 +255,17 @@ export default function SpellDetails(props) {
           />
 
           <Button
-          style={{width:"auto"}}
-          className={classes.title}
           variant="contained"
           onClick={(event) => {
             if(spellTag){
               addTagToSpell(spell.id, spellTag)
-              // console.log(spellTag)
+              console.log(spellTag)
             }
             setSpellTag("")
           }}>Add Tag</Button>
 
-
-
-          {/*<Autocomplete
+{/*
+          <Autocomplete
             onChange={(event) => {
               setSpellTag(event.target.value)
             }}
@@ -277,7 +278,7 @@ export default function SpellDetails(props) {
                 <Chip variant="outlined" label={option} {...getTagProps({ index })} />
               ))
             }
-            renderInput={(params) =>(
+            renderInput={(params) => (
               <TextField {...params}
                 defaultValue={spell.tags.map(t => (t.name))}
                 variant="outlined"
@@ -287,17 +288,6 @@ export default function SpellDetails(props) {
             )}
           />
           */}
-        </div>
-
-        <div>
-        {spell.tags.map(t => (
-          <Button
-          key={t.id}
-          variant="contained"
-          onClick={(event) => {
-            removeTagFromSpell(spell.id, t.name)
-          }}>{t.name}</Button>
-        ))}
         </div>
 
 
