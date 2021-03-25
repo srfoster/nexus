@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import TokenService from '../../Services/token-service';
 import config from '../../config';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
@@ -50,16 +50,15 @@ export default function SpellDetails(props) {
     setSpellToDelete(undefined);
   };
 
+  const { id } = useParams();
   useEffect(() => {
-    const { id } = props.match.params
-
+    // const { id } = props.match.params
+    
     SpellsApiService.getSpellById(id)
       .then(spell => {
         setSpell(spell)
         setSpellText(spell.text);
       })
-
-
   }, [])
 
   const debounce = (func, delay) => {
@@ -89,7 +88,7 @@ export default function SpellDetails(props) {
   const updateSpell = (spell) => {
     setIsSaving(true);
 
-    const { id } = props.match.params
+    // const { id } = props.match.params
 
     let payload = spell
     console.log(payload);
@@ -184,7 +183,7 @@ export default function SpellDetails(props) {
   }
 
   return (
-    <Dashboard>
+    <>
       {spell ?
       <React.Fragment>
         <div className={classes.titleRow}>
@@ -348,7 +347,7 @@ export default function SpellDetails(props) {
         </div>
       </React.Fragment>
       : <div>Spell is loading</div>}
-    </Dashboard>
+    </>
   );
 }
 
