@@ -15,25 +15,16 @@ const UserProfile = (props) => {
 
     SpellsApiService.getUserById(id)
       .then(user => {
-        console.log(user);
         setUser(user)
       })
-
   },[])
 
   return (
     user ?
-    <React.Fragment>
-      <Title>{`Spellbook of ${user.username}`}</Title>
-      {/* <p className={classes.name}>Username: {user.username}</p>
-      <p className={classes.name}>Spells created: {user.spells.length}</p>
-      <p className={classes.name}>User since: {new Date(Date.parse(user.date_created)).toLocaleDateString()}</p> */}
-      {/* <p className={classes.name}>Users public spells:
-        
-      </p> */}
-      <Spellbook spells={user.spells}/>
-
-    </React.Fragment>
+      <>
+        <Title>{`Spellbook of ${user.username}`}</Title>
+        <Spellbook spells={user.spells}/>
+      </>
     : ''
   );
 };
