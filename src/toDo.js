@@ -2,11 +2,6 @@
 
   Server tag endpoint, don't allow repeat tags
 
-  Solve random white screen error from the stream
-
-  Normalize CodeMirror dialog size
-  Fix CodeMirror height to fill more of the screen on SpellDetails
-
   There are rendering issues if someone without auth token tries going directly to a private page
   
   Option to manually resize SpellChart column widths

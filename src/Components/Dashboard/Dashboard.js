@@ -24,6 +24,7 @@ import SpellsApiService from '../../Services/spells-api-service';
 
 function Dashboard(props) {
   const classes = useStyles();
+
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -144,7 +145,7 @@ function Dashboard(props) {
           {/* Spell List */}
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              {props.children}
+              {props.child}
             </Paper>
           </Grid>
         </Grid>

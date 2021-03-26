@@ -12,17 +12,17 @@ function SpellIndex(props) {
   let history = useHistory();
   
   useEffect(() => {
-    SpellsApiService.getSpellsByUser(history)
-      .then(spells => setSpells(spells))
+    if(TokenService.hasAuthToken()){
+      SpellsApiService.getSpellsByUser(history)
+        .then(spells => setSpells(spells))
+    }
   }, [])
 
   function createSpell(event) {
-    if (spells){
-      SpellsApiService.postNewSpell()
-        .then(spell => {
-          setSpells([...spells, spell])
-        })
-    }
+    SpellsApiService.postNewSpell()
+      .then(spell => {
+        setSpells([...spells, spell])
+      })
   }
 
   return (

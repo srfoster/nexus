@@ -7,11 +7,11 @@ import reportWebVitals from './reportWebVitals';
 import {SpellContextProvider} from './Components/Context';
 
 ReactDOM.render(
-  <SpellContextProvider>
+  // <SpellContextProvider>
     <BrowserRouter>
       <App />
-    </BrowserRouter>
-  </SpellContextProvider>,
+    </BrowserRouter>,
+  // </SpellContextProvider>,
   document.getElementById('root')
 );
 

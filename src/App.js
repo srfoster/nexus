@@ -57,7 +57,7 @@ function App() {
             component={(props) => <Dashboard child={<UserProfile match={props.match}/>}></Dashboard>}
           />
           <Route
-            component={NotFound}
+            component={(props) => <Dashboard child={<NotFound/>}></Dashboard>}
           />
         </Switch>
       </div>
