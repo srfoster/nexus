@@ -93,6 +93,7 @@ export default function SpellDetails(props) {
     let payload = spell
     console.log(payload);
 
+
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'PUT',
       headers: {
@@ -328,9 +329,10 @@ export default function SpellDetails(props) {
         {/* <Typography align='left'>
           Code:
         </Typography> */}
-        <div className='CodeMirror'>
+        <div className={classes.CodeMirror}>
           {spellText ?
           <CodeMirror
+            className={classes.CodeMirror}
             value={spellText}
             // value={'Bogus stuff'}
             options={{
@@ -390,5 +392,8 @@ const useStyles = makeStyles((theme) => ({
   },
   metaTitle: {
     width: '33%',
+  },
+  CodeMirror: {
+    height: '300px',
   }
 }));

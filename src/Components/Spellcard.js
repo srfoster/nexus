@@ -22,7 +22,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import Tooltip from '@material-ui/core/Tooltip';
 
-const Spellbook = (props) => {
+const Spellcard = (props) => {
   const classes = useStyles();
   let history = useHistory();
 
@@ -103,9 +103,11 @@ const Spellbook = (props) => {
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">{`${props.spell.name}`}</DialogTitle>
-          <DialogContent>
+          <DialogContent className="dialogBox">
+            
             <DialogContentText id="CodeMirror-Display">
               <CodeMirror
+                className={classes.codeMirror}
                 value={props.spell.text}
                 options={{
                   mode: 'scheme',
@@ -175,6 +177,10 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
   },
+  codeMirror: {
+    height: '60vh',
+    width: '35vw',
+  }
 }));
 
-export default Spellbook;
+export default Spellcard;
