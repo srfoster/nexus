@@ -101,6 +101,8 @@ app.get(`${epSpellTagsIndex}`, requireAuth, (req, res) => {
 
 // Post new tag to specific spell
 app.post(`${epSpellTags}`, requireAuth, async (req, res) => {
+  // TODO: don't allow repeat tags
+  
   let spells = await req.app.get('db')('spells')
     .where({id: req.params.id, user_id: req.user.id})
 
@@ -158,7 +160,12 @@ app.put(`${epSpellDetails}`, requireAuth, (req, res, next) => {
   .then((rows) => {
     let row = rows[0]
     if (row){
-      res.send(row)
+      req.app.get('db')('tags')
+      .where({spell_id: row.id})
+      .then(tags => {
+        row.tags = tags
+        res.send(row)
+      })
     } else {
       res.status(401).send({error: "You don't own that!"})
     }
@@ -189,7 +196,7 @@ app.post(`${epSpellsFork}`, requireAuth, (req, res, next) =>{
     if(displaySpell){
       const {name, description, text} = displaySpell
       req.app.get('db')('spells')
-      .insert({user_id: req.user.id, name: name, description: description,
+      .insert({user_id: req.user.id, name: name+' (Fork)', description: description,
                 text: text, date_created: new Date(), date_modified: new Date()})
       .returning('*')
       .then((spells) => {
