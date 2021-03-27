@@ -32,24 +32,37 @@ let epSpellsFork = '/spells/:id/fork'
 let epSpellTags = '/spells/:id/tags/:tag'
 let epSpellTagsIndex = '/spells/:id/tags'
 
-// Retrieve spells on viewing Dashboard
-app.get(epSpellIndex, requireAuth, (req, res) => {
-  req.app.get('db')('spells')
-    .where({user_id: req.user.id, is_deleted: false})
-    .then((displaySpells) => {
-        delete displaySpells[0].is_deleted
-        res.send(displaySpells)
+//TODO: Move this to another file
+//TODO: Fix n+1 query problem
+let attachTagsToSpells=
+  async(spells) => {
+    for(let i = 0; i < spells.length; i++){
+      delete spells[i].is_deleted
+      let tags = await
+      app.get('db')('tags').where({spell_id: spells[i].id})
 
-    })
+      spells[i].tags = tags
+    }
+  return spells
+}
+
+// Retrieve spells on viewing Dashboard
+app.get(epSpellIndex, requireAuth, async(req, res) => {
+  console.log("any message i want")
+  let spells = await req.app.get('db')('spells')
+    .where({user_id: req.user.id, is_deleted: false})
+  spells = await attachTagsToSpells(spells)
+
+  res.send(spells)
 })
 
 // Retrieve all public spells
-app.get(epPublicSpells, (req, res) => {
-  req.app.get('db')('spells')
+app.get(epPublicSpells, async(req, res) => {
+  let spells = await req.app.get('db')('spells')
     .where({is_public: true, is_deleted: false})
-    .then((displaySpells) => {
-        res.send(displaySpells)
-    })
+  spells = await attachTagsToSpells(spells)
+
+  res.send(spells)
 })
 
 // Retrieve specific spell information
@@ -82,7 +95,8 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
 
     req.app.get('db')('spells')
     .where({user_id: userId, is_deleted: false, is_public: true})
-    .then((spells) => {
+    .then(async (spells) => {
+      spells = await attachTagsToSpells(spells)
       res.send({...user, spells})
     })
   })
