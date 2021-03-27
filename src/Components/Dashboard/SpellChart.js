@@ -89,6 +89,15 @@ export default function SpellChart(props) {
       })
   }
 
+  function addIcon(event) {
+    if (props.spells){
+      SpellsApiService.postNewSpell()
+        .then(spell => {
+          props.setSpells([...props.spells, spell])
+        })
+    }
+  }
+
   return (
     <React.Fragment>
       <Title>My Spells</Title>

@@ -20,9 +20,6 @@ import AppBar from '@material-ui/core/AppBar';
 import clsx from 'clsx';
 import CodeSpells from '../../Assets/CodeSpells.png';
 import Link from '@material-ui/core/Link';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import Tooltip from '@material-ui/core/Tooltip';
 import SpellsApiService from '../../Services/spells-api-service';
 
 function Dashboard(props) {
@@ -35,21 +32,6 @@ function Dashboard(props) {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  function createSpell(event) {
-    // event.preventDefault();
-    // console.log(event);
-    if (props.spells){
-      // props.setSpells([...props.spells, {'name': 'New Spell', 'description':  'Spell Description', 'text': 'Hello World'}])
-      // console.log(spells);
-
-      SpellsApiService.postNewSpell()
-        .then(spell => {
-          // console.log(spell);
-          props.setSpells([...props.spells, spell])
-        })
-    }
-  }
 
   return (
     TokenService.hasAuthToken() ?
@@ -103,16 +85,14 @@ function Dashboard(props) {
             {/* Spell List */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                {props.children}
+                {props.child}
               </Paper>
             </Grid>
           </Grid>
-          {/* <p></p> */}
-          <Tooltip title="New Spell" placement="top">
-            <Fab color="primary" aria-label="add" className={classes.fab} onClick={createSpell}>
-              <AddIcon />
-            </Fab>
-          </Tooltip>
+
+          {/* Inserts relevant fab icon by page */}
+          {props.fabIcon}
+
         </Container>
       </main>
     </div> :

@@ -7,11 +7,12 @@ import TokenService from '../Services/token-service';
 const LandingPage = (props) => {
   let history = useHistory();
 
+  // If user has an auth token, send them to dashboard
+  if (TokenService.hasAuthToken()){
+    history.push('/spells')
+  }
+
   return (
-    // If user has an auth token, send them to dashboard
-    // TokenService.hasAuthToken() ?
-    //   history.push('/spells')
-    // :
     <>
       <Route
         path={'/'}

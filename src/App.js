@@ -37,7 +37,8 @@ function App() {
           />
           <Route
             path={'/spells/:id'}
-            component={SpellDetails}
+            // component={SpellDetails}
+            component={(props) => <Dashboard child={<SpellDetails/>}></Dashboard>}
           />
           <Route
             path={'/spells'}
@@ -45,16 +46,15 @@ function App() {
           />
           <Route
             path={'/friends'}
-            component={(props) => <Dashboard><div>Friends Coming Soon</div></Dashboard>}
+            component={(props) => <Dashboard child={<div>Friends Coming Soon</div>}></Dashboard>}
           />
           <Route
             path={'/gallery'}
-            component={(props) => <Dashboard><PublicSpells /></Dashboard>}
+            component={(props) => <Dashboard child={<PublicSpells/>}></Dashboard>}
           />
-
           <Route
             path={'/wizards/:id'}
-            component={(props) => <Dashboard><UserProfile match={props.match}/></Dashboard>}
+            component={(props) => <Dashboard child={<UserProfile match={props.match}/>}></Dashboard>}
           />
           <Route
             component={NotFound}
