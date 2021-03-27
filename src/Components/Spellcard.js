@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import TokenService from '../Services/token-service';
@@ -37,8 +37,10 @@ import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Tooltip from '@material-ui/core/Tooltip';
+import Chip from '@material-ui/core/Chip';
+import {textTrim} from './Dashboard/SpellChart.js'
 
-const Spellbook = (props) => {
+const Spellcard = (props) => {
   const classes = useStyles();
   let history = useHistory();
 
@@ -47,6 +49,7 @@ const Spellbook = (props) => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
 
   const clickForkIcon = (id) => {
     SpellsApiService.forkSpellById(id)
@@ -79,9 +82,12 @@ const Spellbook = (props) => {
         //     <MoreVertIcon />
         //   </IconButton>
         // }
-        title={props.spell.name}
+        title={textTrim(props.spell.name, 19)}
         subheader={new Date(Date.parse(props.spell.date_created)).toLocaleDateString()}
       />
+
+
+
         <CardMedia
           className={classes.cardMedia}
           image="https://source.unsplash.com/random"
@@ -90,9 +96,22 @@ const Spellbook = (props) => {
 
         <CardContent className={classes.cardContent}>
           <Typography>
-            {props.spell.description}
+            {textTrim(props.spell.description, 30)}
           </Typography>
         </CardContent>
+
+        <div className={classes.chip}>
+        {props.spell.tags.map(t => (
+          <Chip
+          key={t.id}
+          variant="outlined"
+          size="small"
+          label={t.name}
+          // onClick={}
+          />
+        ))}
+        </div>
+
         <CardActions disableSpacing>
           {/* <IconButton aria-label="add to favorites">
             <FavoriteIcon />
@@ -150,6 +169,7 @@ const Spellbook = (props) => {
           </DialogActions>
         </Dialog>
 
+
       </Card>
     </Grid>
   )
@@ -179,6 +199,11 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  chip: {
+    flexDirection:'row',
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
   icon: {
     marginRight: theme.spacing(2),
   },
@@ -202,7 +227,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '56.25%', // 16:9
   },
   cardContent: {
-    flexGrow: 1,
+    // flexGrow: 1,
   },
   footer: {
     backgroundColor: theme.palette.background.paper,
@@ -210,4 +235,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default Spellbook;
+export default Spellcard;

@@ -39,6 +39,9 @@ export default function SpellDetails(props) {
   const [open, setOpen] = React.useState(false);
   const [spellToDelete, setSpellToDelete] = React.useState(undefined);
 
+  const [value, setValue] = React.useState("");
+  const [inputValue, setInputValue] = React.useState('');
+
   const handleClickOpen = (id) => {
     // setOpen(true);
     setSpellToDelete(id);
@@ -236,7 +239,7 @@ export default function SpellDetails(props) {
           </div>
         </div>
 
-        <div className={classes.iconRow}>
+        {/*<div className={classes.iconBut}>
 
           <TextField
             className={classes.title}
@@ -261,16 +264,29 @@ export default function SpellDetails(props) {
             setSpellTag("")
           }}>Add Tag</Button>
 
+          </div>  */}
 
 
-          {/*<Autocomplete
-            onChange={(event) => {
+          <div>
+          {/*<div>{`value: ${value !== null ? `'${value}'` : 'null'}`}</div>
+          <div>{`inputValue: '${inputValue}'`}</div>*/}
+          <Autocomplete
+            // disableCloseOnSelect
+            // value={value}
+            // onChange={(event, newValue) => {
+            //   setValue(newValue);
+            // }}
+            // inputValue={inputValue}
+            onInputChange={(event) => {
               setSpellTag(event.target.value)
             }}
-            className={classes.iconRow}
-            multiple id="tags-outlined"
+            className={classes.iconBut}
+            multiple id="tags-standard"
             options={tagWhitelist.map((option) => option.title)}
+            // defaultValue={spell.tags.map(t => (t.name))}
             freeSolo
+            // includeInputInList
+            onKeyUp={handleKeyUp}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (
                 <Chip variant="outlined" label={option} {...getTagProps({ index })} />
@@ -278,18 +294,21 @@ export default function SpellDetails(props) {
             }
             renderInput={(params) =>(
               <TextField {...params}
-                defaultValue={spell.tags.map(t => (t.name))}
-                variant="outlined"
+                variant="standard"
                 label="Spell Tags"
-                placeholder="Tag"
-                onKeyUp={handleKeyUp} />
+                placeholder="New Tag"
+                onKeyUp={handleKeyUp}
+                onChange={(event) => {
+                  setSpellTag(event.target.value)
+                }}
+                />
             )}
           />
-          */}
+
         </div>
 
         <div>
-        {spell.tags.map(t => (
+        {/*}{spell.tags.map(t => (
           <Button
           key={t.id}
           variant="contained"
@@ -297,6 +316,18 @@ export default function SpellDetails(props) {
             removeTagFromSpell(spell.id, t.name)
           }}>{t.name}</Button>
         ))}
+        */}
+        {spell.tags.map(t => (
+          <Chip
+          key={t.id}
+          variant="outlined"
+          size="small"
+          label={t.name}
+          // onClick={}
+          onDelete={() => removeTagFromSpell(spell.id, t.name)}
+          />
+        ))}
+
         </div>
 
 
@@ -327,7 +358,6 @@ export default function SpellDetails(props) {
         <TextField className={classes.margin}
           label="Description"
           defaultValue={spell.description}
-          fullWidth
           onChange={(event) => {
             setSpell({...spell, description: event.target.value})
             debounce(() => updateSpell({...spell, description: event.target.value}), 3000)
@@ -384,6 +414,12 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     // alignContent: 'left'
     justifyContent: 'space-between'
+  },
+  iconBut: {
+    display: 'flex',
+    margin: theme.spacing(1),
+    // alignContent: 'left'
+    justifyContent: 'left'
   },
   titleRow: {
     display: 'flex',

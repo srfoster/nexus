@@ -29,9 +29,9 @@ export default function PublicSpells() {
   const classes = useStyles();
 
   const [spells, setSpells] = useState([])
-  
+
   useEffect(() => {
-    // console.log(spells);
+
     SpellsApiService.getPublicSpells()
       .then(spells => setSpells(spells))
   }, [])

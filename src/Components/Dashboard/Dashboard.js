@@ -67,7 +67,7 @@ function Dashboard(props) {
           >
             <MenuIcon />
           </IconButton>
-          
+
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
           </Typography>
 
@@ -115,8 +115,8 @@ function Dashboard(props) {
           </Tooltip>
         </Container>
       </main>
-    </div> : 
-    
+    </div> :
+
     // >> Public display <<
     <div className={classes.root}>
     <CssBaseline />
@@ -131,7 +131,7 @@ function Dashboard(props) {
         >
           <MenuIcon />
         </IconButton>
-        
+
         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
         </Typography>
 
@@ -164,7 +164,7 @@ function Dashboard(props) {
           {/* Spell List */}
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              {props.children}
+              {props.child}
             </Paper>
           </Grid>
         </Grid>

@@ -63,15 +63,15 @@ export default function SpellChart(props) {
 
   function textTrim(text, length){
     if (!text) return '';
-    
+
     if(text.length > length){
       return text.slice(0, length) + '...';
-    } else { 
+    } else {
       return text;
     }
   }
 
-  function deleteSpell(id){    
+  function deleteSpell(id){
     SpellsApiService.deleteSpell(id)
       .then(() => props.onDelete(id))
   }
@@ -123,7 +123,7 @@ export default function SpellChart(props) {
                 </IconButton>
               </TableCell>
               <TableCell className={classes.icons}>
-                <IconButton aria-label="delete" 
+                <IconButton aria-label="delete"
                   onClick={() => handleClickOpen(spell.id)}
                   // onClick={handleClickOpen}
                 >
