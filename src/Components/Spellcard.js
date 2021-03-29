@@ -22,7 +22,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
-import {textTrim} from './Dashboard/SpellChart.js'
+import textTrim from './Dashboard/SpellChart.js'
 
 const Spellcard = (props) => {
   const classes = useStyles();

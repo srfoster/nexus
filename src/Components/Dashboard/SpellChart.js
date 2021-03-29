@@ -99,6 +99,7 @@ export default function SpellChart(props) {
   }
 
   return (
+    props.spells ? 
     <React.Fragment>
       <Title>My Spells</Title>
       <Table size="small" padding="none">
@@ -178,6 +179,7 @@ export default function SpellChart(props) {
       </Table>
 
     </React.Fragment>
+    : '' 
   );
 }
 

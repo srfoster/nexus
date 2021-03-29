@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Title from './Dashboard/Title';
 import SpellsApiService from '../Services/spells-api-service';
 import Spellbook from './Spellbook';
@@ -42,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     transform: 'rotate(180deg)',
   },
   avatar: {
-    backgroundColor: red[500],
+    // backgroundColor: red[500],
   },
   icon: {
     marginRight: theme.spacing(2),
