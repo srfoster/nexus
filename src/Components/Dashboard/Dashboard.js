@@ -50,7 +50,7 @@ function Dashboard(props) {
           >
             <MenuIcon />
           </IconButton>
-          
+
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
           </Typography>
 
@@ -96,8 +96,8 @@ function Dashboard(props) {
 
         </Container>
       </main>
-    </div> : 
-    
+    </div> :
+
     // >> Public display <<
     <div className={classes.root}>
     <CssBaseline />
@@ -112,7 +112,7 @@ function Dashboard(props) {
         >
           <MenuIcon />
         </IconButton>
-        
+
         <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
         </Typography>
 
