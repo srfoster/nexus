@@ -25,6 +25,8 @@ import SpellsApiService from '../../Services/spells-api-service';
 function Dashboard(props) {
   const classes = useStyles();
 
+  const [isLoggedIn, setIsLoggedIn] = useState(undefined);
+
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -34,8 +36,16 @@ function Dashboard(props) {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  useEffect(() => {
+    // Only running this to check if logged in
+    SpellsApiService.getUserById('me')
+      .then((user) => setIsLoggedIn(true))
+      .catch(() => setIsLoggedIn(false))
+  }, [])
+
   return (
-    TokenService.hasAuthToken() ?
+    isLoggedIn===undefined ?
+    '': isLoggedIn ?
     // >> Private only display <<
     <div className={classes.root}>
       <CssBaseline />
