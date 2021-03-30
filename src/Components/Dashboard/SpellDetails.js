@@ -23,7 +23,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import SpellsApiService from '../../Services/spells-api-service';
 import Chip from '@material-ui/core/Chip';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-// import { Autocomplete } from "@material-ui/lab";
 
 let debounceTimer
 
@@ -56,7 +55,7 @@ export default function SpellDetails(props) {
   const { id } = useParams();
   useEffect(() => {
     // const { id } = props.match.params
-    
+
     SpellsApiService.getSpellById(id)
       .then(spell => {
         setSpell(spell)
@@ -238,19 +237,9 @@ export default function SpellDetails(props) {
         </div>
 
 
-        {/*<div className={classes.iconBut}>
-
-
-        {spell.tags.map(t => (
-          <Button
-          variant="contained"
-          onClick={(event) => {
-            removeTagFromSpell(spell.id, t.name)
-            console.log(t.name)
-          }}>{t.name}</Button>
-        ))}
-
-          <TextField className={classes.iconRow}
+        <div className={classes.iconRow}>
+          <TextField
+            className={classes.title}
             placeholder="Tag"
             onKeyUp={handleKeyUp}
             value = {spellTag}
@@ -259,7 +248,7 @@ export default function SpellDetails(props) {
               setSpellTag(event.target.value)
             }}
           />
-
+          {/*
           <Button
           variant="contained"
           onClick={(event) => {
@@ -269,14 +258,14 @@ export default function SpellDetails(props) {
             }
             setSpellTag("")
           }}>Add Tag</Button>
+          */}
+
+          </div>
 
 
-          </div>  */}
-
-
-          <div>
-          {/*<div>{`value: ${value !== null ? `'${value}'` : 'null'}`}</div>
-          <div>{`inputValue: '${inputValue}'`}</div>*/}
+          {/*<div>
+          <div>{`value: ${value !== null ? `'${value}'` : 'null'}`}</div>
+          <div>{`inputValue: '${inputValue}'`}</div>
           <Autocomplete
             // disableCloseOnSelect
             // value={value}
@@ -284,19 +273,18 @@ export default function SpellDetails(props) {
             //   setValue(newValue);
             // }}
             // inputValue={inputValue}
-            onInputChange={(event) => {
-              setSpellTag(event.target.value)
-            }}
+            // onInputChange={(event) => {
+            //   setSpellTag(event.target.value)
+            // }}
             className={classes.iconBut}
             multiple id="tags-standard"
             options={tagWhitelist.map((option) => option.title)}
             // defaultValue={spell.tags.map(t => (t.name))}
             freeSolo
-            // includeInputInList
             onKeyUp={handleKeyUp}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => (
-                <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+                <Chip variant="outlined" size="small" label={option} {...getTagProps({ index })} />
               ))
             }
             renderInput={(params) => (
@@ -304,7 +292,7 @@ export default function SpellDetails(props) {
                 variant="standard"
                 label="Spell Tags"
                 placeholder="New Tag"
-                onKeyUp={handleKeyUp}
+                // onKeyUp={handleKeyUp}
                 onChange={(event) => {
                   setSpellTag(event.target.value)
                 }}
@@ -312,19 +300,10 @@ export default function SpellDetails(props) {
             )}
           />
 
-        </div>
+        </div>*/}
 
 
-        <div>
-        {/*}{spell.tags.map(t => (
-          <Button
-          key={t.id}
-          variant="contained"
-          onClick={(event) => {
-            removeTagFromSpell(spell.id, t.name)
-          }}>{t.name}</Button>
-        ))}
-        */}
+        <div className={classes.icon}>
         {spell.tags.map(t => (
           <Chip
           key={t.id}
@@ -335,7 +314,6 @@ export default function SpellDetails(props) {
           onDelete={() => removeTagFromSpell(spell.id, t.name)}
           />
         ))}
-
         </div>
 
 

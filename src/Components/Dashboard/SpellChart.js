@@ -25,6 +25,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Tooltip from '@material-ui/core/Tooltip';
 import {useSpellContext} from '../Context';
 import SpellsApiService from '../../Services/spells-api-service';
+import {textTrim} from '../../Util.js'
+import Pagination from '@material-ui/lab/Pagination';
 
 export default function SpellChart(props) {
 
@@ -61,16 +63,6 @@ export default function SpellChart(props) {
     return 0;
   }
 
-  function textTrim(text, length){
-    if (!text) return '';
-
-    if(text.length > length){
-      return text.slice(0, length) + '...';
-    } else {
-      return text;
-    }
-  }
-
   function deleteSpell(id){
     SpellsApiService.deleteSpell(id)
       .then(() => props.onDelete(id))
@@ -99,7 +91,7 @@ export default function SpellChart(props) {
   }
 
   return (
-    props.spells ? 
+    props.spells ?
     <React.Fragment>
       <Title>My Spells</Title>
       <Table size="small" padding="none">
@@ -178,10 +170,12 @@ export default function SpellChart(props) {
         </TableBody>
       </Table>
 
+
     </React.Fragment>
-    : '' 
+    : ''
   );
 }
+
 
 const useStyles = makeStyles((theme) => ({
   seeMore: {
@@ -194,5 +188,10 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {
     stickyHeader: true,
-  }
+  },
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
+  },
 }));
