@@ -1,11 +1,120 @@
-/* 3/24/21
+/* 3/29/21
+  
+  Client side tests
+
+  SpellChart pagination
+
+  SpellChart sort by column on click
+  SpellChart delete checkboxes
+
+  Server tag endpoint, don't allow repeat tags
+  
+  Option to manually resize SpellChart column widths
+
+  Add image feature to spells
+
+  ? Server readme updates: Assumes postgres database, user named admin, no password
+
+  Implement profile page, avatars, and public profile
+  Create spinner for SpellChart while a spell is being created
+  SpellChart table borders for smaller columns
+  Implement sticky header on SpellChart table
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
+  PublicSpells code accordion opens all albums at once
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
+
+  **Dashboard**
+  Scroll bar should not go under the header bar
+
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+    
+  **User Flow**
+  Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  *Revise the SpellDetails workaround to not re-render CodeMirror
+  *Revise the SpellIndex history.push to accommodate server errors
+
+  ***FINISHED***
+  --> If auth token, either redirect to spells from landing, or make landing look like dashboard
+  --> Hide the plus button if not relevant to that page or move render to sub-component
+  --> Fix console errors about button nesting and unique keys for spellcards
+  --> Give forked spells an indicator in the title that they were forked
+*/
+
+
+/* 3/29/21
+
+  Discord
+  Unmounted component React timeout issue
+  Update endpoint tests to reflect recent changes
+  Login auth token not matching on test
+  Client side tests
 
   Server tag endpoint, don't allow repeat tags
 
-  Solve random white screen error from the stream
+  There are rendering issues if someone without auth token tries going directly to a private page
+  
+  Option to manually resize SpellChart column widths
 
-  Normalize CodeMirror dialog size
-  Fix CodeMirror height to fill more of the screen on SpellDetails
+  Add image feature to spells
+
+  ? Server readme updates: Assumes postgres database, user named admin, no password
+
+  Implement profile page, avatars, and public profile
+  Create spinner for SpellChart while a spell is being created
+  SpellChart table borders for smaller columns
+  Implement sticky header on SpellChart table
+
+  **Public Spells**
+  PublicSpells, cards should identify the creator
+  >> Implement Avatar feature?
+  PublicSpells code accordion opens all albums at once
+  PublicSpells Like, Share, and More buttons need functionality
+  PublicSpells needs sorting options and button to change sorting
+  - PublicSpells default image or rune icon
+
+  **Dashboard**
+  Scroll bar should not go under the header bar
+
+  **Likes**
+  Add in a like counter to all spells
+  Track which spells a user has 'liked'
+  Allow only one vote per user per spell
+    
+  **User Flow**
+  Close tab confirmation window if save is occurring
+
+  **Misc**
+  Create 'Friends' functionality
+  Add in the "forgot password" functionality on login page
+  Fix auth token test randomly failing (server)
+  Give some randomized differences to each "New Spell" that is created
+  *Revise the SpellDetails workaround to not re-render CodeMirror
+  *Revise the SpellIndex history.push to accommodate server errors
+
+  ***FINISHED***
+  --> If auth token, either redirect to spells from landing, or make landing look like dashboard
+  --> Hide the plus button if not relevant to that page or move render to sub-component
+  --> Fix console errors about button nesting and unique keys for spellcards
+  --> Give forked spells an indicator in the title that they were forked
+*/
+
+/* 3/24/21
+
+  Server tag endpoint, don't allow repeat tags
 
   There are rendering issues if someone without auth token tries going directly to a private page
   
