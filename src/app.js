@@ -47,18 +47,22 @@ let attachTagsToSpells =
 }
 
 // Retrieve spells on viewing Dashboard
+// FIXME: sorting should occur on server side before sending back response
 app.get(epSpellIndex, requireAuth, async (req, res) => {
+  let page = req.query.page ? req.query.page : 1;
+  let page_size = req.query.page_size ? req.query.page_size : 10;
+
+  let totalSpells = await req.app.get('db')('spells')
+    .count('id')
+    .where({user_id: req.user.id, is_deleted: false})
+
   let spells = await req.app.get('db')('spells')
     .where({user_id: req.user.id, is_deleted: false})
-  spells = await attachTagsToSpells(spells)
-  res.send({spells, totalSpells: spells.length})
+    .limit(page_size)
+    .offset(page_size * (page-1))
 
-  // TODO: Use knex to implement count
-  // await req.app.get('db')('spells')
-  // .where({user_id: req.user.id, is_deleted: false})
-  // .then((allSpells) => {
-  //   res.send({spells, totalSpells: allSpells.length})
-  // })
+  spells = await attachTagsToSpells(spells)
+  res.send({spells, total: Number(totalSpells[0].count)})
 })
 
 // Retrieve all public spells
@@ -67,7 +71,7 @@ app.get(epPublicSpells, async (req, res) => {
     .where({is_public: true, is_deleted: false})
   spells = await attachTagsToSpells(spells)
 
-  res.send(spells)
+  res.send({spells, length: spells.length})
 })
 
 // Retrieve specific spell information
@@ -106,12 +110,11 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
       userData = {...user, spells}
     })
 
-    // TODO: Use knex method to count matching spells
     await req.app.get('db')('spells')
+    .count('id')
     .where({user_id: userId, is_deleted: false})
     .then(async (allSpells) => {
-      userData = {...userData, totalSpells: allSpells.length}
-      res.send(userData)
+      res.send({...userData, total: Number(allSpells[0].count)})
     })
   })
 })
