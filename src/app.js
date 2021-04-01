@@ -34,7 +34,7 @@ let epSpellTagsIndex = '/spells/:id/tags'
 
 //TODO: Move this to another file
 //TODO: Fix n+1 query problem
-let attachTagsToSpells=
+let attachTagsToSpells =
   async(spells) => {
     for(let i = 0; i < spells.length; i++){
       delete spells[i].is_deleted
@@ -47,17 +47,22 @@ let attachTagsToSpells=
 }
 
 // Retrieve spells on viewing Dashboard
-app.get(epSpellIndex, requireAuth, async(req, res) => {
-  console.log("any message i want")
+app.get(epSpellIndex, requireAuth, async (req, res) => {
   let spells = await req.app.get('db')('spells')
     .where({user_id: req.user.id, is_deleted: false})
   spells = await attachTagsToSpells(spells)
+  res.send({spells, totalSpells: spells.length})
 
-  res.send(spells)
+  // TODO: Use knex to implement count
+  // await req.app.get('db')('spells')
+  // .where({user_id: req.user.id, is_deleted: false})
+  // .then((allSpells) => {
+  //   res.send({spells, totalSpells: allSpells.length})
+  // })
 })
 
 // Retrieve all public spells
-app.get(epPublicSpells, async(req, res) => {
+app.get(epPublicSpells, async (req, res) => {
   let spells = await req.app.get('db')('spells')
     .where({is_public: true, is_deleted: false})
   spells = await attachTagsToSpells(spells)
@@ -90,14 +95,23 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
   req.app.get('db')('users')
   .where({id: userId})
   .first()
-  .then((user) => {
+  .then(async (user) => {
     delete user.password;
+    let userData = ''
 
-    req.app.get('db')('spells')
+    await req.app.get('db')('spells')
     .where({user_id: userId, is_deleted: false, is_public: true})
     .then(async (spells) => {
       spells = await attachTagsToSpells(spells)
-      res.send({...user, spells})
+      userData = {...user, spells}
+    })
+
+    // TODO: Use knex method to count matching spells
+    await req.app.get('db')('spells')
+    .where({user_id: userId, is_deleted: false})
+    .then(async (allSpells) => {
+      userData = {...userData, totalSpells: allSpells.length}
+      res.send(userData)
     })
   })
 })

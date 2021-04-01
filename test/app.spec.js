@@ -10,7 +10,7 @@ const supertest = require('supertest')
 describe('App', () => {
   let db
 
-  const {
+  let {
     testUsers,
     testSpells,
     testTags,
@@ -31,7 +31,22 @@ describe('App', () => {
 
   afterEach('cleanup', () => helpers.cleanTables(db))
 
-  describe(`GET ${epSpellIndex}`, () => {
+  describe.only(`GET ${epSpellIndex}`, () => {
+    let extraSpells = []
+    for(let i=1; i<15; i++){
+      extraSpells.push({
+        id: testSpells.length + i,
+        user_id: 1,
+        name: 'Seeded extra',
+        text: '(Hello Extra)',
+        description: 'This is a bonus',
+        is_deleted: false
+      })
+    }
+    // console.log(extraSpells);
+    // testSpells = {...testSpells, ...extraSpells}
+    testSpells = testSpells.concat(extraSpells)
+
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -42,6 +57,18 @@ describe('App', () => {
       helpers.seedSpells(
         db,
         testSpells,
+      )
+    )
+    // beforeEach('insert extra spells', () =>
+    //   helpers.seedSpells(
+    //     db,
+    //     extraSpells,
+    //   )
+    // )
+    beforeEach('insert tags', () =>
+      helpers.seedTags(
+        db,
+        testTags,
       )
     )
 
@@ -57,8 +84,24 @@ describe('App', () => {
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then((res) => {
-          console.log(res.body);
-          expect(res.body.length).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
+          expect(res.body.spells.length).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
+          expect(res.body.totalSpells).to.equal(res.body.spells.length)
+        })
+    })
+
+    it(`GET returns a list of tags that match the ID of each spell`, () => {
+      return supertest(app)
+        .get(epSpellIndex)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .then((res) => {
+          for (let i=0; i<res.body.length; i++){
+            if (res.body[i].tags.length){
+              expect(res.body[i].tags.map((t) => t.id).toString())
+              .to.equal(testTags.filter((t) => t.spell_id === testSpells[0].id).map(t => t.id).toString())
+            } 
+            expect(res.body[i].tags.length).to.equal(testTags.filter((t) => t.spell_id === testSpells[i].id).length)
+          }
         })
     })
 
@@ -71,8 +114,35 @@ describe('App', () => {
           for (let i=0; i<res.body.length; i++){
             expect(res.body[i].user_id).to.equal(testUsers[0].id)
           }
-
         })
+    })
+
+    // Example /spells?page=2&page_size=10
+    // For user[0], page 2 with a page size of 10 should return 10 spells, ID's 11-20
+    it(`responds with the second page when given ?page=2`, () => {
+      return supertest(app)
+      .get(`/spells?page=2&page_size=10`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then(async (res) => {
+        let userTotalSpells = testSpells.filter(spell => spell.user_id === 1 && spell.is_deleted === false).length
+
+        let allTestSpells = 
+        await db
+        .from('spells')
+        .select('*')
+        .where({user_id: testUsers[0].id, is_deleted: false})
+
+        // console.log(res.body.totalSpells, userTotalSpells);
+        expect(res.body.totalSpells).to.equal(userTotalSpells)
+        // expect(res.body.spells.length).to.equal(10)
+        // expect(res.body.spells.map(spell => spell.id).toString()).to.equal(allTestSpells)
+      })
+    })
+
+    // Create a loop for fixture for this test to populate additional user[0] spells
+    it(`only returns the first page with a size of 10 when no page or page size is specified`, () => {
+
     })
 
   })
@@ -220,6 +290,24 @@ describe('App', () => {
 
     // it does not show the password portion of the user data
 
+    it(`responds with total number of spells that the user owns`, () => {
+      return supertest(app)
+        .get(`/wizards/${testUsers[0].id}`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .then(async (res) => {
+          await db
+          .from('spells')
+          .select('*')
+          .where({user_id: testUsers[0].id, is_deleted: false})
+          .then(spells => {
+            let userTotalSpells = testSpells.filter(spell => spell.user_id === 1 && spell.is_deleted === false).length
+
+            expect(spells.length).to.equal(userTotalSpells)
+          })
+        })
+    })
+
   })
 
   describe(`GET ${epSpellTagsGet}`, () => {
@@ -310,7 +398,7 @@ describe('App', () => {
       .expect(401)
     })
 
-    it.only(`responds 401 if trying to post tags to another user's spell`, () => {
+    it(`responds 401 if trying to post tags to another user's spell`, () => {
       return supertest(app)
         .post(`/spells/3/tags/wind_magic`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -602,23 +690,25 @@ describe('App', () => {
         password: 'password',
         hash: testUser.password
       }
-      const expectedToken = jwt.sign(
-        { user_id: testUser.id },
-        config.JWT_SECRET,
-        {
-          subject: testUser.username,
-          expiresIn: config.JWT_EXPIRY,
-          algorithm: 'HS256',
-        }
-      )
-      console.log("Created hash: ", userValidCreds.hash);
-      console.log("Auto hash: ", expectedToken);
+      
+      // console.log("Created hash: ", userValidCreds.hash);
+      // console.log("Auto hash: ", expectedToken);
       return supertest(app)
         .post('/login')
         .send(userValidCreds)
-        .expect(200, {
-          message: 'Passwords match',
-          authToken: expectedToken,
+        .expect(200)
+        .then((res) => {
+          const expectedToken = jwt.sign(
+            { user_id: testUser.id },
+            config.JWT_SECRET,
+            {
+              subject: testUser.username,
+              expiresIn: config.JWT_EXPIRY,
+              algorithm: 'HS256',
+            }
+          )
+          // console.log(res.body);
+          expect(res.body.authToken).to.equal(expectedToken)
         })
     })
   })
