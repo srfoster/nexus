@@ -31,7 +31,8 @@ describe('App', () => {
 
   afterEach('cleanup', () => helpers.cleanTables(db))
 
-  describe.only(`GET ${epSpellIndex}`, () => {
+  describe(`GET ${epSpellIndex}`, () => {
+    // TODO: Find a way to clear this data after the describe is over
     let extraSpells = []
     for(let i=1; i<15; i++){
       extraSpells.push({
@@ -43,8 +44,6 @@ describe('App', () => {
         is_deleted: false
       })
     }
-    // console.log(extraSpells);
-    // testSpells = {...testSpells, ...extraSpells}
     testSpells = testSpells.concat(extraSpells)
 
     beforeEach('insert users', () =>
@@ -59,12 +58,6 @@ describe('App', () => {
         testSpells,
       )
     )
-    // beforeEach('insert extra spells', () =>
-    //   helpers.seedSpells(
-    //     db,
-    //     extraSpells,
-    //   )
-    // )
     beforeEach('insert tags', () =>
       helpers.seedTags(
         db,
@@ -84,8 +77,9 @@ describe('App', () => {
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then((res) => {
-          expect(res.body.spells.length).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
-          expect(res.body.totalSpells).to.equal(res.body.spells.length)
+          //TODO: further revise to reflect the offset and limit
+          // expect(res.body.spells.length).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
+          expect(res.body.spells.length).to.equal(10)
         })
     })
 
@@ -117,32 +111,57 @@ describe('App', () => {
         })
     })
 
-    // Example /spells?page=2&page_size=10
-    // For user[0], page 2 with a page size of 10 should return 10 spells, ID's 11-20
-    it(`responds with the second page when given ?page=2`, () => {
+    it(`responds with the total number of matching spells`, () => {
       return supertest(app)
-      .get(`/spells?page=2&page_size=10`)
+      .get(`/spells?page=2&page_size=5`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then(async (res) => {
         let userTotalSpells = testSpells.filter(spell => spell.user_id === 1 && spell.is_deleted === false).length
 
-        let allTestSpells = 
-        await db
-        .from('spells')
-        .select('*')
-        .where({user_id: testUsers[0].id, is_deleted: false})
+        expect(res.body.total).to.equal(userTotalSpells)
+      })
+    })
 
-        // console.log(res.body.totalSpells, userTotalSpells);
-        expect(res.body.totalSpells).to.equal(userTotalSpells)
-        // expect(res.body.spells.length).to.equal(10)
-        // expect(res.body.spells.map(spell => spell.id).toString()).to.equal(allTestSpells)
+    // Example /spells?page=2&page_size=5
+    // For user[0], page 2 with a page size of 5 should return 5 spells
+    let page = 2;
+    let page_size = 5;
+    it(`responds with the page ${page} and ${page_size} results when given ?page=${page}&page_size=${page_size}`, () => {
+      return supertest(app)
+      .get(`/spells?page=${page}&page_size=${page_size}`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then(async (res) => {
+        let allTestSpells = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({user_id: testUsers[0].id, is_deleted: false})
+
+        expect(res.body.spells.length).to.equal(page_size)
+        expect(res.body.spells.map(spell => spell.id).toString())
+          .to.equal(allTestSpells.map(spell => spell.id).slice(page_size * (page-1), page_size*page).toString())
       })
     })
 
     // Create a loop for fixture for this test to populate additional user[0] spells
     it(`only returns the first page with a size of 10 when no page or page size is specified`, () => {
+      return supertest(app)
+      .get(`/spells`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then(async (res) => {
+        let allTestSpells = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({user_id: testUsers[0].id, is_deleted: false})
 
+        expect(res.body.spells.length).to.equal(10)
+        expect(res.body.spells.map(spell => spell.id).toString())
+          .to.equal(allTestSpells.map(spell => spell.id).slice(0, 10).toString())
+      })
     })
 
   })
@@ -166,7 +185,7 @@ describe('App', () => {
         .get(epPublicSpells)
         .expect(200)
         .then((res) => {
-          expect(JSON.stringify(res.body.map(spell => spell.id).sort((a,b) => a-b)))
+          expect(JSON.stringify(res.body.spells.map(spell => spell.id).sort((a,b) => a-b)))
             .to.equal(JSON.stringify(testSpells
               .map(spell => spell.is_public === true && spell.is_deleted === false ? spell.id : "")
               .filter(spell => spell !== "")
@@ -180,7 +199,7 @@ describe('App', () => {
       .where({id: 1})
       .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
       .then(rows => {
-        console.log("Row: ", rows[0]);
+        // console.log("Row: ", rows[0]);
         expect(rows[0].is_deleted).to.eql(true)
       })
 
@@ -188,8 +207,8 @@ describe('App', () => {
       .get(epPublicSpells)
       .expect(200)
       .then((res) => {
-        console.log("Res: ", res.body);
-        expect(res.body.map(spell => spell.id)).to.not.include(1)
+        // console.log("Res: ", res.body);
+        expect(res.body.spells.map(spell => spell.id)).to.not.include(1)
       })
     })
 
@@ -199,7 +218,7 @@ describe('App', () => {
       .expect(200)
       .then((res) => {
         console.log("Res: ", res.body);
-        expect(res.body.map(spell => spell.id)).to.not.include(1)
+        expect(res.body.spells.map(spell => spell.id)).to.not.include(1)
       })
     })
 
@@ -288,7 +307,16 @@ describe('App', () => {
         })
     })
 
-    // it does not show the password portion of the user data
+    it(`does not show the password portion of the user data`, () => {
+      return supertest(app)
+      .get(`/wizards/${testUsers[0].id}`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then((res) => {
+        console.log(res.body);
+        expect(res.body.password).to.not.exist
+      })
+    })
 
     it(`responds with total number of spells that the user owns`, () => {
       return supertest(app)
@@ -301,9 +329,7 @@ describe('App', () => {
           .select('*')
           .where({user_id: testUsers[0].id, is_deleted: false})
           .then(spells => {
-            let userTotalSpells = testSpells.filter(spell => spell.user_id === 1 && spell.is_deleted === false).length
-
-            expect(spells.length).to.equal(userTotalSpells)
+            expect(spells.length).to.equal(res.body.total)
           })
         })
     })
