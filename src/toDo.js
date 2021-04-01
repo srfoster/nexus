@@ -1,8 +1,11 @@
 /* 3/29/21
-
-  Rendering issue on load 
   
   Client side tests
+
+  SpellChart pagination
+
+  SpellChart sort by column on click
+  SpellChart delete checkboxes
 
   Server tag endpoint, don't allow repeat tags
   

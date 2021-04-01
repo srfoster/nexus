@@ -14,10 +14,20 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import PublicSpells from './Components/PublicSpells';
 import UserProfile from './Components/UserProfile';
 import NotFound from './Components/NotFound';
+import SpellsApiService from './Services/spells-api-service';
 require('codemirror/mode/scheme/scheme');
 
 function App() {
   const paper = outerPaper();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(undefined);
+
+  useEffect(() => {
+    // Only running this to check if logged in
+    SpellsApiService.getUserById('me')
+      .then((user) => setIsLoggedIn(true))
+      .catch(() => setIsLoggedIn(false))
+  }, [])
 
   return (
     <div className="App">
@@ -25,7 +35,7 @@ function App() {
         <Switch>
           <Route
             exact path={'/'}
-            component={LandingPage}
+            component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
           />
           <Route
             path={'/signup'}
@@ -42,7 +52,7 @@ function App() {
           />
           <Route
             path={'/spells'}
-            component={SpellIndex}
+            component={(props) => <SpellIndex isLoggedIn={isLoggedIn}></SpellIndex>}
           />
           <Route
             path={'/friends'}
@@ -50,7 +60,7 @@ function App() {
           />
           <Route
             path={'/gallery'}
-            component={(props) => <Dashboard child={<PublicSpells/>}></Dashboard>}
+            component={(props) => <Dashboard child={<PublicSpells/>} isLoggedIn={isLoggedIn}></Dashboard>}
           />
           <Route
             path={'/wizards/:id'}

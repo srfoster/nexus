@@ -12,9 +12,9 @@ function SpellIndex(props) {
   let history = useHistory();
   
   useEffect(() => {
-    if(TokenService.hasAuthToken()){
+    if(props.isLoggedIn){
       SpellsApiService.getSpellsByUser(history)
-        .then(spells => setSpells(spells))
+        .then(spells => setSpells(spells.spells))
     }
   }, [])
 
