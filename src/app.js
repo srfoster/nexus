@@ -67,7 +67,7 @@ app.get(epPublicSpells, async (req, res) => {
     .where({is_public: true, is_deleted: false})
   spells = await attachTagsToSpells(spells)
 
-  res.send(spells)
+  res.send({spells, length: spells.legnth})
 })
 
 // Retrieve specific spell information
@@ -103,7 +103,7 @@ app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
     .where({user_id: userId, is_deleted: false, is_public: true})
     .then(async (spells) => {
       spells = await attachTagsToSpells(spells)
-      userData = {...user, spells}
+      userData = {...user, spells, totalPublicSpells: spells.length}
     })
 
     // TODO: Use knex method to count matching spells
