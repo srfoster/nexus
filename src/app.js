@@ -38,6 +38,7 @@ let attachTagsToSpells =
   async(spells) => {
     for(let i = 0; i < spells.length; i++){
       delete spells[i].is_deleted
+      
       let tags = await
       app.get('db')('tags').where({spell_id: spells[i].id})
 
@@ -121,8 +122,10 @@ app.get(`${epWizardDetails}`, requireAuth, async (req, res) => {
     .offset(page_size * (page-1))
   
   let userData = {...user, spells}
+  console.log(userData);
 
   spells = await attachTagsToSpells(spells)
+  delete userData.password
   res.send({...userData, total: Number(totalSpells[0].count)})
 })
 
