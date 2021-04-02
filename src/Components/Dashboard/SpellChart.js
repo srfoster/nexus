@@ -26,11 +26,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import {useSpellContext} from '../Context';
 import SpellsApiService from '../../Services/spells-api-service';
 import {textTrim} from '../../Util.js'
-import {BasicPagination} from '../../Util.js'
 import Pagination from '@material-ui/lab/Pagination';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableContainer from '@material-ui/core/TableContainer';
 import Checkbox from '@material-ui/core/Checkbox';
+import Toolbar from '@material-ui/core/Toolbar';
+import clsx from 'clsx';
+import Typography from '@material-ui/core/Typography';
+import FilterListIcon from '@material-ui/icons/FilterList';
 
 export default function SpellChart(props) {
 
@@ -62,6 +65,56 @@ export default function SpellChart(props) {
     setSpellToDelete(undefined);
   };
 
+  const useToolbarStyles = makeStyles((theme) => ({
+    root: {
+      paddingLeft: theme.spacing(2),
+      paddingRight: theme.spacing(1),
+    },
+    title: {
+      flex: '1 1 100%',
+    },
+  }));
+
+  const EnhancedTableToolbar = (props) => {
+    const classes = useToolbarStyles();
+    
+  }
+
+  const [selected, setSelected] = React.useState([]);
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = rows.map((n) => n.name);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, name);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
+    setSelected(newSelected);
+  };
+
+  const isSelected = (name) => selected.indexOf(name) !== -1;
+
+  const rows = props.spells.length;
+
   function byNameAndModified( a, b ) {
     if ( a.name < b.name ){
       return -1;
@@ -85,12 +138,11 @@ export default function SpellChart(props) {
   }
 
   const updateSpell = (spell) => {
-    const { id } = spell
-
+    console.log(spell)
     let payload = spell
-    console.log(payload);
+    // console.log(payload);
 
-    SpellsApiService.updateSpell(payload, id)
+    SpellsApiService.updateSpell(payload, spell.id)
       .then((spell) => {
         // props.setSpells({...spell, is_public: !spell.is_public})
         props.onChange(spell)
@@ -117,6 +169,36 @@ export default function SpellChart(props) {
         </Tooltip>
       </Title>
 
+      <Toolbar
+      className={clsx(classes.root, {
+        [classes.highlight]: selected.length > 0,
+      })}
+    >
+      {selected.length > 0 ? (
+        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+          {selected.length} selected
+        </Typography>
+      ) : (
+        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+          Nutrition
+        </Typography>
+      )}
+
+      {selected.length > 0 ? (
+        <Tooltip title="Delete">
+          <IconButton aria-label="delete">
+            <DeleteForeverIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Tooltip title="Filter list">
+          <IconButton aria-label="filter list">
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+    </Toolbar>
+
 
       <TableContainer className={classes.container}>
       <Table size="small" padding="none" stickyHeader aria-label="sticky table">
@@ -140,7 +222,7 @@ export default function SpellChart(props) {
         </TableHead>
         <TableBody>
         {/*rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).*/}
-          {props.spells.sort(byNameAndModified).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((spell) => (
+          {props.spells.map((spell) => (
             <TableRow key={"Key: " + spell.id}>
             <TableCell padding="checkbox">
               <Checkbox
@@ -197,7 +279,7 @@ export default function SpellChart(props) {
               </TableCell>
               */}
               <TableCell className={classes.icons}>
-                <IconButton aria-label="isPublic" onClick={() => {
+                <IconButton id={spell.id} aria-label="isPublic" onClick={() => {
                   // setSpell({...spell, is_public: !spell.is_public})
                   updateSpell({...spell, is_public: !spell.is_public})
                 }}>
@@ -211,12 +293,12 @@ export default function SpellChart(props) {
       </Table>
       </TableContainer>
       {/*FIXME: Need endpoint to only supply displayed rows*/}
-    {/*  <Title>
+      {/*<Title>
         <div className={classes.root}>
           <TablePagination
           rowsPerPageOptions={[10, 20, 40]}
           component="div"
-          count={props.spells.length} //change to spells.spells?
+          count={props.totalSpells} //change to spells.spells?
           rowsPerPage={rowsPerPage}
           page={page}
           onChangePage={handleChangePage}
@@ -224,16 +306,18 @@ export default function SpellChart(props) {
           />
         </div>
       </Title>*/}
+
+
       <Title>
           <div className={classes.root}>
-            <Pagination count={40}
-            // onChange
-            // //function(event: object, page: number) => void
-            // //event: The event source of the callback.
-            // //page: The page selected.
+            <Pagination count={Math.ceil(props.totalSpells / rowsPerPage)}
+            onChange={(event ,page ) => {props.setCurrentPage(page)}}
+            //function(event: object, page: number) => void
+            //event: The event source of the callback.
+            //page: The page selected.
             />
           </div>
-        </Title>
+      </Title>
     </React.Fragment>
     : ''
   );

@@ -9,14 +9,19 @@ import FabAddIcon from './FabAddIcon';
 
 function SpellIndex(props) {
   const [spells, setSpells] = useState([])
+  const [totalSpells, setTotalSpells] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
   let history = useHistory();
-  
+
   useEffect(() => {
     if(props.isLoggedIn){
-      SpellsApiService.getSpellsByUser(history)
-        .then(spells => setSpells(spells.spells))
+      SpellsApiService.getSpellsByUser(history, currentPage)
+        .then(spells => {
+          setSpells(spells.spells)
+          setTotalSpells(spells.total)
+        })
     }
-  }, [])
+  }, [currentPage])
 
   function createSpell(event) {
     SpellsApiService.postNewSpell()
@@ -26,18 +31,20 @@ function SpellIndex(props) {
   }
 
   return (
-    <Dashboard 
-      spells={spells} 
+    <Dashboard
+      spells={spells}
       setSpells={setSpells}
       createSpell={createSpell}
 
-      child={<SpellChart 
-        spells={spells} 
+      child={<SpellChart
+        setCurrentPage={setCurrentPage}
+        spells={spells}
+        totalSpells={totalSpells}
         // setSpells={setSpells}
         onChange={(changedSpell) => setSpells(spells.map(spell => changedSpell.id === spell.id ? changedSpell : spell))}
         onDelete={(deletedSpellID) => setSpells(spells.filter(spell => spell.id !== deletedSpellID))}
       />}
-      fabIcon={<FabAddIcon 
+      fabIcon={<FabAddIcon
         spells={spells}
         setSpells={setSpells}
         clickIcon={createSpell}
