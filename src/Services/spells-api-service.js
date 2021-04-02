@@ -23,7 +23,7 @@ const SpellsApiService = {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
-      
+
     })
       .then(res =>
         (!res.ok)
@@ -31,8 +31,8 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  getSpellsByUser(history){
-    return fetch(`${config.API_ENDPOINT}/spells`, {
+  getSpellsByUser(history, page){
+    return fetch(`${config.API_ENDPOINT}/spells?page=${page}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -57,7 +57,7 @@ const SpellsApiService = {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
-      
+
     })
       .then(res =>
         (!res.ok)

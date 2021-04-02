@@ -10,12 +10,3 @@ export function textTrim(text, length){
     return text;
   }
 }
-
-export function BasicPagination() {
-  // const classes = useStyles();
-  return (
-    <div>
-      <Pagination count={10} />
-    </div>
-  );
-}
