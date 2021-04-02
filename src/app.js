@@ -67,11 +67,20 @@ app.get(epSpellIndex, requireAuth, async (req, res) => {
 
 // Retrieve all public spells
 app.get(epPublicSpells, async (req, res) => {
+  let page = req.query.page ? req.query.page : 1;
+  let page_size = req.query.page_size ? req.query.page_size : 9;
+
+  let totalSpells = await req.app.get('db')('spells')
+  .count('id')
+  .where({is_public: true, is_deleted: false})
+
   let spells = await req.app.get('db')('spells')
     .where({is_public: true, is_deleted: false})
-  spells = await attachTagsToSpells(spells)
+    .limit(page_size)
+    .offset(page_size * (page-1))
 
-  res.send({spells, length: spells.length})
+  spells = await attachTagsToSpells(spells)
+  res.send({spells, total: Number(totalSpells[0].count)})
 })
 
 // Retrieve specific spell information
@@ -93,30 +102,28 @@ app.get(`${epSpellDetails}`, requireAuth, (req, res) => {
 })
 
 // Retrieve specific user information
-app.get(`${epWizardDetails}`, requireAuth, (req, res) => {
+app.get(`${epWizardDetails}`, requireAuth, async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+  let page = req.query.page ? req.query.page : 1;
+  let page_size = req.query.page_size ? req.query.page_size : 9;
 
-  req.app.get('db')('users')
+  let totalSpells = await req.app.get('db')('spells')
+  .count('id')
+  .where({user_id: userId, is_deleted: false, is_public: true})
+
+  let user = await req.app.get('db')('users')
   .where({id: userId})
   .first()
-  .then(async (user) => {
-    delete user.password;
-    let userData = ''
 
-    await req.app.get('db')('spells')
+  let spells = await req.app.get('db')('spells')
     .where({user_id: userId, is_deleted: false, is_public: true})
-    .then(async (spells) => {
-      spells = await attachTagsToSpells(spells)
-      userData = {...user, spells}
-    })
+    .limit(page_size)
+    .offset(page_size * (page-1))
+  
+  let userData = {...user, spells}
 
-    await req.app.get('db')('spells')
-    .count('id')
-    .where({user_id: userId, is_deleted: false})
-    .then(async (allSpells) => {
-      res.send({...userData, total: Number(allSpells[0].count)})
-    })
-  })
+  spells = await attachTagsToSpells(spells)
+  res.send({...userData, total: Number(totalSpells[0].count)})
 })
 
 // Get all tags on specific spell
@@ -164,8 +171,8 @@ app.delete(`${epSpellTags}`, requireAuth, async (req, res) => {
 
 // Flag spell as deleted and hide it from client
 app.delete(`${epSpellDetails}`, requireAuth, (req, res) => {
-  console.log('Params: ', req.params);
-  console.log('User: ', req.user);
+  // console.log('Params: ', req.params);
+  // console.log('User: ', req.user);
   req.app.get('db')('spells')
     .where({user_id: req.user.id, id: req.params.id})
     .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
