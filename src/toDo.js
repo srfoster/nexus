@@ -1,5 +1,11 @@
 /* 3/29/21
   
+  MySpells first load render error
+  Unmounted component errors
+
+  Depopulate extra spells after relevant describe is over
+  Sorting of spell endpoint data
+  
   Client side tests
 
   SpellChart pagination
