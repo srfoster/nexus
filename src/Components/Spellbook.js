@@ -6,7 +6,7 @@ import Spellcard from './Spellcard';
 
 const Spellbook = (props) => {
   const classes = useStyles();
-
+console.log(props.spells)
   return (
     <Container className={classes.cardGrid} maxWidth="md">
       <Grid container spacing={4}>

@@ -3,17 +3,21 @@ import { makeStyles } from '@material-ui/core/styles';
 import Title from './Dashboard/Title';
 import SpellsApiService from '../Services/spells-api-service';
 import Spellbook from './Spellbook';
+import Pagination from '@material-ui/lab/Pagination';
 
 export default function PublicSpells(props) {
   // console.log("From index: ", props);
 
   const [spells, setSpells] = useState([])
+  const classes = useStyles();
+
+  const [rowsPerPage, setRowsPerPage] = React.useState(9);
 
   useEffect(() => {
 
     SpellsApiService.getPublicSpells()
-      .then(spells => setSpells(spells))
-      
+      .then(spells => setSpells(spells.spells))
+
   }, [])
   // console.log(spells);
 
@@ -21,9 +25,20 @@ export default function PublicSpells(props) {
     <>
       <Title>Public Spells</Title>
       <Spellbook spells={spells}/>
+      <Title>
+          <div className={classes.root}>
+            <Pagination count={Math.ceil(spells.length / rowsPerPage)}
+            // onChange={(event ,page ) => {props.setCurrentPage(page)}}
+            // //function(event: object, page: number) => void
+            // //event: The event source of the callback.
+            // //page: The page selected.
+            />
+          </div>
+      </Title>
     </>
   );
 }
+
 
 const useStyles = makeStyles((theme) => ({
   album: {
@@ -77,5 +92,12 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(6),
+  },
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+      display: 'flex',
+    justifyContent: 'center',
+    },
   },
 }));
