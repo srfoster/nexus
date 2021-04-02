@@ -11,6 +11,7 @@ function SpellIndex(props) {
   const [spells, setSpells] = useState([])
   const [totalSpells, setTotalSpells] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
+  const [refresh, setRefresh] = useState(0);
   let history = useHistory();
 
   useEffect(() => {
@@ -21,7 +22,7 @@ function SpellIndex(props) {
           setTotalSpells(spells.total)
         })
     }
-  }, [currentPage])
+  }, [currentPage, refresh])
 
   function createSpell(event) {
     SpellsApiService.postNewSpell()
@@ -43,6 +44,7 @@ function SpellIndex(props) {
         // setSpells={setSpells}
         onChange={(changedSpell) => setSpells(spells.map(spell => changedSpell.id === spell.id ? changedSpell : spell))}
         onDelete={(deletedSpellID) => setSpells(spells.filter(spell => spell.id !== deletedSpellID))}
+        setRefresh={setRefresh}
       />}
       fabIcon={<FabAddIcon
         spells={spells}

@@ -12,11 +12,15 @@ export default function PublicSpells(props) {
   const classes = useStyles();
 
   const [rowsPerPage, setRowsPerPage] = React.useState(9);
+  const [totalSpells, setTotalSpells] = React.useState(0);
 
   useEffect(() => {
 
     SpellsApiService.getPublicSpells()
-      .then(spells => setSpells(spells.spells))
+      .then(spells => {
+        setSpells(spells.spells)
+        setTotalSpells(spells.total)
+      })
 
   }, [])
   // console.log(spells);
@@ -27,7 +31,7 @@ export default function PublicSpells(props) {
       <Spellbook spells={spells}/>
       <Title>
           <div className={classes.root}>
-            <Pagination count={Math.ceil(spells.length / rowsPerPage)}
+            <Pagination count={Math.ceil(totalSpells / rowsPerPage)}
             // onChange={(event ,page ) => {props.setCurrentPage(page)}}
             // //function(event: object, page: number) => void
             // //event: The event source of the callback.

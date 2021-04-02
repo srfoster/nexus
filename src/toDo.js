@@ -1,5 +1,9 @@
 /* 3/29/21
   
+  SpellChart delete confirmation
+
+  Confirm all password deletion tests and add more as needed
+
   MySpells first load render error
   Unmounted component errors
 
