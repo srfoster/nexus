@@ -22,7 +22,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
-import textTrim from './Dashboard/SpellChart.js'
+import {textTrim} from '../Util.js'
+
 
 const Spellcard = (props) => {
   const classes = useStyles();
@@ -123,7 +124,7 @@ const Spellcard = (props) => {
         >
           <DialogTitle id="alert-dialog-title">{`${props.spell.name}`}</DialogTitle>
           <DialogContent className="dialogBox">
-            
+
             <DialogContentText id="CodeMirror-Display">
               <CodeMirror
                 className={classes.codeMirror}

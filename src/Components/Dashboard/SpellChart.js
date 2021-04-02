@@ -25,6 +25,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Tooltip from '@material-ui/core/Tooltip';
 import {useSpellContext} from '../Context';
 import SpellsApiService from '../../Services/spells-api-service';
+import {textTrim} from '../../Util.js'
+import {BasicPagination} from '../../Util.js'
+import Pagination from '@material-ui/lab/Pagination';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableContainer from '@material-ui/core/TableContainer';
+import Checkbox from '@material-ui/core/Checkbox';
 
 export default function SpellChart(props) {
 
@@ -33,6 +39,18 @@ export default function SpellChart(props) {
 
   const [open, setOpen] = React.useState(false);
   const [spellToDelete, setSpellToDelete] = React.useState(undefined);
+
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   const handleClickOpen = (id) => {
     // setOpen(true);
@@ -59,16 +77,6 @@ export default function SpellChart(props) {
       return 1;
     }
     return 0;
-  }
-
-  function textTrim(text, length){
-    if (!text) return '';
-
-    if(text.length > length){
-      return text.slice(0, length) + '...';
-    } else {
-      return text;
-    }
   }
 
   function deleteSpell(id){
@@ -99,25 +107,47 @@ export default function SpellChart(props) {
   }
 
   return (
-    props.spells ? 
+    props.spells ?
     <React.Fragment>
-      <Title>My Spells</Title>
-      <Table size="small" padding="none">
+      <Title>My Spells
+        <Tooltip title="Delete" className={classes.icons}>
+          <IconButton aria-label="delete">
+            <DeleteForeverIcon />
+          </IconButton>
+        </Tooltip>
+      </Title>
+
+
+      <TableContainer className={classes.container}>
+      <Table size="small" padding="none" stickyHeader aria-label="sticky table">
         <TableHead>
           <TableRow>
+            <TableCell padding="checkbox">
+              <Checkbox
+                // checked={isItemSelected}
+                // inputProps={{ 'aria-labelledby': labelId }}
+              />
+            </TableCell>
             <TableCell>Created</TableCell>
             <TableCell>Modified</TableCell>
             <TableCell>Name</TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Code</TableCell>
             <TableCell className={classes.icons} >Edit</TableCell>
-            <TableCell className={classes.icons}>Delete</TableCell>
+            {/*<TableCell className={classes.icons}>Delete</TableCell>*/}
             <TableCell className={classes.icons}>Public</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.spells.sort(byNameAndModified).map((spell) => (
+        {/*rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).*/}
+          {props.spells.sort(byNameAndModified).slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((spell) => (
             <TableRow key={"Key: " + spell.id}>
+            <TableCell padding="checkbox">
+              <Checkbox
+                // checked={isItemSelected}
+                // inputProps={{ 'aria-labelledby': labelId }}
+              />
+            </TableCell>
               <Tooltip title={new Date(Date.parse(spell.date_created)).toLocaleTimeString()} arrow placement="bottom-start">
                 <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>
               </Tooltip>
@@ -132,7 +162,7 @@ export default function SpellChart(props) {
                   <EditIcon />
                 </IconButton>
               </TableCell>
-              <TableCell className={classes.icons}>
+              {/*<TableCell className={classes.icons}>
                 <IconButton aria-label="delete"
                   onClick={() => handleClickOpen(spell.id)}
                   // onClick={handleClickOpen}
@@ -140,7 +170,7 @@ export default function SpellChart(props) {
                   <DeleteForeverIcon />
                 </IconButton>
 
-                {/* Dialog confirmation */}
+                {/* Dialog confirmation */}{/*
                 <Dialog
                   // open={open}
                   open={spellToDelete === spell.id}
@@ -165,6 +195,7 @@ export default function SpellChart(props) {
                 </Dialog>
 
               </TableCell>
+              */}
               <TableCell className={classes.icons}>
                 <IconButton aria-label="isPublic" onClick={() => {
                   // setSpell({...spell, is_public: !spell.is_public})
@@ -176,16 +207,46 @@ export default function SpellChart(props) {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
 
+      </Table>
+      </TableContainer>
+      {/*FIXME: Need endpoint to only supply displayed rows*/}
+    {/*  <Title>
+        <div className={classes.root}>
+          <TablePagination
+          rowsPerPageOptions={[10, 20, 40]}
+          component="div"
+          count={props.spells.length} //change to spells.spells?
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
+        </div>
+      </Title>*/}
+      <Title>
+          <div className={classes.root}>
+            <Pagination count={40}
+            // onChange
+            // //function(event: object, page: number) => void
+            // //event: The event source of the callback.
+            // //page: The page selected.
+            />
+          </div>
+        </Title>
     </React.Fragment>
-    : '' 
+    : ''
   );
 }
+
 
 const useStyles = makeStyles((theme) => ({
   seeMore: {
     marginTop: theme.spacing(3),
+  },
+  delIcon: {
+    display: 'inline-flex',
+    align: 'right',
   },
   icons: {
     align: 'right',
@@ -194,5 +255,15 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {
     stickyHeader: true,
-  }
+  },
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+      display: 'flex',
+    justifyContent: 'center',
+    },
+  },
+  container: {
+    maxHeight: '70vh',
+  },
 }));
