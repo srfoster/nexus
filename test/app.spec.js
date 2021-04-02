@@ -103,7 +103,7 @@ describe('App', () => {
         })
     })
 
-    it(`does not provide spells owned by another user`, () => {
+    it.only(`does not provide spells owned by another user`, () => {
       return supertest(app)
         .get(epSpellIndex)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
