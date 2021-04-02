@@ -177,10 +177,10 @@ app.delete(`${epSpellDetails}`, requireAuth, (req, res) => {
   // console.log('Params: ', req.params);
   // console.log('User: ', req.user);
   req.app.get('db')('spells')
-    .where({user_id: req.user.id, id: req.params.id})
+    .where({user_id: req.user.id}).andWhere('id', 'in', req.params.id.split(','))
     .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
     .then((spells) => {
-      console.log('Spells: ', spells);
+      // console.log('Spells: ', spells);
       if(spells.length){
         res.send(spells[0])
       } else {
