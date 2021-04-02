@@ -94,6 +94,7 @@ const SpellsApiService = {
       )
   },
   deleteSpell(id){
+    id = typeof(id) === 'number' ? id : id.join(',')
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'DELETE',
       headers: {

@@ -91,7 +91,7 @@ export default function SpellChart(props) {
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
+  const handleClickRow = (event, name) => {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
@@ -111,7 +111,7 @@ export default function SpellChart(props) {
     setSelected(newSelected);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSpellSelected = (id) => selected.indexOf(id) !== -1;
 
   const rows = props.spells.length;
 
@@ -158,46 +158,57 @@ export default function SpellChart(props) {
     }
   }
 
+  function deleteAllSelected() {
+    SpellsApiService.deleteSpell(selected)
+      .then(res => {
+        // Re-request current page of spells
+        props.setRefresh(Math.random())
+        setSelected([])
+      })
+  }
+
   return (
     props.spells ?
     <React.Fragment>
       <Title>My Spells
-        <Tooltip title="Delete" className={classes.icons}>
+        {/* <Tooltip title="Delete" className={classes.icons}>
           <IconButton aria-label="delete">
             <DeleteForeverIcon />
           </IconButton>
-        </Tooltip>
+        </Tooltip> */}
       </Title>
 
       <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: selected.length > 0,
-      })}
-    >
-      {selected.length > 0 ? (
-        <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-          {selected.length} selected
-        </Typography>
-      ) : (
-        <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          Nutrition
-        </Typography>
-      )}
+        className={clsx(classes.root, {
+          [classes.highlight]: selected.length > 0,
+        })}
+      >
+        {selected.length > 0 ? (
+          <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+            {selected.length} selected
+          </Typography>
+        ) : (
+          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+            Nutrition
+          </Typography>
+        )}
 
-      {selected.length > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteForeverIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
+        {selected.length > 0 ? (
+          <Tooltip title="Delete">
+            <IconButton aria-label="delete">
+              <DeleteForeverIcon 
+                onClick={deleteAllSelected}
+              />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title="Filter list">
+            <IconButton aria-label="filter list">
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Toolbar>
 
 
       <TableContainer className={classes.container}>
@@ -223,10 +234,13 @@ export default function SpellChart(props) {
         <TableBody>
         {/*rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).*/}
           {props.spells.map((spell) => (
-            <TableRow key={"Key: " + spell.id}>
+            <TableRow 
+              key={"Key: " + spell.id}
+              onClick={(event) => handleClickRow(event, spell.id)}
+            >
             <TableCell padding="checkbox">
               <Checkbox
-                // checked={isItemSelected}
+                checked={isSpellSelected(spell.id)}
                 // inputProps={{ 'aria-labelledby': labelId }}
               />
             </TableCell>

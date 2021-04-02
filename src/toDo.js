@@ -1,5 +1,15 @@
 /* 3/29/21
   
+  SpellChart delete confirmation
+
+  Confirm all password deletion tests and add more as needed
+
+  MySpells first load render error
+  Unmounted component errors
+
+  Depopulate extra spells after relevant describe is over
+  Sorting of spell endpoint data
+  
   Client side tests
 
   SpellChart pagination
