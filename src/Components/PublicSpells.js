@@ -14,15 +14,17 @@ export default function PublicSpells(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(9);
   const [totalSpells, setTotalSpells] = React.useState(0);
 
+  const [currentPage, setCurrentPage] = useState(1)
+
   useEffect(() => {
 
-    SpellsApiService.getPublicSpells()
+    SpellsApiService.getPublicSpells(currentPage)
       .then(spells => {
         setSpells(spells.spells)
         setTotalSpells(spells.total)
       })
 
-  }, [])
+  }, [currentPage])
   // console.log(spells);
 
   return (
@@ -32,7 +34,7 @@ export default function PublicSpells(props) {
       <Title>
           <div className={classes.root}>
             <Pagination count={Math.ceil(totalSpells / rowsPerPage)}
-            // onChange={(event ,page ) => {props.setCurrentPage(page)}}
+              onChange={(event ,page ) => {setCurrentPage(page)}}
             // //function(event: object, page: number) => void
             // //event: The event source of the callback.
             // //page: The page selected.

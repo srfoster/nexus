@@ -3,8 +3,8 @@ import TokenService from './token-service'
 // import IdleService from './idle-service'
 
 const SpellsApiService = {
-  getPublicSpells(){
-    return fetch(`${config.API_ENDPOINT}/gallery`, {
+  getPublicSpells(page){
+    return fetch(`${config.API_ENDPOINT}/gallery?page=${page}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -50,8 +50,8 @@ const SpellsApiService = {
         : res.json()
     )
   },
-  getUserById(id){
-    return fetch(`${config.API_ENDPOINT}/wizards/${id}`, {
+  getUserById(id, page){
+    return fetch(`${config.API_ENDPOINT}/wizards/${id}?page=${page}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
