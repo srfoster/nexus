@@ -55,14 +55,14 @@ export default function SpellChart(props) {
     setPage(0);
   };
 
-  const handleClickOpen = (id) => {
-    // setOpen(true);
-    setSpellToDelete(id);
+  const handleClickOpen = () => {
+    setOpen(true);
+    // setSpellToDelete(id);
   };
 
-  const handleClose = (id) => {
-    // setOpen(false);
-    setSpellToDelete(undefined);
+  const handleClose = () => {
+    setOpen(false);
+    // setSpellToDelete(undefined);
   };
 
   const useToolbarStyles = makeStyles((theme) => ({
@@ -194,13 +194,38 @@ export default function SpellChart(props) {
         )}
 
         {selected.length > 0 ? (
+          <>
           <Tooltip title="Delete">
-            <IconButton aria-label="delete">
+            <IconButton aria-label="delete" onClick={handleClickOpen}> 
               <DeleteForeverIcon 
-                onClick={deleteAllSelected}
+                // onClick={deleteAllSelected}
               />
             </IconButton>
           </Tooltip>
+
+            <Dialog 
+              open={open}
+              // open={spellToDelete === spell.id}
+              onClose={() => handleClose()}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">{"Delete spell?"}</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  Are you sure you would like to delete this spell?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => {handleClose(); deleteAllSelected()}} color="secondary">
+                  Delete
+                </Button>
+                <Button onClick={handleClose} color="primary" autoFocus>
+                  Keep
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </>
         ) : (
           <Tooltip title="Filter list">
             <IconButton aria-label="filter list">

@@ -11,17 +11,18 @@ const UserProfile = (props) => {
   const classes = useStyles();
   const [user, setUser] = useState(undefined)
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [currentPage, setCurrentPage] = useState(1)
 
 
   useEffect(() => {
     const { id } = props.match.params
 
-    SpellsApiService.getUserById(id)
+    SpellsApiService.getUserById(id, currentPage)
       .then(user => {
         setUser(user)
       })
-  },[])
-  console.log(user)
+  },[currentPage])
+
   return (
     user ?
       <>
@@ -29,9 +30,9 @@ const UserProfile = (props) => {
         <Spellbook spells={user.spells}/>
         <Title>
             <div className={classes.root}>
-              <Pagination count={Math.ceil(user.spells.length / rowsPerPage)}
-              // onChange={(event ,page ) => {props.setCurrentPage(page)}}
-              // //function(event: object, page: number) => void
+              <Pagination count={Math.ceil(user.total / rowsPerPage)}
+                onChange={(event ,page ) => {setCurrentPage(page)}}
+               // //function(event: object, page: number) => void
               // //event: The event source of the callback.
               // //page: The page selected.
               />
