@@ -41,10 +41,14 @@ describe('App', () => {
         name: 'Seeded extra',
         text: '(Hello Extra)',
         description: 'This is a bonus',
-        is_deleted: false
+        is_deleted: false,
+        is_public: true
       })
     }
     testSpells = testSpells.concat(extraSpells)
+
+    let page = 2;
+    let page_size = 5;
 
     beforeEach('insert users', () =>
       helpers.seedUsers(
@@ -99,14 +103,14 @@ describe('App', () => {
         })
     })
 
-    it(`does not provide spells owned by another user`, () => {
+    it.only(`does not provide spells owned by another user`, () => {
       return supertest(app)
         .get(epSpellIndex)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then((res) => {
-          for (let i=0; i<res.body.length; i++){
-            expect(res.body[i].user_id).to.equal(testUsers[0].id)
+          for (let i=0; i<page_size; i++){
+            expect(res.body.spells[i].user_id).to.equal(testUsers[0].id)
           }
         })
     })
@@ -123,10 +127,7 @@ describe('App', () => {
       })
     })
 
-    // Example /spells?page=2&page_size=5
-    // For user[0], page 2 with a page size of 5 should return 5 spells
-    let page = 2;
-    let page_size = 5;
+    // page and page_size defined at top of describe
     it(`responds with the page ${page} and ${page_size} results when given ?page=${page}&page_size=${page_size}`, () => {
       return supertest(app)
       .get(`/spells?page=${page}&page_size=${page_size}`)
@@ -145,7 +146,6 @@ describe('App', () => {
       })
     })
 
-    // Create a loop for fixture for this test to populate additional user[0] spells
     it(`only returns the first page with a size of 10 when no page or page size is specified`, () => {
       return supertest(app)
       .get(`/spells`)
@@ -164,6 +164,11 @@ describe('App', () => {
       })
     })
 
+    // for(let i=extraSpells[0].id; i<extraSpells.length + extraSpells[0].id; i++){
+    //   console.log(i);
+    //   testSpells = testSpells.filter(spell => spell.id !== i)
+    // }
+    // console.log(testSpells);
   })
 
   describe(`GET ${epPublicSpells}`, () => {
@@ -177,6 +182,12 @@ describe('App', () => {
       helpers.seedSpells(
         db,
         testSpells,
+      )
+    )
+    beforeEach('insert tags', () =>
+      helpers.seedTags(
+        db,
+        testTags,
       )
     )
 
@@ -199,7 +210,6 @@ describe('App', () => {
       .where({id: 1})
       .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
       .then(rows => {
-        // console.log("Row: ", rows[0]);
         expect(rows[0].is_deleted).to.eql(true)
       })
 
@@ -207,7 +217,6 @@ describe('App', () => {
       .get(epPublicSpells)
       .expect(200)
       .then((res) => {
-        // console.log("Res: ", res.body);
         expect(res.body.spells.map(spell => spell.id)).to.not.include(1)
       })
     })
@@ -217,10 +226,79 @@ describe('App', () => {
       .get(epPublicSpells)
       .expect(200)
       .then((res) => {
-        console.log("Res: ", res.body);
         expect(res.body.spells.map(spell => spell.id)).to.not.include(1)
       })
     })
+
+    it(`GET returns a list of tags that match the ID of each spell`, () => {
+      return supertest(app)
+        .get(epPublicSpells)
+        .expect(200)
+        .then((res) => {
+          for (let i=0; i<res.body.length; i++){
+            if (res.body[i].tags.length){
+              expect(res.body[i].tags.map((t) => t.id).toString())
+              .to.equal(testTags.filter((t) => t.spell_id === testSpells[0].id).map(t => t.id).toString())
+            } 
+            expect(res.body[i].tags.length).to.equal(testTags.filter((t) => t.spell_id === testSpells[i].id).length)
+          }
+        })
+    })
+
+    it(`responds with the total number of matching spells`, () => {
+      return supertest(app)
+      .get(epPublicSpells)
+      .expect(200)
+      .then(async (res) => {
+        let totalPublicSpells = testSpells.filter(spell => spell.is_public === true && spell.is_deleted === false).length
+
+        expect(res.body.total).to.equal(totalPublicSpells)
+      })
+    })
+
+    // Example /spells?page=2&page_size=5
+    // For user[0], page 2 with a page size of 5 should return 5 spells
+    let page = 2;
+    let page_size = 6;
+    it(`responds with the page ${page} and ${page_size} results when given ?page=${page}&page_size=${page_size}`, () => {
+      return supertest(app)
+      .get(`/gallery?page=${page}&page_size=${page_size}`)
+      .expect(200)
+      .then(async (res) => {
+        let allTestSpells = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({is_public: true, is_deleted: false})
+
+        expect(res.body.spells.length).to.equal(page_size)
+        expect(res.body.spells.map(spell => spell.id).toString())
+          .to.equal(allTestSpells.map(spell => spell.id).slice(page_size * (page-1), page_size*page).toString())
+      })
+    })
+
+    it(`only returns the first page with a size of 9 when no page or page size is specified`, () => {
+      return supertest(app)
+      .get(`/gallery`)
+      .expect(200)
+      .then(async (res) => {
+        let allTestSpells = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({is_public: true, is_deleted: false})
+
+        expect(res.body.spells.length).to.equal(9)
+        expect(res.body.spells.map(spell => spell.id).toString())
+          .to.equal(allTestSpells.map(spell => spell.id).slice(0, 9).toString())
+      })
+    })
+
+    // for(let i=extraSpells[0].id; i<extraSpells.length + extraSpells[0].id; i++){
+    //   console.log(i);
+    //   testSpells = testSpells.filter(spell => spell.id !== i)
+    // }
+    // console.log(testSpells);
 
   })
 
@@ -244,7 +322,6 @@ describe('App', () => {
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then((res) => {
-          console.log(res.body);
           expect(res.body.id).to.equal(testSpells[0].id)
         })
     })
@@ -261,7 +338,6 @@ describe('App', () => {
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then((res) => {
-          console.log(res.body);
           expect(res.body.id).to.deep.equal(testSpells[0].id)
           // expect(res.body.id.toString()).to.not.equal(/[1]/)
         })
@@ -289,6 +365,12 @@ describe('App', () => {
         testSpells,
       )
     )
+    beforeEach('insert tags', () =>
+      helpers.seedTags(
+        db,
+        testTags,
+      )
+    )
 
     // TODO: Wizard profile should be publicly accessible
     it(`GET ${epWizardDetails} responds with 401 if not logged in`, () => {
@@ -313,7 +395,6 @@ describe('App', () => {
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then((res) => {
-        console.log(res.body);
         expect(res.body.password).to.not.exist
       })
     })
@@ -332,6 +413,85 @@ describe('App', () => {
             expect(spells.length).to.equal(res.body.total)
           })
         })
+    })
+
+    // >>>> NEW <<<<
+    it(`only shows spells tagged as public`, async () => {
+      await supertest(app)
+      .get(`/wizards/${testUsers[0].id}`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then((res) => {
+        expect(res.body.spells.map(spell => spell.id)).to.not.include(1)
+      })
+    })
+
+    it(`GET returns a list of tags that match the ID of each spell`, () => {
+      return supertest(app)
+        .get(`/wizards/${testUsers[0].id}`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))        
+        .expect(200)
+        .then((res) => {
+          for (let i=0; i<res.body.length; i++){
+            if (res.body[i].tags.length){
+              expect(res.body[i].tags.map((t) => t.id).toString())
+              .to.equal(testTags.filter((t) => t.spell_id === testSpells[0].id).map(t => t.id).toString())
+            } 
+            expect(res.body[i].tags.length).to.equal(testTags.filter((t) => t.spell_id === testSpells[i].id).length)
+          }
+        })
+    })
+
+    it(`responds with the total number of matching spells`, () => {
+      return supertest(app)
+      .get(`/wizards/${testUsers[0].id}`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))      
+      .expect(200)
+      .then(async (res) => {
+        let totalPublicSpells = testSpells.filter(spell => spell.user_id === testUsers[0].id && spell.is_public === true && spell.is_deleted === false).length
+
+        expect(res.body.total).to.equal(totalPublicSpells)
+      })
+    })
+
+    // Example /spells?page=2&page_size=5
+    // For user[0], page 2 with a page size of 5 should return 5 spells
+    let page = 2;
+    let page_size = 6;
+    it(`responds with the page ${page} and ${page_size} results when given ?page=${page}&page_size=${page_size}`, () => {
+      return supertest(app)
+      .get(`/wizards/${testUsers[0].id}?page=2&page_size=6`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))      
+      .expect(200)
+      .then(async (res) => {
+        let allTestSpells = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({is_public: true, is_deleted: false})
+
+        expect(res.body.spells.length).to.equal(page_size)
+        expect(res.body.spells.map(spell => spell.id).toString())
+          .to.equal(allTestSpells.map(spell => spell.id).slice(page_size * (page-1), page_size*page).toString())
+      })
+    })
+
+    it(`only returns the first page with a size of 9 when no page or page size is specified`, () => {
+      return supertest(app)
+      .get(`/wizards/${testUsers[0].id}`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then(async (res) => {
+        let allTestSpells = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({is_public: true, is_deleted: false})
+
+        expect(res.body.spells.length).to.equal(9)
+        expect(res.body.spells.map(spell => spell.id).toString())
+          .to.equal(allTestSpells.map(spell => spell.id).slice(0, 9).toString())
+      })
     })
 
   })
@@ -598,7 +758,6 @@ describe('App', () => {
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then((res) => {
-        // console.log("Res: ", res.body);
         expect(res.body.name).to.equal("New Spell")
         expect(res.body.description).to.equal('Spell Description')
         expect(res.body.text).to.equal('(displayln "Hello")')
@@ -647,7 +806,6 @@ describe('App', () => {
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then((res) => {
-        console.log("Spell Count: ", spellCount);
         db
         .from('spells')
         .select('*')
@@ -717,8 +875,6 @@ describe('App', () => {
         hash: testUser.password
       }
       
-      // console.log("Created hash: ", userValidCreds.hash);
-      // console.log("Auto hash: ", expectedToken);
       return supertest(app)
         .post('/login')
         .send(userValidCreds)
@@ -733,7 +889,6 @@ describe('App', () => {
               algorithm: 'HS256',
             }
           )
-          // console.log(res.body);
           expect(res.body.authToken).to.equal(expectedToken)
         })
     })
