@@ -1,7 +1,7 @@
 const knex = require('knex')
 const { expect } = require('chai')
 const jwt = require('jsonwebtoken')
-const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epWizardDetails, epSpellsFork, epSpellTags, epSpellTagsGet } = require('../src/app')
+const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epWizardDetails, epSpellsFork, epSpellTags, epSpellTagsIndex } = require('../src/app')
 const helpers = require('./test-helpers')
 const config = require('../src/config')
 const bcrypt = require('bcryptjs')
@@ -81,8 +81,7 @@ describe('App', () => {
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then((res) => {
-          //TODO: further revise to reflect the offset and limit
-          // expect(res.body.spells.length).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
+          expect(res.body.total).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
           expect(res.body.spells.length).to.equal(10)
         })
     })
@@ -103,7 +102,7 @@ describe('App', () => {
         })
     })
 
-    it.only(`does not provide spells owned by another user`, () => {
+    it(`does not provide spells owned by another user`, () => {
       return supertest(app)
         .get(epSpellIndex)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -196,11 +195,13 @@ describe('App', () => {
         .get(epPublicSpells)
         .expect(200)
         .then((res) => {
-          expect(JSON.stringify(res.body.spells.map(spell => spell.id).sort((a,b) => a-b)))
-            .to.equal(JSON.stringify(testSpells
+          expect(res.body.spells.map(spell => spell.id).toString())
+            .to.equal(testSpells
               .map(spell => spell.is_public === true && spell.is_deleted === false ? spell.id : "")
               .filter(spell => spell !== "")
-              .sort((a,b) => a-b)))
+              .slice(0, 9)
+              .toString()
+            )
         })
     })
 
@@ -408,14 +409,13 @@ describe('App', () => {
           await db
           .from('spells')
           .select('*')
-          .where({user_id: testUsers[0].id, is_deleted: false})
+          .where({user_id: testUsers[0].id, is_deleted: false, is_public: true})
           .then(spells => {
             expect(spells.length).to.equal(res.body.total)
           })
         })
     })
 
-    // >>>> NEW <<<<
     it(`only shows spells tagged as public`, async () => {
       await supertest(app)
       .get(`/wizards/${testUsers[0].id}`)
@@ -496,7 +496,7 @@ describe('App', () => {
 
   })
 
-  describe(`GET ${epSpellTagsGet}`, () => {
+  describe(`GET ${epSpellTagsIndex}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -591,9 +591,15 @@ describe('App', () => {
         .expect(401)
     })
 
-    // only allows authorized tags?
+    it(`responds 401 if submitting a repeat tag to the same spell`, () => {
+      return supertest(app)
+        .post(`/spells/1/tags/fire_magic`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(401)
+    })
 
-    // Does not allow repeat tags
+    //TODO:
+    // only allows authorized tags?
 
   })
 
