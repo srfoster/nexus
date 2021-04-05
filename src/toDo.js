@@ -1,6 +1,9 @@
 /* 3/29/21
+  Seeded loop applies to all tests
   
-  SpellChart delete confirmation
+  Implement server side sorting
+  Client side sort query
+  Client side search bar
 
   Confirm all password deletion tests and add more as needed
 
@@ -12,10 +15,7 @@
   
   Client side tests
 
-  SpellChart pagination
-
   SpellChart sort by column on click
-  SpellChart delete checkboxes
 
   Server tag endpoint, don't allow repeat tags
   
