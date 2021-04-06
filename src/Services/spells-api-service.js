@@ -51,6 +51,8 @@ const SpellsApiService = {
     )
   },
   getUserById(id, page){
+    page = page || 1
+    
     return fetch(`${config.API_ENDPOINT}/wizards/${id}?page=${page}`, {
       method: 'GET',
       headers: {
