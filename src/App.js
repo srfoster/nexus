@@ -52,7 +52,7 @@ function App() {
           />
           <Route
             path={'/spells'}
-            component={(props) => <SpellIndex isLoggedIn={isLoggedIn}></SpellIndex>}
+            component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}></SpellIndex>}
           />
           <Route
             path={'/friends'}

@@ -12,17 +12,24 @@ function SpellIndex(props) {
   const [totalSpells, setTotalSpells] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [refresh, setRefresh] = useState(0);
+  const [search, setSearch] = React.useState('');
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('name');
   let history = useHistory();
 
   useEffect(() => {
+    SpellsApiService.getUserById('me')
+      .then((user) => props.setIsLoggedIn(true))
+      .catch(() => props.setIsLoggedIn(false))
+
     if(props.isLoggedIn){
-      SpellsApiService.getSpellsByUser(history, currentPage)
+      SpellsApiService.getSpellsByUser(history, currentPage, search, order, orderBy)
         .then(spells => {
           setSpells(spells.spells)
           setTotalSpells(spells.total)
         })
     }
-  }, [currentPage, refresh])
+  }, [currentPage, refresh, search, order, orderBy])
 
   function createSpell(event) {
     SpellsApiService.postNewSpell()
@@ -30,6 +37,7 @@ function SpellIndex(props) {
         setSpells([...spells, spell])
       })
   }
+
 
   return (
     <Dashboard
@@ -39,6 +47,11 @@ function SpellIndex(props) {
 
       child={<SpellChart
         setCurrentPage={setCurrentPage}
+        setSearch={setSearch}
+        setOrder={setOrder}
+        order={order}
+        orderBy={orderBy}
+        setOrderBy={setOrderBy}
         spells={spells}
         totalSpells={totalSpells}
         // setSpells={setSpells}

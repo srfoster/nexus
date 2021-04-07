@@ -34,6 +34,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import SearchIcon from '@material-ui/icons/Search';
+import InputBase from '@material-ui/core/InputBase';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+import PropTypes from 'prop-types';
 
 export default function SpellChart(props) {
 
@@ -43,17 +49,9 @@ export default function SpellChart(props) {
   const [open, setOpen] = React.useState(false);
   const [spellToDelete, setSpellToDelete] = React.useState(undefined);
 
-  const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  const [dense, setDense] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -66,10 +64,10 @@ export default function SpellChart(props) {
   };
 
   const useToolbarStyles = makeStyles((theme) => ({
-    root: {
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(1),
-    },
+    // root: {
+    //   paddingLeft: theme.spacing(2),
+    //   paddingRight: theme.spacing(1),
+    // },
     title: {
       flex: '1 1 100%',
     },
@@ -80,12 +78,18 @@ export default function SpellChart(props) {
     
   }
 
+  const handleChangeDense = (event) => {
+    setDense(event.target.checked);
+  };
+
   const [selected, setSelected] = React.useState([]);
 
-  const handleSelectAllClick = (event) => {
+  const handleSelectAllClick = (event, id) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      console.log(selected)
+      const newSelecteds = props.spells.map((n) => n.id);
       setSelected(newSelecteds);
+      console.log(selected, 'too')
       return;
     }
     setSelected([]);
@@ -112,8 +116,33 @@ export default function SpellChart(props) {
   };
 
   const isSpellSelected = (id) => selected.indexOf(id) !== -1;
-
   const rows = props.spells.length;
+
+  const headCells = [
+    { id: 'Created', numeric: false, disablePadding: true, label: 'Created' },
+    { id: 'Modified', numeric: false, disablePadding: true, label: 'Modified' },
+    { id: 'Name', numeric: false, disablePadding: true, label: 'Name' },
+    { id: 'Description', numeric: false, disablePadding: false, label: 'Description' },
+    { id: 'Code', numeric: false, disablePadding: false, label: 'Code' },
+    { id: 'edit', numeric: false, disablePadding: false, label: 'Edit'},
+    { id: 'Public', numeric: false, disablePadding: false, label: 'Public'},
+  ];
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = props.orderBy === property && props.order === 'asc';
+    props.setOrder(isAsc ? 'desc' : 'asc');
+    props.setOrderBy(property.toLowerCase());
+  };
+
+  EnhancedTableHead.propTypes = {
+    classes: PropTypes.object.isRequired,
+    numSelected: PropTypes.number.isRequired,
+    onRequestSort: PropTypes.func.isRequired,
+    onSelectAllClick: PropTypes.func.isRequired,
+    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+    orderBy: PropTypes.string.isRequired,
+    // rowsPerPage: PropTypes.number.isRequired,
+  };
 
   function byNameAndModified( a, b ) {
     if ( a.name < b.name ){
@@ -138,7 +167,6 @@ export default function SpellChart(props) {
   }
 
   const updateSpell = (spell) => {
-    console.log(spell)
     let payload = spell
     // console.log(payload);
 
@@ -167,6 +195,73 @@ export default function SpellChart(props) {
       })
   }
 
+  function onSearchChange(event) {
+    props.setSearch(event.target.value)
+  }
+
+  function SearchAppBar() {
+
+    return (
+      <>
+        <div className={classes.searchIcon}>
+        <SearchIcon />
+        </div> 
+        <div className={classes.searchBar}>
+        <InputBase
+          
+          
+          placeholder="Search Spells"
+          onChange={onSearchChange}
+          inputProps={{ 'aria-label': 'search' }}
+        />
+        </div>
+      </>
+    )
+  }
+
+  function EnhancedTableHead(props) {
+    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const createSortHandler = (property) => (event) => {
+      onRequestSort(event, property);
+    };
+  
+    return (
+      <TableHead>
+        <TableRow>
+          <TableCell padding="checkbox">
+            <Checkbox
+              indeterminate={numSelected > 0 && numSelected < rowsPerPage}
+              checked={rowsPerPage > 0 && numSelected === rowsPerPage}
+              onChange={onSelectAllClick}
+              inputProps={{ 'aria-label': 'select all desserts' }}
+            />
+          </TableCell>
+          {headCells.map((headCell) => (
+            <TableCell
+              key={headCell.id}
+              align={headCell.numeric ? 'right' : 'left'}
+              padding={headCell.disablePadding ? 'none' : 'default'}
+              sortDirection={orderBy === headCell.id ? order : false}
+            >
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <span className={classes.visuallyHidden}>
+                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  </span>
+                ) : null}
+              </TableSortLabel>
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+    );
+  }
+
   return (
     props.spells ?
     <React.Fragment>
@@ -176,7 +271,10 @@ export default function SpellChart(props) {
             <DeleteForeverIcon />
           </IconButton>
         </Tooltip> */}
+          
       </Title>
+           
+      {SearchAppBar()}
 
       <Toolbar
         className={clsx(classes.root, {
@@ -189,7 +287,6 @@ export default function SpellChart(props) {
           </Typography>
         ) : (
           <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-            Nutrition
           </Typography>
         )}
 
@@ -227,21 +324,31 @@ export default function SpellChart(props) {
             </Dialog>
           </>
         ) : (
-          <Tooltip title="Filter list">
-            <IconButton aria-label="filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
+          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+          </Typography>
         )}
       </Toolbar>
 
 
       <TableContainer className={classes.container}>
-      <Table size="small" padding="none" stickyHeader aria-label="sticky table">
-        <TableHead>
+      <Table size={dense ? 'small' : 'medium'} padding='none' stickyHeader aria-label="sticky table"> 
+      <EnhancedTableHead
+              classes={classes}
+              numSelected={selected.length}
+              order={props.order}
+              orderBy={props.orderBy}
+              onSelectAllClick={(event) => handleSelectAllClick(event)}
+              onRequestSort={handleRequestSort}
+              rowCount={rows.length}
+            />
+        {/* <TableHead>
           <TableRow>
             <TableCell padding="checkbox">
               <Checkbox
+                indeterminate={selected > 0 && selected < rowsPerPage}
+                checked={rowsPerPage > 0 && selected === rowsPerPage}
+                // onChange={onSelectAllClick}
+                inputProps={{ 'aria-label': 'Select row of Spells' }}
                 // checked={isItemSelected}
                 // inputProps={{ 'aria-labelledby': labelId }}
               />
@@ -252,16 +359,16 @@ export default function SpellChart(props) {
             <TableCell>Description</TableCell>
             <TableCell>Code</TableCell>
             <TableCell className={classes.icons} >Edit</TableCell>
-            {/*<TableCell className={classes.icons}>Delete</TableCell>*/}
             <TableCell className={classes.icons}>Public</TableCell>
           </TableRow>
-        </TableHead>
+        </TableHead> */}
         <TableBody>
-        {/*rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).*/}
           {props.spells.map((spell) => (
             <TableRow 
+              hover 
               key={"Key: " + spell.id}
               onClick={(event) => handleClickRow(event, spell.id)}
+              selected={selected.indexOf(spell.id) !== -1}
             >
             <TableCell padding="checkbox">
               <Checkbox
@@ -318,9 +425,13 @@ export default function SpellChart(props) {
               </TableCell>
               */}
               <TableCell className={classes.icons}>
-                <IconButton id={spell.id} aria-label="isPublic" onClick={() => {
+                <IconButton 
+                id={spell.id} 
+                aria-label="isPublic" 
+                onClick={(event) => {
                   // setSpell({...spell, is_public: !spell.is_public})
-                  updateSpell({...spell, is_public: !spell.is_public})
+                  updateSpell({...spell, is_public: !spell.is_public});
+                  event.stopPropagation();
                 }}>
                   {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </IconButton>
@@ -346,17 +457,22 @@ export default function SpellChart(props) {
         </div>
       </Title>*/}
 
-
+ 
       <Title>
-          <div className={classes.root}>
+          <div className={classes.pagi}>
             <Pagination count={Math.ceil(props.totalSpells / rowsPerPage)}
             onChange={(event ,page ) => {props.setCurrentPage(page)}}
             //function(event: object, page: number) => void
             //event: The event source of the callback.
             //page: The page selected.
             />
+
           </div>
       </Title>
+      <FormControlLabel
+        control={<Switch checked={dense} onChange={handleChangeDense} />}
+        label="Dense padding"
+      />
     </React.Fragment>
     : ''
   );
@@ -370,23 +486,52 @@ const useStyles = makeStyles((theme) => ({
   delIcon: {
     display: 'inline-flex',
     align: 'right',
+    padding: '0px'
   },
   icons: {
     align: 'right',
     textAlign: 'center',
-    width: '5%'
   },
   header: {
     stickyHeader: true,
   },
-  root: {
+  pagi: {
     '& > *': {
-      marginTop: theme.spacing(2),
+      marginTop: theme.spacing(1),
       display: 'flex',
-    justifyContent: 'center',
+      justifyContent: 'center',
     },
   },
   container: {
     maxHeight: '70vh',
+  },
+  searchIcon: {
+    
+    width: '24px'
+  },
+  searchBar: {
+    height: '32px',
+    width: '100px'
+  },
+  root: {
+    width: '100%',
+  },
+  paper: {
+    width: '100%',
+    marginBottom: theme.spacing(2),
+  },
+  table: {
+    minWidth: 750,
+  },
+  visuallyHidden: {
+    border: 0,
+    clip: 'rect(0 0 0 0)',
+    height: 1,
+    margin: -1,
+    overflow: 'hidden',
+    padding: 0,
+    position: 'absolute',
+    top: 20,
+    width: 1,
   },
 }));
