@@ -6,27 +6,54 @@ import SpellsApiService from '../Services/spells-api-service';
 import Spellbook from './Spellbook';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
+import SearchIcon from '@material-ui/icons/Search';
+import InputBase from '@material-ui/core/InputBase';
 
 const UserProfile = (props) => {
   const classes = useStyles();
   const [user, setUser] = useState(undefined)
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [currentPage, setCurrentPage] = useState(1)
+  const [search, setSearch] = React.useState('');
 
 
   useEffect(() => {
     const { id } = props.match.params
 
-    SpellsApiService.getUserById(id, currentPage)
+    SpellsApiService.getUserById(id, currentPage, search)
       .then(user => {
         setUser(user)
       })
-  },[currentPage])
+  },[currentPage, search])
+
+  function onSearchChange(event) {
+    setSearch(event.target.value)
+  }
+
+  function SearchAppBar() {
+    
+    return (
+      <>
+        <div className={classes.searchIcon}>
+        <SearchIcon />
+        </div> 
+        <div className={classes.searchBar}>
+        <InputBase
+          
+          
+          placeholder="Search Spells"
+          onChange={onSearchChange}
+          inputProps={{ 'aria-label': 'search' }}
+        />
+        </div>
+      </>
+    )
+  }
 
   return (
     user ?
       <>
-        <Title>{`Spellbook of ${user.username}`}</Title>
+        <Title>{`Spellbook of ${user.username}`} </Title>{SearchAppBar()}
         <Spellbook spells={user.spells}/>
         <Title>
             <div className={classes.root}>

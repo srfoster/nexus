@@ -3,8 +3,8 @@ import TokenService from './token-service'
 // import IdleService from './idle-service'
 
 const SpellsApiService = {
-  getPublicSpells(page){
-    return fetch(`${config.API_ENDPOINT}/gallery?page=${page}`, {
+  getPublicSpells(page, search){
+    return fetch(`${config.API_ENDPOINT}/gallery?page=${page}&search=${search}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -31,8 +31,8 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  getSpellsByUser(history, page){
-    return fetch(`${config.API_ENDPOINT}/spells?page=${page}`, {
+  getSpellsByUser(history, page, search, sort_order, sort){
+    return fetch(`${config.API_ENDPOINT}/spells?page=${page}&search=${search}&sort=${sort}&sort_order=${sort_order}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -50,10 +50,12 @@ const SpellsApiService = {
         : res.json()
     )
   },
-  getUserById(id, page){
+  getUserById(id, page, search){
     page = page || 1
-    
-    return fetch(`${config.API_ENDPOINT}/wizards/${id}?page=${page}`, {
+    // search = search || ''
+    console.log(search)
+    let searchPath = search ? `&search=${search}` : ""
+    return fetch(`${config.API_ENDPOINT}/wizards/${id}?page=${page}${searchPath}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',

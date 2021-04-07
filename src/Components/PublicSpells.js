@@ -4,6 +4,8 @@ import Title from './Dashboard/Title';
 import SpellsApiService from '../Services/spells-api-service';
 import Spellbook from './Spellbook';
 import Pagination from '@material-ui/lab/Pagination';
+import SearchIcon from '@material-ui/icons/Search';
+import InputBase from '@material-ui/core/InputBase';
 
 export default function PublicSpells(props) {
   // console.log("From index: ", props);
@@ -15,21 +17,49 @@ export default function PublicSpells(props) {
   const [totalSpells, setTotalSpells] = React.useState(0);
 
   const [currentPage, setCurrentPage] = useState(1)
+  const [search, setSearch] = React.useState('');
 
   useEffect(() => {
 
-    SpellsApiService.getPublicSpells(currentPage)
+    SpellsApiService.getPublicSpells(currentPage, search)
       .then(spells => {
         setSpells(spells.spells)
         setTotalSpells(spells.total)
       })
 
-  }, [currentPage])
+  }, [currentPage, search])
   // console.log(spells);
+
+  function onSearchChange(event) {
+    setSearch(event.target.value)
+  }
+
+  function SearchAppBar() {
+    const classes = useStyles();
+
+    return (
+      <>
+        <div className={classes.searchIcon}>
+        <SearchIcon />
+        </div> 
+        <div className={classes.searchBar}>
+        <InputBase
+          
+          
+          placeholder="Search Spells"
+          onChange={onSearchChange}
+          inputProps={{ 'aria-label': 'search' }}
+        />
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
-      <Title>Public Spells</Title>
+      <Title>Public Spells 
+        {SearchAppBar()}
+      </Title>
       <Spellbook spells={spells}/>
       <Title>
           <div className={classes.root}>
@@ -105,5 +135,13 @@ const useStyles = makeStyles((theme) => ({
       display: 'flex',
     justifyContent: 'center',
     },
+  },
+  searchIcon: {
+    
+    width: '24px'
+  },
+  searchBar: {
+    height: '32px',
+    width: '100px'
   },
 }));
