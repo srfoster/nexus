@@ -81,7 +81,7 @@ describe('App', () => {
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then((res) => {
-          // expect(res.body.total).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
+          expect(res.body.total).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
           expect(res.body.spells.length).to.equal(10)
         })
     })
@@ -188,7 +188,7 @@ describe('App', () => {
     })
 
     let sortQuery = 'description'
-    it.skip(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
+    it(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
       return supertest(app)
       .get(`/spells?sort=${sortQuery}`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -201,11 +201,7 @@ describe('App', () => {
             .where({user_id: testUsers[0].id, is_deleted: false})
             .orderBy(`${sortQuery}`, 'asc')
 
-        // console.log(sortedSpells);
-
-        for(let i=0; i<res.body.total; i++){
-          expect(res.body.spells[i].description.toString()).to.equal(sortedSpells[i].description.toString())
-        }
+        expect(res.body.spells[0].description.toString()).to.equal(sortedSpells[0].description.toString())
       })
     })
 
@@ -361,6 +357,22 @@ describe('App', () => {
       })
     })
 
+    let sortQuery = 'description'
+    it(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
+      return supertest(app)
+      .get(`/gallery?sort=${sortQuery}`)
+      .expect(200)
+      .then(async (res) => {
+        let sortedSpells = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({is_public: true, is_deleted: false})
+            .orderBy(`${sortQuery}`, 'asc')
+
+        expect(res.body.spells[0].description.toString()).to.equal(sortedSpells[0].description.toString())
+      })
+    })
 
     // for(let i=extraSpells[0].id; i<extraSpells.length + extraSpells[0].id; i++){
     //   console.log(i);
@@ -535,7 +547,7 @@ describe('App', () => {
           await db
             .from('spells')
             .select('*')
-            .where({is_public: true, is_deleted: false})
+            .where({user_id: testUsers[0].id, is_public: true, is_deleted: false})
 
         expect(res.body.spells.length).to.equal(page_size)
         expect(res.body.spells.map(spell => spell.id).toString())
@@ -553,7 +565,7 @@ describe('App', () => {
           await db
             .from('spells')
             .select('*')
-            .where({is_public: true, is_deleted: false})
+            .where({user_id: testUsers[0].id, is_public: true, is_deleted: false})
 
         expect(res.body.spells.length).to.equal(9)
         expect(res.body.spells.map(spell => spell.id).toString())
@@ -561,7 +573,7 @@ describe('App', () => {
       })
     })
 
-    it.only(`responds with the spell "Cozy Cabin" when given the query ?search=cozy`, () => {
+    it(`responds with the spell "Cozy Cabin" when given the query ?search=cozy`, () => {
       return supertest(app)
       .get(`/wizards/${testUsers[0].id}?search=cozy`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -573,11 +585,29 @@ describe('App', () => {
           await db
             .from('spells')
             .select('*')
-            .where({is_deleted: false, is_public: true})
+            .where({user_id: testUsers[0].id, is_deleted: false, is_public: true})
             .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
 
         expect(res.body.spells[0].name).to.equal(allSearchResults[0].name)
         expect(res.body.total).to.equal(allSearchResults.length)
+      })
+    })
+
+    let sortQuery = 'description'
+    it(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
+      return supertest(app)
+      .get(`/wizards/${testUsers[0].id}?sort=${sortQuery}`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then(async (res) => {
+        let sortedSpells = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({user_id: testUsers[0].id, is_public: true, is_deleted: false})
+            .orderBy(`${sortQuery}`, 'asc')
+
+        expect(res.body.spells[0].description.toString()).to.equal(sortedSpells[0].description.toString())
       })
     })
 

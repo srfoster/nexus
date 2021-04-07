@@ -56,6 +56,9 @@ app.get(epSpellIndex, requireAuth, async (req, res) => {
   let page_size = req.query.page_size ? req.query.page_size : 10;
   let searchTerm = req.query.search ? `%${req.query.search}%` : `%%`
 
+  // Should all sorts take the name as a secondary sort by default?
+  let sortQuery = req.query.sort ? req.query.sort : 'name'
+
   let totalSpells = await req.app.get('db')('spells')
     .count('id')
     .where({user_id: req.user.id, is_deleted: false})
@@ -66,7 +69,7 @@ app.get(epSpellIndex, requireAuth, async (req, res) => {
     .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
     .limit(page_size)
     .offset(page_size * (page-1))
-    
+    .orderBy(`${sortQuery}`, 'asc')
 
   spells = await attachTagsToSpells(spells)
   res.send({spells, total: Number(totalSpells[0].count)})
@@ -77,6 +80,7 @@ app.get(epPublicSpells, async (req, res) => {
   let page = req.query.page ? req.query.page : 1;
   let page_size = req.query.page_size ? req.query.page_size : 9;
   let searchTerm = req.query.search ? `%${req.query.search}%` : `%%`
+  let sortQuery = req.query.sort ? req.query.sort : 'name'
 
   let totalSpells = await req.app.get('db')('spells')
     .count('id')
@@ -88,6 +92,7 @@ app.get(epPublicSpells, async (req, res) => {
     .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
     .limit(page_size)
     .offset(page_size * (page-1))
+    .orderBy(`${sortQuery}`, 'asc')
 
   spells = await attachTagsToSpells(spells)
   res.send({spells, total: Number(totalSpells[0].count)})
@@ -137,6 +142,7 @@ app.get(`${epWizardDetails}`, requireAuth, async (req, res) => {
   let page = req.query.page ? req.query.page : 1;
   let page_size = req.query.page_size ? req.query.page_size : 9;
   let searchTerm = req.query.search ? `%${req.query.search}%` : `%%`
+  let sortQuery = req.query.sort ? req.query.sort : 'name'
 
   let totalSpells = await req.app.get('db')('spells')
     .count('id')
@@ -152,6 +158,7 @@ app.get(`${epWizardDetails}`, requireAuth, async (req, res) => {
     .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
     .limit(page_size)
     .offset(page_size * (page-1))
+    .orderBy(`${sortQuery}`, 'asc')
   
   let userData = {...user, spells}
   // console.log(userData);
