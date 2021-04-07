@@ -81,7 +81,7 @@ describe('App', () => {
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then((res) => {
-          expect(res.body.total).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
+          // expect(res.body.total).to.equal(testSpells.filter((s) => s.user_id === testUsers[0].id && s.is_deleted === false).length)
           expect(res.body.spells.length).to.equal(10)
         })
     })
@@ -162,6 +162,53 @@ describe('App', () => {
           .to.equal(allTestSpells.map(spell => spell.id).slice(0, 10).toString())
       })
     })
+
+    // it responds with any matching spells when given search query
+    // responds with "Apple Storm" spell when given search query ?search=apple
+    // underscores within search queries should be translated to spaces
+    
+    it(`responds with the spell "Apple Storm" when given the query ?search=apple`, () => {
+      return supertest(app)
+      .get(`/spells?search=seeded`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then(async (res) => {
+        let searchTerm = '%seeded%'
+        
+        let allSearchResults = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({user_id: testUsers[0].id, is_deleted: false})
+            .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
+
+        expect(res.body.spells[0].name).to.equal(allSearchResults[0].name)
+        expect(res.body.total).to.equal(allSearchResults.length)
+      })
+    })
+
+    let sortQuery = 'description'
+    it.skip(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
+      return supertest(app)
+      .get(`/spells?sort=${sortQuery}`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then(async (res) => {
+        let sortedSpells = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({user_id: testUsers[0].id, is_deleted: false})
+            .orderBy(`${sortQuery}`, 'asc')
+
+        // console.log(sortedSpells);
+
+        for(let i=0; i<res.body.total; i++){
+          expect(res.body.spells[i].description.toString()).to.equal(sortedSpells[i].description.toString())
+        }
+      })
+    })
+
 
     // for(let i=extraSpells[0].id; i<extraSpells.length + extraSpells[0].id; i++){
     //   console.log(i);
@@ -294,6 +341,26 @@ describe('App', () => {
           .to.equal(allTestSpells.map(spell => spell.id).slice(0, 9).toString())
       })
     })
+
+    it(`responds with the spell "Cozy Cabin" when given the query ?search=cozy`, () => {
+      return supertest(app)
+      .get(`/gallery?search=cozy`)
+      .expect(200)
+      .then(async (res) => {
+        let searchTerm = '%cozy%'
+        
+        let allSearchResults = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({is_deleted: false, is_public: true})
+            .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
+
+        expect(res.body.spells[0].name).to.equal(allSearchResults[0].name)
+        expect(res.body.total).to.equal(allSearchResults.length)
+      })
+    })
+
 
     // for(let i=extraSpells[0].id; i<extraSpells.length + extraSpells[0].id; i++){
     //   console.log(i);
@@ -491,6 +558,26 @@ describe('App', () => {
         expect(res.body.spells.length).to.equal(9)
         expect(res.body.spells.map(spell => spell.id).toString())
           .to.equal(allTestSpells.map(spell => spell.id).slice(0, 9).toString())
+      })
+    })
+
+    it.only(`responds with the spell "Cozy Cabin" when given the query ?search=cozy`, () => {
+      return supertest(app)
+      .get(`/wizards/${testUsers[0].id}?search=cozy`)
+      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+      .expect(200)
+      .then(async (res) => {
+        let searchTerm = '%cozy%'
+        
+        let allSearchResults = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({is_deleted: false, is_public: true})
+            .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
+
+        expect(res.body.spells[0].name).to.equal(allSearchResults[0].name)
+        expect(res.body.total).to.equal(allSearchResults.length)
       })
     })
 

@@ -54,15 +54,19 @@ let attachTagsToSpells =
 app.get(epSpellIndex, requireAuth, async (req, res) => {
   let page = req.query.page ? req.query.page : 1;
   let page_size = req.query.page_size ? req.query.page_size : 10;
+  let searchTerm = req.query.search ? `%${req.query.search}%` : `%%`
 
   let totalSpells = await req.app.get('db')('spells')
     .count('id')
     .where({user_id: req.user.id, is_deleted: false})
+    .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
 
   let spells = await req.app.get('db')('spells')
     .where({user_id: req.user.id, is_deleted: false})
+    .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
     .limit(page_size)
     .offset(page_size * (page-1))
+    
 
   spells = await attachTagsToSpells(spells)
   res.send({spells, total: Number(totalSpells[0].count)})
@@ -72,13 +76,16 @@ app.get(epSpellIndex, requireAuth, async (req, res) => {
 app.get(epPublicSpells, async (req, res) => {
   let page = req.query.page ? req.query.page : 1;
   let page_size = req.query.page_size ? req.query.page_size : 9;
+  let searchTerm = req.query.search ? `%${req.query.search}%` : `%%`
 
   let totalSpells = await req.app.get('db')('spells')
     .count('id')
     .where({is_public: true, is_deleted: false})
+    .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
 
   let spells = await req.app.get('db')('spells')
     .where({is_public: true, is_deleted: false})
+    .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
     .limit(page_size)
     .offset(page_size * (page-1))
 
@@ -129,10 +136,12 @@ app.get(`${epWizardDetails}`, requireAuth, async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
   let page = req.query.page ? req.query.page : 1;
   let page_size = req.query.page_size ? req.query.page_size : 9;
+  let searchTerm = req.query.search ? `%${req.query.search}%` : `%%`
 
   let totalSpells = await req.app.get('db')('spells')
     .count('id')
     .where({user_id: userId, is_deleted: false, is_public: true})
+    .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
 
   let user = await req.app.get('db')('users')
     .where({id: userId})
@@ -140,6 +149,7 @@ app.get(`${epWizardDetails}`, requireAuth, async (req, res) => {
 
   let spells = await req.app.get('db')('spells')
     .where({user_id: userId, is_deleted: false, is_public: true})
+    .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
     .limit(page_size)
     .offset(page_size * (page-1))
   
