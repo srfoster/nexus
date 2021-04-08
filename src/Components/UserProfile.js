@@ -31,21 +31,18 @@ const UserProfile = (props) => {
   }
 
   function SearchAppBar() {
-    
+
     return (
-      <>
-        <div className={classes.searchIcon}>
-        <SearchIcon />
-        </div> 
-        <div className={classes.searchBar}>
+      <>       
+       
         <InputBase
-          
-          
           placeholder="Search Spells"
           onChange={onSearchChange}
           inputProps={{ 'aria-label': 'search' }}
         />
-        </div>
+      
+         <SearchIcon />
+       
       </>
     )
   }
@@ -53,7 +50,11 @@ const UserProfile = (props) => {
   return (
     user ?
       <>
-        <Title>{`Spellbook of ${user.username}`} </Title>{SearchAppBar()}
+        <div className={classes.headBar}>
+          <div className={classes.headLeft}></div>
+          <div className={classes.headTitle}>{`Spellbook of ${user.username}`}</div>
+          <div className={classes.headRight}>{SearchAppBar()}</div>
+        </div>
         <Spellbook spells={user.spells}/>
         <Title>
             <div className={classes.root}>
@@ -80,6 +81,30 @@ root: {
     display: 'flex',
   justifyContent: 'center',
   },
+},
+headBar: {
+  justifyContent: 'space-between',
+  fontSize: '1.5rem',
+  display: 'inline-flex',
+  width: 'auto',
+  fontFamily: "Roboto",
+  fontWeight: '400',
+  lineHeight: '1.334',
+  letterSpacing: '0em',
+  color: '#3f51b5',
+},
+headLeft: {
+  flexGrow: '5',
+  display: 'inline-flex',
+},
+headTitle: {
+  flexGrow: '3',
+  display: 'inline-flex',
+},
+headRight: {
+  flexGrow: '1',
+  width: '120px',
+  display: 'inline-flex',
 },
 }));
 

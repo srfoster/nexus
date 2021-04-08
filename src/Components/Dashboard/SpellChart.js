@@ -40,6 +40,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import PropTypes from 'prop-types';
+import Chip from '@material-ui/core/Chip';
+import CodeIcon from '@material-ui/icons/Code';
+import {UnControlled as CodeMirror} from 'react-codemirror2';
 
 export default function SpellChart(props) {
 
@@ -52,6 +55,14 @@ export default function SpellChart(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const [dense, setDense] = React.useState(false);
+
+  const [expanded, setExpanded] = React.useState(false);
+
+  const [selected, setSelected] = React.useState([]);
+
+  const handleExpandClick = (id) => {
+    setExpanded(id);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -81,8 +92,6 @@ export default function SpellChart(props) {
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
-
-  const [selected, setSelected] = React.useState([]);
 
   const handleSelectAllClick = (event, id) => {
     if (event.target.checked) {
@@ -123,24 +132,25 @@ export default function SpellChart(props) {
     { id: 'Modified', numeric: false, disablePadding: true, label: 'Modified' },
     { id: 'Name', numeric: false, disablePadding: true, label: 'Name' },
     { id: 'Description', numeric: false, disablePadding: false, label: 'Description' },
-    { id: 'Code', numeric: false, disablePadding: false, label: 'Code' },
-    { id: 'edit', numeric: false, disablePadding: false, label: 'Edit'},
-    { id: 'Public', numeric: false, disablePadding: false, label: 'Public'},
+    { id: 'Tags', numeric: false, disablePadding: false, label: 'Tags' },
+    { id: 'Code', numeric: false, disablePadding: true, label: 'Code' },
+    { id: 'edit', numeric: false, disablePadding: true, label: 'Edit'},
+    { id: 'Public', numeric: false, disablePadding: true, label: 'Public'},
   ];
 
   const handleRequestSort = (event, property) => {
-    const isAsc = props.orderBy === property && props.order === 'asc';
-    props.setOrder(isAsc ? 'desc' : 'asc');
+    const isAsc = props.orderBy === property && props.sort_direction === 'asc';
+    props.setSortDirection(isAsc ? 'desc' : 'asc');
     props.setOrderBy(property.toLowerCase());
   };
+
 
   EnhancedTableHead.propTypes = {
     classes: PropTypes.object.isRequired,
     numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
     onSelectAllClick: PropTypes.func.isRequired,
-    order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-    orderBy: PropTypes.string.isRequired,
+    sort_direction: PropTypes.oneOf(['asc', 'desc']),
     // rowsPerPage: PropTypes.number.isRequired,
   };
 
@@ -202,28 +212,26 @@ export default function SpellChart(props) {
   function SearchAppBar() {
 
     return (
-      <>
-        <div className={classes.searchIcon}>
-        <SearchIcon />
-        </div> 
-        <div className={classes.searchBar}>
+      <>       
+       
         <InputBase
-          
-          
           placeholder="Search Spells"
           onChange={onSearchChange}
           inputProps={{ 'aria-label': 'search' }}
         />
-        </div>
+      
+         <SearchIcon />
+       
       </>
     )
   }
 
   function EnhancedTableHead(props) {
-    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const { classes, onSelectAllClick, sort_direction, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = (property) => (event) => {
       onRequestSort(event, property);
     };
+    
   
     return (
       <TableHead>
@@ -241,17 +249,17 @@ export default function SpellChart(props) {
               key={headCell.id}
               align={headCell.numeric ? 'right' : 'left'}
               padding={headCell.disablePadding ? 'none' : 'default'}
-              sortDirection={orderBy === headCell.id ? order : false}
+              sortDirection={orderBy === headCell.id ? sort_direction : false}
             >
               <TableSortLabel
                 active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
+                direction={orderBy === headCell.id ? sort_direction : 'asc'}
                 onClick={createSortHandler(headCell.id)}
               >
                 {headCell.label}
                 {orderBy === headCell.id ? (
                   <span className={classes.visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    {sort_direction === 'desc' ? 'sorted descending' : 'sorted ascending'}
                   </span>
                 ) : null}
               </TableSortLabel>
@@ -265,16 +273,13 @@ export default function SpellChart(props) {
   return (
     props.spells ?
     <React.Fragment>
-      <Title>My Spells
-        {/* <Tooltip title="Delete" className={classes.icons}>
-          <IconButton aria-label="delete">
-            <DeleteForeverIcon />
-          </IconButton>
-        </Tooltip> */}
-          
-      </Title>
-           
-      {SearchAppBar()}
+
+ 
+      <div className={classes.headBar}>
+        <div className={classes.headLeft}></div>
+        <div className={classes.headTitle}>My Spells</div>
+        <div className={classes.headRight}>{SearchAppBar()}</div>
+      </div>
 
       <Toolbar
         className={clsx(classes.root, {
@@ -335,7 +340,7 @@ export default function SpellChart(props) {
       <EnhancedTableHead
               classes={classes}
               numSelected={selected.length}
-              order={props.order}
+              sort_direction={props.sort_direction}
               orderBy={props.orderBy}
               onSelectAllClick={(event) => handleSelectAllClick(event)}
               onRequestSort={handleRequestSort}
@@ -384,46 +389,68 @@ export default function SpellChart(props) {
               </Tooltip>
               <TableCell>{textTrim(spell.name, 15)}</TableCell>
               <TableCell>{textTrim(spell.description, 30)}</TableCell>
-              <TableCell width='40%'>{textTrim(spell.text, 65)}</TableCell>
+              <TableCell width='40%'>{spell.tags.length ? 
+                spell.tags.map(t => (
+                  <Chip
+                  key={t.id}
+                  variant="outlined"
+                  size="small"
+                  label={t.name}
+                  // onClick={console.log(t.name)}
+                  />
+                )) : ''}
+              </TableCell>
+              <TableCell className={classes.icons}>
+                <IconButton
+                  className={clsx(classes.expand, {
+                    [classes.expandOpen]: expanded == spell.id,
+                  })}
+                  onClick={(event) => {
+                    handleExpandClick(spell.id)
+                    event.stopPropagation();
+                  }}
+                  aria-expanded={expanded == spell.id}
+                  aria-label="show more"
+                >
+                  <Tooltip title="View Code" placement="top">
+                    <CodeIcon />
+                  </Tooltip>
+                </IconButton>
+                <Dialog
+                  // open={open}
+                  open={expanded == spell.id}
+                  onClose={(event) => {
+                    handleExpandClick(false)
+                  }}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                  }}
+                  aria-labelledby="alert-dialog-title"
+                  aria-describedby="alert-dialog-description"
+                >
+                  <DialogTitle id="alert-dialog-title">{`${spell.name}`}</DialogTitle>
+                  <DialogContent className="dialogBox">
+
+                    <DialogContentText id="CodeMirror-Display">
+                      <CodeMirror
+                        className={classes.codeMirror}
+                        value={spell.text}
+                        options={{
+                          mode: 'scheme',
+                          theme: 'material',
+                          lineNumbers: true,
+                          readOnly: "nocursor",
+                        }}
+                      />
+                    </DialogContentText>
+                  </DialogContent>
+                </Dialog>
+              </TableCell>
               <TableCell className={classes.icons}>
                 <IconButton aria-label="edit" onClick={() => history.push(`/spells/${spell.id}`)}>
                   <EditIcon />
                 </IconButton>
               </TableCell>
-              {/*<TableCell className={classes.icons}>
-                <IconButton aria-label="delete"
-                  onClick={() => handleClickOpen(spell.id)}
-                  // onClick={handleClickOpen}
-                >
-                  <DeleteForeverIcon />
-                </IconButton>
-
-                {/* Dialog confirmation */}{/*
-                <Dialog
-                  // open={open}
-                  open={spellToDelete === spell.id}
-                  onClose={() => handleClose(spell.id)}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">{"Delete spell?"}</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      Are you sure you would like to delete this spell?
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={() => {handleClose(); deleteSpell(spell.id)}} color="secondary">
-                      Delete
-                    </Button>
-                    <Button onClick={handleClose} color="primary" autoFocus>
-                      Keep
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-
-              </TableCell>
-              */}
               <TableCell className={classes.icons}>
                 <IconButton 
                 id={spell.id} 
@@ -442,37 +469,25 @@ export default function SpellChart(props) {
 
       </Table>
       </TableContainer>
-      {/*FIXME: Need endpoint to only supply displayed rows*/}
-      {/*<Title>
-        <div className={classes.root}>
-          <TablePagination
-          rowsPerPageOptions={[10, 20, 40]}
-          component="div"
-          count={props.totalSpells} //change to spells.spells?
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-          />
-        </div>
-      </Title>*/}
-
- 
+      
       <Title>
           <div className={classes.pagi}>
             <Pagination count={Math.ceil(props.totalSpells / rowsPerPage)}
-            onChange={(event ,page ) => {props.setCurrentPage(page)}}
-            //function(event: object, page: number) => void
-            //event: The event source of the callback.
-            //page: The page selected.
+            onChange={(event ,page ) => {
+              props.setCurrentPage(page)
+              setSelected([])
+            }}
             />
 
           </div>
       </Title>
-      <FormControlLabel
+
+      {/* <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
-      />
+      /> */}
+
+        
     </React.Fragment>
     : ''
   );
@@ -489,6 +504,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '0px'
   },
   icons: {
+    width: '32px',
     align: 'right',
     textAlign: 'center',
   },
@@ -505,13 +521,29 @@ const useStyles = makeStyles((theme) => ({
   container: {
     maxHeight: '70vh',
   },
-  searchIcon: {
-    
-    width: '24px'
+  headBar: {
+    justifyContent: 'space-between',
+    fontSize: '1.5rem',
+    display: 'inline-flex',
+    width: 'auto',
+    fontFamily: "Roboto",
+    fontWeight: '400',
+    lineHeight: '1.334',
+    letterSpacing: '0em',
+    color: '#3f51b5',
   },
-  searchBar: {
-    height: '32px',
-    width: '100px'
+  headLeft: {
+    flexGrow: '5',
+    display: 'inline-flex',
+  },
+  headTitle: {
+    flexGrow: '3',
+    display: 'inline-flex',
+  },
+  headRight: {
+    flexGrow: '1',
+    width: '120px',
+    display: 'inline-flex',
   },
   root: {
     width: '100%',

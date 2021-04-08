@@ -31,8 +31,8 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  getSpellsByUser(history, page, search, sort_order, sort){
-    return fetch(`${config.API_ENDPOINT}/spells?page=${page}&search=${search}&sort=${sort}&sort_order=${sort_order}`, {
+  getSpellsByUser(history, page, search, sort_direction, sort){
+    return fetch(`${config.API_ENDPOINT}/spells?page=${page}&search=${search}&sort=${sort}&sort_direction=${sort_direction}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
