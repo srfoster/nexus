@@ -50,7 +50,7 @@ let attachTagsToSpells =
 }
 
 // Retrieve spells on viewing Dashboard
-// FIXME: sorting should occur on server side before sending back response
+// FIXME: add sort_direction variable based on the "sort_direction" query for ascending or descending
 app.get(epSpellIndex, requireAuth, async (req, res) => {
   let page = req.query.page ? req.query.page : 1;
   let page_size = req.query.page_size ? req.query.page_size : 10;
