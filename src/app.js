@@ -41,8 +41,9 @@ let attachTagsToSpells =
     for(let i = 0; i < spells.length; i++){
       delete spells[i].is_deleted
       
-      let tags = await
-      app.get('db')('tags').where({spell_id: spells[i].id})
+      let tags = await app.get('db')('tags')
+        .where({spell_id: spells[i].id})
+        .orderBy(`name`, 'asc')
 
       spells[i].tags = tags
     }
@@ -58,6 +59,7 @@ app.get(epSpellIndex, requireAuth, async (req, res) => {
 
   // Should all sorts take the name as a secondary sort by default?
   let sortQuery = req.query.sort ? req.query.sort : 'name'
+  let sort_direction = req.query.sort_direction ? req.query.sort_direction : 'asc'
 
   let totalSpells = await req.app.get('db')('spells')
     .count('id')
@@ -69,7 +71,7 @@ app.get(epSpellIndex, requireAuth, async (req, res) => {
     .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
     .limit(page_size)
     .offset(page_size * (page-1))
-    .orderBy(`${sortQuery}`, 'asc')
+    .orderBy(`${sortQuery}`, sort_direction)
 
   spells = await attachTagsToSpells(spells)
   res.send({spells, total: Number(totalSpells[0].count)})

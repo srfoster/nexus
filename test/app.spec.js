@@ -167,7 +167,7 @@ describe('App', () => {
     // responds with "Apple Storm" spell when given search query ?search=apple
     // underscores within search queries should be translated to spaces
     
-    it(`responds with the spell "Apple Storm" when given the query ?search=apple`, () => {
+    it.only(`responds with the spell "Apple Storm" when given the query ?search=apple`, () => {
       return supertest(app)
       .get(`/spells?search=seeded`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
