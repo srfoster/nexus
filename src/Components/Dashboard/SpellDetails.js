@@ -248,17 +248,6 @@ export default function SpellDetails(props) {
               setSpellTag(event.target.value)
             }}
           />
-          {/*
-          <Button
-          variant="contained"
-          onClick={(event) => {
-            if(spellTag){
-              addTagToSpell(spell.id, spellTag)
-              console.log(spellTag)
-            }
-            setSpellTag("")
-          }}>Add Tag</Button>
-          */}
 
           </div>
 
@@ -310,7 +299,9 @@ export default function SpellDetails(props) {
           variant="outlined"
           size="small"
           label={t.name}
-          // onClick={}
+          onClick={(event) => {
+            console.log(t.name)
+          }}
           onDelete={() => removeTagFromSpell(spell.id, t.name)}
           />
         ))}

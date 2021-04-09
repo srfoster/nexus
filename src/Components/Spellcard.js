@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -30,6 +30,7 @@ const Spellcard = (props) => {
   let history = useHistory();
 
   const [expanded, setExpanded] = React.useState(false);
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -66,8 +67,9 @@ const Spellcard = (props) => {
 
         <CardMedia
           className={classes.cardMedia}
+          // image={props.cardImage}
           image="https://source.unsplash.com/random"
-          title="Image title"
+          title={"Image title" + props.spell.id}
         />
 
         <CardContent className={classes.cardContent}>
@@ -83,7 +85,9 @@ const Spellcard = (props) => {
           variant="outlined"
           size="small"
           label={t.name}
-          // onClick={}
+          onClick={(event) => {
+            console.log(t.name)
+          }}
           />
         ))}
         </div>

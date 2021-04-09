@@ -43,6 +43,7 @@ import PropTypes from 'prop-types';
 import Chip from '@material-ui/core/Chip';
 import CodeIcon from '@material-ui/icons/Code';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 export default function SpellChart(props) {
 
@@ -60,6 +61,8 @@ export default function SpellChart(props) {
 
   const [selected, setSelected] = React.useState([]);
 
+  const [searchIcon, setSearchIcon] = React.useState(true);
+
   const handleExpandClick = (id) => {
     setExpanded(id);
   };
@@ -73,6 +76,11 @@ export default function SpellChart(props) {
     setOpen(false);
     // setSpellToDelete(undefined);
   };
+
+  const handleSearchIconClick = () => {
+    setSearchIcon(!searchIcon);
+  };
+
 
   const useToolbarStyles = makeStyles((theme) => ({
     // root: {
@@ -205,7 +213,7 @@ export default function SpellChart(props) {
       })
   }
 
-  function onSearchChange(event) {
+  function onSearchIconChange(event) {
     props.setSearch(event.target.value)
   }
 
@@ -215,13 +223,18 @@ export default function SpellChart(props) {
       <>       
        
         <InputBase
+          className={clsx(classes.searchField, searchIcon && classes.searchFieldHidden)}
           placeholder="Search Spells"
-          onChange={onSearchChange}
+          onChange={onSearchIconChange}
           inputProps={{ 'aria-label': 'search' }}
+          // onClickAway={(event) => handleSearchIconClick()}
         />
-      
-         <SearchIcon />
-       
+
+        <IconButton 
+          onClick={(event) => handleSearchIconClick()}
+        >
+          <SearchIcon />
+        </IconButton>
       </>
     )
   }
@@ -396,7 +409,10 @@ export default function SpellChart(props) {
                   variant="outlined"
                   size="small"
                   label={t.name}
-                  // onClick={console.log(t.name)}
+                  onClick={(event) => {
+                    console.log(t.name)
+                    event.stopPropagation();
+                  }}
                   />
                 )) : ''}
               </TableCell>
@@ -544,6 +560,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: '1',
     width: '120px',
     display: 'inline-flex',
+    justifyContent: 'flex-end',
   },
   root: {
     width: '100%',
@@ -565,5 +582,25 @@ const useStyles = makeStyles((theme) => ({
     position: 'absolute',
     top: 20,
     width: 1,
+  },
+  codeMirror: {
+    height: '60vh',
+    width: '35vw',
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  searchField: {
+    width: '114px',
+  },
+  searchFieldHidden: {
+    width: '0px',
   },
 }));
