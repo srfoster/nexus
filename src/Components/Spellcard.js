@@ -68,7 +68,7 @@ const Spellcard = (props) => {
         <CardMedia
           className={classes.cardMedia}
           // image={props.cardImage}
-          image="https://source.unsplash.com/random"
+          image="https://i.imgur.com/gtuo28j.jpg"
           title={"Image title" + props.spell.id}
         />
 
@@ -198,6 +198,8 @@ const useStyles = makeStyles((theme) => ({
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9
+
+    color: "blue",
   },
   cardContent: {
     // flexGrow: 1,
