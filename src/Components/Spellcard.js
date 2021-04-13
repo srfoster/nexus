@@ -23,6 +23,7 @@ import {UnControlled as CodeMirror} from 'react-codemirror2';
 import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
 import {textTrim} from '../Util.js'
+import TextField from '@material-ui/core/TextField'; 
 
 
 const Spellcard = (props) => {
@@ -30,6 +31,7 @@ const Spellcard = (props) => {
   let history = useHistory();
 
   const [expanded, setExpanded] = React.useState(false);
+  const runSpell= "!!run " + props.spell.id
 
 
   const handleExpandClick = () => {
@@ -43,6 +45,7 @@ const Spellcard = (props) => {
       history.push(`/spells/${spell.id}`)
     })
   }
+
 
 
   return (
@@ -68,7 +71,7 @@ const Spellcard = (props) => {
         <CardMedia
           className={classes.cardMedia}
           // image={props.cardImage}
-          image="https://i.imgur.com/gtuo28j.jpg"
+          image="https://i.imgur.com/33XGUsG.jpg"
           title={"Image title" + props.spell.id}
         />
 
@@ -85,9 +88,8 @@ const Spellcard = (props) => {
           variant="outlined"
           size="small"
           label={t.name}
-          onClick={(event) => {
-            console.log(t.name)
-          }}
+          // onClick={(event) => {
+          // }}
           />
         ))}
         </div>
@@ -126,7 +128,26 @@ const Spellcard = (props) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{`${props.spell.name}`}</DialogTitle>
+          
+          <div className={classes.cardHead}>
+            <DialogTitle id="alert-dialog-title">{`${props.spell.name}`}</DialogTitle>
+          </div>
+
+          <div className={classes.cardHead}>
+            <TextField
+            size="small"
+            className={classes.copy}
+            id="read-only-spell-command"
+            // label="Spell Command"
+            defaultValue= {runSpell}
+            InputProps={{
+              readOnly: true,
+            }}
+            variant="outlined"
+            />
+          </div>
+         
+
           <DialogContent className="dialogBox">
 
             <DialogContentText id="CodeMirror-Display">
@@ -210,8 +231,17 @@ const useStyles = makeStyles((theme) => ({
   },
   codeMirror: {
     height: '60vh',
-    width: '35vw',
-  }
+    width: '29vw',
+  },
+  copy: {
+    justifyContent: 'center',
+    width: '14ch',
+  },
+  cardHead: {
+    display: 'flex',
+    justifyContent: 'center'
+
+  },
 }));
 
 export default Spellcard;

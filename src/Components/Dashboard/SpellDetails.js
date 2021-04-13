@@ -23,6 +23,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import SpellsApiService from '../../Services/spells-api-service';
 import Chip from '@material-ui/core/Chip';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import LockIcon from '@material-ui/icons/Lock';
 
 let debounceTimer
 
@@ -188,7 +189,7 @@ export default function SpellDetails(props) {
   return (
     <>
       {spell ?
-      <React.Fragment>
+      <div className={spell.locked ? classes.locked : ''}>
         <div className={classes.titleRow}>
           <div className={classes.metaTitle}></div>
           <div className={classes.metaTitle}>
@@ -214,27 +215,36 @@ export default function SpellDetails(props) {
             }}
           />
 
+          {spell.locked ?
+            <div className={classes.icons}>
+              <Tooltip title="Spell Locked" placement="top-end">
+                <LockIcon />
+              </Tooltip>
+            </div>
+            :
+            <div className={classes.icons}>
+              <Tooltip title="Public status" placement="top-end">
+                <IconButton className={classes.icons} aria-label="isPublic" onClick={() => {
+                  setSpell({...spell, is_public: !spell.is_public})
+                  debounce(() => updateSpell({...spell, is_public: !spell.is_public}), 3000)
+                }}>
+                  {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </IconButton>
+              </Tooltip>
 
-          <div className={classes.icons}>
-            <Tooltip title="Public status" placement="top-end">
-              <IconButton className={classes.icons} aria-label="isPublic" onClick={() => {
-                setSpell({...spell, is_public: !spell.is_public})
-                debounce(() => updateSpell({...spell, is_public: !spell.is_public}), 3000)
-              }}>
-                {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
-              </IconButton>
-            </Tooltip>
-
-            <Tooltip title="Delete" placement="top-end">
-              <IconButton className={classes.icons} aria-label="delete"
-                onClick={() => handleClickOpen(spell.id)}
-                // onClick={handleClickOpen}
-              >
-                <DeleteForeverIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
+              <Tooltip title="Delete" placement="top-end">
+                <IconButton className={classes.icons} aria-label="delete"
+                  onClick={() => handleClickOpen(spell.id)}
+                  // onClick={handleClickOpen}
+                >
+                  <DeleteForeverIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          }
         </div>
+            
+
 
 
         <div className={classes.iconRow}>
@@ -291,21 +301,36 @@ export default function SpellDetails(props) {
 
         </div>*/}
 
-
-        <div className={classes.icon}>
-        {spell.tags.map(t => (
-          <Chip
-          key={t.id}
-          variant="outlined"
-          size="small"
-          label={t.name}
-          onClick={(event) => {
-            console.log(t.name)
-          }}
-          onDelete={() => removeTagFromSpell(spell.id, t.name)}
-          />
-        ))}
-        </div>
+        {spell.locked ? 
+          <div className={classes.icon}>
+            {spell.tags.map(t => (
+              <Chip
+              key={t.id}
+              variant="outlined"
+              size="small"
+              label={t.name}
+              onClick={(event) => {
+                console.log(t.name)
+              }}
+              />
+            ))}
+          </div>
+          :
+          <div className={classes.icon}>
+            {spell.tags.map(t => (
+              <Chip
+              key={t.id}
+              variant="outlined"
+              size="small"
+              label={t.name}
+              onClick={(event) => {
+                console.log(t.name)
+              }}
+              onDelete={() => removeTagFromSpell(spell.id, t.name)}
+              />
+            ))}
+          </div>
+        } 
 
 
 
@@ -332,15 +357,16 @@ export default function SpellDetails(props) {
             </Button>
           </DialogActions>
         </Dialog>
-
-        <TextField className={classes.margin}
-          label="Description"
-          defaultValue={spell.description}
-          onChange={(event) => {
-            setSpell({...spell, description: event.target.value})
-            debounce(() => updateSpell({...spell, description: event.target.value}), 3000)
-          }}
-        />
+        <div className={classes.iconRow}>
+          <TextField className={classes.title}
+            label="Description"
+            defaultValue={spell.description}
+            onChange={(event) => {
+              setSpell({...spell, description: event.target.value})
+              debounce(() => updateSpell({...spell, description: event.target.value}), 3000)
+            }}
+          />
+        </div>
         <p></p>
         {/* <Typography align='left'>
           Code:
@@ -363,7 +389,7 @@ export default function SpellDetails(props) {
           />
           : ''}
         </div>
-      </React.Fragment>
+      </div>
       : <div>Spell is loading</div>}
     </>
   );
@@ -417,5 +443,8 @@ const useStyles = makeStyles((theme) => ({
   },
   CodeMirror: {
     height: '300px',
+  },
+  locked: {
+    pointerEvents: 'none',
   }
 }));

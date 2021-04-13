@@ -44,6 +44,7 @@ import Chip from '@material-ui/core/Chip';
 import CodeIcon from '@material-ui/icons/Code';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import LockIcon from '@material-ui/icons/Lock';
 
 export default function SpellChart(props) {
 
@@ -104,7 +105,11 @@ export default function SpellChart(props) {
   const handleSelectAllClick = (event, id) => {
     if (event.target.checked) {
       console.log(selected)
-      const newSelecteds = props.spells.map((n) => n.id);
+      const newSelecteds = props.spells
+        .map((spell) => {
+          if (spell.locked) return
+          else return spell.id
+        })
       setSelected(newSelecteds);
       console.log(selected, 'too')
       return;
@@ -112,9 +117,14 @@ export default function SpellChart(props) {
     setSelected([]);
   };
 
-  const handleClickRow = (event, name) => {
+  const handleClickRow = (event, spell) => {
+    const name = spell.id
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
+        
+    if (spell.locked) {
+      return false
+    }
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -382,18 +392,24 @@ export default function SpellChart(props) {
         </TableHead> */}
         <TableBody>
           {props.spells.map((spell) => (
+            
             <TableRow 
               hover 
               key={"Key: " + spell.id}
-              onClick={(event) => handleClickRow(event, spell.id)}
+              onClick={(event) => handleClickRow(event, spell)}
               selected={selected.indexOf(spell.id) !== -1}
             >
-            <TableCell padding="checkbox">
-              <Checkbox
-                checked={isSpellSelected(spell.id)}
-                // inputProps={{ 'aria-labelledby': labelId }}
-              />
-            </TableCell>
+
+              <TableCell padding="checkbox">
+                {spell.locked ?
+                ''
+                :
+                <Checkbox
+                  checked={isSpellSelected(spell.id)}
+                  // inputProps={{ 'aria-labelledby': labelId }}
+                />
+                }
+              </TableCell>
               <Tooltip title={new Date(Date.parse(spell.date_created)).toLocaleTimeString()} arrow placement="bottom-start">
                 <TableCell>{new Date(Date.parse(spell.date_created)).toLocaleDateString()}</TableCell>
               </Tooltip>
@@ -410,7 +426,7 @@ export default function SpellChart(props) {
                   size="small"
                   label={t.name}
                   onClick={(event) => {
-                    console.log(t.name)
+                    // console.log(t.name)
                     event.stopPropagation();
                   }}
                   />
@@ -462,23 +478,38 @@ export default function SpellChart(props) {
                   </DialogContent>
                 </Dialog>
               </TableCell>
-              <TableCell className={classes.icons}>
-                <IconButton aria-label="edit" onClick={() => history.push(`/spells/${spell.id}`)}>
-                  <EditIcon />
-                </IconButton>
-              </TableCell>
-              <TableCell className={classes.icons}>
-                <IconButton 
-                id={spell.id} 
-                aria-label="isPublic" 
-                onClick={(event) => {
-                  // setSpell({...spell, is_public: !spell.is_public})
-                  updateSpell({...spell, is_public: !spell.is_public});
-                  event.stopPropagation();
-                }}>
-                  {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                </IconButton>
-              </TableCell>
+              <>
+              {spell.locked ? 
+                <>
+                  <TableCell className={classes.icons}>
+                  </TableCell>
+                  <TableCell className={classes.icons}>
+                    <LockIcon />
+                  </TableCell>
+                </>
+               :
+               <>
+                <TableCell className={classes.icons}>
+                  <IconButton aria-label="edit" onClick={() => history.push(`/spells/${spell.id}`)}>
+                    <EditIcon />
+                  </IconButton>
+                </TableCell>
+
+                <TableCell className={classes.icons}>
+                  <IconButton 
+                  id={spell.id} 
+                  aria-label="isPublic" 
+                  onClick={(event) => {
+                    // setSpell({...spell, is_public: !spell.is_public})
+                    updateSpell({...spell, is_public: !spell.is_public});
+                    event.stopPropagation();
+                  }}>
+                    {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                </TableCell>
+                </>
+              }
+              </>
             </TableRow>
           ))}
         </TableBody>
@@ -584,8 +615,8 @@ const useStyles = makeStyles((theme) => ({
     width: 1,
   },
   codeMirror: {
-    height: '60vh',
-    width: '35vw',
+    height: '60vh', 
+    width: '29vw',
   },
   expand: {
     transform: 'rotate(0deg)',
