@@ -240,7 +240,6 @@ const useStyles = makeStyles((theme) => ({
   cardHead: {
     display: 'flex',
     justifyContent: 'center'
-
   },
 }));
 
