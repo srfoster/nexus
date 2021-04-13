@@ -83,16 +83,16 @@ function makeSpellsArray() {
       is_public: false,
       is_deleted: true,
     },
-    // {
-    //   id: 6,
-    //   user_id: 1,
-    //   name: 'Sorting Test',
-    //   text: '(Hello World)',
-    //   description: "Alphabetical description",
-    //   date_created: new Date('2029-01-22T16:28:32.615Z'),
-    //   is_public: true,
-    //   is_deleted: false,
-    // }
+    {
+      id: 6,
+      user_id: 1,
+      name: 'Sorting Test',
+      text: '(Hello World)',
+      description: "Alphabetical description",
+      date_created: new Date('2029-01-22T16:28:32.615Z'),
+      is_public: true,
+      is_deleted: false,
+    }
   ]
 }
 

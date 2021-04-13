@@ -17,6 +17,8 @@ describe('App', () => {
   } = helpers.makeSpellFixtures()
   const testUser = testUsers[0]
 
+  let byName = (a,b) => a.name < b.name ? -1 : 1;
+
   before('make knex instance', () => {
     db = knex({
       client: 'pg',
@@ -38,7 +40,8 @@ describe('App', () => {
       extraSpells.push({
         id: testSpells.length + i,
         user_id: 1,
-        name: 'Seeded extra',
+        // Zz's ensure these sort after all other spells
+        name: 'Zz Seeded extra '+i,
         text: '(Hello Extra)',
         description: 'This is a bonus',
         is_deleted: false,
@@ -127,7 +130,7 @@ describe('App', () => {
     })
 
     // page and page_size defined at top of describe
-    it(`responds with the page ${page} and ${page_size} results when given ?page=${page}&page_size=${page_size}`, () => {
+    it.only(`responds with the page ${page} and ${page_size} results when given ?page=${page}&page_size=${page_size}`, () => {
       return supertest(app)
       .get(`/spells?page=${page}&page_size=${page_size}`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -139,9 +142,12 @@ describe('App', () => {
             .select('*')
             .where({user_id: testUsers[0].id, is_deleted: false})
 
+        console.log(res.body.spells.map(spell => spell.name));
+        console.log(allTestSpells.sort(byName).map(spell => spell.name));
+
         expect(res.body.spells.length).to.equal(page_size)
         expect(res.body.spells.map(spell => spell.id).toString())
-          .to.equal(allTestSpells.map(spell => spell.id).slice(page_size * (page-1), page_size*page).toString())
+          .to.equal(allTestSpells.sort(byName).map(spell => spell.id).slice(page_size * (page-1), page_size*page).toString())
       })
     })
 
@@ -167,7 +173,7 @@ describe('App', () => {
     // responds with "Apple Storm" spell when given search query ?search=apple
     // underscores within search queries should be translated to spaces
     
-    it.only(`responds with the spell "Apple Storm" when given the query ?search=apple`, () => {
+    it(`responds with the spell "Apple Storm" when given the query ?search=apple`, () => {
       return supertest(app)
       .get(`/spells?search=seeded`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
