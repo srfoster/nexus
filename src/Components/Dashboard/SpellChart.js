@@ -45,6 +45,7 @@ import CodeIcon from '@material-ui/icons/Code';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import LockIcon from '@material-ui/icons/Lock';
+import TextField from '@material-ui/core/TextField'; 
 
 export default function SpellChart(props) {
 
@@ -63,6 +64,10 @@ export default function SpellChart(props) {
   const [selected, setSelected] = React.useState([]);
 
   const [searchIcon, setSearchIcon] = React.useState(true);
+
+  const runSpell = (id) => {
+    return "!!run " + id
+  }
 
   const handleExpandClick = (id) => {
     setExpanded(id);
@@ -460,7 +465,26 @@ export default function SpellChart(props) {
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                 >
-                  <DialogTitle id="alert-dialog-title">{`${spell.name}`}</DialogTitle>
+                  {/* <DialogTitle id="alert-dialog-title">{`${spell.name}`}</DialogTitle> */}
+                  
+                  <div className={classes.cardHead}>
+                    <DialogTitle id="alert-dialog-title">{`${spell.name}`}</DialogTitle>
+                  </div>
+
+                  <div className={classes.cardHead}>
+                    <TextField
+                    size="small"
+                    className={classes.copy}
+                    id="read-only-spell-command"
+                    // label="Spell Command"
+                    defaultValue= {runSpell(spell.id)}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    variant="outlined"
+                    />
+                  </div>
+
                   <DialogContent className="dialogBox">
 
                     <DialogContentText id="CodeMirror-Display">
@@ -633,5 +657,13 @@ const useStyles = makeStyles((theme) => ({
   },
   searchFieldHidden: {
     width: '0px',
+  },
+  copy: {
+    justifyContent: 'center',
+    width: '14ch',
+  },
+  cardHead: {
+    display: 'flex',
+    justifyContent: 'center'
   },
 }));
