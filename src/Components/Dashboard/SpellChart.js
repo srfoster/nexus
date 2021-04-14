@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
@@ -63,7 +63,11 @@ export default function SpellChart(props) {
 
   const [selected, setSelected] = React.useState([]);
 
-  const [searchIcon, setSearchIcon] = React.useState(true);
+  const [searchIcon, setSearchIcon] = React.useState(true)
+
+  const isSpellSelected = (id) => selected.indexOf(id) !== -1;
+
+  const rows = props.spells.length;
 
   const runSpell = (id) => {
     return "!!run " + id
@@ -112,10 +116,11 @@ export default function SpellChart(props) {
       console.log(selected)
       const newSelecteds = props.spells
         .map((spell) => {
-          if (spell.locked) return
-          else return spell.id
+          // if (spell.locked) {return}
+          return spell.id
         })
       setSelected(newSelecteds);
+      console.log(props.spells.length)
       console.log(selected, 'too')
       return;
     }
@@ -127,9 +132,9 @@ export default function SpellChart(props) {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
         
-    if (spell.locked) {
-      return false
-    }
+    // if (spell.locked) {
+    //   return false
+    // }
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -147,8 +152,7 @@ export default function SpellChart(props) {
     setSelected(newSelected);
   };
 
-  const isSpellSelected = (id) => selected.indexOf(id) !== -1;
-  const rows = props.spells.length;
+
 
   const headCells = [
     { id: 'Created', numeric: false, disablePadding: true, label: 'Created' },
@@ -253,24 +257,25 @@ export default function SpellChart(props) {
       </>
     )
   }
-
+  
   function EnhancedTableHead(props) {
-    const { classes, onSelectAllClick, sort_direction, orderBy, numSelected, rowCount, onRequestSort } = props;
+    console.log(rows)
+    const { classes, onSelectAllClick, sort_direction, orderBy, numSelected, rowCount, onRequestSort, spells } = props;
     const createSortHandler = (property) => (event) => {
       onRequestSort(event, property);
     };
     
-  
     return (
       <TableHead>
         <TableRow>
           <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowsPerPage}
-              checked={rowsPerPage > 0 && numSelected === rowsPerPage}
+              checked={rowsPerPage > 0 && numSelected === Math.min(rows, rowsPerPage)}
               onChange={onSelectAllClick}
               inputProps={{ 'aria-label': 'select all desserts' }}
             />
+            
           </TableCell>
           {headCells.map((headCell) => (
             <TableCell
