@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,7 +25,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Tooltip from '@material-ui/core/Tooltip';
 import {useSpellContext} from '../Context';
 import SpellsApiService from '../../Services/spells-api-service';
-import {textTrim} from '../../Util.js'
+import {textTrim, MouseOverPopover} from '../../Util.js'
 import Pagination from '@material-ui/lab/Pagination';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -45,7 +45,8 @@ import CodeIcon from '@material-ui/icons/Code';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import LockIcon from '@material-ui/icons/Lock';
-import TextField from '@material-ui/core/TextField'; 
+import TextField from '@material-ui/core/TextField';
+import Popover from '@material-ui/core/Popover';
 
 export default function SpellChart(props) {
 
@@ -63,7 +64,18 @@ export default function SpellChart(props) {
 
   const [selected, setSelected] = React.useState([]);
 
-  const [searchIcon, setSearchIcon] = React.useState(true);
+  const [searchIcon, setSearchIcon] = React.useState(true)
+
+  const isSpellSelected = (id) => selected.indexOf(id) !== -1;
+
+  const rows = props.spells.length;
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const popoverOpen = Boolean(anchorEl);
+
+  const [popText, setPopText] = React.useState('Click To Copy')
+ 
 
   const runSpell = (id) => {
     return "!!run " + id
@@ -109,14 +121,12 @@ export default function SpellChart(props) {
 
   const handleSelectAllClick = (event, id) => {
     if (event.target.checked) {
-      console.log(selected)
       const newSelecteds = props.spells
         .map((spell) => {
-          if (spell.locked) return
-          else return spell.id
+          // if (spell.locked) {return}
+          return spell.id
         })
       setSelected(newSelecteds);
-      console.log(selected, 'too')
       return;
     }
     setSelected([]);
@@ -127,9 +137,9 @@ export default function SpellChart(props) {
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
         
-    if (spell.locked) {
-      return false
-    }
+    // if (spell.locked) {
+    //   return false
+    // }
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -147,8 +157,7 @@ export default function SpellChart(props) {
     setSelected(newSelected);
   };
 
-  const isSpellSelected = (id) => selected.indexOf(id) !== -1;
-  const rows = props.spells.length;
+
 
   const headCells = [
     { id: 'Created', numeric: false, disablePadding: true, label: 'Created' },
@@ -201,7 +210,6 @@ export default function SpellChart(props) {
 
   const updateSpell = (spell) => {
     let payload = spell
-    // console.log(payload);
 
     SpellsApiService.updateSpell(payload, spell.id)
       .then((spell) => {
@@ -231,7 +239,16 @@ export default function SpellChart(props) {
   function onSearchIconChange(event) {
     props.setSearch(event.target.value)
   }
+  
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setPopText('Click To Copy')
+  }
+  
   function SearchAppBar() {
 
     return (
@@ -253,24 +270,24 @@ export default function SpellChart(props) {
       </>
     )
   }
-
+  
   function EnhancedTableHead(props) {
-    const { classes, onSelectAllClick, sort_direction, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const { classes, onSelectAllClick, sort_direction, orderBy, numSelected, rowCount, onRequestSort, spells } = props;
     const createSortHandler = (property) => (event) => {
       onRequestSort(event, property);
     };
     
-  
     return (
       <TableHead>
         <TableRow>
           <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowsPerPage}
-              checked={rowsPerPage > 0 && numSelected === rowsPerPage}
+              checked={rowsPerPage > 0 && numSelected === Math.min(rows, rowsPerPage)}
               onChange={onSelectAllClick}
               inputProps={{ 'aria-label': 'select all desserts' }}
             />
+            
           </TableCell>
           {headCells.map((headCell) => (
             <TableCell
@@ -431,7 +448,6 @@ export default function SpellChart(props) {
                   size="small"
                   label={t.name}
                   onClick={(event) => {
-                    // console.log(t.name)
                     event.stopPropagation();
                   }}
                   />
@@ -482,7 +498,36 @@ export default function SpellChart(props) {
                       readOnly: true,
                     }}
                     variant="outlined"
+                    aria-owns={popoverOpen ? 'mouse-over-popover' : undefined}
+                    aria-haspopup="true"
+                    onMouseEnter={handlePopoverOpen}
+                    onMouseLeave={handlePopoverClose}
+                    onClick={() => {
+                      navigator.clipboard.writeText(runSpell(spell.id))
+                      setPopText('Copied!')
+                    }}
                     />
+                    <Popover
+                      id="mouse-over-popover"
+                      className={classes.popover}
+                      classes={{
+                        paper: classes.paper,
+                      }}
+                      open={popoverOpen}
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      onClose={handlePopoverClose}
+                      disableRestoreFocus
+                    >
+                      <Typography>{popText}</Typography>
+                    </Popover>
                   </div>
 
                   <DialogContent className="dialogBox">
@@ -569,25 +614,17 @@ const useStyles = makeStyles((theme) => ({
   seeMore: {
     marginTop: theme.spacing(3),
   },
-  delIcon: {
-    display: 'inline-flex',
-    align: 'right',
-    padding: '0px'
-  },
   icons: {
     width: '32px',
-    align: 'right',
     textAlign: 'center',
   },
   header: {
     stickyHeader: true,
   },
   pagi: {
-    '& > *': {
       marginTop: theme.spacing(1),
       display: 'flex',
       justifyContent: 'center',
-    },
   },
   container: {
     maxHeight: '70vh',
@@ -665,5 +702,11 @@ const useStyles = makeStyles((theme) => ({
   cardHead: {
     display: 'flex',
     justifyContent: 'center'
+  },
+  popover: {
+    pointerEvents: 'none',
+  },
+  paper: {
+    padding: theme.spacing(1),
   },
 }));
