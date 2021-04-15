@@ -81,7 +81,8 @@ const Spellcard = (props) => {
         <CardMedia
           className={classes.cardMedia}
           // image={props.cardImage}
-          image="https://i.imgur.com/33XGUsG.jpg"
+          // image="https://i.imgur.com/33XGUsG.jpg"
+          image="https://i.imgur.com/KEPVIOS.jpg"
           title={"Image title" + props.spell.id}
         />
 
@@ -143,8 +144,8 @@ const Spellcard = (props) => {
             <TextField
             size="small"
             className={classes.copy}
-            id="read-only-spell-command"
-            // label="Spell Command"
+            id="read-only-twitch-command"
+            label="Twitch Dictum"
             defaultValue= {runSpell}
             InputProps={{
               readOnly: true,
