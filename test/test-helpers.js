@@ -32,7 +32,7 @@ function makeUsersArray() {
 }
 
 function makeSpellsArray() {
-  return [
+  let ret = [
     {
       id: 1,
       user_id: 1,
@@ -94,7 +94,35 @@ function makeSpellsArray() {
       is_deleted: false,
     }
   ]
+  for(let i=1; i<15; i++){
+    ret.push({
+      id: ret.length + i,
+      user_id: 1,
+      // Zz's ensure these sort after all other spells
+      name: 'Zz Seeded extra '+i,
+      text: '(Hello Extra)',
+      description: 'This is a bonus',
+      is_deleted: false,
+      is_public: true
+    })
+  }
+  return ret;
 }
+
+// let extraSpells = []
+// for(let i=1; i<15; i++){
+//   extraSpells.push({
+//     id: testSpells.length + i,
+//     user_id: 1,
+//     // Zz's ensure these sort after all other spells
+//     name: 'Zz Seeded extra '+i,
+//     text: '(Hello Extra)',
+//     description: 'This is a bonus',
+//     is_deleted: false,
+//     is_public: true
+//   })
+// }
+// testSpells = testSpells.concat(extraSpells)
 
 function makeTagsArray() {
   return [

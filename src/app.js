@@ -50,16 +50,27 @@ let attachTagsToSpells =
   return spells
 }
 
+// TODO: Tests for this
+let checkIfLocked = async() => {
+  await req.app.get('db')('spells')
+    .count('id')
+    .where({id: req.params.id, locked: true})
+  if(checkLocked) {return res.status(401).send({error: "You cannot alter a locked spell. Fork it instead."})}
+}
+
 // Retrieve spells on viewing Dashboard
 // FIXME: add sort_direction variable based on the "sort_direction" query for ascending or descending
 app.get(epSpellIndex, requireAuth, async (req, res) => {
   let page = req.query.page ? req.query.page : 1;
   let page_size = req.query.page_size ? req.query.page_size : 10;
-  let searchTerm = req.query.search ? `%${req.query.search}%` : `%%`
+  let searchTerm = req.query.search ? `%${req.query.search}%` : `%%`;
 
   // Should all sorts take the name as a secondary sort by default?
-  let sortQuery = req.query.sort ? req.query.sort : 'name'
-  let sort_direction = req.query.sort_direction ? req.query.sort_direction : 'asc'
+  let sortQuery = req.query.sort ? req.query.sort : 'name';
+  let sort_direction = req.query.sortDirection ? req.query.sortDirection : 'asc';
+  if(sortQuery === 'created') sortQuery = 'date_created';
+  if(sortQuery === 'modified') sortQuery = 'date_modified';
+  if(sortQuery === 'public') sortQuery = 'is_public';
 
   let totalSpells = await req.app.get('db')('spells')
     .count('id')
@@ -98,6 +109,7 @@ app.get(epPublicSpells, async (req, res) => {
 
   spells = await attachTagsToSpells(spells)
   res.send({spells, total: Number(totalSpells[0].count)})
+  // res.send({spells: [], total: 0})
 })
 
 // Retrieve specific spell information
@@ -183,6 +195,8 @@ app.get(`${epSpellTagsIndex}`, requireAuth, (req, res) => {
 
 // Post new tag to specific spell
 app.post(`${epSpellTags}`, requireAuth, async (req, res) => {
+  await checkIfLocked
+
   let spells = await req.app.get('db')('spells')
     .count('id')
     .where({id: req.params.id, user_id: req.user.id})
@@ -207,6 +221,8 @@ app.post(`${epSpellTags}`, requireAuth, async (req, res) => {
 
 // Delete a tag from a spell
 app.delete(`${epSpellTags}`, requireAuth, async (req, res) => {
+  await checkIfLocked
+
   let spells = await req.app.get('db')('spells')
     .where({id: req.params.id, user_id: req.user.id})
 
@@ -221,9 +237,9 @@ app.delete(`${epSpellTags}`, requireAuth, async (req, res) => {
 })
 
 // Flag spell as deleted and hide it from client
-app.delete(`${epSpellDetails}`, requireAuth, (req, res) => {
-  // console.log('Params: ', req.params);
-  // console.log('User: ', req.user);
+app.delete(`${epSpellDetails}`, requireAuth, async (req, res) => {
+  await checkIfLocked
+
   req.app.get('db')('spells')
     .where({user_id: req.user.id}).andWhere('id', 'in', req.params.id.split(','))
     .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
@@ -233,13 +249,15 @@ app.delete(`${epSpellDetails}`, requireAuth, (req, res) => {
         res.send(spells[0])
       } else {
         // console.log('Inside else');
-        res.status(401).send({error: 'Spell is not yours! Go away!'})
+        res.status(401).send({error: 'This spell is not yours! Go away!'})
       }
     })
 })
 
 // Update user changes to a specific spell's information
-app.put(`${epSpellDetails}`, requireAuth, (req, res, next) => {
+app.put(`${epSpellDetails}`, requireAuth, async (req, res, next) => {
+  await checkIfLocked
+  
   const { name, description, text, is_public } = req.body;
 
   req.app.get('db')('spells')
@@ -394,6 +412,7 @@ module.exports = {
   epSignup,
   epSpellIndex,
   epSpellDetails,
+  epPublicSpellDetails,
   epPublicSpells,
   epWizardDetails,
   epSpellsFork,
