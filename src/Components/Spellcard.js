@@ -23,8 +23,9 @@ import {UnControlled as CodeMirror} from 'react-codemirror2';
 import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
 import {textTrim} from '../Util.js'
-import TextField from '@material-ui/core/TextField'; 
-
+import TextField from '@material-ui/core/TextField';
+import LockIcon from '@material-ui/icons/Lock';
+import Popover from '@material-ui/core/Popover';
 
 const Spellcard = (props) => {
   const classes = useStyles();
@@ -33,11 +34,15 @@ const Spellcard = (props) => {
   const [expanded, setExpanded] = React.useState(false);
   const runSpell= "!!run " + props.spell.id
 
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const popoverOpen = Boolean(anchorEl);
+
+  const [popText, setPopText] = React.useState('Click To Copy')
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
 
   const clickForkIcon = (id) => {
     SpellsApiService.forkSpellById(id)
@@ -46,7 +51,14 @@ const Spellcard = (props) => {
     })
   }
 
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setPopText('Click To Copy')
+  }
 
   return (
     <Grid item key={props.spell.id} xs={12} sm={6} md={4}>
@@ -65,8 +77,6 @@ const Spellcard = (props) => {
         title={textTrim(props.spell.name, 19)}
         subheader={new Date(Date.parse(props.spell.date_created)).toLocaleDateString()}
       />
-
-
 
         <CardMedia
           className={classes.cardMedia}
@@ -94,19 +104,15 @@ const Spellcard = (props) => {
         ))}
         </div>
 
-        <CardActions disableSpacing>
-          {/* <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton> */}
+        <CardActions className={classes.footer}>
           <IconButton onClick={() => clickForkIcon(props.spell.id)}>
             <Tooltip title="Fork Spell" placement="top">
               <CallSplitIcon />
             </Tooltip>
           </IconButton>
 
+          {props.spell.locked ? <LockIcon /> : ""}
+          
           <IconButton
             className={clsx(classes.expand, {
               [classes.expandOpen]: expanded,
@@ -132,7 +138,7 @@ const Spellcard = (props) => {
           <div className={classes.cardHead}>
             <DialogTitle id="alert-dialog-title">{`${props.spell.name}`}</DialogTitle>
           </div>
-
+          
           <div className={classes.cardHead}>
             <TextField
             size="small"
@@ -144,9 +150,37 @@ const Spellcard = (props) => {
               readOnly: true,
             }}
             variant="outlined"
+            aria-owns={popoverOpen ? 'mouse-over-popover' : undefined}
+            aria-haspopup="true"
+            onMouseEnter={handlePopoverOpen}
+            onMouseLeave={handlePopoverClose}
+            onClick={() =>  {
+              navigator.clipboard.writeText(runSpell)
+              setPopText('Copied!')
+            }}
             />
+            <Popover
+              id="mouse-over-popover"
+              className={classes.popover}
+              classes={{
+                paper: classes.paper,
+              }}
+              open={popoverOpen}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              onClose={handlePopoverClose}
+              disableRestoreFocus
+            >
+              <Typography>{popText}</Typography>
+            </Popover>
           </div>
-         
 
           <DialogContent className="dialogBox">
 
@@ -240,6 +274,16 @@ const useStyles = makeStyles((theme) => ({
   cardHead: {
     display: 'flex',
     justifyContent: 'center'
+  },
+  footer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  popover: {
+    pointerEvents: 'none',
+  },
+  paper: {
+    padding: theme.spacing(1),
   },
 }));
 
