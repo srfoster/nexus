@@ -52,8 +52,6 @@ const SpellsApiService = {
   },
   getUserById(id, page, search){
     page = page || 1
-    // search = search || ''
-    console.log(search)
     let searchPath = search ? `&search=${search}` : ""
     return fetch(`${config.API_ENDPOINT}/wizards/${id}?page=${page}${searchPath}`, {
       method: 'GET',
