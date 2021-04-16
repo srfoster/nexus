@@ -106,6 +106,8 @@ export default function SpellChart(props) {
 
   const handleRequestSort = (event, property) => {
     const isAsc = props.orderBy.toLowerCase() === property.toLowerCase() && props.sortDirection === 'asc';
+    console.log(props.orderBy.toLowerCase() === property.toLowerCase());
+    console.log(props.sortDirection === 'asc');
     props.setSortDirection(isAsc ? 'desc' : 'asc');
     props.setOrderBy(property.toLowerCase());
   };
