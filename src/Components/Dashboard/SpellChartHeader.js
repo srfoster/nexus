@@ -42,6 +42,7 @@ return (
     padding={headCell.disablePadding ? 'none' : 'default'}
     sortDirection={orderBy === headCell.id ? sortDirection : false}
   >
+  {headCell.id !== "Tags" && headCell.id !=="Code" && headCell.id !== "edit" ? 
   <TableSortLabel
   active={orderBy === headCell.id}
   direction={orderBy === headCell.id ? sortDirection : 'asc'}
@@ -54,6 +55,8 @@ return (
     </span>
   ) : null}
   </TableSortLabel>
+  :headCell.label
+  }
   </TableCell>
   ))}
 </TableRow>
