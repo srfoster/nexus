@@ -21,7 +21,6 @@ function SpellIndex(props) {
       .catch(() => props.setIsLoggedIn(false))
 
     if(props.isLoggedIn){
-      console.log(orderBy, sortDirection)
       SpellsApiService.getSpellsByUser(history, currentPage, search, sortDirection, orderBy)
         .then(spells => {
           setSpells(spells.spells)
