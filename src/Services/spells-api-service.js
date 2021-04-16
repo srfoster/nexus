@@ -31,8 +31,8 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  getSpellsByUser(history, page, search, sort_direction, sort){
-    return fetch(`${config.API_ENDPOINT}/spells?page=${page}&search=${search}&sort=${sort}&sort_direction=${sort_direction}`, {
+  getSpellsByUser(history, page, search, sortDirection, sort){
+    return fetch(`${config.API_ENDPOINT}/spells?page=${page}&search=${search}&sort=${sort}&sortDirection=${sortDirection}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -52,8 +52,6 @@ const SpellsApiService = {
   },
   getUserById(id, page, search){
     page = page || 1
-    // search = search || ''
-    console.log(search)
     let searchPath = search ? `&search=${search}` : ""
     return fetch(`${config.API_ENDPOINT}/wizards/${id}?page=${page}${searchPath}`, {
       method: 'GET',

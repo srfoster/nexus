@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -23,18 +23,26 @@ import {UnControlled as CodeMirror} from 'react-codemirror2';
 import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
 import {textTrim} from '../Util.js'
-
+import TextField from '@material-ui/core/TextField';
+import LockIcon from '@material-ui/icons/Lock';
+import Popover from '@material-ui/core/Popover';
 
 const Spellcard = (props) => {
   const classes = useStyles();
   let history = useHistory();
 
   const [expanded, setExpanded] = React.useState(false);
+  const runSpell= "!!run " + props.spell.id
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const popoverOpen = Boolean(anchorEl);
+
+  const [popText, setPopText] = React.useState('Click To Copy')
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
 
   const clickForkIcon = (id) => {
     SpellsApiService.forkSpellById(id)
@@ -43,6 +51,14 @@ const Spellcard = (props) => {
     })
   }
 
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+    setPopText('Click To Copy')
+  }
 
   return (
     <Grid item key={props.spell.id} xs={12} sm={6} md={4}>
@@ -62,12 +78,12 @@ const Spellcard = (props) => {
         subheader={new Date(Date.parse(props.spell.date_created)).toLocaleDateString()}
       />
 
-
-
         <CardMedia
           className={classes.cardMedia}
-          image="https://source.unsplash.com/random"
-          title="Image title"
+          // image={props.cardImage}
+          // image="https://i.imgur.com/33XGUsG.jpg"
+          image="https://i.imgur.com/KEPVIOS.jpg"
+          title={"Image title" + props.spell.id}
         />
 
         <CardContent className={classes.cardContent}>
@@ -83,24 +99,21 @@ const Spellcard = (props) => {
           variant="outlined"
           size="small"
           label={t.name}
-          // onClick={}
+          // onClick={(event) => {
+          // }}
           />
         ))}
         </div>
 
-        <CardActions disableSpacing>
-          {/* <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon />
-          </IconButton> */}
+        <CardActions className={classes.footer}>
           <IconButton onClick={() => clickForkIcon(props.spell.id)}>
             <Tooltip title="Fork Spell" placement="top">
               <CallSplitIcon />
             </Tooltip>
           </IconButton>
 
+          {props.spell.locked ? <LockIcon /> : ""}
+          
           <IconButton
             className={clsx(classes.expand, {
               [classes.expandOpen]: expanded,
@@ -122,7 +135,54 @@ const Spellcard = (props) => {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{`${props.spell.name}`}</DialogTitle>
+          
+          <div className={classes.cardHead}>
+            <DialogTitle id="alert-dialog-title">{`${props.spell.name}`}</DialogTitle>
+          </div>
+          
+          <div className={classes.cardHead}>
+            <TextField
+            size="small"
+            className={classes.copy}
+            id="read-only-twitch-command"
+            label="Twitch Dictum"
+            defaultValue= {runSpell}
+            InputProps={{
+              readOnly: true,
+            }}
+            variant="outlined"
+            aria-owns={popoverOpen ? 'mouse-over-popover' : undefined}
+            aria-haspopup="true"
+            onMouseEnter={handlePopoverOpen}
+            onMouseLeave={handlePopoverClose}
+            onClick={() =>  {
+              navigator.clipboard.writeText(runSpell)
+              setPopText('Copied!')
+            }}
+            />
+            <Popover
+              id="mouse-over-popover"
+              className={classes.popover}
+              classes={{
+                paper: classes.paper,
+              }}
+              open={popoverOpen}
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              onClose={handlePopoverClose}
+              disableRestoreFocus
+            >
+              <Typography>{popText}</Typography>
+            </Popover>
+          </div>
+
           <DialogContent className="dialogBox">
 
             <DialogContentText id="CodeMirror-Display">
@@ -194,6 +254,8 @@ const useStyles = makeStyles((theme) => ({
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9
+
+    color: "blue",
   },
   cardContent: {
     // flexGrow: 1,
@@ -204,8 +266,26 @@ const useStyles = makeStyles((theme) => ({
   },
   codeMirror: {
     height: '60vh',
-    width: '35vw',
-  }
+    width: '29vw',
+  },
+  copy: {
+    justifyContent: 'center',
+    width: '14ch',
+  },
+  cardHead: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  footer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  popover: {
+    pointerEvents: 'none',
+  },
+  paper: {
+    padding: theme.spacing(1),
+  },
 }));
 
 export default Spellcard;

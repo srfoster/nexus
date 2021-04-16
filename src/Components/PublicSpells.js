@@ -6,6 +6,8 @@ import Spellbook from './Spellbook';
 import Pagination from '@material-ui/lab/Pagination';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
+import clsx from 'clsx';
+import IconButton from '@material-ui/core/IconButton';
 
 export default function PublicSpells(props) {
   // console.log("From index: ", props);
@@ -19,6 +21,12 @@ export default function PublicSpells(props) {
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = React.useState('');
 
+  const [searchIcon, setSearchIcon] = React.useState(true);
+
+  const handleSearchIconClick = () => {
+    setSearchIcon(!searchIcon);
+  };
+
   useEffect(() => {
 
     SpellsApiService.getPublicSpells(currentPage, search)
@@ -30,23 +38,24 @@ export default function PublicSpells(props) {
   }, [currentPage, search])
   // console.log(spells);
 
-  function onSearchChange(event) {
+  function onSearchIconChange(event) {
     setSearch(event.target.value)
   }
 
   function SearchAppBar() {
-
     return (
       <>       
-       
         <InputBase
+          className={clsx(classes.searchField, searchIcon && classes.searchFieldHidden)}
           placeholder="Search Spells"
-          onChange={onSearchChange}
+          onChange={onSearchIconChange}
           inputProps={{ 'aria-label': 'search' }}
         />
-      
-         <SearchIcon />
-       
+        <IconButton 
+          onClick={(event) => handleSearchIconClick()}
+        >
+          <SearchIcon />
+        </IconButton>
       </>
     )
   }
@@ -158,5 +167,12 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: '1',
     width: '120px',
     display: 'inline-flex',
-  }
+    justifyContent: 'flex-end',
+  },
+  searchField: {
+    width: '114px',
+  },
+  searchFieldHidden: {
+    width: '0px',
+  },
 }));
