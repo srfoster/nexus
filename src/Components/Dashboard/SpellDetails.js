@@ -4,9 +4,6 @@ import TokenService from '../../Services/token-service';
 import config from '../../config';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 import Title from './Title';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Dashboard from './Dashboard';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import IconButton from '@material-ui/core/IconButton';
@@ -22,57 +19,46 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import SpellsApiService from '../../Services/spells-api-service';
 import Chip from '@material-ui/core/Chip';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import LockIcon from '@material-ui/icons/Lock';
+import useStyles from '../../styles.js';
 
 let debounceTimer
 
 export default function SpellDetails(props) {
   const classes = useStyles();
   let history = useHistory();
-
   const [spell, setSpell] = useState();
   const [isSaving, setIsSaving] = useState(false);
-
   // FIXME: CodeMirror re-render workaround. Needs revision
   const [spellText, setSpellText] = useState(undefined)
-
   const [open, setOpen] = React.useState(false);
   const [spellToDelete, setSpellToDelete] = React.useState(undefined);
-
   const [value, setValue] = React.useState("");
   const [inputValue, setInputValue] = React.useState('');
-
+  let [spellTag, setSpellTag] = useState("");
+  
   const handleClickOpen = (id) => {
-    // setOpen(true);
     setSpellToDelete(id);
   };
 
   const handleClose = (id) => {
-    // setOpen(false);
     setSpellToDelete(undefined);
   };
 
   const { id } = useParams();
   useEffect(() => {
-    // const { id } = props.match.params
 
-    SpellsApiService.getSpellById(id)
-      .then(spell => {
-        setSpell(spell)
-        setSpellText(spell.text);
-      })
+  SpellsApiService.getSpellById(id)
+    .then(spell => {
+      setSpell(spell)
+      setSpellText(spell.text);
+    })
   }, [])
 
   const debounce = (func, delay) => {
-    // setIsSaving(true);
-
     clearTimeout(debounceTimer)
     debounceTimer = setTimeout(() => func(), delay)
-
   }
-
-  let [spellTag, setSpellTag] = useState("");
 
   const tagWhitelist = [
   { title: 'Fire'},
@@ -91,11 +77,7 @@ export default function SpellDetails(props) {
   const updateSpell = (spell) => {
     setIsSaving(true);
 
-    // const { id } = props.match.params
-
     let payload = spell
-    console.log(payload);
-
 
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'PUT',
@@ -117,7 +99,6 @@ export default function SpellDetails(props) {
   }
 
   function deleteSpell(id){
-    // console.log("Clicked delete", id);
 
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'DELETE',
@@ -125,7 +106,6 @@ export default function SpellDetails(props) {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
-      // body: JSON.stringify(payload)
     })
       .then(res =>
         (!res.ok)
@@ -171,7 +151,6 @@ export default function SpellDetails(props) {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
-      // body: JSON.stringify(payload)
     })
       .then(res =>
         (!res.ok)
@@ -189,11 +168,11 @@ export default function SpellDetails(props) {
   return (
     <>
       {spell ?
-      <div className={spell.locked ? classes.locked : ''}>
+      <div className={spell.locked ? classes.spellDetailsLocked : ''}>
         <div className={classes.titleRow}>
           <div className={classes.metaTitle}></div>
           <div className={classes.metaTitle}>
-            <Title className={classes.titleDisplay}>
+            <Title>
               {spell.name}
             </Title>
           </div>
@@ -205,37 +184,34 @@ export default function SpellDetails(props) {
         </div>
 
         <div className={classes.iconRow}>
-          <TextField className={classes.title}
+          <TextField className={classes.spellDetailsTitle}
             label="Name"
             defaultValue={spell.name}
             onChange={(event) => {
-              // console.log(event.target.value);
               setSpell({...spell, name: event.target.value})
               debounce(() => updateSpell({...spell, name: event.target.value}), 3000)
             }}
           />
-
+          <img src='https://i.imgur.com/33XGUsG.jpg' alt="Spell Image" width='30%'></img>
           {spell.locked ?
-            <div className={classes.icons}>
+            <div className={classes.spellDetailsIcons}>
               <Tooltip title="Spell Locked" placement="top-end">
                 <LockIcon />
               </Tooltip>
             </div>
             :
-            <div className={classes.icons}>
+            <div className={classes.spellDetailsIcons}>
               <Tooltip title="Public status" placement="top-end">
-                <IconButton className={classes.icons} aria-label="isPublic" onClick={() => {
+                <IconButton className={classes.spellDetailsIcons} aria-label="isPublic" onClick={() => {
                   setSpell({...spell, is_public: !spell.is_public})
                   debounce(() => updateSpell({...spell, is_public: !spell.is_public}), 3000)
                 }}>
                   {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </IconButton>
               </Tooltip>
-
               <Tooltip title="Delete" placement="top-end">
-                <IconButton className={classes.icons} aria-label="delete"
+                <IconButton className={classes.spellDetailsIcons} aria-label="delete"
                   onClick={() => handleClickOpen(spell.id)}
-                  // onClick={handleClickOpen}
                 >
                   <DeleteForeverIcon />
                 </IconButton>
@@ -243,13 +219,42 @@ export default function SpellDetails(props) {
             </div>
           }
         </div>
-            
-
-
-
+         {/* Delete Spell dialog confirmation */}
+         <Dialog
+          open={spellToDelete === spell.id}
+          onClose={() => handleClose(spell.id)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Delete spell?"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you would like to delete this spell?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => {handleClose(); deleteSpell(spell.id); history.push('/spells')}} color="secondary">
+              Delete
+            </Button>
+            <Button onClick={handleClose} color="primary" autoFocus>
+              Keep
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <div className={classes.iconRow}>
+          <TextField className={classes.spellDetailsTitle}
+            label="Description"
+            defaultValue={spell.description}
+            onChange={(event) => {
+              setSpell({...spell, description: event.target.value})
+              debounce(() => updateSpell({...spell, description: event.target.value}), 3000)
+            }}
+          />
+        </div>
+        <p></p>
         <div className={classes.iconRow}>
           <TextField
-            className={classes.title}
+            className={classes.spellDetailsTitle}
             placeholder="Tag"
             onKeyUp={handleKeyUp}
             value = {spellTag}
@@ -258,49 +263,7 @@ export default function SpellDetails(props) {
               setSpellTag(event.target.value)
             }}
           />
-
-          </div>
-
-
-          {/*<div>
-          <div>{`value: ${value !== null ? `'${value}'` : 'null'}`}</div>
-          <div>{`inputValue: '${inputValue}'`}</div>
-          <Autocomplete
-            // disableCloseOnSelect
-            // value={value}
-            // onChange={(event, newValue) => {
-            //   setValue(newValue);
-            // }}
-            // inputValue={inputValue}
-            // onInputChange={(event) => {
-            //   setSpellTag(event.target.value)
-            // }}
-            className={classes.iconBut}
-            multiple id="tags-standard"
-            options={tagWhitelist.map((option) => option.title)}
-            // defaultValue={spell.tags.map(t => (t.name))}
-            freeSolo
-            onKeyUp={handleKeyUp}
-            renderTags={(value, getTagProps) =>
-              value.map((option, index) => (
-                <Chip variant="outlined" size="small" label={option} {...getTagProps({ index })} />
-              ))
-            }
-            renderInput={(params) => (
-              <TextField {...params}
-                variant="standard"
-                label="Spell Tags"
-                placeholder="New Tag"
-                // onKeyUp={handleKeyUp}
-                onChange={(event) => {
-                  setSpellTag(event.target.value)
-                }}
-                />
-            )}
-          />
-
-        </div>*/}
-
+        </div>
         {spell.locked ? 
           <div className={classes.icon}>
             {spell.tags.map(t => (
@@ -330,53 +293,13 @@ export default function SpellDetails(props) {
               />
             ))}
           </div>
-        } 
-
-
-
-        {/* Dialog confirmation */}
-        <Dialog
-          // open={open}
-          open={spellToDelete === spell.id}
-          onClose={() => handleClose(spell.id)}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{"Delete spell?"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Are you sure you would like to delete this spell?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => {handleClose(); deleteSpell(spell.id); history.push('/spells')}} color="secondary">
-              Delete
-            </Button>
-            <Button onClick={handleClose} color="primary" autoFocus>
-              Keep
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <div className={classes.iconRow}>
-          <TextField className={classes.title}
-            label="Description"
-            defaultValue={spell.description}
-            onChange={(event) => {
-              setSpell({...spell, description: event.target.value})
-              debounce(() => updateSpell({...spell, description: event.target.value}), 3000)
-            }}
-          />
-        </div>
-        <p></p>
-        {/* <Typography align='left'>
-          Code:
-        </Typography> */}
-        <div className={classes.CodeMirror}>
+        }
+        <p></p> 
+        <div className={classes.spellDetailsCodeMirror}>
           {spellText ?
           <CodeMirror
-            className={classes.CodeMirror}
+            className={classes.spellDetailsCodeMirror}
             value={spellText}
-            // value={'Bogus stuff'}
             options={{
               mode: 'scheme',
               theme: 'material',
@@ -394,57 +317,3 @@ export default function SpellDetails(props) {
     </>
   );
 }
-
-
-const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(1),
-  },
-  title: {
-    margin: theme.spacing(1),
-    width: '30%',
-    justifyContent: 'left'
-  },
-  spinner: {
-    display: 'flex',
-    '& > * + *': {
-      marginRight: theme.spacing(2),
-    },
-    // justifyContent: 'right',
-  },
-  icons: {
-    justifyContent: 'right'
-  },
-  iconRow: {
-    display: 'flex',
-    // alignContent: 'left'
-    justifyContent: 'space-between'
-  },
-  iconBut: {
-    display: 'flex',
-    margin: theme.spacing(1),
-    // alignContent: 'left'
-    justifyContent: 'left'
-  },
-  titleRow: {
-    display: 'flex',
-    justifyContent: 'center'
-  },
-  titleDisplay: {
-    // justifyContent: 'center',
-  },
-  metaSpinner: {
-    width: '33%',
-    display: 'flex',
-    justifyContent: 'flex-end',
-  },
-  metaTitle: {
-    width: '33%',
-  },
-  CodeMirror: {
-    height: '300px',
-  },
-  locked: {
-    pointerEvents: 'none',
-  }
-}));
