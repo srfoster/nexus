@@ -62,7 +62,12 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(9),
     },
   },
-  appBarSpacer: theme.mixins.toolbar,
+  appBarSpacer: {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  ...theme.mixins.toolbar,},
   content: {
     flexGrow: 1,
     height: '100vh',
@@ -246,7 +251,12 @@ const useStyles = makeStyles((theme) => ({
   // SpellDetails //
   spellDetailsTitle: {
     margin: theme.spacing(1),
-    width: '30%',
+    width: '33%',
+    justifyContent: 'left'
+  },
+  spellDetailsDescription: {
+    margin: theme.spacing(1),
+    width: '100%',
     justifyContent: 'left'
   },
   spinner: {
@@ -256,11 +266,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   spellDetailsIcons: {
-    justifyContent: 'right'
+    width: '33%',
+    display: 'flex',
+    // justifyContent: "flex-end",
+  },
+  singleIcon:{
+    justifyContent: 'flex-end',
+  },
+  spellDetailsTooltip: {
+    display: 'flex'
   },
   iconRow: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'center'
   },
   iconBut: {
     display: 'flex',
@@ -286,6 +304,39 @@ const useStyles = makeStyles((theme) => ({
     pointerEvents: 'none',
   },
   
+  // PublicSpells //
+  root: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+      display: 'flex',
+    justifyContent: 'center',
+    },
+  },
+  headBar: {
+    justifyContent: 'space-between',
+    fontSize: '1.5rem',
+    display: 'inline-flex',
+    width: 'auto',
+    fontFamily: "Roboto",
+    fontWeight: '400',
+    lineHeight: '1.334',
+    letterSpacing: '0em',
+    color: '#3f51b5',
+  },
+  headLeft: {
+    flexGrow: '5',
+    display: 'inline-flex',
+  },
+  headTitle: {
+    flexGrow: '3',
+    display: 'inline-flex',
+  },
+  headRight: {
+    flexGrow: '1',
+    width: '120px',
+    display: 'inline-flex',
+    justifyContent: 'flex-end',
+  },
 }));
 
 export default useStyles

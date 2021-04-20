@@ -61,7 +61,7 @@ const Spellcard = (props) => {
   }
 
   return (
-    <Grid item key={props.spell.id} xs={12} sm={6} md={4}>
+    <Grid className={'Card Frame'} item key={'Frame ' + props.spell.id} xs={12} sm={6} md={4}>
       <Card className={classes.card}>
       <CardHeader
         // avatar={
@@ -95,7 +95,7 @@ const Spellcard = (props) => {
         <div className={classes.chip}>
         {props.spell.tags.map(t => (
           <Chip
-          key={t.id}
+          key={'tags ' + t.id}
           variant="outlined"
           size="small"
           label={t.name}

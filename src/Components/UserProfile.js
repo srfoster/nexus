@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import TokenService from '../Services/token-service';
-import config from '../config';
 import Title from './Dashboard/Title';
 import SpellsApiService from '../Services/spells-api-service';
 import Spellbook from './Spellbook';
 import { makeStyles } from '@material-ui/core/styles';
 import Pagination from '@material-ui/lab/Pagination';
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
-import clsx from 'clsx';
-import IconButton from '@material-ui/core/IconButton';
+import {SearchBar} from '../Util.js'
 
 const UserProfile = (props) => {
   const classes = useStyles();
@@ -17,43 +12,19 @@ const UserProfile = (props) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = React.useState('');
-  const [searchIcon, setSearchIcon] = React.useState(true);
-
-  const handleSearchIconClick = () => {
-    setSearchIcon(!searchIcon);
-  };
-
 
   useEffect(() => {
+    let isMounted = true
     const { id } = props.match.params
 
     SpellsApiService.getUserById(id, currentPage, search)
       .then(user => {
-        setUser(user)
+        if(isMounted) setUser(user)
       })
+      return () => {
+        isMounted = false
+      }
   },[currentPage, search])
-
-  function onSearchIconChange(event) {
-    setSearch(event.target.value)
-  }
-
-  function SearchAppBar() {
-    return (
-      <>    
-        <InputBase
-          className={clsx(classes.searchField, searchIcon && classes.searchFieldHidden)}
-          placeholder="Search Spells"
-          onChange={onSearchIconChange}
-          inputProps={{ 'aria-label': 'search' }}
-        />
-        <IconButton 
-          onClick={(event) => handleSearchIconClick()}
-        >
-          <SearchIcon />
-        </IconButton>
-      </>
-    )
-  }
 
   return (
     user ?
@@ -61,16 +32,13 @@ const UserProfile = (props) => {
         <div className={classes.headBar}>
           <div className={classes.headLeft}></div>
           <div className={classes.headTitle}>{`Spellbook of ${user.username}`}</div>
-          <div className={classes.headRight}>{SearchAppBar()}</div>
+          <div className={classes.headRight}><SearchBar setSearch={setSearch}/></div>
         </div>
         <Spellbook spells={user.spells}/>
         <Title>
             <div className={classes.root}>
               <Pagination count={Math.ceil(user.total / rowsPerPage)}
                 onChange={(event ,page ) => {setCurrentPage(page)}}
-               // //function(event: object, page: number) => void
-              // //event: The event source of the callback.
-              // //page: The page selected.
               />
             </div>
         </Title>

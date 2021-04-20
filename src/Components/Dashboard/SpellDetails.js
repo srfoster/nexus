@@ -182,7 +182,7 @@ export default function SpellDetails(props) {
             </div> : <div className={classes.spinner}></div>}
           </div>
         </div>
-
+        <p></p>
         <div className={classes.iconRow}>
           <TextField className={classes.spellDetailsTitle}
             label="Name"
@@ -192,7 +192,7 @@ export default function SpellDetails(props) {
               debounce(() => updateSpell({...spell, name: event.target.value}), 3000)
             }}
           />
-          <img src='https://i.imgur.com/33XGUsG.jpg' alt="Spell Image" width='30%'></img>
+          <div width="33%"><img src='https://i.imgur.com/VE9Aksf.jpg' alt="Spell Image" width='40%'></img></div>
           {spell.locked ?
             <div className={classes.spellDetailsIcons}>
               <Tooltip title="Spell Locked" placement="top-end">
@@ -202,7 +202,7 @@ export default function SpellDetails(props) {
             :
             <div className={classes.spellDetailsIcons}>
               <Tooltip title="Public status" placement="top-end">
-                <IconButton className={classes.spellDetailsIcons} aria-label="isPublic" onClick={() => {
+                <IconButton  className={classes.singleIcon} aria-label="isPublic" onClick={() => {
                   setSpell({...spell, is_public: !spell.is_public})
                   debounce(() => updateSpell({...spell, is_public: !spell.is_public}), 3000)
                 }}>
@@ -210,7 +210,7 @@ export default function SpellDetails(props) {
                 </IconButton>
               </Tooltip>
               <Tooltip title="Delete" placement="top-end">
-                <IconButton className={classes.spellDetailsIcons} aria-label="delete"
+                <IconButton className={classes.singleIcon} aria-label="delete"
                   onClick={() => handleClickOpen(spell.id)}
                 >
                   <DeleteForeverIcon />
@@ -242,7 +242,7 @@ export default function SpellDetails(props) {
           </DialogActions>
         </Dialog>
         <div className={classes.iconRow}>
-          <TextField className={classes.spellDetailsTitle}
+          <TextField className={classes.spellDetailsDescription}
             label="Description"
             defaultValue={spell.description}
             onChange={(event) => {
@@ -296,10 +296,9 @@ export default function SpellDetails(props) {
         }
         <p></p> 
         <div className={classes.spellDetailsCodeMirror}>
-          {spellText ?
           <CodeMirror
             className={classes.spellDetailsCodeMirror}
-            value={spellText}
+            value={spellText ? spellText : ''}
             options={{
               mode: 'scheme',
               theme: 'material',
@@ -310,7 +309,6 @@ export default function SpellDetails(props) {
               debounce(() => updateSpell({...spell, text: value}), 3000)
             }}
           />
-          : ''}
         </div>
       </div>
       : <div>Spell is loading</div>}
