@@ -13,7 +13,7 @@ const headCells = [
   { id: 'Description', numeric: false, disablePadding: false, label: 'Description' },
   { id: 'Tags', numeric: false, disablePadding: false, label: 'Tags' },
   { id: 'Code', numeric: false, disablePadding: true, label: 'Code' },
-  { id: 'edit', numeric: false, disablePadding: true, label: 'Edit'},
+  { id: 'Edit', numeric: false, disablePadding: true, label: 'Edit'},
   { id: 'Public', numeric: false, disablePadding: true, label: 'Public'},
 ];
 
@@ -42,6 +42,7 @@ export function SpellChartHeader(props) {
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? sortDirection : false}
           >
+            {headCell.id !== 'Tags' && headCell.id !== 'Code' && headCell.id !== 'Edit' ?
             <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? sortDirection : 'asc'}
@@ -54,6 +55,7 @@ export function SpellChartHeader(props) {
                 </span>
               ) : null}
             </TableSortLabel>
+            : headCell.id}
           </TableCell>
         ))}
       </TableRow>

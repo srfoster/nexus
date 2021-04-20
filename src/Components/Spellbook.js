@@ -19,11 +19,8 @@ const Spellbook = (props) => {
   return (
     <Container className={classes.cardGrid} maxWidth="md">
       <Grid container spacing={4}>
-        {props.spells.map((spell) => (
-          <>
-          {/* {setCardImage(cardImage)} */}
-          <Spellcard cardImage={cardImage} spell={spell} key={spell.id}/>
-          </>
+        {props.spells.map((spell) => (  
+          <Spellcard cardImage={cardImage} spell={spell} key={'key ' + spell.id}/>
         ))}
       </Grid>
     </Container>

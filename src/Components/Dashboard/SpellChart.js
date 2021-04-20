@@ -18,15 +18,13 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Tooltip from '@material-ui/core/Tooltip';
 import SpellsApiService from '../../Services/spells-api-service';
-import {textTrim} from '../../Util.js'
+import {textTrim, SearchBar} from '../../Util.js'
 import Pagination from '@material-ui/lab/Pagination';
 import TableContainer from '@material-ui/core/TableContainer';
 import Checkbox from '@material-ui/core/Checkbox';
 import Toolbar from '@material-ui/core/Toolbar';
 import clsx from 'clsx';
 import Typography from '@material-ui/core/Typography';
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
 import Chip from '@material-ui/core/Chip';
 import CodeIcon from '@material-ui/icons/Code';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
@@ -44,7 +42,6 @@ export default function SpellChart(props) {
   const [spellsPerPage, setSpellsPerPage] = React.useState(10);
   const [expanded, setExpanded] = React.useState(false);
   const [selected, setSelected] = React.useState([]);
-  const [searchIcon, setSearchIcon] = React.useState(true)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popText, setPopText] = React.useState('Click To Copy')
   const isSpellSelected = (id) => selected.indexOf(id) !== -1;
@@ -66,10 +63,6 @@ export default function SpellChart(props) {
   const handleClose = () => {
     setOpen(false);
     // setSpellToDelete(undefined);
-  };
-
-  const handleSearchIconClick = () => {
-    setSearchIcon(!searchIcon);
   };
 
   const handleSelectAllClick = (event, id) => {
@@ -127,10 +120,6 @@ export default function SpellChart(props) {
         setSelected([])
       })
   }
-
-  function onSearchIconChange(event) {
-    props.setSearch(event.target.value)
-  }
   
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -140,24 +129,6 @@ export default function SpellChart(props) {
     setAnchorEl(null);
     setPopText('Click To Copy')
   }
-  
-  function SearchAppBar() {
-    return (
-      <>       
-        <InputBase
-          className={clsx(classes.searchField, searchIcon && classes.searchFieldHidden)}
-          placeholder="Search Spells"
-          onChange={onSearchIconChange}
-          inputProps={{ 'aria-label': 'search' }}
-        />
-        <IconButton 
-          onClick={(event) => handleSearchIconClick()}
-        >
-          <SearchIcon />
-        </IconButton>
-      </>
-    )
-  }
 
   return (
     props.spells ?
@@ -166,7 +137,7 @@ export default function SpellChart(props) {
       <div className={classes.headBar}>
         <div className={classes.headLeft}></div>
         <div className={classes.headTitle}>My Spells</div>
-        <div className={classes.headRight}>{SearchAppBar()}</div>
+        <div className={classes.headRight}><SearchBar setSearch={props.setSearch} /></div>
       </div>
 
       <Toolbar
