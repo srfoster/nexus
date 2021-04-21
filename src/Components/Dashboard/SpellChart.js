@@ -133,27 +133,16 @@ export default function SpellChart(props) {
   return (
     props.spells ?
     <React.Fragment>
-
       <div className={classes.headBar}>
         <div className={classes.headLeft}></div>
         <div className={classes.headTitle}>My Spells</div>
         <div className={classes.headRight}><SearchBar setSearch={props.setSearch} /></div>
       </div>
-
       <Toolbar
-        className={clsx(classes.root, {
+        className={clsx(classes.spellChartRoot, {
           [classes.highlight]: selected.length > 0,
         })}
       >
-        {selected.length > 0 ? (
-          <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
-            {selected.length} selected
-          </Typography>
-        ) : (
-          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-          </Typography>
-        )}
-
         {selected.length > 0 ? (
           <>
           <Tooltip title="Delete">
@@ -163,7 +152,6 @@ export default function SpellChart(props) {
               />
             </IconButton>
           </Tooltip>
-
             <Dialog 
               open={open}
               // open={spellToDelete === spell.id}
@@ -191,8 +179,15 @@ export default function SpellChart(props) {
           <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
           </Typography>
         )}
+        {selected.length > 0 ? (
+          <Typography className={classes.title} color="inherit" variant="subtitle1" component="div">
+            {selected.length} selected
+          </Typography>
+        ) : (
+          <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
+          </Typography>
+        )}
       </Toolbar>
-
       <TableContainer className={classes.container}>
         <Table size='small' padding='none' stickyHeader aria-label="sticky table"> 
           <SpellChartHeader
@@ -205,7 +200,6 @@ export default function SpellChart(props) {
             spells={props.spells}
             spellsPerPage={spellsPerPage}
           />
-
           <TableBody>
             {props.spells.map((spell) => (
               <TableRow 
@@ -271,11 +265,9 @@ export default function SpellChart(props) {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                   >
-                    
                     <div className={classes.cardHead}>
                       <DialogTitle id="alert-dialog-title">{`${spell.name}`}</DialogTitle>
                     </div>
-
                     <div className={classes.cardHead}>
                       <TextField
                         size="small"
@@ -318,9 +310,7 @@ export default function SpellChart(props) {
                         <Typography>{popText}</Typography>
                       </Popover>
                     </div>
-
                     <DialogContent className="dialogBox">
-
                       <DialogContentText id="CodeMirror-Display">
                         <CodeMirror
                           className={classes.codeMirror}
@@ -351,7 +341,6 @@ export default function SpellChart(props) {
                       <EditIcon />
                     </IconButton>
                   </TableCell>
-
                   <TableCell className={classes.icons}>
                     <IconButton 
                     id={spell.id} 
@@ -371,7 +360,6 @@ export default function SpellChart(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      
       <Title>
           <div className={classes.pagi}>
             <Pagination count={Math.ceil(props.totalSpells / spellsPerPage)}

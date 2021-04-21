@@ -1,5 +1,5 @@
 import { makeStyles, fade } from '@material-ui/core/styles';
-import clsx from 'clsx';
+import { red } from '@material-ui/core/colors';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -98,19 +98,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
   // ListItems //
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -193,7 +180,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-flex',
     justifyContent: 'flex-end',
   },
-  root: {
+  spellChartRoot: {
     width: '100%',
   },
   table: {
@@ -249,11 +236,6 @@ const useStyles = makeStyles((theme) => ({
   },
 
   // SpellDetails //
-  spellDetailsTitle: {
-    margin: theme.spacing(1),
-    width: '33%',
-    justifyContent: 'left'
-  },
   spellDetailsDescription: {
     margin: theme.spacing(1),
     width: '100%',
@@ -265,20 +247,31 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(2),
     },
   },
-  spellDetailsIcons: {
-    width: '33%',
-    display: 'flex',
-    // justifyContent: "flex-end",
-  },
-  singleIcon:{
-    justifyContent: 'flex-end',
-  },
-  spellDetailsTooltip: {
-    display: 'flex'
-  },
   iconRow: {
     display: 'flex',
     justifyContent: 'center'
+  },
+    spellDetailsTitle: {
+    margin: theme.spacing(1),
+    width: '33%',
+    justifyContent: 'left'
+  },
+  spellDetailsIcons: {
+    width: '33%',
+    display: 'flex',
+    justifyContent: "end",
+  },
+  spellDetailsImage: {
+    display: 'flex',
+    justifyContent: 'center',  
+  },
+  tagField: {
+    width: '33%',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  spellDetailsTooltip: {
+    display: 'flex'
   },
   iconBut: {
     display: 'flex',
@@ -303,9 +296,47 @@ const useStyles = makeStyles((theme) => ({
   spellDetailsLocked: {
     pointerEvents: 'none',
   },
+
+  // Header //
+  headerRoot: {
+    flexGrow: 1,
+  },
+  headerTitle: {
+    flexGrow: 1,
+  },
   
+  // LandingPage //
+  landingIntro: {
+    width: '700px',
+    textAlign: 'center',
+    margin: 'auto',
+  },
+  landingDisplay: {
+    width: '100%',
+    textAlign: 'center',
+  },
+
+  // LoginForm //
+  loginFormPaper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  loginFormAvatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  loginFormForm: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(1),
+  },
+  loginFormSubmit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+
   // PublicSpells //
-  root: {
+  publicSpellsRoot: {
     '& > *': {
       marginTop: theme.spacing(2),
       display: 'flex',
@@ -332,6 +363,110 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-flex',
   },
   headRight: {
+    flexGrow: '1',
+    width: '120px',
+    display: 'inline-flex',
+    justifyContent: 'flex-end',
+  },  
+
+  // SignupForm //
+  signupFormPaper: {
+    marginTop: theme.spacing(8),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  signupFormAvatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+  signupFormForm: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+  signupFormSubmit: {
+    margin: theme.spacing(3, 0, 2),
+  },
+
+  // Spellcard //
+  spellcardExpand: {
+    transform: 'rotate(0deg)',
+    marginLeft: 'auto',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  spellcardExpandOpen: {
+    transform: 'rotate(180deg)',
+  },
+  spellcardAvatar: {
+    backgroundColor: red[500],
+  },
+  spellcardChip: {
+    flexDirection:'row',
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  spellcardCard: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  spellcardCardMedia: {
+    paddingTop: '56.25%', // 16:9
+    color: "blue",
+  },
+  codeMirror: {
+    height: '60vh',
+    width: '29vw',
+  },
+  copy: {
+    justifyContent: 'center',
+    width: '14ch',
+  },
+  cardHead: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  spellcardFooter: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  spellcardPopover: {
+    pointerEvents: 'none',
+  },
+  spellcardPaper: {
+    padding: theme.spacing(1),
+  },
+
+  // UserProfile //
+  userProfileRoot: {
+    '& > *': {
+      marginTop: theme.spacing(2),
+      display: 'flex',
+    justifyContent: 'center',
+    },
+  },
+  userProfileHeadBar: {
+    justifyContent: 'space-between',
+    fontSize: '1.5rem',
+    display: 'inline-flex',
+    width: 'auto',
+    fontFamily: "Roboto",
+    fontWeight: '400',
+    lineHeight: '1.334',
+    letterSpacing: '0em',
+    color: '#3f51b5',
+  },
+  userProfileHeadLeft: {
+    flexGrow: '5',
+    display: 'inline-flex',
+  },
+  userProfileHeadTitle: {
+    flexGrow: '3',
+    display: 'inline-flex',
+  },
+  userProfileHeadRight: {
     flexGrow: '1',
     width: '120px',
     display: 'inline-flex',
