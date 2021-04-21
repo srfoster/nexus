@@ -59,11 +59,11 @@ export function PublicListItems(props) {
       </ListItemIcon>
       <ListItemText primary="My Profile" />
     </ListItem>
-    {/* Twitch Tab
-    <ListItem button
+    {/* Twitch Tab */}
+    {/* <ListItem button
       onClick={() => handleClickButton('/wizards/me')}
       >
-      <ListItemIcon className={classes.twitch}>
+      <ListItemIcon >
       <img src='https://i.imgur.com/O6pTizo.png' alt="TwitchIcon" width="24px"></img>
       </ListItemIcon>
       <ListItemText primary="Twitch" />

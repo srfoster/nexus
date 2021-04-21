@@ -8,22 +8,19 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Header from './Header';
+import useStyles from '../styles.js';
 
 const SignupForm = (props) => {
   const classes = useStyles();
-
   let usernameInput = React.createRef()
   let passwordInput = React.createRef()
   let passConfirmInput = React.createRef()
-
   const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    // const { username, password, passwordVerify } = e.target;
 
     if(passwordInput.current.value !== passConfirmInput.current.value){
       setError("Password do not match");
@@ -35,7 +32,6 @@ const SignupForm = (props) => {
       password: passwordInput.current.value,
     })
       .then(user => {
-        // console.log("New user submitted");
         usernameInput.current.value = ''
         passwordInput.current.value = ''
         passConfirmInput.current.value = ''
@@ -59,14 +55,14 @@ const SignupForm = (props) => {
       />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+        <div className={classes.signupFormPaper}>
+          <Avatar className={classes.signupFormAvatar}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.signupFormForm} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
@@ -106,12 +102,6 @@ const SignupForm = (props) => {
                   inputRef={passConfirmInput}
                 />
               </Grid>
-              {/* <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
-                />
-              </Grid> */}
             </Grid>
             <div role='alert'>
               {error ? <p className='red'>{error}</p> : null}
@@ -121,7 +111,7 @@ const SignupForm = (props) => {
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
+              className={classes.signupFormSubmit}
               onClick={(e) => handleSubmit(e)}
             >
               Sign Up
@@ -149,25 +139,5 @@ SignupForm.defaultProps = {
     push: () => {},
   },
 }
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
 export default SignupForm;

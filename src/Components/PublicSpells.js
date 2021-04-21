@@ -39,7 +39,7 @@ export default function PublicSpells(props) {
       </div>
       <Spellbook spells={spells}/>
       <Title>
-          <div className={classes.root}>
+          <div className={classes.publicSpellsRoot}>
             <Pagination count={Math.ceil(totalSpells / rowsPerPage)}
               onChange={(event ,page ) => {setCurrentPage(page)}}
             />

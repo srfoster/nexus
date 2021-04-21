@@ -44,15 +44,20 @@ export default function SpellDetails(props) {
   const handleClose = (id) => {
     setSpellToDelete(undefined);
   };
-
   const { id } = useParams();
+  
   useEffect(() => {
-
-  SpellsApiService.getSpellById(id)
-    .then(spell => {
-      setSpell(spell)
-      setSpellText(spell.text);
-    })
+    let isMounted = true
+    SpellsApiService.getSpellById(id)
+      .then(spell => {
+        if (isMounted) {
+          setSpell(spell)
+          setSpellText(spell.text);
+        }
+      })
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   const debounce = (func, delay) => {
@@ -192,7 +197,9 @@ export default function SpellDetails(props) {
               debounce(() => updateSpell({...spell, name: event.target.value}), 3000)
             }}
           />
-          <div width="33%"><img src='https://i.imgur.com/VE9Aksf.jpg' alt="Spell Image" width='40%'></img></div>
+          <div className={classes.spellDetailsImage}>
+            <img src='https://i.imgur.com/VE9Aksf.jpg' alt="Spell Image" width='40%'></img>
+          </div>
           {spell.locked ?
             <div className={classes.spellDetailsIcons}>
               <Tooltip title="Spell Locked" placement="top-end">
@@ -202,7 +209,7 @@ export default function SpellDetails(props) {
             :
             <div className={classes.spellDetailsIcons}>
               <Tooltip title="Public status" placement="top-end">
-                <IconButton  className={classes.singleIcon} aria-label="isPublic" onClick={() => {
+                <IconButton  aria-label="isPublic" onClick={() => {
                   setSpell({...spell, is_public: !spell.is_public})
                   debounce(() => updateSpell({...spell, is_public: !spell.is_public}), 3000)
                 }}>
@@ -254,7 +261,6 @@ export default function SpellDetails(props) {
         <p></p>
         <div className={classes.iconRow}>
           <TextField
-            className={classes.spellDetailsTitle}
             placeholder="Tag"
             onKeyUp={handleKeyUp}
             value = {spellTag}

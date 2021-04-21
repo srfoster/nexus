@@ -5,21 +5,18 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Header from './Header';
+import useStyles from '../styles.js';
 
 const LoginForm = (props) => {
   const classes = useStyles();
-
   let usernameInput = React.createRef()
   let passwordInput = React.createRef()
-
   const [error, setError] = useState(null);
 
   const handleSubmitJwtAuth = (e) => {
@@ -53,14 +50,14 @@ const LoginForm = (props) => {
       />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+        <div className={classes.loginFormPaper}>
+          <Avatar className={classes.loginFormAvatar}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.loginFormForm} noValidate>
             <TextField
               variant="outlined"
               margin="normal"
@@ -85,10 +82,6 @@ const LoginForm = (props) => {
               autoComplete="current-password"
               inputRef={passwordInput}
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
             <div role='alert'>
               {error ? <p className='red'>{error}</p> : null}
             </div>
@@ -97,7 +90,7 @@ const LoginForm = (props) => {
               fullWidth
               variant="contained"
               color="primary"
-              className={classes.submit}
+              className={classes.loginFormSubmit}
               onClick={(e) => handleSubmitJwtAuth(e)}
             >
               Sign In
@@ -127,25 +120,5 @@ LoginForm.defaultProps = {
     push: () => {},
   },
 }
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
 
 export default LoginForm;

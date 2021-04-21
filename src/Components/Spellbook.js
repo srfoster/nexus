@@ -6,15 +6,10 @@ import Spellcard from './Spellcard';
 
 const Spellbook = (props) => {
   const classes = useStyles();
-// console.log(props.spells)
 
   const [cardImage, setCardImage] = useState(undefined);
 
   const [spellId, setSpellId] = useState(undefined);
-
-  // useEffect(() => {
-  //   setCardImage("https://source.unsplash.com/random")
-  // }, [])
 
   return (
     <Container className={classes.cardGrid} maxWidth="md">
