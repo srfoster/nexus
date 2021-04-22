@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, Link, useHistory } from "react-router-dom";
 import Header from './Header';
-import TokenService from '../Services/token-service';
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import useStyles from '../styles.js';
 
 const LandingPage = (props) => {
   let history = useHistory();
-
   const classes = useStyles();
 
   // If user has an auth token, send them to dashboard
@@ -27,7 +25,7 @@ const LandingPage = (props) => {
             CodeSpells Spell Sharing
           </h1>
         </div>
-        <div className={classes.intro}>
+        <div className={classes.landingIntro}>
           <p>
             Welcome to the CodeSpells Spell Sharing Server!
           </p>
@@ -58,16 +56,5 @@ const LandingPage = (props) => {
     </>
   );
 }
-const useStyles = makeStyles((theme) => ({
-  intro: {
-    width: '700px',
-    textAlign: 'center',
-    margin: 'auto',
-  },
-  landingDisplay: {
-    width: '100%',
-    textAlign: 'center',
-  }
-}))
 
 export default LandingPage;
