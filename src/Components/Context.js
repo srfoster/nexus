@@ -8,16 +8,13 @@ import SpellsApiService from '../Services/spells-api-service';
 // 1) User specific spells
 // 2) Public spells
 
-
 //Spells
 const SpellContext = React.createContext({});
 
 export function SpellContextProvider(props) {
   let history = useHistory();
-
   const [userSpells, setUserSpells] = useState([])
   const [publicSpells, setPublicSpells] = useState([])
-
   const [spells, setSpells] = useState([])
   
   useEffect(() => {
@@ -33,7 +30,6 @@ export function SpellContextProvider(props) {
 }
 
 export const useSpellContext = () => React.useContext(SpellContext);
-
 
 // Needed user data:
 // Username

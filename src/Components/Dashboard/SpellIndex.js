@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route, Link, useHistory } from "react-router-dom";
-import TokenService from '../../Services/token-service';
-import config from '../../config';
+import { useHistory } from "react-router-dom";
 import SpellChart from './SpellChart';
 import Dashboard from './Dashboard';
 import SpellsApiService from '../../Services/spells-api-service';
@@ -23,7 +21,6 @@ function SpellIndex(props) {
       .catch(() => props.setIsLoggedIn(false))
 
     if(props.isLoggedIn){
-      console.log(orderBy, sortDirection)
       SpellsApiService.getSpellsByUser(history, currentPage, search, sortDirection, orderBy)
         .then(spells => {
           setSpells(spells.spells)
@@ -39,13 +36,11 @@ function SpellIndex(props) {
       })
   }
 
-
   return (
     <Dashboard
       spells={spells}
       setSpells={setSpells}
       createSpell={createSpell}
-
       child={<SpellChart
         setCurrentPage={setCurrentPage}
         setSearch={setSearch}
@@ -55,7 +50,6 @@ function SpellIndex(props) {
         setOrderBy={setOrderBy}
         spells={spells}
         totalSpells={totalSpells}
-        // setSpells={setSpells}
         onChange={(changedSpell) => setSpells(spells.map(spell => changedSpell.id === spell.id ? changedSpell : spell))}
         onDelete={(deletedSpellID) => setSpells(spells.filter(spell => spell.id !== deletedSpellID))}
         setRefresh={setRefresh}
@@ -66,9 +60,7 @@ function SpellIndex(props) {
         clickIcon={createSpell}
       />}
     >
-
     </Dashboard>
-
   )
 }
 

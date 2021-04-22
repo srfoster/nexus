@@ -1,28 +1,17 @@
 /* 3/29/21
 
-  Missing tag code
-
   Seeded loop applies to all tests
   
   Implement server side sorting
   Client side sort query
   Client side search bar
+  SpellChart sort by column on click
 
-  Confirm all password deletion tests and add more as needed
-
-  
-  MySpells first load render error
   Unmounted component errors
 
-  Depopulate extra spells after relevant describe is over
-  Sorting of spell endpoint data
   
   Client side tests
 
-  SpellChart sort by column on click
-
-  Server tag endpoint, don't allow repeat tags
-  
   Option to manually resize SpellChart column widths
 
   Add image feature to spells
