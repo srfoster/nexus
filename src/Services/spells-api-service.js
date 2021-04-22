@@ -42,8 +42,9 @@ const SpellsApiService = {
     .then(res =>
       (!res.ok)
         ? res.json().then(e => {
-          // console.log("Are we there yet?");
           // TODO: Check error message and act accordingly
+          // This is used if use logs out, then immediately hits back to return to /spells
+          // Error message needs to be looked at.
           if (history) history.push('/gallery')
           // return Promise.reject(e)
         })

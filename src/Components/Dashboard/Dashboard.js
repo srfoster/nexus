@@ -45,7 +45,7 @@ function Dashboard(props) {
 
   return (
     isLoggedIn===undefined ?
-    '': isLoggedIn ?
+    '' : isLoggedIn ?
     // >> Private only display <<
     <div className={classes.root}>
       <CssBaseline />
