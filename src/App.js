@@ -38,6 +38,10 @@ function App() {
             component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
           />
           <Route
+            exact path={'/panel.html'}
+            component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
+          />
+          <Route
             path={'/signup'}
             component={SignupForm}
           />

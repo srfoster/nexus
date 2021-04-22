@@ -39,8 +39,8 @@ function Dashboard(props) {
   }, [])
 
   return (
-    isLoggedIn===undefined ?
-    '': isLoggedIn ?
+    isLoggedIn === undefined ?
+    '': 
     // >> Private only display <<
     <div className={classes.dashRoot}>
       <CssBaseline />
@@ -77,7 +77,7 @@ function Dashboard(props) {
         </div>
         <Divider />
         <List>
-          <PublicListItems/>
+          {isLoggedIn ? <PublicListItems/> : <PrivateListItems/>}
         </List>
       </Drawer>
       <main className={classes.content}>
@@ -92,62 +92,10 @@ function Dashboard(props) {
             </Grid>
           </Grid>
           {/* Inserts relevant fab icon by page */}
-          {props.fabIcon}
+          {isLoggedIn ? props.fabIcon : ''}
         </Container>
       </main>
-    </div> :
-    // >> Public display <<
-    <div className={classes.dashRoot}>
-    <CssBaseline />
-    <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-      <Toolbar className={classes.toolbar}>
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          className={clsx(classes.dashMenuButton, open && classes.dashMenuButtonHidden)}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.dashTitle}>
-        </Typography>
-        <Link href='https://codespells.org/index.html' className={classes.link}>
-          <img src={CodeSpells} alt="CodeSpells" width="100%"></img>
-        </Link>
-      </Toolbar>
-    </AppBar>
-    <Drawer
-      variant="permanent"
-      classes={{
-        paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-      }}
-      open={open}
-    >
-      <div className={classes.toolbarIcon}>
-        <IconButton onClick={handleDrawerClose}>
-          <ChevronLeftIcon />
-        </IconButton>
-      </div>
-      <Divider />
-      <List>
-        <PrivateListItems/>
-      </List>
-    </Drawer>
-    <main className={classes.content}>
-      <div className={classes.appBarSpacer} />
-      <Container maxWidth="lg" className={classes.dashContainer}>
-        <Grid container spacing={3}>
-          {/* Spell List */}
-          <Grid item xs={12}>
-            <Paper className={classes.dashPaper}>
-              {props.child}
-            </Paper>
-          </Grid>
-        </Grid>
-      </Container>
-    </main>
-  </div>
+    </div>
   )
 }
 
