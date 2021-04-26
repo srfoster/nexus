@@ -173,7 +173,6 @@ const Spellcard = (props) => {
                   mode: 'scheme',
                   theme: 'material',
                   lineNumbers: true,
-                  readOnly: "nocursor",
                 }}
               />
             </DialogContentText>
