@@ -68,8 +68,8 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  postNewSpell(){
-    return fetch(`${config.API_ENDPOINT}/spells`, {
+  postNewSpell(title){
+    return fetch(`${config.API_ENDPOINT}/spells?title=${title}`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',

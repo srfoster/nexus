@@ -66,7 +66,7 @@ const Spellcard = (props) => {
         //   </IconButton>
         // }
         title={textTrim(props.spell.name, 19)}
-        subheader={new Date(Date.parse(props.spell.date_created)).toLocaleDateString()}
+        subheader={new Date(Date.parse(props.spell.date_modified)).toLocaleDateString()}
       />
         <CardMedia
           className={classes.spellcardCardMedia}
@@ -99,6 +99,7 @@ const Spellcard = (props) => {
             </Tooltip>
           </IconButton>
           {props.spell.locked ? <LockIcon /> : ""}
+
           <IconButton
             className={clsx(classes.spellcardExpand, {
               [classes.spellcardExpandOpen]: expanded,
