@@ -319,7 +319,6 @@ export default function SpellChart(props) {
                             mode: 'scheme',
                             theme: 'material',
                             lineNumbers: true,
-                            readOnly: "nocursor",
                           }}
                         />
                       </DialogContentText>
