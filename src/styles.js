@@ -290,6 +290,10 @@ const useStyles = makeStyles((theme) => ({
   metaTitle: {
     width: '33%',
   },
+  metaID: {
+    width: '33%',
+    textAlign: 'left'
+  },
   spellDetailsCodeMirror: {
     height: '300px',
   },

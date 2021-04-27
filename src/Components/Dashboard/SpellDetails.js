@@ -175,7 +175,7 @@ export default function SpellDetails(props) {
       {spell ?
       <div className={spell.locked ? classes.spellDetailsLocked : ''}>
         <div className={classes.titleRow}>
-          <div className={classes.metaTitle}></div>
+          <div className={classes.metaID}>ID: {spell.id}</div>
           <div className={classes.metaTitle}>
             <Title>
               {spell.name}
@@ -227,7 +227,7 @@ export default function SpellDetails(props) {
           }
         </div>
          {/* Delete Spell dialog confirmation */}
-         <Dialog
+        <Dialog
           open={spellToDelete === spell.id}
           onClose={() => handleClose(spell.id)}
           aria-labelledby="alert-dialog-title"
