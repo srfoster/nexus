@@ -15,9 +15,15 @@ let attachTagsToSpells = async(db, spells) => {
 
 // TODO: Tests for this
 let checkIfLocked = async(db, req, res) => {
+  let idList = req.params.id.split(',')
+  console.log(idList);
+
   let lockedCount = await db('spells')
     .count('id')
-    .where({id: req.params.id, locked: true})
+    .where({locked: true})
+    .andWhere('id', 'in', idList)
+
+  console.log(lockedCount);
   if(lockedCount > 0) {return res.status(401).send({error: "You cannot alter a locked spell. Fork it instead."})}
 }
 
