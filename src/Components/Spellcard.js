@@ -171,6 +171,7 @@ const Spellcard = (props) => {
                 className={classes.codeMirror}
                 value={props.spell.text}
                 options={{
+                  lineWrapping: true,
                   mode: 'scheme',
                   theme: 'material',
                   lineNumbers: true,
