@@ -113,7 +113,7 @@ export default function SpellChart(props) {
   }
 
   function deleteAllSelected() {
-    SpellsApiService.deleteSpell(selected)
+    SpellsApiService.deleteSpells(selected)
       .then(res => {
         // Re-request current page of spells
         props.setRefresh(Math.random())

@@ -103,7 +103,7 @@ export default function SpellDetails(props) {
       })
   }
 
-  function deleteSpell(id){
+  function deleteSpells(id){
 
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'DELETE',
@@ -240,7 +240,7 @@ export default function SpellDetails(props) {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => {handleClose(); deleteSpell(spell.id); history.push('/spells')}} color="secondary">
+            <Button onClick={() => {handleClose(); deleteSpells(spell.id); history.push('/spells')}} color="secondary">
               Delete
             </Button>
             <Button onClick={handleClose} color="primary" autoFocus>

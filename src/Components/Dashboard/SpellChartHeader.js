@@ -29,7 +29,7 @@ export function SpellChartHeader(props) {
         <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < spellsPerPage}
-            checked={spellsPerPage > 0 && numSelected === Math.min(spells.length, spellsPerPage)}
+            checked={spells.length > 0 && numSelected === Math.min(spells.length, spellsPerPage)}
             onChange={onSelectAllClick}
             inputProps={{ 'aria-label': 'select all desserts' }}
           />
