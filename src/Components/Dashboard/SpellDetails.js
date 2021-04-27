@@ -306,6 +306,7 @@ export default function SpellDetails(props) {
             className={classes.spellDetailsCodeMirror}
             value={spellText ? spellText : ''}
             options={{
+              lineWrapping: true,
               mode: 'scheme',
               theme: 'material',
               lineNumbers: true
