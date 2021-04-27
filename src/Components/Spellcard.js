@@ -99,7 +99,7 @@ const Spellcard = (props) => {
             </Tooltip>
           </IconButton>
           {props.spell.locked ? <LockIcon /> : ""}
-
+          ID: {props.spell.id}
           <IconButton
             className={clsx(classes.spellcardExpand, {
               [classes.spellcardExpandOpen]: expanded,
