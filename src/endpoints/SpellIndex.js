@@ -6,8 +6,9 @@ const handleGet = async (req, res) => {
   let searchTerm = req.query.search ? `%${req.query.search}%` : `%%`;
 
   // Should all sorts take the name as a secondary sort by default?
-  let sortQuery = req.query.sort ? req.query.sort : 'name';
-  let sort_direction = req.query.sortDirection ? req.query.sortDirection : 'asc';
+  let sortQuery = req.query.sort ? req.query.sort : 'date_modified';
+  let sort_direction = req.query.sortDirection ? req.query.sortDirection : 'desc';
+  if(sortQuery === 'date_modified') sort_direction = 'desc'; //Sets default as modified and descending
   if(sortQuery === 'created') sortQuery = 'date_created';
   if(sortQuery === 'modified') sortQuery = 'date_modified';
   if(sortQuery === 'public') sortQuery = 'is_public';
@@ -29,8 +30,10 @@ const handleGet = async (req, res) => {
 }
 
 const handlePost = (req, res, next) => {
+  let newTitle = req.query.title ? req.query.title : 'New Spell'
+
   req.app.get('db')('spells')
-  .insert({user_id: req.user.id, name: 'New Spell', description: 'Spell Description',
+  .insert({user_id: req.user.id, name: newTitle, description: 'Spell Description',
             text: '(displayln "Hello")', date_created: new Date(), date_modified: new Date()})
   .returning('*')
   .then((spells) => {
