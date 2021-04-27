@@ -316,6 +316,7 @@ export default function SpellChart(props) {
                           className={classes.codeMirror}
                           value={spell.text}
                           options={{
+                            lineWrapping: true,
                             mode: 'scheme',
                             theme: 'material',
                             lineNumbers: true,
