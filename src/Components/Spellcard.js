@@ -23,6 +23,8 @@ import {textTrim} from '../Util.js'
 import TextField from '@material-ui/core/TextField';
 import LockIcon from '@material-ui/icons/Lock';
 import Popover from '@material-ui/core/Popover';
+import Avatar from '@material-ui/core/Avatar';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import useStyles from '../styles.js';
 
 const Spellcard = (props) => {
