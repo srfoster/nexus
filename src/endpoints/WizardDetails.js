@@ -10,23 +10,35 @@ const handleGet = async (req, res) => {
   let totalSpells = await req.app.get('db')('spells')
     .count('id')
     .where({user_id: userId, is_deleted: false, is_public: true})
-    .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
+    .whereRaw(helpers.spellSearchFields, [searchTerm])
 
   let user = await req.app.get('db')('users')
     .where({id: userId})
     .first()
 
-  let spells = await req.app.get('db')('spells')
-    .where({user_id: userId, is_deleted: false, is_public: true})
-    .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
-    .limit(page_size)
-    .offset(page_size * (page-1))
-    .orderBy(`${sortQuery}`, 'desc')
+  let spells = await req.app.get('db')
+    .raw(`
+      (select * from (select spells.*, string_agg(tags.name, ',') as tags from spells 
+      left join tags on spells.id = tags.spell_id 
+      where spells.user_id = ? and spells.is_deleted = false
+      group by spells.id) as spellsWithTags
+      where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?
+      limit ? offset ?)
+      order by date_modified desc`, 
+      [req.user.id, '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%',
+        page_size, (page_size * (page-1))
+      ]
+    )
+
+  spells = spells.rows
+  spells = spells.map(spell => {
+    spell.tags = spell.tags ? spell.tags.split(',') : []
+    spell.tags = spell.tags.map(tag => {return {id: tag, name: tag}})
+    return spell
+  })
   
   let userData = {...user, spells}
-  // console.log(userData);
 
-  spells = await helpers.attachTagsToSpells(req.app.get('db'), spells)
   delete userData.password
   res.send({...userData, total: Number(totalSpells[0].count)})
 }

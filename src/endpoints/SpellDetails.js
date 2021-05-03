@@ -1,12 +1,13 @@
 const helpers = require('../endpoint-helpers')
+const { requireAuth } = require('../middleware/jwt-auth')
 
 const handleGet = (req, res) => {
   req.app.get('db')('spells')
   .where({user_id: req.user.id, id: req.params.id, is_deleted: false})
   .first()
   .then((displaySpell) => {
-    // delete displaySpell.is_deleted
-    // console.log(displaySpells[0]);
+    delete displaySpell.is_deleted
+    console.log(displaySpell);
 
     req.app.get('db')('tags')
     .where({spell_id: displaySpell.id})
