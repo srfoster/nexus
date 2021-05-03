@@ -1,15 +1,22 @@
 
-//TODO: Fix n+1 query problem
-let attachTagsToSpells = async(db, spells) => {
-    for(let i = 0; i < spells.length; i++){
-      delete spells[i].is_deleted
-      
-      let tags = await db('tags')
-        .where({spell_id: spells[i].id})
-        .orderBy(`name`, 'asc')
+let spellSearchFields = "LOWER(name || id || description) like LOWER(?)"
+let tagSearchFields = "LOWER(name) like LOWER(?)"
 
-      spells[i].tags = tags
-    }
+//TODO: Fix n+1 query problem
+let attachTagsToSpells = async(db, spells, searchTerm) => {
+  // searchTerm = searchTerm ? searchTerm : `%%`;
+
+  for(let i = 0; i < spells.length; i++){
+    delete spells[i].is_deleted
+    
+    let tags = await db('tags')
+      .where({spell_id: spells[i].id})
+      // .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
+      .orderBy(`name`, 'asc')
+
+    spells[i].tags = tags
+  }
+
   return spells
 }
 
@@ -29,5 +36,7 @@ let checkIfLocked = async(db, req, res) => {
 
 module.exports = {
   attachTagsToSpells,
-  checkIfLocked
+  checkIfLocked,
+  spellSearchFields,
+  tagSearchFields
 }
