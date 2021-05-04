@@ -36,8 +36,6 @@ export default function SpellDetails(props) {
   const [spellToDelete, setSpellToDelete] = React.useState(undefined);
   const [value, setValue] = React.useState("");
   const [inputValue, setInputValue] = React.useState('');
-  const [currentDateTime, setCurrentDateTime] = React.useState(Date().toLocaleString());
-  const [savedDate , setSavedDate] = React.useState("");
   let [spellTag, setSpellTag] = useState("");
   
   const handleClickOpen = (id) => {
@@ -103,7 +101,6 @@ export default function SpellDetails(props) {
       .then((spell) => {
         setIsSaving(false)
         setSpell(spell)
-        setSavedDate(Date().toLocaleString())
       })
   }
 
@@ -174,10 +171,6 @@ export default function SpellDetails(props) {
       })
   }
 
-  function getDifferenceInSeconds(date1, date2) {
-    const diffInMs = Math.abs(date2 - date1);
-    return diffInMs / 1000;
-  }
 
   return (
     <>
@@ -193,7 +186,8 @@ export default function SpellDetails(props) {
           <div className={classes.metaSpinner}>
             {isSaving ? <div className={classes.spinner}>
               <CircularProgress size={30} />
-            </div> : <div className={classes.spinner}><CheckIcon /></div>}
+            </div> : <div className={classes.spinner}><CheckIcon />
+            </div>}
           </div>
         </div>
         <p></p>
@@ -321,9 +315,11 @@ export default function SpellDetails(props) {
               lineNumbers: true
             }}
             onChange={(editor, data, value) => {
-              setIsSaving(true)
               setSpell({...spell, text: value})
-              debounce(() => updateSpell({...spell, text: value}), 3000)
+              setIsSaving(true)
+              console.log("Something")
+              debounce(() => updateSpell({...spell, text: value}), 3000
+              )
             }}
           />
         </div>
