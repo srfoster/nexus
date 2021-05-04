@@ -295,7 +295,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'left'
   },
   spellDetailsCodeMirror: {
-    height: '300px',
+    height: '500px',
   },
   spellDetailsLocked: {
     pointerEvents: 'none',
