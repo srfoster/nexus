@@ -12,6 +12,8 @@ import TokenService from '../../Services/token-service';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ListIcon from '@material-ui/icons/List';
+import ViewListIcon from '@material-ui/icons/ViewList';
 import useStyles from '../../styles.js';
 import {TwitchIcon} from '../../Assets/TwitchIcon.png';
 
@@ -30,7 +32,7 @@ export function PublicListItems(props) {
     
     <ListItem button onClick={() => handleClickButton('/spells')}>
       <ListItemIcon>
-        <CodeIcon />
+        <ViewListIcon />
       </ListItemIcon>
       <ListItemText primary="My Spells" />
     </ListItem>

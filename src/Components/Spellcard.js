@@ -26,6 +26,7 @@ import Popover from '@material-ui/core/Popover';
 import Avatar from '@material-ui/core/Avatar';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import useStyles from '../styles.js';
+import Button from '@material-ui/core/Button';
 
 const Spellcard = (props) => {
   const classes = useStyles();
@@ -57,16 +58,20 @@ const Spellcard = (props) => {
     <Grid className={'Card Frame'} item key={'Frame ' + props.spell.id} xs={12} sm={6} md={4}>
       <Card className={classes.spellcardCard}>
       <CardHeader
-        // avatar={
-        //   <Avatar aria-label="recipe" className={classes.spellcardAvatar}>
-        //     R
-        //   </Avatar>
-        // }
-        // action={
-        //   <IconButton aria-label="settings">
-        //     <MoreVertIcon />
-        //   </IconButton>
-        // }
+        avatar={
+          <Tooltip title={`${props.spell.author}`} placement='left'>
+            <Button onClick={() => history.push(`/wizards/${props.spell.user_id}`)}>
+              <Avatar aria-label="recipe" className={classes.spellcardAvatar}>
+                {props.spell.author.slice(0,1).toUpperCase()}
+              </Avatar>
+            </Button>
+          </Tooltip>
+        }
+        action={
+          <IconButton aria-label="settings">
+            {/* <MoreVertIcon /> */}
+          </IconButton>
+        }
         title={textTrim(props.spell.name, 19)}
         subheader={new Date(Date.parse(props.spell.date_modified)).toLocaleDateString()}
       />
