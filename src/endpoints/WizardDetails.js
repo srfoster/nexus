@@ -18,10 +18,11 @@ const handleGet = async (req, res) => {
 
   let spells = await req.app.get('db')
     .raw(`
-      (select * from (select spells.*, string_agg(tags.name, ',') as tags from spells 
+      (select * from (select spells.*, users.username as author, string_agg(tags.name, ',') as tags from spells 
       left join tags on spells.id = tags.spell_id 
+      left join users on users.id = spells.user_id
       where spells.user_id = ? and spells.is_deleted = false
-      group by spells.id) as spellsWithTags
+      group by spells.id, users.username) as spellsWithTags
       where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?
       limit ? offset ?)
       order by date_modified desc`, 
