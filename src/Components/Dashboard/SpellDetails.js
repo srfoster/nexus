@@ -90,7 +90,6 @@ export default function SpellDetails(props) {
 
   const updateSpell = (spell) => {
     setIsSaving(true);
-    console.log('update')
 
     let payload = spell
 
@@ -155,7 +154,6 @@ export default function SpellDetails(props) {
   function handleKeyUp(event) {
     if(event.keyCode === 13 && spellTag) {
         addTagToSpell(spell.id, spellTag)
-        console.log(spellTag)
         setSpellTag("")
     }
   }
@@ -299,9 +297,6 @@ export default function SpellDetails(props) {
               variant="outlined"
               size="small"
               label={t.name}
-              onClick={(event) => {
-                console.log(t.name)
-              }}
               />
             ))}
           </div>
@@ -313,9 +308,6 @@ export default function SpellDetails(props) {
               variant="outlined"
               size="small"
               label={t.name}
-              onClick={(event) => {
-                console.log(t.name)
-              }}
               onDelete={() => removeTagFromSpell(spell.id, t.name)}
               />
             ))}
@@ -338,7 +330,6 @@ export default function SpellDetails(props) {
             onChange={(editor, data, value) => {
               setSpell({...spell, text: value})
               // setIsSaving(true)
-              console.log("Something")
               setTimeout(() => {
                 debounce(() => updateSpell({...spell, text: value}), debounceWait
               )}, 500)
