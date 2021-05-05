@@ -35,18 +35,19 @@ import useStyles from '../../styles.js';
 import { SpellChartHeader } from './SpellChartHeader.js';
 
 export default function SpellChart(props) {
-
   const classes = useStyles();
   let history = useHistory();
+
   const [open, setOpen] = React.useState(false);
   const [spellsPerPage, setSpellsPerPage] = React.useState(10);
   const [expanded, setExpanded] = React.useState(false);
   const [selected, setSelected] = React.useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popText, setPopText] = React.useState('Click To Copy')
+  
   const isSpellSelected = (id) => selected.indexOf(id) !== -1;
   const popoverOpen = Boolean(anchorEl);
- 
+
   const runSpell = (id) => {
     return "!!run " + id
   }

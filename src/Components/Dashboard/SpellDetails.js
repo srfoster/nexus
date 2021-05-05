@@ -36,7 +36,10 @@ export default function SpellDetails(props) {
   const [spellToDelete, setSpellToDelete] = React.useState(undefined);
   const [value, setValue] = React.useState("");
   const [inputValue, setInputValue] = React.useState('');
-  let [spellTag, setSpellTag] = useState("");
+  const [spellTag, setSpellTag] = useState("");
+
+  let debounceWait = 2000;
+  let spinnerShow = 1000;
   
   const handleClickOpen = (id) => {
     setSpellToDelete(id);
@@ -62,6 +65,7 @@ export default function SpellDetails(props) {
   }, [])
 
   const debounce = (func, delay) => {
+    // setIsSaving(true);
     clearTimeout(debounceTimer)
     debounceTimer = setTimeout(() => func(), delay)
   }
@@ -81,7 +85,8 @@ export default function SpellDetails(props) {
   ]
 
   const updateSpell = (spell) => {
-    // setIsSaving(true);
+    setIsSaving(true);
+    console.log('update')
 
     let payload = spell
 
@@ -99,7 +104,8 @@ export default function SpellDetails(props) {
           : res.json()
       )
       .then((spell) => {
-        setIsSaving(false)
+        setTimeout(() => {  setIsSaving(false); }, spinnerShow);
+        // setIsSaving(false)
         setSpell(spell)
       })
   }
@@ -197,7 +203,9 @@ export default function SpellDetails(props) {
             defaultValue={spell.name}
             onChange={(event) => {
               setSpell({...spell, name: event.target.value})
-              debounce(() => updateSpell({...spell, name: event.target.value}), 3000)
+              setTimeout(() => {
+                debounce(() => updateSpell({...spell, name: event.target.value}), debounceWait)
+              },500)
             }}
           />
           <div className={classes.spellDetailsImage}>
@@ -214,7 +222,7 @@ export default function SpellDetails(props) {
               <Tooltip title="Public status" placement="top-end">
                 <IconButton  aria-label="isPublic" onClick={() => {
                   setSpell({...spell, is_public: !spell.is_public})
-                  debounce(() => updateSpell({...spell, is_public: !spell.is_public}), 3000)
+                  debounce(() => updateSpell({...spell, is_public: !spell.is_public}), debounceWait)
                 }}>
                   {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </IconButton>
@@ -257,7 +265,9 @@ export default function SpellDetails(props) {
             defaultValue={spell.description}
             onChange={(event) => {
               setSpell({...spell, description: event.target.value})
-              debounce(() => updateSpell({...spell, description: event.target.value}), 3000)
+              setTimeout(() => {
+                debounce(() => updateSpell({...spell, description: event.target.value}), debounceWait)
+              },500)
             }}
           />
         </div>
@@ -316,10 +326,11 @@ export default function SpellDetails(props) {
             }}
             onChange={(editor, data, value) => {
               setSpell({...spell, text: value})
-              setIsSaving(true)
+              // setIsSaving(true)
               console.log("Something")
-              debounce(() => updateSpell({...spell, text: value}), 3000
-              )
+              setTimeout(() => {
+                debounce(() => updateSpell({...spell, text: value}), debounceWait
+              )}, 500)
             }}
           />
         </div>
