@@ -26,6 +26,9 @@ import Popover from '@material-ui/core/Popover';
 import Avatar from '@material-ui/core/Avatar';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import useStyles from '../styles.js';
+import 'codemirror/addon/edit/matchbrackets.js'
+import 'codemirror/addon/edit/closebrackets.js'
+import 'codemirror/addon/selection/active-line.js'
 
 const Spellcard = (props) => {
   const classes = useStyles();
@@ -177,6 +180,9 @@ const Spellcard = (props) => {
                   mode: 'scheme',
                   theme: 'material',
                   lineNumbers: true,
+                  matchBrackets: true,
+                  autoCloseBrackets: true,
+                  styleActiveLine: true,
                 }}
               />
             </DialogContentText>

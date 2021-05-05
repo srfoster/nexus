@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from "react-router-dom";
 import TokenService from '../../Services/token-service';
 import config from '../../config';
-import {UnControlled as CodeMirror} from 'react-codemirror2';
 import Title from './Title';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -22,6 +21,11 @@ import Chip from '@material-ui/core/Chip';
 import LockIcon from '@material-ui/icons/Lock';
 import useStyles from '../../styles.js';
 import CheckIcon from '@material-ui/icons/Check';
+import CodeMirror from 'codemirror';
+import {UnControlled as ReactCodeMirror} from 'react-codemirror2';
+import 'codemirror/addon/edit/matchbrackets.js'
+import 'codemirror/addon/edit/closebrackets.js'
+import 'codemirror/addon/selection/active-line.js'
 
 let debounceTimer
 
@@ -315,14 +319,17 @@ export default function SpellDetails(props) {
         }
         <p></p> 
         <div className={classes.spellDetailsCodeMirror}>
-          <CodeMirror
+          <ReactCodeMirror
             className={classes.spellDetailsCodeMirror}
             value={spellText ? spellText : ''}
             options={{
               lineWrapping: true,
               mode: 'scheme',
               theme: 'material',
-              lineNumbers: true
+              lineNumbers: true,
+              matchBrackets: true,
+              autoCloseBrackets: true,
+              styleActiveLine: true,
             }}
             onChange={(editor, data, value) => {
               setSpell({...spell, text: value})

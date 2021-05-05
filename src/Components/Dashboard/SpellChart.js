@@ -33,6 +33,9 @@ import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
 import useStyles from '../../styles.js';
 import { SpellChartHeader } from './SpellChartHeader.js';
+import 'codemirror/addon/edit/matchbrackets.js'
+import 'codemirror/addon/edit/closebrackets.js'
+import 'codemirror/addon/selection/active-line.js'
 
 export default function SpellChart(props) {
   const classes = useStyles();
@@ -321,9 +324,13 @@ export default function SpellChart(props) {
                             mode: 'scheme',
                             theme: 'material',
                             lineNumbers: true,
+                            matchBrackets: true,
+                            autoCloseBrackets: true,
+                            styleActiveLine: true,
                           }}
                         />
                       </DialogContentText>
+                      Edited code will not be saved
                     </DialogContent>
                   </Dialog>
                 </TableCell>
