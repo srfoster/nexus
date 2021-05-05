@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, Prompt } from "react-router-dom";
 import TokenService from '../../Services/token-service';
 import config from '../../config';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
@@ -180,6 +180,10 @@ export default function SpellDetails(props) {
 
   return (
     <>
+    <Prompt 
+      when={isSaving}
+      message='Spell is not saved yet'
+    />
       {spell ?
       <div className={spell.locked ? classes.spellDetailsLocked : ''}>
         <div className={classes.titleRow}>
