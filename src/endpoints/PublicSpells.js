@@ -18,10 +18,10 @@ const handleGet = async (req, res) => {
       left join users on users.id = spells.user_id
       where spells.is_deleted = false
       group by spells.id, users.username) as spellsWithTags
-      where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?
+      where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ? or lower(author) like ?
       limit ? offset ?)
       order by date_modified desc`, 
-      ['%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%',
+      ['%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%',
         page_size, (page_size * (page-1))
       ]
     )
