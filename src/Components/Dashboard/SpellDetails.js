@@ -21,6 +21,7 @@ import SpellsApiService from '../../Services/spells-api-service';
 import Chip from '@material-ui/core/Chip';
 import LockIcon from '@material-ui/icons/Lock';
 import useStyles from '../../styles.js';
+import CheckIcon from '@material-ui/icons/Check';
 
 let debounceTimer
 
@@ -35,7 +36,10 @@ export default function SpellDetails(props) {
   const [spellToDelete, setSpellToDelete] = React.useState(undefined);
   const [value, setValue] = React.useState("");
   const [inputValue, setInputValue] = React.useState('');
-  let [spellTag, setSpellTag] = useState("");
+  const [spellTag, setSpellTag] = useState("");
+
+  let debounceWait = 2000;
+  let spinnerShow = 1000;
   
   const handleClickOpen = (id) => {
     setSpellToDelete(id);
@@ -61,6 +65,7 @@ export default function SpellDetails(props) {
   }, [])
 
   const debounce = (func, delay) => {
+    // setIsSaving(true);
     clearTimeout(debounceTimer)
     debounceTimer = setTimeout(() => func(), delay)
   }
@@ -81,6 +86,7 @@ export default function SpellDetails(props) {
 
   const updateSpell = (spell) => {
     setIsSaving(true);
+    console.log('update')
 
     let payload = spell
 
@@ -98,12 +104,13 @@ export default function SpellDetails(props) {
           : res.json()
       )
       .then((spell) => {
-        setIsSaving(false)
+        setTimeout(() => {  setIsSaving(false); }, spinnerShow);
+        // setIsSaving(false)
         setSpell(spell)
       })
   }
 
-  function deleteSpell(id){
+  function deleteSpells(id){
 
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'DELETE',
@@ -170,12 +177,13 @@ export default function SpellDetails(props) {
       })
   }
 
+
   return (
     <>
       {spell ?
       <div className={spell.locked ? classes.spellDetailsLocked : ''}>
         <div className={classes.titleRow}>
-          <div className={classes.metaTitle}></div>
+          <div className={classes.metaID}>ID: {spell.id}</div>
           <div className={classes.metaTitle}>
             <Title>
               {spell.name}
@@ -184,7 +192,8 @@ export default function SpellDetails(props) {
           <div className={classes.metaSpinner}>
             {isSaving ? <div className={classes.spinner}>
               <CircularProgress size={30} />
-            </div> : <div className={classes.spinner}></div>}
+            </div> : <div className={classes.spinner}><CheckIcon />
+            </div>}
           </div>
         </div>
         <p></p>
@@ -194,7 +203,9 @@ export default function SpellDetails(props) {
             defaultValue={spell.name}
             onChange={(event) => {
               setSpell({...spell, name: event.target.value})
-              debounce(() => updateSpell({...spell, name: event.target.value}), 3000)
+              setTimeout(() => {
+                debounce(() => updateSpell({...spell, name: event.target.value}), debounceWait)
+              },500)
             }}
           />
           <div className={classes.spellDetailsImage}>
@@ -211,7 +222,7 @@ export default function SpellDetails(props) {
               <Tooltip title="Public status" placement="top-end">
                 <IconButton  aria-label="isPublic" onClick={() => {
                   setSpell({...spell, is_public: !spell.is_public})
-                  debounce(() => updateSpell({...spell, is_public: !spell.is_public}), 3000)
+                  debounce(() => updateSpell({...spell, is_public: !spell.is_public}), debounceWait)
                 }}>
                   {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
                 </IconButton>
@@ -227,7 +238,7 @@ export default function SpellDetails(props) {
           }
         </div>
          {/* Delete Spell dialog confirmation */}
-         <Dialog
+        <Dialog
           open={spellToDelete === spell.id}
           onClose={() => handleClose(spell.id)}
           aria-labelledby="alert-dialog-title"
@@ -240,7 +251,7 @@ export default function SpellDetails(props) {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => {handleClose(); deleteSpell(spell.id); history.push('/spells')}} color="secondary">
+            <Button onClick={() => {handleClose(); deleteSpells(spell.id); history.push('/spells')}} color="secondary">
               Delete
             </Button>
             <Button onClick={handleClose} color="primary" autoFocus>
@@ -254,7 +265,9 @@ export default function SpellDetails(props) {
             defaultValue={spell.description}
             onChange={(event) => {
               setSpell({...spell, description: event.target.value})
-              debounce(() => updateSpell({...spell, description: event.target.value}), 3000)
+              setTimeout(() => {
+                debounce(() => updateSpell({...spell, description: event.target.value}), debounceWait)
+              },500)
             }}
           />
         </div>
@@ -313,7 +326,11 @@ export default function SpellDetails(props) {
             }}
             onChange={(editor, data, value) => {
               setSpell({...spell, text: value})
-              debounce(() => updateSpell({...spell, text: value}), 3000)
+              // setIsSaving(true)
+              console.log("Something")
+              setTimeout(() => {
+                debounce(() => updateSpell({...spell, text: value}), debounceWait
+              )}, 500)
             }}
           />
         </div>

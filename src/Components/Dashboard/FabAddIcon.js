@@ -5,13 +5,22 @@ import Tooltip from '@material-ui/core/Tooltip';
 import SpellsApiService from '../../Services/spells-api-service';
 import { useHistory } from "react-router-dom";
 import useStyles from '../../styles.js';
+import Haikunator from 'haikunator';
 
 function FabAddIcon(props) {
   const classes = useStyles();
   let history = useHistory();
 
+  var haikunator = new Haikunator()
+
+
   const clickNewSpell = () => {
-    SpellsApiService.postNewSpell()
+    let randomTitle = haikunator.haikunate({tokenLength: 0, delimiter: " "})
+      .split(' ').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
+
+    console.log(randomTitle);
+    
+    SpellsApiService.postNewSpell(randomTitle)
     .then((spell) => {
       history.push(`/spells/${spell.id}`)
     })

@@ -12,9 +12,9 @@ function SpellIndex(props) {
   const [refresh, setRefresh] = useState(0);
   const [search, setSearch] = React.useState('');
   const [sortDirection, setSortDirection] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('name');
+  const [orderBy, setOrderBy] = React.useState('');
   let history = useHistory();
-
+  
   useEffect(() => {
     SpellsApiService.getUserById('me')
       .then((user) => props.setIsLoggedIn(true))

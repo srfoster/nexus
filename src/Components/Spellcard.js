@@ -23,6 +23,8 @@ import {textTrim} from '../Util.js'
 import TextField from '@material-ui/core/TextField';
 import LockIcon from '@material-ui/icons/Lock';
 import Popover from '@material-ui/core/Popover';
+import Avatar from '@material-ui/core/Avatar';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import useStyles from '../styles.js';
 
 const Spellcard = (props) => {
@@ -66,7 +68,7 @@ const Spellcard = (props) => {
         //   </IconButton>
         // }
         title={textTrim(props.spell.name, 19)}
-        subheader={new Date(Date.parse(props.spell.date_created)).toLocaleDateString()}
+        subheader={new Date(Date.parse(props.spell.date_modified)).toLocaleDateString()}
       />
         <CardMedia
           className={classes.spellcardCardMedia}
@@ -99,6 +101,7 @@ const Spellcard = (props) => {
             </Tooltip>
           </IconButton>
           {props.spell.locked ? <LockIcon /> : ""}
+          ID: {props.spell.id}
           <IconButton
             className={clsx(classes.spellcardExpand, {
               [classes.spellcardExpandOpen]: expanded,

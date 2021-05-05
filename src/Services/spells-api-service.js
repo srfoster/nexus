@@ -42,8 +42,9 @@ const SpellsApiService = {
     .then(res =>
       (!res.ok)
         ? res.json().then(e => {
-          // console.log("Are we there yet?");
           // TODO: Check error message and act accordingly
+          // This is used if user logs out, then immediately hits back to return to /spells
+          // Error message needs to be looked at.
           if (history) history.push('/gallery')
           // return Promise.reject(e)
         })
@@ -67,8 +68,8 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  postNewSpell(){
-    return fetch(`${config.API_ENDPOINT}/spells`, {
+  postNewSpell(title){
+    return fetch(`${config.API_ENDPOINT}/spells?title=${title}`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -95,7 +96,7 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  deleteSpell(id){
+  deleteSpells(id){
     id = typeof(id) === 'number' ? id : id.join(',')
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'DELETE',
