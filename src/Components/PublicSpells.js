@@ -28,7 +28,6 @@ export default function PublicSpells(props) {
       isMounted = false
     }
   }, [currentPage, search])
-  // console.log(spells);
 
   return (
     <>
