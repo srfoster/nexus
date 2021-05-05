@@ -35,17 +35,20 @@ const handleGet = async (req, res) => {
     console.log(sort_direction);
   }
 
-  let totalSpells = await req.app.get('db')('spells')
-    .count('id')
-    .where({user_id: req.user.id, is_deleted: false})
-    .whereRaw(helpers.spellSearchFields, [searchTerm])
+  let authoredSpells = await req.app.get('db')('users')
+    .select('users.id', 'users.username as author', 'spells.*')
+    .leftJoin('spells', 'users.id', 'spells.user_id')
+    // .where({'users.id': req.user.id, is_deleted: false})
+
+  // console.log(authoredSpells);
 
   let spells = await req.app.get('db')
     .raw(`
-      (select * from (select spells.*, string_agg(tags.name, ',') as tags from spells 
+      (select * from (select spells.*, users.username as author, string_agg(tags.name, ',') as tags from spells 
       left join tags on spells.id = tags.spell_id 
+      left join users on users.id = spells.user_id
       where spells.user_id = ? and spells.is_deleted = false
-      group by spells.id) as spellsWithTags
+      group by spells.id, users.username) as spellsWithTags
       where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?
       limit ? offset ?)
       order by ${sortQuery ? sortQuery : 'date_modified'} ${sort_direction ? sort_direction : 'desc'}`, 
@@ -61,8 +64,7 @@ const handleGet = async (req, res) => {
     return spell
   })
 
-
-  res.send({spells, total: Number(totalSpells[0].count)})
+  res.send({spells, total: spells.length})
 }
 
 const handlePost = (req, res, next) => {
