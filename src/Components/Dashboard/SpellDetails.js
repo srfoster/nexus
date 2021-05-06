@@ -53,16 +53,20 @@ export default function SpellDetails(props) {
     setSpellToDelete(undefined);
   };
   const { id } = useParams();
+  console.log("pineapple", id)
   
   useEffect(() => {
     let isMounted = true
     SpellsApiService.getSpellById(id)
       .then(spell => {
         if (isMounted) {
+          console.log("spell" , spell)
           setSpell(spell)
           setSpellText(spell.text);
         }
       })
+      .catch(errors => 
+        Console.log("errors" , errors))
     return () => {
       isMounted = false
     }
@@ -90,7 +94,6 @@ export default function SpellDetails(props) {
 
   const updateSpell = (spell) => {
     setIsSaving(true);
-    console.log('update')
 
     let payload = spell
 
@@ -112,6 +115,8 @@ export default function SpellDetails(props) {
         // setIsSaving(false)
         setSpell(spell)
       })
+      .catch(errors => 
+        Console.log("errors" , errors))
   }
 
   function deleteSpells(id){
@@ -128,6 +133,8 @@ export default function SpellDetails(props) {
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       )
+      .catch(errors => 
+        Console.log("errors" , errors))
   }
 
   function addTagToSpell(id,tag){
@@ -149,6 +156,8 @@ export default function SpellDetails(props) {
         setIsSaving(false)
         setSpell({...spell, tags:[...spell.tags, tag]})
       })
+      .catch(errors => 
+        Console.log("errors" , errors))
   }
 
   //Press enter to save tag
@@ -179,6 +188,8 @@ export default function SpellDetails(props) {
           return t.name !== tag_name
         })})
       })
+      .catch(errors => 
+        Console.log("errors" , errors))
   }
 
 
@@ -338,7 +349,6 @@ export default function SpellDetails(props) {
             onChange={(editor, data, value) => {
               setSpell({...spell, text: value})
               // setIsSaving(true)
-              console.log("Something")
               setTimeout(() => {
                 debounce(() => updateSpell({...spell, text: value}), debounceWait
               )}, 500)
