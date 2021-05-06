@@ -1,0 +1,1 @@
+import {SpellDetails} from '../SpellDetails';

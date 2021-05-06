@@ -1,0 +1,1 @@
+import {TagManager} from '../TagManager';

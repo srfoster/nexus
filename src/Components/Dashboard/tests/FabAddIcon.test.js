@@ -1,0 +1,1 @@
+import {FabAddIcon} from '../FabAddIcon';
