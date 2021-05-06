@@ -4,7 +4,7 @@ const handleGet = async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
   let page = req.query.page ? req.query.page : 1;
   let page_size = req.query.page_size ? req.query.page_size : 9;
-  let searchTerm = req.query.search ? `%${req.query.search}%` : `%%`
+  let searchTerm = req.query.search ? `%${req.query.search.toLowerCase()}%` : `%%`
   let sortQuery = req.query.sort ? req.query.sort : 'date_modified'
 
   let totalSpells = await req.app.get('db')
