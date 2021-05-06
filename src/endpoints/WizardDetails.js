@@ -18,7 +18,6 @@ const handleGet = async (req, res) => {
       where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?) as searchedSpells`, 
       [req.user.id, '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%']
     )
-  console.log(totalSpells.rows[0].count);
 
   let user = await req.app.get('db')('users')
     .where({id: userId})
