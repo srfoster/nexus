@@ -72,7 +72,7 @@ const Spellcard = (props) => {
         }
         action={
           <IconButton aria-label="settings">
-            {/* <MoreVertIcon /> */}
+            <MoreVertIcon />
           </IconButton>
         }
         title={textTrim(props.spell.name, 19)}

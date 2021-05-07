@@ -23,7 +23,19 @@ const SpellsApiService = {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
-
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+  getPublicSpellById(id){
+    return fetch(`${config.API_ENDPOINT}/public-spells/${id}`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+      },
     })
       .then(res =>
         (!res.ok)
@@ -120,6 +132,20 @@ const SpellsApiService = {
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
       body: JSON.stringify(payload)
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+  checkForSpellOwnership(spell_id){
+    return fetch(`${config.API_ENDPOINT}/check-ownership/${spell_id}`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
     })
       .then(res =>
         (!res.ok)

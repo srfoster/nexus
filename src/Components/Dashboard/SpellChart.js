@@ -369,12 +369,13 @@ export default function SpellChart(props) {
         </Table>
       </TableContainer>
       <Title>
+        {/* {console.log(props.spells)} */}
           <div className={classes.pagi}>
             <Pagination count={Math.ceil(props.totalSpells / spellsPerPage)}
-            onChange={(event, page) => {
-              props.setCurrentPage(page)
-              setSelected([])
-            }}
+              onChange={(event, page) => {
+                props.setCurrentPage(page)
+                setSelected([])
+              }}
             />
           </div>
       </Title>
