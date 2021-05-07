@@ -40,7 +40,7 @@ const handleGet = async (req, res) => {
     return spell
   })
 
-  res.send({spells, total: totalSpells.rows[0].count})
+  res.send({spells, total: Number(totalSpells.rows[0].count)})
 }
 
 module.exports = {

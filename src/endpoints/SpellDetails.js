@@ -3,11 +3,11 @@ const { requireAuth } = require('../middleware/jwt-auth')
 
 const handleGet = (req, res) => {
   req.app.get('db')('spells')
-  .where({user_id: req.user.id, id: req.params.id, is_deleted: false})
+  .where({id: req.params.id, is_deleted: false})
   .first()
   .then((displaySpell) => {
     delete displaySpell.is_deleted
-    console.log(displaySpell);
+    // console.log(displaySpell);
 
     req.app.get('db')('tags')
     .where({spell_id: displaySpell.id})
@@ -22,7 +22,8 @@ const handleDelete = async (req, res) => {
   await helpers.checkIfLocked(req.app.get('db'), req, res)
 
   req.app.get('db')('spells')
-    .where({user_id: req.user.id}).andWhere('id', 'in', req.params.id.split(','))
+    .where({user_id: req.user.id})
+    .andWhere('id', 'in', req.params.id.split(','))
     .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
     .then((spells) => {
       // console.log('Spells: ', spells);

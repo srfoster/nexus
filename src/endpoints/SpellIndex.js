@@ -32,7 +32,7 @@ const handleGet = async (req, res) => {
       return res.status(400).send({error: "Not an expected sort direction."})
     }
     sort_direction = insecure_sort_direction
-    console.log(sort_direction);
+    // console.log(sort_direction);
   }
 
   let totalSpells = await req.app.get('db')
@@ -69,7 +69,7 @@ const handleGet = async (req, res) => {
     return spell
   })
 
-  res.send({spells, total: totalSpells.rows[0].count})
+  res.send({spells, total: Number(totalSpells.rows[0].count)})
 }
 
 const handlePost = (req, res, next) => {

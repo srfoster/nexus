@@ -78,6 +78,19 @@ app.post(`${epSpellIndex}`, requireAuth, SpellIndex.handlePost)
 // Creates a new spell with the forked spell's information
 app.post(`${epSpellsFork}`, requireAuth, SpellsFork.handlePost)
 
+app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
+  req.app.get('db')('spells')
+    .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})
+    .first()
+    .then((matchingSpell) => {
+      delete matchingSpell.is_deleted
+
+      let boolean = !!matchingSpell
+      // console.log(!!matchingSpell);
+      res.send({userOwnsSpell: boolean})
+    })
+})
+
 app.post(epLogin, handleLogin)
 
 app.post(epSignup, handleSignup)

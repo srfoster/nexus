@@ -48,7 +48,7 @@ const handleGet = async (req, res) => {
   let userData = {...user, spells}
 
   delete userData.password
-  res.send({...userData, total: totalSpells.rows[0].count})
+  res.send({...userData, total: Number(totalSpells.rows[0].count)})
 }
 
 module.exports = {
