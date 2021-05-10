@@ -1,5 +1,5 @@
 import SpellDetails from '../SpellDetails';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen, queryByLabelText, queryByDisplayValue } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { MemoryRouter, Route, useParams, useRouteMatch } from "react-router";
 
@@ -52,13 +52,16 @@ describe('After spell is loaded', () => {
     })
   })
   it('displays the name of spell', async () => {
+     
     await waitFor(() => {
-      expect(screen.getByLabelText('Name')).toBe('value="kevinaaa Storm (Fork) 2"')
+      const spellName = screen.getByLabelText('Name');
+      expect (spellName.value).toBe('kevinaaa Storm (Fork) 2')
     })
   })
   it('displays the description of spell', async () => {
     await waitFor(() => {
-      expect(screen.getByLabelText('Description')).toHaveTextContent('Swirling storm of apples')
+      const spellDescription = screen.getByLabelText('Description')
+      expect (spellDescription.value).toBe('Swirling storm of apples')
     })
   })
   it('displays the codemirror of spell', () => {
@@ -66,9 +69,9 @@ describe('After spell is loaded', () => {
       expect(screen.getByLabelText('text')).toHaveTextContent('(displayln \"Hello\")')
     })
   })
-  it('displays the ID of spell', () => {
-    waitFor(() => {
-      expect(screen.getByText('ID:')).toBeInTheDocument()
+  it('displays the ID of spell', async () => {
+    await waitFor(() => {
+      expect(screen.getByText('ID: 1')).toBeInTheDocument()
     })
   })
   it('displays image of spell', () => {
@@ -85,5 +88,28 @@ describe('After spell is loaded', () => {
       console.log(2)
     })
   })
+  fit("pass functions to matchers", async () => {
+    const classes = { metaID: 1 }
+    const spell = {id: 1}
+    const SpellId = () => (
+      <div className={classes.metaID}>
+        ID: {spell.id}
+      </div>
+    );
+    render(<SpellId />);
+    await waitFor(() => {
+  
+    // These won't match
+    // getByText("Hello world");
+    // getByText(/Hello world/);
+  
+    screen.getByText((content, node) => {
+      const hasText = (node) => node.textContent === "ID: 1";
+      const nodeHasText = hasText(node);
+  
+      return nodeHasText;
+      });
+    });
+  });
 })
 

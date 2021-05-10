@@ -217,6 +217,7 @@ export default function SpellDetails(props) {
         <p></p>
         <div className={classes.iconRow}>
           <TextField className={classes.spellDetailsTitle}
+            id = "spell-details-title"
             label="Name"
             defaultValue={spell.name}
             onChange={(event) => {
@@ -279,6 +280,7 @@ export default function SpellDetails(props) {
         </Dialog>
         <div className={classes.iconRow}>
           <TextField className={classes.spellDetailsDescription}
+            id = "spell-details-description"
             label="Description"
             defaultValue={spell.description}
             onChange={(event) => {
