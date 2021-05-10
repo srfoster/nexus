@@ -26,12 +26,15 @@ import {UnControlled as ReactCodeMirror} from 'react-codemirror2';
 import 'codemirror/addon/edit/matchbrackets.js'
 import 'codemirror/addon/edit/closebrackets.js'
 import 'codemirror/addon/selection/active-line.js'
+import CallSplitIcon from '@material-ui/icons/CallSplit';
+
 
 let debounceTimer
 
 export default function SpellDetails(props) {
   const classes = useStyles();
   let history = useHistory();
+
   const [spell, setSpell] = useState();
   const [isSaving, setIsSaving] = useState(false);
   // FIXME: CodeMirror re-render workaround. Needs revision
@@ -42,6 +45,7 @@ export default function SpellDetails(props) {
   const [inputValue, setInputValue] = React.useState('');
   const [spellTag, setSpellTag] = useState("");
   const [userOwnsSpell, setUserOwnsSpell] = useState()
+  const [error, setError] = useState(null);
 
   let debounceWait = 2000;
   let spinnerShow = 1000;
@@ -53,6 +57,7 @@ export default function SpellDetails(props) {
   const handleClose = (id) => {
     setSpellToDelete(undefined);
   };
+
   const { id } = useParams();
   
   useEffect(() => {
@@ -60,7 +65,6 @@ export default function SpellDetails(props) {
 
     SpellsApiService.checkForSpellOwnership(id)
       .then(res => {
-        // console.log(res.userOwnsSpell);
         setUserOwnsSpell(res.userOwnsSpell)
       })
     
@@ -70,6 +74,9 @@ export default function SpellDetails(props) {
           setSpell(spell)
           setSpellText(spell.text);
         }
+      })
+      .catch(res => {
+        setError(res.error);
       })
 
     return () => {
@@ -189,6 +196,13 @@ export default function SpellDetails(props) {
       })
   }
 
+  const clickForkIcon = (id) => {
+    SpellsApiService.forkSpellById(id)
+    .then((spell) => {
+      history.push(`/spells/${spell.id}`)
+    })
+  }
+
   return (
     <>
     <Prompt 
@@ -238,6 +252,7 @@ export default function SpellDetails(props) {
           <div className={classes.spellDetailsImage}>
             <img src='https://i.imgur.com/VE9Aksf.jpg' alt="Spell Image" width='40%'></img>
           </div>
+          <div className={classes.iconBox}>
           {spell.locked || !userOwnsSpell ?
             <div className={classes.spellDetailsIcons}>
               <Tooltip title="Spell Locked" placement="top-end">
@@ -246,6 +261,11 @@ export default function SpellDetails(props) {
             </div>
             :
             <div className={classes.spellDetailsIcons}>
+              <Tooltip title="Fork Spell" placement="top">
+                <IconButton onClick={() => clickForkIcon(props.spell.id)}>
+                  <CallSplitIcon />
+                </IconButton>
+              </Tooltip>
               <Tooltip title="Public status" placement="top-end">
                 <IconButton  aria-label="isPublic" onClick={() => {
                   setSpell({...spell, is_public: !spell.is_public})
@@ -263,6 +283,7 @@ export default function SpellDetails(props) {
               </Tooltip>
             </div>
           }
+          </div>
         </div>
          {/* Delete Spell dialog confirmation */}
         <Dialog
@@ -308,13 +329,13 @@ export default function SpellDetails(props) {
         <p></p>
         <div className={classes.iconRow}>
           {spell.lock || !userOwnsSpell ?
-            <TextField
+            <TextField className={classes.tagLine}
               placeholder="Tag"
               value = {spellTag}
               label="Spell Tags"
               disabled
             /> :
-            <TextField
+            <TextField className={classes.tagLine}
               placeholder="Tag"
               onKeyUp={handleKeyUp}
               value = {spellTag}
@@ -388,7 +409,10 @@ export default function SpellDetails(props) {
           }
         </div>
       </div>
-      : <div>Spell is loading</div>}
+      :
+      <div role='alert'>
+        {error ? <p className='red'>{error}</p> : null}
+      </div>}
     </>
   );
 }
