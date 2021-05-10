@@ -53,7 +53,6 @@ export default function SpellDetails(props) {
     setSpellToDelete(undefined);
   };
   const { id } = useParams();
-  console.log("pineapple", id)
   
   useEffect(() => {
     let isMounted = true
@@ -66,7 +65,7 @@ export default function SpellDetails(props) {
         }
       })
       .catch(errors => 
-        Console.log("errors" , errors))
+        console.log("useEffect errors" , errors))
     return () => {
       isMounted = false
     }
@@ -116,7 +115,7 @@ export default function SpellDetails(props) {
         setSpell(spell)
       })
       .catch(errors => 
-        Console.log("errors" , errors))
+        console.log("UpdateSpell errors" , errors))
   }
 
   function deleteSpells(id){
@@ -134,7 +133,7 @@ export default function SpellDetails(props) {
           : res.json()
       )
       .catch(errors => 
-        Console.log("errors" , errors))
+        console.log("deleteSpell errors" , errors))
   }
 
   function addTagToSpell(id,tag){
@@ -157,7 +156,7 @@ export default function SpellDetails(props) {
         setSpell({...spell, tags:[...spell.tags, tag]})
       })
       .catch(errors => 
-        Console.log("errors" , errors))
+        console.log("add tag errors" , errors))
   }
 
   //Press enter to save tag
@@ -189,7 +188,7 @@ export default function SpellDetails(props) {
         })})
       })
       .catch(errors => 
-        Console.log("errors" , errors))
+        console.log("remove tag errors" , errors))
   }
 
 
