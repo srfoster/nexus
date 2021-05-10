@@ -3,11 +3,15 @@ const { requireAuth } = require('../middleware/jwt-auth')
 
 const handleGet = (req, res) => {
   req.app.get('db')('spells')
-  .where({id: req.params.id, is_deleted: false})
+  .where({id: req.params.id})
   .first()
   .then((displaySpell) => {
+    if( !displaySpell || displaySpell.is_deleted === true) return res.status(400).send({error: "This spell does not exist."})
     delete displaySpell.is_deleted
-    // console.log(displaySpell);
+
+    if(displaySpell.is_public === false && req.user.id !== displaySpell.user_id) {
+      return res.status(400).send({error: "This is a private spell that you do not own."})
+    }
 
     req.app.get('db')('tags')
     .where({spell_id: displaySpell.id})

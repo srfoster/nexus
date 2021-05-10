@@ -34,7 +34,7 @@ let epLogin = '/login'
 let epSignup = '/signup'
 let epSpellIndex = '/spells'
 let epSpellDetails = '/spells/:id'
-// TODO: update this endpoint 
+// TODO: update this endpoint
 let epPublicSpellDetails = '/secret/:id'
 let epPublicSpells = '/gallery'
 let epWizardDetails = '/wizards/:id'

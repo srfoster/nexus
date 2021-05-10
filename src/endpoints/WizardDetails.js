@@ -16,7 +16,7 @@ const handleGet = async (req, res) => {
       where spells.user_id = ? and spells.is_deleted = false and spells.is_public = true
       group by spells.id, users.username) as spellsWithTags
       where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?) as searchedSpells`, 
-      [req.user.id, '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%']
+      [userId, '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%']
     )
 
   let user = await req.app.get('db')('users')
