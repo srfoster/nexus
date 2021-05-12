@@ -59,7 +59,7 @@ export default function SpellDetails(props) {
     SpellsApiService.getSpellById(id)
       .then(spell => {
         if (isMounted) {
-          console.log("spell" , spell)
+          // console.log("spell" , spell)
           setSpell(spell)
           setSpellText(spell.text);
         }
@@ -243,7 +243,7 @@ export default function SpellDetails(props) {
                   setSpell({...spell, is_public: !spell.is_public})
                   debounce(() => updateSpell({...spell, is_public: !spell.is_public}), debounceWait)
                 }}>
-                  {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  {spell.is_public ? <VisibilityIcon id='yes'/> : <VisibilityOffIcon id='no'/>}
                 </IconButton>
               </Tooltip>
               <Tooltip title="Delete" placement="top-end">
