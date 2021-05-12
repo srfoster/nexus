@@ -1,8 +1,9 @@
 import SpellDetails from '../SpellDetails';
-import { render, fireEvent, waitFor, screen, queryByLabelText, queryByDisplayValue } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen, queryByLabelText, queryByDisplayValue, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { MemoryRouter, Route, useParams, useRouteMatch } from "react-router";
 
+//codemirror was had a function that was looking for a range and this was a fix 
 document.createRange = () => {
   const range = new Range();
 
@@ -20,6 +21,7 @@ document.createRange = () => {
 }
 
 describe('When SpellDetail first renders', () => {
+  //beforeEach adds all these paths before each it block 
   beforeEach(() => {
     render(
       <MemoryRouter initialEntries={["/spells/1"]}>
@@ -64,9 +66,10 @@ describe('After spell is loaded', () => {
       expect (spellDescription.value).toBe('Swirling storm of apples')
     })
   })
-  it('displays the codemirror of spell', () => {
-    waitFor(() => {
-      expect(screen.getByLabelText('text')).toHaveTextContent('(displayln \"Hello\")')
+  it('displays the codemirror of spell', async () => {
+    await waitFor(() => {
+      // expect(screen.getByLabelText('text')).toHaveTextContent('(displayln \"Hello\")')
+      expect(screen.getByText('displayln \"Hello\"')).toBeInTheDocument()
     })
   })
   it('displays the ID of spell', async () => {
@@ -74,42 +77,50 @@ describe('After spell is loaded', () => {
       expect(screen.getByText('ID: 1')).toBeInTheDocument()
     })
   })
-  it('displays image of spell', () => {
-    waitFor(() => {
+  it('displays image of spell', async () => {
+    await waitFor(() => {
       expect(screen.getByAltText('Spell Image')).toBeInTheDocument()
     })
   })
-  it('displays changes the public visibility of spell', () => {
-    console.log(3)
-    waitFor(() => {
-      fireEvent.click(screen.getByLabelText('isPublic'))
-      console.log(1)
-      expect(screen.getByLabelText('isPublic')).toBe()
-      console.log(2)
+  it('displays changes the public visibility of spell', async() => {
+    const mockOnClick = jest.fn()
+    await waitFor(async () => {
+      await fireEvent.click(screen.getByRole('button', { name: /ispublic/i }), mockOnClick())
+      // await expect(screen.getByRole('button', { name: /ispublic/i })).toBeCalled()
+      await expect(mockOnClick).toBeCalledTimes(1)
     })
   })
-  fit("pass functions to matchers", async () => {
-    const classes = { metaID: 1 }
-    const spell = {id: 1}
-    const SpellId = () => (
-      <div className={classes.metaID}>
-        ID: {spell.id}
-      </div>
-    );
-    render(<SpellId />);
-    await waitFor(() => {
+  it('displays dialog box to confirm delete of spell', async() => {
+    const mockOnClick = jest.fn()
+    await waitFor(async () => {
+      await fireEvent.click(screen.getByRole('button', { name: /delete/i }), mockOnClick(1))
+      await expect(mockOnClick).toBeCalledTimes(1)
+    })
+  })
+
+
+  // it("pass functions to matchers", async () => {
+  //   const classes = { metaID: 1 }
+  //   const spell = {id: 1}
+  //   const SpellId = () => (
+  //     <div className={classes.metaID}>
+  //       ID: {spell.id}
+  //     </div>
+  //   );
+  //   render(<SpellId />);
+  //   await waitFor(() => {
   
-    // These won't match
-    // getByText("Hello world");
-    // getByText(/Hello world/);
+  //   // These won't match
+  //   // getByText("Hello world");
+  //   // getByText(/Hello world/);
   
-    screen.getByText((content, node) => {
-      const hasText = (node) => node.textContent === "ID: 1";
-      const nodeHasText = hasText(node);
+  //   screen.getByText((content, node) => {
+  //     const hasText = (node) => node.textContent === "ID: 1";
+  //     const nodeHasText = hasText(node);
   
-      return nodeHasText;
-      });
-    });
-  });
+  //     return nodeHasText;
+  //     });
+  //   });
+  // });
 })
 
