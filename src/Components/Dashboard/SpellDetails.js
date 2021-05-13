@@ -59,6 +59,7 @@ export default function SpellDetails(props) {
   };
 
   const { id } = useParams();
+  const path = window.location.pathname;
   
   useEffect(() => {
     let isMounted = true
@@ -83,7 +84,7 @@ export default function SpellDetails(props) {
       isMounted = false
     }
 
-  }, [])
+  }, [path])
 
   const debounce = (func, delay) => {
     // setIsSaving(true);
@@ -197,9 +198,12 @@ export default function SpellDetails(props) {
   }
 
   const clickForkIcon = (id) => {
+    // console.log("Before API ", id);
     SpellsApiService.forkSpellById(id)
     .then((spell) => {
       history.push(`/spells/${spell.id}`)
+      // console.log("After history ", spell.id);
+      // console.log(object);
     })
   }
 
