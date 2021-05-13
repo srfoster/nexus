@@ -6,8 +6,7 @@ const handlePost = async (req, res, next) =>{
 
   // console.log(req.body)
   let displaySpell = await req.app.get('db')('spells')
-  //FIXME: currently blocks all private spells, even if owned by that user
-  .where({id: req.params.id, is_public: true})
+  .where({id: req.params.id})
   .first()
 
   if(displaySpell){
