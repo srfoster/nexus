@@ -255,14 +255,21 @@ export default function SpellDetails(props) {
           <div className={classes.iconBox}>
           {spell.locked || !userOwnsSpell ?
             <div className={classes.spellDetailsIcons}>
-              <Tooltip title="Spell Locked" placement="top-end">
-                <LockIcon />
+              <Tooltip title="Spell Locked" placement="top">
+                <IconButton>    
+                  <LockIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Fork Spell" placement="top-end">
+                <IconButton onClick={() => clickForkIcon(spell.id)}>
+                  <CallSplitIcon />
+                </IconButton>
               </Tooltip>
             </div>
             :
             <div className={classes.spellDetailsIcons}>
               <Tooltip title="Fork Spell" placement="top">
-                <IconButton onClick={() => clickForkIcon(props.spell.id)}>
+                <IconButton onClick={() => clickForkIcon(spell.id)}>
                   <CallSplitIcon />
                 </IconButton>
               </Tooltip>
@@ -275,7 +282,7 @@ export default function SpellDetails(props) {
                 </IconButton>
               </Tooltip>
               <Tooltip title="Delete" placement="top-end">
-                <IconButton className={classes.singleIcon} aria-label="delete"
+                <IconButton  aria-label="delete"
                   onClick={() => handleClickOpen(spell.id)}
                 >
                   <DeleteForeverIcon />
@@ -306,8 +313,8 @@ export default function SpellDetails(props) {
               Keep
             </Button>
           </DialogActions>
-        </Dialog>
-        <div className={classes.iconRow}>
+          </Dialog>
+          <div className={classes.iconRow}>
           {spell.locked || !userOwnsSpell ? 
             <TextField className={classes.spellDetailsDescription}
               label="Description"
