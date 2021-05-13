@@ -26,12 +26,15 @@ import {UnControlled as ReactCodeMirror} from 'react-codemirror2';
 import 'codemirror/addon/edit/matchbrackets.js'
 import 'codemirror/addon/edit/closebrackets.js'
 import 'codemirror/addon/selection/active-line.js'
+import CallSplitIcon from '@material-ui/icons/CallSplit';
+
 
 let debounceTimer
 
 export default function SpellDetails(props) {
   const classes = useStyles();
   let history = useHistory();
+
   const [spell, setSpell] = useState();
   const [isSaving, setIsSaving] = useState(false);
   // FIXME: CodeMirror re-render workaround. Needs revision
@@ -41,6 +44,8 @@ export default function SpellDetails(props) {
   const [value, setValue] = React.useState("");
   const [inputValue, setInputValue] = React.useState('');
   const [spellTag, setSpellTag] = useState("");
+  const [userOwnsSpell, setUserOwnsSpell] = useState()
+  const [error, setError] = useState(null);
 
   let debounceWait = 2000;
   let spinnerShow = 1000;
@@ -52,10 +57,17 @@ export default function SpellDetails(props) {
   const handleClose = (id) => {
     setSpellToDelete(undefined);
   };
+
   const { id } = useParams();
   
   useEffect(() => {
     let isMounted = true
+
+    SpellsApiService.checkForSpellOwnership(id)
+      .then(res => {
+        setUserOwnsSpell(res.userOwnsSpell)
+      })
+    
     SpellsApiService.getSpellById(id)
       .then(spell => {
         if (isMounted) {
@@ -64,11 +76,14 @@ export default function SpellDetails(props) {
           setSpellText(spell.text);
         }
       })
-      .catch(errors => 
-        console.log("useEffect errors" , errors))
+      .catch(res => {
+        setError(res.error);
+      })
+
     return () => {
       isMounted = false
     }
+
   }, [])
 
   const debounce = (func, delay) => {
@@ -163,7 +178,6 @@ export default function SpellDetails(props) {
   function handleKeyUp(event) {
     if(event.keyCode === 13 && spellTag) {
         addTagToSpell(spell.id, spellTag)
-        console.log(spellTag)
         setSpellTag("")
     }
   }
@@ -191,6 +205,12 @@ export default function SpellDetails(props) {
         console.log("remove tag errors" , errors))
   }
 
+  const clickForkIcon = (id) => {
+    SpellsApiService.forkSpellById(id)
+    .then((spell) => {
+      history.push(`/spells/${spell.id}`)
+    })
+  }
 
   return (
     <>
@@ -208,29 +228,43 @@ export default function SpellDetails(props) {
             </Title>
           </div>
           <div className={classes.metaSpinner}>
-            {isSaving ? <div className={classes.spinner}>
-              <CircularProgress size={30} />
-            </div> : <div className={classes.spinner}><CheckIcon />
-            </div>}
+            {spell.locked || !userOwnsSpell ?
+              '' :
+              isSaving ? 
+                <div className={classes.spinner}>
+                  <CircularProgress size={30} />
+                </div> : 
+                <div className={classes.spinner}><CheckIcon />
+                </div>
+            }
           </div>
         </div>
         <p></p>
         <div className={classes.iconRow}>
-          <TextField className={classes.spellDetailsTitle}
-            id = "spell-details-title"
-            label="Name"
-            defaultValue={spell.name}
-            onChange={(event) => {
-              setSpell({...spell, name: event.target.value})
-              setTimeout(() => {
-                debounce(() => updateSpell({...spell, name: event.target.value}), debounceWait)
-              },500)
-            }}
-          />
+          {spell.locked || !userOwnsSpell ? 
+            <TextField className={classes.spellDetailsTitle}
+              id = "spell-details-title"
+              label="Name"
+              defaultValue={spell.name}
+              disabled
+            /> :
+            <TextField className={classes.spellDetailsTitle}
+              id = "spell-details-title-owns"
+              label="Name"
+              defaultValue={spell.name}
+              onChange={(event) => {
+                setSpell({...spell, name: event.target.value})
+                setTimeout(() => {
+                  debounce(() => updateSpell({...spell, name: event.target.value}), debounceWait)
+                },500)
+              }}
+            />
+          }
           <div className={classes.spellDetailsImage}>
             <img src='https://i.imgur.com/VE9Aksf.jpg' alt="Spell Image" width='40%'></img>
           </div>
-          {spell.locked ?
+          <div className={classes.iconBox}>
+          {spell.locked || !userOwnsSpell ?
             <div className={classes.spellDetailsIcons}>
               <Tooltip title="Spell Locked" placement="top-end">
                 <LockIcon />
@@ -238,6 +272,11 @@ export default function SpellDetails(props) {
             </div>
             :
             <div className={classes.spellDetailsIcons}>
+              <Tooltip title="Fork Spell" placement="top">
+                <IconButton onClick={() => clickForkIcon(props.spell.id)}>
+                  <CallSplitIcon />
+                </IconButton>
+              </Tooltip>
               <Tooltip title="Public status" placement="top-end">
                 <IconButton  aria-label="isPublic" onClick={() => {
                   setSpell({...spell, is_public: !spell.is_public})
@@ -255,6 +294,7 @@ export default function SpellDetails(props) {
               </Tooltip>
             </div>
           }
+          </div>
         </div>
          {/* Delete Spell dialog confirmation */}
         <Dialog
@@ -279,31 +319,47 @@ export default function SpellDetails(props) {
           </DialogActions>
         </Dialog>
         <div className={classes.iconRow}>
-          <TextField className={classes.spellDetailsDescription}
-            id = "spell-details-description"
-            label="Description"
-            defaultValue={spell.description}
-            onChange={(event) => {
-              setSpell({...spell, description: event.target.value})
-              setTimeout(() => {
-                debounce(() => updateSpell({...spell, description: event.target.value}), debounceWait)
-              },500)
-            }}
-          />
+          {spell.locked || !userOwnsSpell ? 
+            <TextField className={classes.spellDetailsDescription}
+              id = "spell-details-description"
+              label="Description"
+              defaultValue={spell.description}
+              disabled
+            />:
+            <TextField className={classes.spellDetailsDescription}
+              id = "spell-details-description-owns"
+              label="Description"
+              defaultValue={spell.description}
+              onChange={(event) => {
+                setSpell({...spell, description: event.target.value})
+                setTimeout(() => {
+                  debounce(() => updateSpell({...spell, description: event.target.value}), debounceWait)
+                },500)
+              }}
+            />
+          }
         </div>
         <p></p>
         <div className={classes.iconRow}>
-          <TextField
-            placeholder="Tag"
-            onKeyUp={handleKeyUp}
-            value = {spellTag}
-            label="Spell Tags"
-            onChange={(event) => {
-              setSpellTag(event.target.value)
-            }}
-          />
+          {spell.lock || !userOwnsSpell ?
+            <TextField className={classes.tagLine}
+              placeholder="Tag"
+              value = {spellTag}
+              label="Spell Tags"
+              disabled
+            /> :
+            <TextField className={classes.tagLine}
+              placeholder="Tag"
+              onKeyUp={handleKeyUp}
+              value = {spellTag}
+              label="Spell Tags"
+              onChange={(event) => {
+                setSpellTag(event.target.value)
+              }}
+            />
+          }
         </div>
-        {spell.locked ? 
+        {spell.locked || !userOwnsSpell ? 
           <div className={classes.icon}>
             {spell.tags.map(t => (
               <Chip
@@ -311,9 +367,6 @@ export default function SpellDetails(props) {
               variant="outlined"
               size="small"
               label={t.name}
-              onClick={(event) => {
-                console.log(t.name)
-              }}
               />
             ))}
           </div>
@@ -325,9 +378,6 @@ export default function SpellDetails(props) {
               variant="outlined"
               size="small"
               label={t.name}
-              onClick={(event) => {
-                console.log(t.name)
-              }}
               onDelete={() => removeTagFromSpell(spell.id, t.name)}
               />
             ))}
@@ -335,29 +385,47 @@ export default function SpellDetails(props) {
         }
         <p></p> 
         <div className={classes.spellDetailsCodeMirror}>
-          <ReactCodeMirror
-            className={classes.spellDetailsCodeMirror}
-            value={spellText ? spellText : ''}
-            options={{
-              lineWrapping: true,
-              mode: 'scheme',
-              theme: 'material',
-              lineNumbers: true,
-              matchBrackets: true,
-              autoCloseBrackets: true,
-              styleActiveLine: true,
-            }}
-            onChange={(editor, data, value) => {
-              setSpell({...spell, text: value})
-              // setIsSaving(true)
-              setTimeout(() => {
-                debounce(() => updateSpell({...spell, text: value}), debounceWait
-              )}, 500)
-            }}
-          />
+          {spell.locked || !userOwnsSpell ?
+            <ReactCodeMirror
+              className={classes.spellDetailsCodeMirror}
+              value={spellText ? spellText : ''}
+              options={{
+                lineWrapping: true,
+                mode: 'scheme',
+                theme: 'material',
+                lineNumbers: true,
+                matchBrackets: true,
+                autoCloseBrackets: true,
+                styleActiveLine: true,
+              }}
+            /> :
+            <ReactCodeMirror
+              className={classes.spellDetailsCodeMirror}
+              value={spellText ? spellText : ''}
+              options={{
+                lineWrapping: true,
+                mode: 'scheme',
+                theme: 'material',
+                lineNumbers: true,
+                matchBrackets: true,
+                autoCloseBrackets: true,
+                styleActiveLine: true,
+              }}
+              onChange={(editor, data, value) => {
+                setSpell({...spell, text: value})
+                // setIsSaving(true)
+                setTimeout(() => {
+                  debounce(() => updateSpell({...spell, text: value}), debounceWait
+                )}, 500)
+              }}
+            />
+          }
         </div>
       </div>
-      : <div>Spell is loading</div>}
+      :
+      <div role='alert'>
+        {error ? <p className='red'>{error}</p> : null}
+      </div>}
     </>
   );
 }

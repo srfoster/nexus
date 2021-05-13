@@ -27,7 +27,7 @@ function SpellIndex(props) {
           setTotalSpells(spells.total)
         })
     }
-  }, [currentPage, refresh, search, sortDirection, orderBy])
+  }, [currentPage, refresh, search, sortDirection, orderBy, props, history])
 
   function createSpell(event) {
     SpellsApiService.postNewSpell()

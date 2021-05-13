@@ -13,6 +13,8 @@ const UserProfile = (props) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = React.useState('');
 
+  let path = window.location.pathname
+
   useEffect(() => {
     let isMounted = true
     const { id } = props.match.params
@@ -24,7 +26,7 @@ const UserProfile = (props) => {
       return () => {
         isMounted = false
       }
-  },[currentPage, search])
+  },[currentPage, search, path])
 
   return (
     user ?
@@ -34,14 +36,14 @@ const UserProfile = (props) => {
           <div className={classes.userProfileHeadTitle}>{`Spellbook of ${user.username}`}</div>
           <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
         </div>
+
         <Spellbook spells={user.spells}/>
-        <Title>
-            <div className={classes.userProfileRoot}>
-              <Pagination count={Math.ceil(user.total / rowsPerPage)}
-                onChange={(event ,page ) => {setCurrentPage(page)}}
-              />
-            </div>
-        </Title>
+        
+        <div className={classes.userProfileRoot}>
+          <Pagination count={Math.ceil(user.total / rowsPerPage)}
+            onChange={(event, page) => {setCurrentPage(page)}}
+          />
+        </div>
       </>
     : ''
   );

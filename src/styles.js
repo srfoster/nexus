@@ -174,6 +174,11 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: '3',
     display: 'inline-flex',
   },
+  headTitle101: {
+    flexGrow: '3',
+    display: 'inline-flex',
+    fontWeight: '400px' ,
+  },
   headRight: {
     flexGrow: '1',
     width: '120px',
@@ -249,7 +254,7 @@ const useStyles = makeStyles((theme) => ({
   },
   iconRow: {
     display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'flex-start',
   },
     spellDetailsTitle: {
     margin: theme.spacing(1),
@@ -261,6 +266,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: "end",
   },
+  nameImageIcons: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    width: '33%'
+  },
+  iconBox: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    width: '33%',
+    height: '20%'
+  },
   spellDetailsImage: {
     display: 'flex',
     justifyContent: 'center',  
@@ -269,6 +285,9 @@ const useStyles = makeStyles((theme) => ({
     width: '33%',
     display: 'flex',
     justifyContent: 'center',
+  },
+  tagLine: {
+    margin: '8px'
   },
   spellDetailsTooltip: {
     display: 'flex'
@@ -476,6 +495,11 @@ const useStyles = makeStyles((theme) => ({
     display: 'inline-flex',
     justifyContent: 'flex-end',
   },
+
+  // List Items
+  listIcon: {
+    backgroundColor: 'rgb(100,149,237)',
+  }
 }));
 
 export default useStyles

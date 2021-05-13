@@ -368,16 +368,15 @@ export default function SpellChart(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Title>
-          <div className={classes.pagi}>
-            <Pagination count={Math.ceil(props.totalSpells / spellsPerPage)}
+      {/* {console.log(props.spells)} */}
+        <div className={classes.pagi}>
+          <Pagination count={Math.ceil(props.totalSpells / spellsPerPage)}
             onChange={(event, page) => {
               props.setCurrentPage(page)
               setSelected([])
             }}
-            />
-          </div>
-      </Title>
+          />
+        </div>
     </React.Fragment>
     : ''
   );

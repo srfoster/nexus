@@ -29,6 +29,7 @@ export function SearchBar(props) {
   
   function onSearchIconChange(event) {
     props.setSearch(event.target.value)
+    props.setCurrentPage(1)
   }
 
   return (
