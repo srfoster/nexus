@@ -23,7 +23,19 @@ const SpellsApiService = {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
-
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+  getPublicSpellById(id){
+    return fetch(`${config.API_ENDPOINT}/public-spells/${id}`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+      },
     })
       .then(res =>
         (!res.ok)
@@ -42,8 +54,9 @@ const SpellsApiService = {
     .then(res =>
       (!res.ok)
         ? res.json().then(e => {
-          // console.log("Are we there yet?");
           // TODO: Check error message and act accordingly
+          // This is used if user logs out, then immediately hits back to return to /spells
+          // Error message needs to be looked at.
           if (history) history.push('/gallery')
           // return Promise.reject(e)
         })
@@ -67,8 +80,8 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  postNewSpell(){
-    return fetch(`${config.API_ENDPOINT}/spells`, {
+  postNewSpell(title){
+    return fetch(`${config.API_ENDPOINT}/spells?title=${title}`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -95,7 +108,7 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  deleteSpell(id){
+  deleteSpells(id){
     id = typeof(id) === 'number' ? id : id.join(',')
     return fetch(`${config.API_ENDPOINT}/spells/${id}`, {
       method: 'DELETE',
@@ -119,6 +132,20 @@ const SpellsApiService = {
         'authorization': `bearer ${TokenService.getAuthToken()}`,
       },
       body: JSON.stringify(payload)
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+  checkForSpellOwnership(spell_id){
+    return fetch(`${config.API_ENDPOINT}/check-ownership/${spell_id}`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
     })
       .then(res =>
         (!res.ok)

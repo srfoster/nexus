@@ -33,20 +33,24 @@ import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
 import useStyles from '../../styles.js';
 import { SpellChartHeader } from './SpellChartHeader.js';
+import 'codemirror/addon/edit/matchbrackets.js'
+import 'codemirror/addon/edit/closebrackets.js'
+import 'codemirror/addon/selection/active-line.js'
 
 export default function SpellChart(props) {
-
   const classes = useStyles();
   let history = useHistory();
+
   const [open, setOpen] = React.useState(false);
   const [spellsPerPage, setSpellsPerPage] = React.useState(10);
   const [expanded, setExpanded] = React.useState(false);
   const [selected, setSelected] = React.useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popText, setPopText] = React.useState('Click To Copy')
+  
   const isSpellSelected = (id) => selected.indexOf(id) !== -1;
   const popoverOpen = Boolean(anchorEl);
- 
+
   const runSpell = (id) => {
     return "!!run " + id
   }
@@ -113,7 +117,7 @@ export default function SpellChart(props) {
   }
 
   function deleteAllSelected() {
-    SpellsApiService.deleteSpell(selected)
+    SpellsApiService.deleteSpells(selected)
       .then(res => {
         // Re-request current page of spells
         props.setRefresh(Math.random())
@@ -320,9 +324,13 @@ export default function SpellChart(props) {
                             mode: 'scheme',
                             theme: 'material',
                             lineNumbers: true,
+                            matchBrackets: true,
+                            autoCloseBrackets: true,
+                            styleActiveLine: true,
                           }}
                         />
                       </DialogContentText>
+                      Edited code will not be saved
                     </DialogContent>
                   </Dialog>
                 </TableCell>
@@ -360,16 +368,15 @@ export default function SpellChart(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Title>
-          <div className={classes.pagi}>
-            <Pagination count={Math.ceil(props.totalSpells / spellsPerPage)}
-            onChange={(event ,page ) => {
+      {/* {console.log(props.spells)} */}
+        <div className={classes.pagi}>
+          <Pagination count={Math.ceil(props.totalSpells / spellsPerPage)}
+            onChange={(event, page) => {
               props.setCurrentPage(page)
               setSelected([])
             }}
-            />
-          </div>
-      </Title>
+          />
+        </div>
     </React.Fragment>
     : ''
   );

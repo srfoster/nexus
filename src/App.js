@@ -38,6 +38,10 @@ function App() {
             component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
           />
           <Route
+            exact path={'/panel.html'}
+            component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
+          />
+          <Route
             path={'/signup'}
             component={SignupForm}
           />
@@ -48,7 +52,7 @@ function App() {
           <Route
             path={'/spells/:id'}
             // component={SpellDetails}
-            component={(props) => <Dashboard child={<SpellDetails/>}></Dashboard>}
+            component={(props) => <Dashboard child={<SpellDetails/>} isLoggedIn={isLoggedIn}></Dashboard>}
           />
           <Route
             path={'/spells'}

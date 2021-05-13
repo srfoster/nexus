@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -12,6 +12,8 @@ import TokenService from '../../Services/token-service';
 import PersonIcon from '@material-ui/icons/Person';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ListIcon from '@material-ui/icons/List';
+import ViewListIcon from '@material-ui/icons/ViewList';
 import useStyles from '../../styles.js';
 import {TwitchIcon} from '../../Assets/TwitchIcon.png';
 
@@ -24,25 +26,30 @@ export function PublicListItems(props) {
     history.push(path)
   }  
 
+  let path = window.location.pathname
+
   return (
   <>
     <div>
-    
-    <ListItem button onClick={() => handleClickButton('/spells')}>
+
+    <ListItem button onClick={() => handleClickButton('/spells')} 
+      className={path === '/spells' ? classes.listIcon : ''}>
       <ListItemIcon>
-        <CodeIcon />
+        <ViewListIcon />
       </ListItemIcon>
       <ListItemText primary="My Spells" />
     </ListItem>
 
-    <ListItem button onClick={() => handleClickButton('/friends')}>
+    <ListItem button onClick={() => handleClickButton('/friends')}
+      className={path === '/friends' ? classes.listIcon : ''}>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
       <ListItemText primary="Friends" />
     </ListItem>
 
-    <ListItem button onClick={() => handleClickButton('/gallery')}>
+    <ListItem button onClick={() => handleClickButton('/gallery')}
+      className={path === '/gallery' ? classes.listIcon : ''}>
       <ListItemIcon>
         <PhotoAlbumIcon />
       </ListItemIcon>
@@ -51,9 +58,8 @@ export function PublicListItems(props) {
     </div>
     <Divider />
     <div>
-    <ListItem button
-      onClick={() => handleClickButton('/wizards/me')}
-      >
+    <ListItem button onClick={() => handleClickButton('/wizards/me')}
+      className={path.includes('/wizards') ? classes.listIcon : ''}>
       <ListItemIcon>
         <AccountCircleIcon />
       </ListItemIcon>
@@ -70,7 +76,7 @@ export function PublicListItems(props) {
     </ListItem> */}
     <ListItem button onClick={() => handleClickButton('/login')}>
       <ListItemIcon>
-      <PowerSettingsNewIcon />
+        <PowerSettingsNewIcon />
       </ListItemIcon>
       <ListItemText primary="Logout" />
     </ListItem>
@@ -80,17 +86,21 @@ export function PublicListItems(props) {
 };
 
 export function PrivateListItems() {
+  const classes = useStyles();
   let history = useHistory();
 
   const handleClickButton = (path) => {
-  history.push(path)
-  if(path === '/login') TokenService.clearAuthToken();
+    history.push(path)
+    if(path === '/login') TokenService.clearAuthToken();
   }
+
+  let path = window.location.pathname
 
   return (
   <>
     <div>
-    <ListItem button onClick={() => handleClickButton('/gallery')}>
+    <ListItem button onClick={() => handleClickButton('/gallery')}
+      className={path === '/gallery' ? classes.listIcon : ''}>
       <ListItemIcon>
       <PhotoAlbumIcon />
       </ListItemIcon>

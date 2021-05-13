@@ -23,7 +23,15 @@ import {textTrim} from '../Util.js'
 import TextField from '@material-ui/core/TextField';
 import LockIcon from '@material-ui/icons/Lock';
 import Popover from '@material-ui/core/Popover';
+import Avatar from '@material-ui/core/Avatar';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import useStyles from '../styles.js';
+import 'codemirror/addon/edit/matchbrackets.js'
+import 'codemirror/addon/edit/closebrackets.js'
+import 'codemirror/addon/selection/active-line.js'
+import Button from '@material-ui/core/Button';
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+
 
 const Spellcard = (props) => {
   const classes = useStyles();
@@ -37,15 +45,18 @@ const Spellcard = (props) => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
   const clickForkIcon = (id) => {
     SpellsApiService.forkSpellById(id)
     .then((spell) => {
       history.push(`/spells/${spell.id}`)
     })
   }
+
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handlePopoverClose = () => {
     setAnchorEl(null);
     setPopText('Click To Copy')
@@ -55,18 +66,24 @@ const Spellcard = (props) => {
     <Grid className={'Card Frame'} item key={'Frame ' + props.spell.id} xs={12} sm={6} md={4}>
       <Card className={classes.spellcardCard}>
       <CardHeader
-        // avatar={
-        //   <Avatar aria-label="recipe" className={classes.spellcardAvatar}>
-        //     R
-        //   </Avatar>
-        // }
-        // action={
-        //   <IconButton aria-label="settings">
-        //     <MoreVertIcon />
-        //   </IconButton>
-        // }
+        avatar={
+          <Tooltip title={`${props.spell.author}`} placement='top'>
+            <Button onClick={() => history.push(`/wizards/${props.spell.user_id}`)}>
+              <Avatar aria-label="recipe" className={classes.spellcardAvatar}>
+                {props.spell.author.slice(0,1).toUpperCase()}
+              </Avatar>
+            </Button>
+          </Tooltip>
+        }
+        action={
+          <Tooltip title='View Details' placement='top'>
+            <IconButton aria-label="settings" onClick={() => history.push(`/spells/${props.spell.id}`)}>
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </Tooltip>
+        }
         title={textTrim(props.spell.name, 19)}
-        subheader={new Date(Date.parse(props.spell.date_created)).toLocaleDateString()}
+        subheader={new Date(Date.parse(props.spell.date_modified)).toLocaleDateString()}
       />
         <CardMedia
           className={classes.spellcardCardMedia}
@@ -93,24 +110,25 @@ const Spellcard = (props) => {
         ))}
         </div>
         <CardActions className={classes.spellcardFooter}>
-          <IconButton onClick={() => clickForkIcon(props.spell.id)}>
-            <Tooltip title="Fork Spell" placement="top">
+          <Tooltip title="Fork Spell" placement="top">
+            <IconButton onClick={() => clickForkIcon(props.spell.id)}>
               <CallSplitIcon />
-            </Tooltip>
-          </IconButton>
+            </IconButton>
+          </Tooltip>
           {props.spell.locked ? <LockIcon /> : ""}
-          <IconButton
-            className={clsx(classes.spellcardExpand, {
-              [classes.spellcardExpandOpen]: expanded,
-            })}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
-          >
-            <Tooltip title="View Code" placement="top">
+          ID: {props.spell.id}
+          <Tooltip title="View Code" placement="top">
+            <IconButton
+              className={clsx(classes.spellcardExpand, {
+                [classes.spellcardExpandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
               <CodeIcon />
-            </Tooltip>
-          </IconButton>
+            </IconButton>
+          </Tooltip>
         </CardActions>
         <Dialog
           // open={open}
@@ -174,6 +192,9 @@ const Spellcard = (props) => {
                   mode: 'scheme',
                   theme: 'material',
                   lineNumbers: true,
+                  matchBrackets: true,
+                  autoCloseBrackets: true,
+                  styleActiveLine: true,
                 }}
               />
             </DialogContentText>

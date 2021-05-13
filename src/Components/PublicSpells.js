@@ -28,20 +28,19 @@ export default function PublicSpells(props) {
       isMounted = false
     }
   }, [currentPage, search])
-  // console.log(spells);
 
   return (
     <>
       <div className={classes.headBar}>
         <div className={classes.headLeft}></div>
         <div className={classes.headTitle}>Public Spells</div>
-        <div className={classes.headRight}><SearchBar setSearch={setSearch}/></div>
+        <div className={classes.headRight}><SearchBar setSearch={setSearch} setCurrentPage={setCurrentPage}/></div>
       </div>
       <Spellbook spells={spells}/>
       <Title>
           <div className={classes.publicSpellsRoot}>
             <Pagination count={Math.ceil(totalSpells / rowsPerPage)}
-              onChange={(event ,page ) => {setCurrentPage(page)}}
+              onChange={(event, page) => {setCurrentPage(page)}}
             />
           </div>
       </Title>

@@ -20,12 +20,16 @@ export function textTrim(text, length){
 
 export function SearchBar(props) {
   const classes = useStyles();
+
   const [searchIcon, setSearchIcon] = React.useState(true)
+
   const handleSearchIconClick = () => {
     setSearchIcon(!searchIcon);
   };
+  
   function onSearchIconChange(event) {
     props.setSearch(event.target.value)
+    props.setCurrentPage(1)
   }
 
   return (
