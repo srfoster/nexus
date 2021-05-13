@@ -84,7 +84,7 @@ export default function SpellDetails(props) {
       isMounted = false
     }
 
-  }, [path])
+  }, [path, id])
 
   const debounce = (func, delay) => {
     // setIsSaving(true);
