@@ -4,6 +4,7 @@ import config from '../config'
 
 const id = 1;
 
+
 export const handlers = [
   // Handles a GET /user request
   rest.get(`${config.API_ENDPOINT}/spells/${id}`, (req, res, ctx) => {
@@ -78,4 +79,61 @@ export const handlers = [
       ])
     )
 
-})]
+  }),
+  rest.get(`${config.API_ENDPOINT}/gallery`, (req, res, ctx) => {
+    const query = req.url.searchParams
+    const page = query.get("page")
+    const search = query.get("search")
+    return res(
+      ctx.json({
+        spells: [
+            {
+                id: 1,
+                user_id: 1,
+                name: "Apple Storm",
+                description: "Swirling storm of apples",
+                text: "(displayln \"Hello\")",
+                is_public: true,
+                is_deleted: false,
+                date_created: "2021-05-14T16:38:21.161Z",
+                date_modified: "2021-05-14T16:38:21.161Z",
+                locked: false,
+                author: "dunder",
+                tags: []
+            },
+            {
+                id: 2,
+                user_id: 1,
+                name: "Cozy Cabin",
+                description: "Summons a log cabin",
+                text: "(displayln \"Hello\")",
+                is_public: true,
+                is_deleted: false,
+                date_created: "2021-05-14T16:38:21.161Z",
+                date_modified: "2021-05-14T16:38:21.161Z",
+                locked: false,
+                author: "dunder",
+                tags: []
+            },
+            {
+                id: 6,
+                user_id: 1,
+                name: "Safely Locked!",
+                description: "This spell is set as locked by default",
+                text: "(displayln \"Go Away\")",
+                is_public: true,
+                is_deleted: false,
+                date_created: "2021-05-14T16:38:21.161Z",
+                date_modified: "2021-05-14T16:38:21.161Z",
+                locked: true,
+                author: "dunder",
+                tags: []
+            }
+        ],
+        total: 3
+      })
+    )
+  }),
+]
+
+

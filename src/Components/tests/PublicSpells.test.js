@@ -1,10 +1,10 @@
 import PublicSpells from '../PublicSpells';
-import { render, fireEvent, waitFor, screen, container, querySelector, getByRole } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen, container, querySelector, getByRole  } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter, Route, useParams, useRouteMatch } from "react-router";
-import {SearchBar} from '../../Util.js';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
+import { SearchBar } from '../../Util.js';
+import Pagination from '@material-ui/lab/Pagination';
 
 describe('When Public Spells first renders',  () => {
     //beforeEach adds all these paths before each it block 
@@ -39,6 +39,10 @@ describe('When Public Spells first renders',  () => {
     //Checks to see if the heading of "Public Spells" Can be searched as regular text or as regex
     expect(screen.getByRole('heading', {name: "Public Spells"})).toBeInTheDocument()
     });
+    it('shows search icon' , () => {
+
+    expect(screen.getByRole('button' , {name:/search icon/i})).toBeInTheDocument()
+    });
     it('shows search bar' , () => {
 
     expect(screen.getByRole('textbox' , {name:/search/i})).toBeInTheDocument()
@@ -56,8 +60,35 @@ describe('When Public Spells first renders',  () => {
 
     expect(screen.getByRole('heading' , {name:/pagination navigation/i})).toBeInTheDocument()
     });
-    it('shows page 1' , () => {
+    it('shows pagination button' , () => {
+
+    
+    render(<Pagination count={1} />)
 
     expect(screen.getByRole('button' , {name:"page 1"})).toBeInTheDocument()
+    });
+});
+    describe('What user interacts with on the screen',  () => {
+        //beforeEach adds all these paths before each it block 
+        beforeEach(() => {
+            //renders the DOM
+        render(
+            <MemoryRouter initialEntries={["/gallery"]}>
+            <Route path="/gallery">
+                <PublicSpells />
+            </Route>
+            </MemoryRouter>
+        )
+        });
+        it('shows search icon' , () => {
+
+        // render(<SearchBar />)
+
+        //still need to figure out how to show that the search box is hidden before user click
+        expect(screen.getByPlaceholderText("Search Spells")).toBeInTheDocument()
+
+        userEvent.click(screen.getByRole('button' , {name:/search icon/i}))
+
+        expect(screen.getByPlaceholderText("Search Spells")).toBeInTheDocument()
     });
 });
