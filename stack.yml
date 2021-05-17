@@ -1,0 +1,35 @@
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+
+  backend:
+    image: codespells-backend
+    build: ./backend
+    restart: always
+    ports:
+      - 8000:8000
+    depends_on: 
+      - "db"
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    command: "scripts/setup-and-run.sh"
+
+  frontend:
+    image: codespells-frontend
+    build: ./frontend
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on: 
+      - "backend"
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+

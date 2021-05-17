@@ -10,15 +10,11 @@ COPY package*.json ./
 
 RUN npm install
 RUN apt-get update
-RUN apt-get install -y postgresql-client 
-
-RUN npm install -g nodemon
-
 # If you are building your code for production
 # RUN npm ci --only=production
 
 # Bundle app source
 COPY . .
 
-EXPOSE 8000
-CMD [ "npm", "run", "dev" ]
+EXPOSE 3000
+CMD [ "npm", "start" ]
