@@ -76,8 +76,7 @@ Run:
 
 ```
 npm run migrate
-psql postgresql://postgres:example@db/spells -f ./seeds/seed.t
-ables.sql
+psql postgresql://postgres:example@db/spells -f ./seeds/seed.tables.sql
 ```
 
 You should now be able to log in at `localhost:3000`
