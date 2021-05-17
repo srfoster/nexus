@@ -1,0 +1,2 @@
+ALTER TABLE "spells"
+  ADD "locked" BOOLEAN NOT NULL DEFAULT false;
