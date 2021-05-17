@@ -20,7 +20,7 @@ Build the image:
 docker build . -t codespells-backend
 ```
 
-Make sure you've built the front-end image too.
+Make sure you've built the front-end image too: https://github.com/srfoster/codespells-spell-sharing-front-end
 
 Then, use this `stack.yml`
 
