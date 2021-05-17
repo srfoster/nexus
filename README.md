@@ -1,5 +1,91 @@
 # Getting Started
 
+# The Docker Way
+
+Use this `.env` file:
+
+```
+NODE_ENV=development
+PORT=8000
+DATABASE_URL="postgresql://postgres:example@db/spells"
+DATABASE_URL_QUERY=""
+TEST_DATABASE_URL="postgresql://postgres:example@db/spells-test"
+JWT_SECRET="super-secret"
+JWT_EXPIRY="720hr"
+```
+
+Build the image:
+
+```
+docker build . -t codespells-backend
+```
+
+Make sure you've built the front-end image too.
+
+Then, use this `stack.yml`
+
+```
+# Use postgres/example user/password credentials
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+
+  backend:
+    image: codespells-backend
+    restart: always
+    ports:
+      - 8000:8000
+    depends_on:
+      - "db"
+
+  frontend:
+    image: codespells-frontend
+    restart: always
+    ports:
+      - 3000:3000
+    depends_on:
+      - "backend"
+```
+
+Run:
+
+```
+docker-compose -f stack.yml up
+```
+
+To run migrations and seed your local db:
+
+Find out backend hash:
+
+```
+docker ps
+```
+
+Exec into the backend for migration and seeding:
+
+```
+docker exec -it [hash for backend] bash
+```
+
+Run:
+
+```
+npm run migrate
+psql postgresql://postgres:example@db/spells -f ./seeds/seed.t
+ables.sql
+```
+
+You should now be able to log in at `localhost:3000`
+
+
+
+# The Not Docker Way
+
 Clone the repo
 
 `npm install`
