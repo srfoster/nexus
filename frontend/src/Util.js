@@ -39,6 +39,7 @@ export function SearchBar(props) {
         placeholder="Search Spells"
         onChange={onSearchIconChange}
         inputProps={{ 'aria-label': 'search' }}
+        autoFocus={true}
       />
       <IconButton 
         onClick={(event) => handleSearchIconClick()}
