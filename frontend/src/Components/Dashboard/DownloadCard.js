@@ -18,10 +18,10 @@ import Grid from "@material-ui/core/Grid";
 const DownloadCard = (props) => {
   const classes = useStyles();
   const theme = useTheme();
-console.log("LSKDJf;lkja;lskdjf;oiajsdf")
+
   return (
     <Grid className={"Card Frame"} item key={"Frame "} xs={12} sm={6} md={4}>
-      <Card className={classes.spellcardCard}>
+      <Card className={classes.root}>
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography component="h5" variant="h5">
@@ -62,3 +62,30 @@ console.log("LSKDJf;lkja;lskdjf;oiajsdf")
 };
 
 export default DownloadCard;
+
+
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     display: 'flex',
+//   },
+//   details: {
+//     display: 'flex',
+//     flexDirection: 'column',
+//   },
+//   content: {
+//     flex: '1 0 auto',
+//   },
+//   cover: {
+//     width: 151,
+//   },
+//   controls: {
+//     display: 'flex',
+//     alignItems: 'center',
+//     paddingLeft: theme.spacing(1),
+//     paddingBottom: theme.spacing(1),
+//   },
+//   playIcon: {
+//     height: 38,
+//     width: 38,
+//   },
+// }));

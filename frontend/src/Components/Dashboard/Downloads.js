@@ -26,14 +26,9 @@ function Downloads() {
       
       <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={4}>
-          {/* {cardNumber.map((item) => { */}
-            { console.log("WORKY") }
-            {cardNumber.forEach(item => {
-              <DownloadCard />
-            })}
-              
-            {console.log('after map?')}
-          {/* })} */}
+          {cardNumber.map((item) => (
+            <DownloadCard key={'Key ', item}/>
+          ))}
         </Grid>
       </Container>
       
