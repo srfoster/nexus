@@ -37,13 +37,11 @@ export default function PublicSpells(props) {
         <div className={classes.headRight}><SearchBar setSearch={setSearch} setCurrentPage={setCurrentPage}/></div>
       </div>
       <Spellbook spells={spells}/>
-      <Title>
-          <div className={classes.publicSpellsRoot}>
-            <Pagination count={Math.ceil(totalSpells / rowsPerPage)}
-              onChange={(event, page) => {setCurrentPage(page)}}
-            />
-          </div>
-      </Title>
+      <div className={classes.publicSpellsRoot}>
+        <Pagination count={Math.ceil(totalSpells / rowsPerPage)}
+          onChange={(event, page) => {setCurrentPage(page)}}
+        />
+      </div>
     </>
   );
 }
