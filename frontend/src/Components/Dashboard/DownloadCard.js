@@ -10,10 +10,13 @@ import CardActions from "@material-ui/core/CardActions";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import SkipPreviousIcon from "@material-ui/icons/SkipPrevious";
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import SkipNextIcon from "@material-ui/icons/SkipNext";
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import useStyles from "../../styles.js";
 import Grid from "@material-ui/core/Grid";
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 const DownloadCard = (props) => {
   const classes = useStyles();
@@ -25,29 +28,21 @@ const DownloadCard = (props) => {
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography component="h5" variant="h5">
-              Live From Space
+              Orb Game 1
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              Justin
+              Click To Download
             </Typography>
           </CardContent>
           <div className={classes.controls}>
             <IconButton aria-label="previous">
-              {theme.direction === "rtl" ? (
-                <SkipNextIcon />
-              ) : (
-                <SkipPreviousIcon />
-              )}
+              <ChevronRightIcon />
             </IconButton>
-            <IconButton aria-label="play/pause">
-              <PlayArrowIcon className={classes.playIcon} />
+            <IconButton aria-label="Download Game" href="https://codespells-org.s3.amazonaws.com/StandaloneBuilds/orb-game-1/0.0/OrbGame1.7z">
+              <GetAppIcon className={classes.downloadIcon} />
             </IconButton>
             <IconButton aria-label="next">
-              {theme.direction === "rtl" ? (
-                <SkipPreviousIcon />
-              ) : (
-                <SkipNextIcon />
-              )}
+              <ChevronLeftIcon />
             </IconButton>
           </div>
         </div>
@@ -58,34 +53,7 @@ const DownloadCard = (props) => {
         />
       </Card>
     </Grid>
-  )
+  );
 };
 
 export default DownloadCard;
-
-
-// const useStyles = makeStyles((theme) => ({
-//   root: {
-//     display: 'flex',
-//   },
-//   details: {
-//     display: 'flex',
-//     flexDirection: 'column',
-//   },
-//   content: {
-//     flex: '1 0 auto',
-//   },
-//   cover: {
-//     width: 151,
-//   },
-//   controls: {
-//     display: 'flex',
-//     alignItems: 'center',
-//     paddingLeft: theme.spacing(1),
-//     paddingBottom: theme.spacing(1),
-//   },
-//   playIcon: {
-//     height: 38,
-//     width: 38,
-//   },
-// }));

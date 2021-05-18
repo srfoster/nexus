@@ -110,7 +110,9 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(1),
     paddingBottom: theme.spacing(1),
   },
-  playIcon: {
+  downloadIcon: {
+    display: 'flex',
+    justifyContent: 'center',
     height: 38,
     width: 38,
   },

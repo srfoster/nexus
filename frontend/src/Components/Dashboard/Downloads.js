@@ -10,7 +10,7 @@ import {SearchBar} from '../../Util.js'
 function Downloads() {
   const classes = useStyles();
   const theme = useTheme();
-  const cardNumber = [1, 2, 3, 4, 5];
+  const cardNumber = [1];
   const [rowsPerPage, setRowsPerPage] = React.useState(9);
   const [totalSpells, setTotalSpells] = React.useState(0);
   const [currentPage, setCurrentPage] = useState(1)
