@@ -337,9 +337,20 @@ export default function SpellChart(props) {
                 <>
                 {spell.locked ? 
                   <>
-                    <TableCell className={classes.icons}></TableCell>
+                    
                     <TableCell className={classes.icons}>
-                      <LockIcon />
+                      <IconButton aria-label="details" onClick={() => history.push(`/spells/${spell.id}`)}>
+                        <LockIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell className={classes.icons}>
+                      <IconButton 
+                        id={spell.id} 
+                        aria-label="isPublic" 
+                        disabled
+                      >
+                        {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      </IconButton>
                     </TableCell>
                   </>
                   :
@@ -351,11 +362,11 @@ export default function SpellChart(props) {
                   </TableCell>
                   <TableCell className={classes.icons}>
                     <IconButton 
-                    id={spell.id} 
-                    aria-label="isPublic" 
-                    onClick={(event) => {
-                      updateSpell({...spell, is_public: !spell.is_public});
-                      event.stopPropagation();
+                      id={spell.id} 
+                      aria-label="isPublic" 
+                      onClick={(event) => {
+                        updateSpell({...spell, is_public: !spell.is_public});
+                        event.stopPropagation();
                     }}>
                       {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
                     </IconButton>
