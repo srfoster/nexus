@@ -3,7 +3,7 @@ import React from 'react';
 function Downloads(props) {
   return (
     <div>
-      Hey, sup?
+      This will soon have some downloads for you to ....download!
     </div>
   );
 }
