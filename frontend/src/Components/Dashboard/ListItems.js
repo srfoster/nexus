@@ -15,7 +15,8 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ListIcon from '@material-ui/icons/List';
 import ViewListIcon from '@material-ui/icons/ViewList';
 import useStyles from '../../styles.js';
-import {TwitchIcon} from '../../Assets/TwitchIcon.png';
+import { TwitchIcon } from '../../Assets/TwitchIcon.png';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 export function PublicListItems(props) {
   const classes = useStyles();
@@ -65,6 +66,13 @@ export function PublicListItems(props) {
       </ListItemIcon>
       <ListItemText primary="My Profile" />
     </ListItem>
+    <ListItem button onClick={() => handleClickButton('/downloads')}
+      className={path === '/downloads' ? classes.listIcon : ''}>
+      <ListItemIcon>
+        <GetAppIcon />
+      </ListItemIcon>
+      <ListItemText primary="Downloads" />
+    </ListItem>
     {/* Twitch Tab */}
     {/* <ListItem button
       onClick={() => handleClickButton('/wizards/me')}
@@ -105,6 +113,13 @@ export function PrivateListItems() {
       <PhotoAlbumIcon />
       </ListItemIcon>
       <ListItemText primary="Public Spells" />
+    </ListItem>
+    <ListItem button onClick={() => handleClickButton('/downloads')}
+      className={path === '/downloads' ? classes.listIcon : ''}>
+      <ListItemIcon>
+        <GetAppIcon />
+      </ListItemIcon>
+      <ListItemText primary="Downloads" />
     </ListItem>
     </div>
 
