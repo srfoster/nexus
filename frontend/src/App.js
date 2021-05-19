@@ -66,8 +66,12 @@ function App() {
             path={'/gallery'}
             component={(props) => <Dashboard child={<PublicSpells/>} isLoggedIn={isLoggedIn}></Dashboard>}
           />
+          {/* <Route
+            path={'/check-auth'}
+            component={(props) => <Dashboard child={<UserProfile match={props.match}/>}></Dashboard>}
+          /> */}
           <Route
-            path={'/wizards/:id'}
+            path={'/wizards/:username'}
             component={(props) => <Dashboard child={<UserProfile match={props.match}/>}></Dashboard>}
           />
           <Route

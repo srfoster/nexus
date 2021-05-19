@@ -1,11 +1,18 @@
 const helpers = require('../endpoint-helpers')
 
 const handleGet = async (req, res) => {
-  let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+
+// console.log(req.user.username)
+// console.log(req.params.username)
+// console.log(req.params.username === 'me')
+
+  let userName = req.params.username === 'me' ? req.user.username : req.params.username;
   let page = req.query.page ? req.query.page : 1;
   let page_size = req.query.page_size ? req.query.page_size : 9;
   let searchTerm = req.query.search ? `%${req.query.search.toLowerCase()}%` : `%%`
   let sortQuery = req.query.sort ? req.query.sort : 'date_modified'
+
+  // console.log(userName)
 
   let totalSpells = await req.app.get('db')
     .raw(`
@@ -16,11 +23,11 @@ const handleGet = async (req, res) => {
       where spells.user_id = ? and spells.is_deleted = false and spells.is_public = true
       group by spells.id, users.username) as spellsWithTags
       where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?) as searchedSpells`, 
-      [userId, '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%']
+      [req.user.id, '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%']
     )
 
   let user = await req.app.get('db')('users')
-    .where({id: userId})
+    .where({username: userName})
     .first()
 
   let spells = await req.app.get('db')
@@ -33,7 +40,7 @@ const handleGet = async (req, res) => {
       where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?
       limit ? offset ?)
       order by date_modified desc`, 
-      [userId, '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%',
+      [req.user.id, '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%',
         page_size, (page_size * (page-1))
       ]
     )
@@ -46,6 +53,8 @@ const handleGet = async (req, res) => {
   })
   
   let userData = {...user, spells}
+
+  console.log('userdata',userData)
 
   delete userData.password
   res.send({...userData, total: Number(totalSpells.rows[0].count)})

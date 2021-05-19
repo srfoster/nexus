@@ -17,10 +17,12 @@ const UserProfile = (props) => {
 
   useEffect(() => {
     let isMounted = true
-    const { id } = props.match.params
+    const { username } = props.match.params
+    console.log('this',user)
 
-    SpellsApiService.getUserById(id, currentPage, search)
+    SpellsApiService.getUserByUsername(username, currentPage, search)
       .then(user => {
+
         if(isMounted) setUser(user)
       })
       return () => {

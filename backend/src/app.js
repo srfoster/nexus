@@ -37,7 +37,7 @@ let epSpellDetails = '/spells/:id'
 // TODO: update this endpoint
 let epPublicSpellDetails = '/secret/:id'
 let epPublicSpells = '/gallery'
-let epWizardDetails = '/wizards/:id'
+let epWizardDetails = '/wizards/:username'
 let epSpellsFork = '/spells/:id/fork'
 let epSpellTags = '/spells/:id/tags/:tag'
 let epSpellTagsIndex = '/spells/:id/tags'
@@ -89,6 +89,18 @@ app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
       // console.log(!!matchingSpell);
       res.send({userOwnsSpell: boolean})
     })
+})
+
+app.get(`/check-auth`, async (req, res) => {
+  let userId = req.user.id
+  // let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+  let user = await req.app.get('db')('users')
+    .where({id: userId})
+    .first()
+
+    delete user.password
+    console.log('server app',user)
+    res.send(user)
 })
 
 app.post(epLogin, handleLogin)

@@ -64,9 +64,25 @@ const SpellsApiService = {
     )
   },
   getUserById(id, page, search){
+    return fetch(`${config.API_ENDPOINT}/check-auth`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+  getUserByUsername(username, page, search){
     page = page || 1
     let searchPath = search ? `&search=${search}` : ""
-    return fetch(`${config.API_ENDPOINT}/wizards/${id}?page=${page}${searchPath}`, {
+    console.log('apiservice', username)
+    return fetch(`${config.API_ENDPOINT}/wizards/${username}?page=${page}${searchPath}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
