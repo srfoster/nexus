@@ -15,7 +15,9 @@ import PublicSpells from './Components/PublicSpells';
 import UserProfile from './Components/UserProfile';
 import NotFound from './Components/NotFound';
 import SpellsApiService from './Services/spells-api-service';
+import Downloads from './Components/Dashboard/Downloads';
 require('codemirror/mode/scheme/scheme');
+
 
 function App() {
   const paper = outerPaper();
@@ -69,6 +71,10 @@ function App() {
           <Route
             path={'/wizards/:id'}
             component={(props) => <Dashboard child={<UserProfile match={props.match}/>}></Dashboard>}
+          />
+           <Route
+            path={'/downloads'}
+            component={(props) => <Dashboard child={<Downloads/>}></Dashboard>}
           />
           <Route
             component={(props) => <Dashboard child={<NotFound/>}></Dashboard>}
