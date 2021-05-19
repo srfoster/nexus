@@ -21,6 +21,5 @@ Now you should be able to edit files in `frontend/` or `backend/`.  Reloading sh
 Running tests:
 
 ```
-docker exec -it [backend container id] bash
-npm run test
+docker exec -it backend npm run test
 ```

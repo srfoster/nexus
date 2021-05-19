@@ -20,6 +20,7 @@ services:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules
     command: "scripts/setup-and-run.sh"
+    container_name: backend
 
   frontend:
     image: codespells-frontend
@@ -32,4 +33,5 @@ services:
     volumes:
       - ./frontend:/usr/src/app
       - /usr/src/app/node_modules
+    container_name: frontend
 
