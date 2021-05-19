@@ -5,6 +5,9 @@ import Spellbook from './Spellbook';
 import Pagination from '@material-ui/lab/Pagination';
 import {SearchBar} from '../Util.js'
 import useStyles from '../styles.js';
+import IconButton from '@material-ui/core/IconButton';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const UserProfile = (props) => {
   const classes = useStyles();
@@ -27,13 +30,14 @@ const UserProfile = (props) => {
         isMounted = false
       }
   },[currentPage, search, path])
-
+//logged in for profile page
   return (
     user ?
       <>
+      {/* //logged in for profile page */}
         <div className={classes.userProfileHeadBar}>
-          <div className={classes.userProfileHeadLeft}></div>
-          <div className={classes.userProfileHeadTitle}>{`Spellbook of ${user.username}`}</div>
+          <div className={classes.userProfileHeadLeft}><Tooltip title={`Add ${user.username}`}><IconButton aria-label="add-mage"><GroupAddIcon /></IconButton></Tooltip></div>
+          <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>
           <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
         </div>
 
