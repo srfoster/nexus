@@ -42,6 +42,7 @@ export function SearchBar(props) {
       />
       <IconButton 
         onClick={(event) => handleSearchIconClick()}
+        aria-label = "search icon"
       >
         <SearchIcon />
       </IconButton>

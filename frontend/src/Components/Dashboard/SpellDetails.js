@@ -72,6 +72,7 @@ export default function SpellDetails(props) {
     SpellsApiService.getSpellById(id)
       .then(spell => {
         if (isMounted) {
+          // console.log("spell" , spell)
           setSpell(spell)
           setSpellText(spell.text);
         }
@@ -129,6 +130,8 @@ export default function SpellDetails(props) {
         // setIsSaving(false)
         setSpell(spell)
       })
+      .catch(errors => 
+        console.log("UpdateSpell errors" , errors))
   }
 
   function deleteSpells(id){
@@ -145,6 +148,8 @@ export default function SpellDetails(props) {
           ? res.json().then(e => Promise.reject(e))
           : res.json()
       )
+      .catch(errors => 
+        console.log("deleteSpell errors" , errors))
   }
 
   function addTagToSpell(id,tag){
@@ -166,6 +171,8 @@ export default function SpellDetails(props) {
         setIsSaving(false)
         setSpell({...spell, tags:[...spell.tags, tag]})
       })
+      .catch(errors => 
+        console.log("add tag errors" , errors))
   }
 
   //Press enter to save tag
@@ -195,6 +202,8 @@ export default function SpellDetails(props) {
           return t.name !== tag_name
         })})
       })
+      .catch(errors => 
+        console.log("remove tag errors" , errors))
   }
 
   const clickForkIcon = (id) => {
@@ -238,11 +247,13 @@ export default function SpellDetails(props) {
         <div className={classes.iconRow}>
           {spell.locked || !userOwnsSpell ? 
             <TextField className={classes.spellDetailsTitle}
+              id = "spell-details-title"
               label="Name"
               defaultValue={spell.name}
               disabled
             /> :
             <TextField className={classes.spellDetailsTitle}
+              id = "spell-details-title-owns"
               label="Name"
               defaultValue={spell.name}
               onChange={(event) => {
@@ -282,7 +293,7 @@ export default function SpellDetails(props) {
                   setSpell({...spell, is_public: !spell.is_public})
                   debounce(() => updateSpell({...spell, is_public: !spell.is_public}), debounceWait)
                 }}>
-                  {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  {spell.is_public ? <VisibilityIcon id='yes'/> : <VisibilityOffIcon id='no'/>}
                 </IconButton>
               </Tooltip>
               <Tooltip title="Delete" placement="top-end">
@@ -321,11 +332,13 @@ export default function SpellDetails(props) {
           <div className={classes.iconRow}>
           {spell.locked || !userOwnsSpell ? 
             <TextField className={classes.spellDetailsDescription}
+              id = "spell-details-description"
               label="Description"
               defaultValue={spell.description}
               disabled
             />:
             <TextField className={classes.spellDetailsDescription}
+              id = "spell-details-description-owns"
               label="Description"
               defaultValue={spell.description}
               onChange={(event) => {

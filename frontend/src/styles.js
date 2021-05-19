@@ -174,6 +174,11 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: '3',
     display: 'inline-flex',
   },
+  headTitle101: {
+    flexGrow: '3',
+    display: 'inline-flex',
+    fontWeight: '400px' ,
+  },
   headRight: {
     flexGrow: '1',
     width: '120px',
