@@ -140,7 +140,12 @@ export default function SpellChart(props) {
       <div className={classes.headBar}>
         <div className={classes.headLeft}></div>
         <div className={classes.headTitle}>My Spells</div>
-        <div className={classes.headRight}><SearchBar setSearch={props.setSearch} /></div>
+        <div className={classes.headRight}>
+          <SearchBar 
+            setSearch={props.setSearch}
+            setCurrentPage={props.setCurrentPage} 
+          />
+        </div>
       </div>
       <Toolbar
         className={clsx(classes.spellChartRoot, {

@@ -34,7 +34,12 @@ const UserProfile = (props) => {
         <div className={classes.userProfileHeadBar}>
           <div className={classes.userProfileHeadLeft}></div>
           <div className={classes.userProfileHeadTitle}>{`Spellbook of ${user.username}`}</div>
-          <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
+          <div className={classes.userProfileHeadRight}>
+            <SearchBar 
+              setSearch={setSearch}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
         </div>
 
         <Spellbook spells={user.spells}/>
