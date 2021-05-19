@@ -143,7 +143,12 @@ export default function SpellChart(props) {
       <div className={classes.headBar}>
         <div className={classes.headLeft}></div>
         <div className={classes.headTitle}>My Spells</div>
-        <div className={classes.headRight}><SearchBar setSearch={props.setSearch} /></div>
+        <div className={classes.headRight}>
+          <SearchBar 
+            setSearch={props.setSearch}
+            setCurrentPage={props.setCurrentPage} 
+          />
+        </div>
       </div>
       <Toolbar
         className={clsx(classes.spellChartRoot, {
@@ -340,9 +345,20 @@ export default function SpellChart(props) {
                 <>
                 {spell.locked ? 
                   <>
-                    <TableCell className={classes.icons}></TableCell>
+                    
                     <TableCell className={classes.icons}>
-                      <LockIcon />
+                      <IconButton aria-label="details" onClick={() => history.push(`/spells/${spell.id}`)}>
+                        <LockIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell className={classes.icons}>
+                      <IconButton 
+                        id={spell.id} 
+                        aria-label="isPublic" 
+                        disabled
+                      >
+                        {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      </IconButton>
                     </TableCell>
                   </>
                   :
@@ -354,11 +370,11 @@ export default function SpellChart(props) {
                   </TableCell>
                   <TableCell className={classes.icons}>
                     <IconButton 
-                    id={spell.id} 
-                    aria-label="isPublic" 
-                    onClick={(event) => {
-                      updateSpell({...spell, is_public: !spell.is_public});
-                      event.stopPropagation();
+                      id={spell.id} 
+                      aria-label="isPublic" 
+                      onClick={(event) => {
+                        updateSpell({...spell, is_public: !spell.is_public});
+                        event.stopPropagation();
                     }}>
                       {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
                     </IconButton>
