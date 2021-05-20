@@ -48,7 +48,7 @@ const DownloadCard = (props) => {
         </div>
         <CardMedia
           className={classes.cover}
-          image="https://i.imgur.com/33XGUsG.jpg"
+          image="https://i.imgur.com/SDbPuTR.png"
           title="Live from space album cover"
         />
       </Card>

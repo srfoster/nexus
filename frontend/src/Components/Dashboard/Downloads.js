@@ -1,20 +1,31 @@
 // DownloadCards
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import DownloadCard from './DownloadCard'
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Pagination from '@material-ui/lab/Pagination';
-import {SearchBar} from '../../Util.js'
+import { SearchBar } from '../../Util.js'
+import SpellsApiService from '../../Services/spells-api-service';
 
 function Downloads() {
   const classes = useStyles();
   const theme = useTheme();
-  const cardNumber = [1];
+  const cardNumber = [1, 2, 3, 4, 5];
   const [rowsPerPage, setRowsPerPage] = React.useState(9);
   const [totalSpells, setTotalSpells] = React.useState(0);
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = React.useState('');
+  const [games, setGames] = React.useState([]);
+  const [totalGames, setTotalGames] = React.useState(0);
+    
+  useEffect(() => {
+    SpellsApiService.getDownloads()
+      .then(games => {
+        setGames(games.games)
+        setTotalGames(games.total)
+      })
+  }, [])
 
   return (
     <>

@@ -22,8 +22,10 @@ export function SearchBar(props) {
   const classes = useStyles();
 
   const [searchIcon, setSearchIcon] = React.useState(true)
+  const [focus, setFocus] = React.useState(false)
 
   const handleSearchIconClick = () => {
+    setFocus(!focus)
     setSearchIcon(!searchIcon);
   };
   
@@ -39,7 +41,11 @@ export function SearchBar(props) {
         placeholder="Search Spells"
         onChange={onSearchIconChange}
         inputProps={{ 'aria-label': 'search' }}
-        // autoFocus={true}
+        inputRef={(input) => {
+          if (input != null) {
+            input.focus();
+          }
+        }}
       />
       <IconButton
         onClick={(event) => handleSearchIconClick()}
