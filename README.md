@@ -1,5 +1,12 @@
 # nexus
 
+Pre-Installation:
+(Windows users only)
+
+```
+git config --global core.autocrlf false
+```
+
 Installation:
 
 ```
@@ -22,4 +29,5 @@ Running tests:
 
 ```
 docker exec -it backend npm run test
+docker exec -it frontend npm run test
 ```
