@@ -7,7 +7,7 @@ const config = require('../src/config')
 const bcrypt = require('bcryptjs')
 const supertest = require('supertest')
 
-describe('Spell Index', () => {
+describe.only('Spell Index', () => {
   let db
 
   let {

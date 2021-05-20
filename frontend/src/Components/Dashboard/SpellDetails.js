@@ -214,7 +214,7 @@ export default function SpellDetails(props) {
       message='Spell is not saved yet'
     />
       {spell ?
-      <div className={spell.locked ? classes.spellDetailsLocked : ''}>
+      <div>
         <div className={classes.titleRow}>
           <div className={classes.metaID}>ID: {spell.id}</div>
           <div className={classes.metaTitle}>
@@ -257,43 +257,38 @@ export default function SpellDetails(props) {
             <img src='https://i.imgur.com/VE9Aksf.jpg' alt="Spell Image" width='40%'></img>
           </div>
           <div className={classes.iconBox}>
-          {spell.locked || !userOwnsSpell ?
-            <div className={classes.spellDetailsIcons}>
-              <Tooltip title="Spell Locked" placement="top">
-                <IconButton>    
-                  <LockIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Fork Spell" placement="top-end">
-                <IconButton onClick={() => clickForkIcon(spell.id)}>
-                  <CallSplitIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-            :
             <div className={classes.spellDetailsIcons}>
               <Tooltip title="Fork Spell" placement="top">
                 <IconButton onClick={() => clickForkIcon(spell.id)}>
                   <CallSplitIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Public status" placement="top-end">
-                <IconButton  aria-label="isPublic" onClick={() => {
-                  setSpell({...spell, is_public: !spell.is_public})
-                  debounce(() => updateSpell({...spell, is_public: !spell.is_public}), debounceWait)
-                }}>
-                  {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Delete" placement="top-end">
-                <IconButton  aria-label="delete"
-                  onClick={() => handleClickOpen(spell.id)}
-                >
-                  <DeleteForeverIcon />
-                </IconButton>
-              </Tooltip>
+              {spell.locked || !userOwnsSpell ?
+                <Tooltip title="Spell Locked" placement="top">
+                  <IconButton >    
+                    <LockIcon />
+                  </IconButton>
+                </Tooltip> 
+                :
+                <>
+                <Tooltip title="Public status" placement="top-end">
+                  <IconButton  aria-label="isPublic" onClick={() => {
+                    setSpell({...spell, is_public: !spell.is_public})
+                    debounce(() => updateSpell({...spell, is_public: !spell.is_public}), debounceWait)
+                  }}>
+                    {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Delete" placement="top-end">
+                  <IconButton  aria-label="delete"
+                    onClick={() => handleClickOpen(spell.id)}
+                  >
+                    <DeleteForeverIcon />
+                  </IconButton>
+                </Tooltip>
+                </>
+              }
             </div>
-          }
           </div>
         </div>
          {/* Delete Spell dialog confirmation */}
@@ -339,7 +334,7 @@ export default function SpellDetails(props) {
         </div>
         <p></p>
         <div className={classes.iconRow}>
-          {spell.lock || !userOwnsSpell ?
+          {spell.locked || !userOwnsSpell ?
             <TextField className={classes.tagLine}
               placeholder="Tag"
               value = {spellTag}

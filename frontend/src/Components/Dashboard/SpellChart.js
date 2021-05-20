@@ -85,20 +85,23 @@ export default function SpellChart(props) {
     const name = spell.id
     const selectedIndex = selected.indexOf(name);
     let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
+    // Prevent locked spell from being deletable
+    if (!spell.locked) {
+      // Selects spell to be deleted
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selected, name);
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selected.slice(1));
+      } else if (selectedIndex === selected.length - 1) {
+        newSelected = newSelected.concat(selected.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(
+          selected.slice(0, selectedIndex),
+          selected.slice(selectedIndex + 1),
+        );
+      }
+      setSelected(newSelected);
     }
-    setSelected(newSelected);
   };
 
   const handleRequestSort = (event, property) => {
@@ -140,7 +143,12 @@ export default function SpellChart(props) {
       <div className={classes.headBar}>
         <div className={classes.headLeft}></div>
         <div className={classes.headTitle}>My Spells</div>
-        <div className={classes.headRight}><SearchBar setSearch={props.setSearch} /></div>
+        <div className={classes.headRight}>
+          <SearchBar 
+            setSearch={props.setSearch}
+            setCurrentPage={props.setCurrentPage} 
+          />
+        </div>
       </div>
       <Toolbar
         className={clsx(classes.spellChartRoot, {
@@ -337,9 +345,20 @@ export default function SpellChart(props) {
                 <>
                 {spell.locked ? 
                   <>
-                    <TableCell className={classes.icons}></TableCell>
+                    
                     <TableCell className={classes.icons}>
-                      <LockIcon />
+                      <IconButton aria-label="details" onClick={() => history.push(`/spells/${spell.id}`)}>
+                        <LockIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell className={classes.icons}>
+                      <IconButton 
+                        id={spell.id} 
+                        aria-label="isPublic" 
+                        disabled
+                      >
+                        {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                      </IconButton>
                     </TableCell>
                   </>
                   :
@@ -351,11 +370,11 @@ export default function SpellChart(props) {
                   </TableCell>
                   <TableCell className={classes.icons}>
                     <IconButton 
-                    id={spell.id} 
-                    aria-label="isPublic" 
-                    onClick={(event) => {
-                      updateSpell({...spell, is_public: !spell.is_public});
-                      event.stopPropagation();
+                      id={spell.id} 
+                      aria-label="isPublic" 
+                      onClick={(event) => {
+                        updateSpell({...spell, is_public: !spell.is_public});
+                        event.stopPropagation();
                     }}>
                       {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
                     </IconButton>
