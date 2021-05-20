@@ -17,6 +17,7 @@ const WizardDetails = require('./endpoints/WizardDetails')
 const SpellTagsIndex = require('./endpoints/SpellTagsIndex')
 const SpellTags = require('./endpoints/SpellTags')
 const SpellsFork = require('./endpoints/SpellFork')
+const Downloads = require('./endpoints/Downloads')
 
 const app = express()
 // testing branches
@@ -41,6 +42,7 @@ let epWizardDetails = '/wizards/:id'
 let epSpellsFork = '/spells/:id/fork'
 let epSpellTags = '/spells/:id/tags/:tag'
 let epSpellTagsIndex = '/spells/:id/tags'
+let epDownloads = '/downloads'
 
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, SpellIndex.handleGet)
@@ -77,6 +79,9 @@ app.post(`${epSpellIndex}`, requireAuth, SpellIndex.handlePost)
 
 // Creates a new spell with the forked spell's information
 app.post(`${epSpellsFork}`, requireAuth, SpellsFork.handlePost)
+
+// Retreives download information
+app.get(`${epDownloads}`, Downloads.handleGet)
 
 app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
@@ -118,5 +123,6 @@ module.exports = {
   epWizardDetails,
   epSpellsFork,
   epSpellTags,
-  epSpellTagsIndex
+  epSpellTagsIndex,
+  epDownloads
 }
