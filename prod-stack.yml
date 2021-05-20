@@ -2,40 +2,45 @@
 version: '3.1'
 
 services:
-  db:
+  prod-db:
     image: postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: example
+    container_name: prod-db
+    volumes:
+      - ../data:/var/lib/postgresql/data
+      - ../dump.sql:/dump.sql #Temp
 
-  backend:
+  prod-backend:
     image: codespells-backend
     build: ./backend
     restart: always
     ports:
-      - 8000:8000
+      - 8080:8000
     depends_on: 
-      - "db"
+      - prod-db
     volumes:
       - ./backend:/usr/src/app
+      - ./backend/.prod-env:/usr/src/app/.env
       - /usr/src/app/node_modules
     command: "scripts/setup-and-run.sh"
-    container_name: backend
+    container_name: prod-backend
     env_file:
-      - ./backend/.env
+      - ./backend/.prod-env
 
-  frontend:
+  prod-frontend:
     image: codespells-frontend
     build: ./frontend
     restart: always
     ports:
-      - 3000:3000
+      - 80:3000
     depends_on: 
-      - "backend"
+      - prod-backend
     volumes:
       - ./frontend:/usr/src/app
+      - ./frontend/.prod-env:/usr/src/app/.env
       - /usr/src/app/node_modules
-    container_name: frontend
+    container_name: prod-frontend
     env_file:
-      - ./frontend/.env
-
+      - ./frontend/.prod-env

@@ -23,3 +23,4 @@ yarn-error.log*
 
 .vercel
 *.code-workspace
+*.log
