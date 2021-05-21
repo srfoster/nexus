@@ -22,23 +22,24 @@ const DownloadCard = (props) => {
   const classes = useStyles();
   const theme = useTheme();
 
+  const {game} = props
   return (
     <Grid className={"Card Frame"} item key={"Frame "} xs={12} sm={6} md={4}>
       <Card className={classes.root}>
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography component="h5" variant="h5">
-              Orb Game 1
+              {game.name}
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-              Click To Download
+              {game.description}
             </Typography>
           </CardContent>
           <div className={classes.controls}>
             <IconButton aria-label="previous">
               <ChevronRightIcon />
             </IconButton>
-            <IconButton aria-label="Download Game" href="https://codespells-org.s3.amazonaws.com/StandaloneBuilds/orb-game-1/0.0/OrbGame1.7z">
+            <IconButton aria-label="Download Game" href={`${game.link}`}>
               <GetAppIcon className={classes.downloadIcon} />
             </IconButton>
             <IconButton aria-label="next">
@@ -48,7 +49,7 @@ const DownloadCard = (props) => {
         </div>
         <CardMedia
           className={classes.cover}
-          image="https://i.imgur.com/33XGUsG.jpg"
+          image={`${game.thumbnail}`}
           title="Live from space album cover"
         />
       </Card>

@@ -153,6 +153,19 @@ const SpellsApiService = {
           : res.json()
       )
   },
+  getDownloads(){
+    return fetch(`${config.API_ENDPOINT}/downloads`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
 }
 
 export default SpellsApiService

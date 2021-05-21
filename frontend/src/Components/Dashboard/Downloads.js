@@ -1,42 +1,56 @@
 // DownloadCards
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import DownloadCard from './DownloadCard'
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Pagination from '@material-ui/lab/Pagination';
-import {SearchBar} from '../../Util.js'
+import { SearchBar } from '../../Util.js'
+import SpellsApiService from '../../Services/spells-api-service';
+import Title from './Title';
+import styles from '../../styles.js'
 
 function Downloads() {
   const classes = useStyles();
   const theme = useTheme();
-  const cardNumber = [1];
   const [rowsPerPage, setRowsPerPage] = React.useState(9);
   const [totalSpells, setTotalSpells] = React.useState(0);
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = React.useState('');
+  const [games, setGames] = React.useState([]);
+  const [totalGames, setTotalGames] = React.useState(0);
+    
+  useEffect(() => {
+    SpellsApiService.getDownloads()
+      .then(games => {
+        setGames(games.games)
+        setTotalGames(games.total)
+      })
+  }, [])
+
+  console.log(games, totalGames)
 
   return (
     <>
       <div className={classes.headBar}>
         <div className={classes.headLeft}></div>
-        <div className={classes.headTitle}>Public Spells</div>
-        <div className={classes.headRight}><SearchBar setSearch={setSearch} setCurrentPage={setCurrentPage}/></div>
+        <Title className={classes.headTitle}>Downloads</Title>
+        {/* <div className={classes.headRight}><SearchBar setSearch={setSearch} setCurrentPage={setCurrentPage}/></div> */}
       </div>
       
       <Container className={classes.cardGrid} maxWidth="md">
         <Grid container spacing={4}>
-          {cardNumber.map((item) => (
-            <DownloadCard key={'Key ', item}/>
+          {games.map((game) => (
+            <DownloadCard game={game} key={'Key ', game.id}/>
           ))}
         </Grid>
       </Container>
       
-      <div className={classes.publicSpellsRoot}>
+      {/* <div className={classes.publicSpellsRoot}>
         <Pagination count={Math.ceil(totalSpells / rowsPerPage)}
           onChange={(event, page) => {setCurrentPage(page)}}
         />
-      </div>
+      </div> */}
     </>
   );
 }
