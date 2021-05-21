@@ -20,7 +20,6 @@ export default function PublicSpells(props) {
     SpellsApiService.getPublicSpells(currentPage, search)
       .then(spells => {
         if(isMounted){
-          console.log(spells ,'checking')
           setSpells(spells.spells)
           setTotalSpells(spells.total)
         }
