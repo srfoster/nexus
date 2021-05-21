@@ -13,7 +13,10 @@
     "predeploy": "npm audit",
     "deploy": "git push heroku main",
     "postdeploy": "npm run migrate:production",
-    "add:download": "node src/scripts/add-download.js"
+    "add:download": "node src/server-scripts/add-download.js",
+    "delete:download": "node src/server-scripts/delete-download.js",
+    "edit:download": "node src/server-scripts/edit-download.js",
+    "print:downloads": "node src/server-scripts/print-downloads.js"
   },
   "keywords": [],
   "engines": {
