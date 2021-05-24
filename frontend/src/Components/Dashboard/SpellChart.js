@@ -142,7 +142,7 @@ export default function SpellChart(props) {
     <React.Fragment>
       <div className={classes.headBar}>
         <div className={classes.headLeft}></div>
-        <div className={classes.headTitle}>My Spells</div>
+        <div className={classes.headTitle}>My Spells?</div>
         <div className={classes.headRight}>
           <SearchBar 
             setSearch={props.setSearch}

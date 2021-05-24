@@ -7,7 +7,7 @@ const config = require('../src/config')
 const bcrypt = require('bcryptjs')
 const supertest = require('supertest')
 
-describe.only('Spell Index', () => {
+describe('Spell Index', () => {
   let db
 
   let {
@@ -169,7 +169,7 @@ describe.only('Spell Index', () => {
     // responds with "Apple Storm" spell when given search query ?search=apple
     // underscores within search queries should be translated to spaces
     
-    it.only(`responds with the spell "Apple Storm" when given the query ?search=apple`, () => {
+    it(`responds with the spell "Apple Storm" when given the query ?search=apple`, () => {
       return supertest(app)
       .get(`/spells?search=seeded`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
@@ -190,7 +190,7 @@ describe.only('Spell Index', () => {
     })
 
     let sortQuery = 'description'
-    it(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
+    it.only(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
       return supertest(app)
       .get(`/spells?sort=${sortQuery}`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
