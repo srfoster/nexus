@@ -7,7 +7,7 @@ const config = require('../src/config')
 const bcrypt = require('bcryptjs')
 const supertest = require('supertest')
 
-describe.only('Spell Index', () => {
+describe('Spell Index', () => {
   let db
 
   let {
@@ -122,13 +122,20 @@ describe.only('Spell Index', () => {
       .then(async (res) => {
         let allTestSpells = 
           await db
-            .from('spells')
-            .select('*')
-            .where({user_id: testUsers[0].id, is_deleted: false})
+            .raw(`
+              (select * from (select spells.*, users.username as author, string_agg(tags.name, ',') as tags from spells 
+              left join tags on spells.id = tags.spell_id 
+              left join users on users.id = spells.user_id
+              where spells.user_id = ? and spells.is_deleted = false
+              group by spells.id, users.username) as spellsWithTags
+              limit ? offset ?)
+              order by date_modified desc`, 
+              [testUser.id, page_size, (page_size * (page-1))]
+            )
 
         expect(res.body.spells.length).to.equal(page_size)
         expect(res.body.spells.map(spell => spell.id).toString())
-          .to.equal(allTestSpells.sort(byName).map(spell => spell.id).slice(page_size * (page-1), page_size*page).toString())
+          .to.equal(allTestSpells.rows.map(spell => spell.id).toString())
       })
     })
 
@@ -140,13 +147,20 @@ describe.only('Spell Index', () => {
       .then(async (res) => {
         let allTestSpells = 
           await db
-            .from('spells')
-            .select('*')
-            .where({user_id: testUsers[0].id, is_deleted: false})
+          .raw(`
+            (select * from (select spells.*, users.username as author, string_agg(tags.name, ',') as tags from spells 
+            left join tags on spells.id = tags.spell_id 
+            left join users on users.id = spells.user_id
+            where spells.user_id = ? and spells.is_deleted = false
+            group by spells.id, users.username) as spellsWithTags
+            limit ? offset ?)
+            order by date_modified desc`, 
+            [testUser.id, 10, 0]
+          )
 
         expect(res.body.spells.length).to.equal(10)
         expect(res.body.spells.map(spell => spell.id).toString())
-          .to.equal(allTestSpells.sort(byName).map(spell => spell.id).slice(0, 10).toString())
+          .to.equal(allTestSpells.rows.map(spell => spell.id).toString())
       })
     })
 

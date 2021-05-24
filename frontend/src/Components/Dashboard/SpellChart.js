@@ -73,7 +73,9 @@ export default function SpellChart(props) {
     if (event.target.checked) {
       const newSelecteds = props.spells
         .map((spell) => {
-          return spell.id
+          if (spell.locked) {
+            console.log(spell.locked)
+          } else return spell.id
         })
       setSelected(newSelecteds);
       return;

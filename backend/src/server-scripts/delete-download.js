@@ -25,10 +25,10 @@ if (downloadId) {
         .where({ id: downloadId })
         .delete()
         .then((downloads) => {
-          console.log("Succcess!")
+          console.log("Success!")
         })
       } else {
-        return 'Ctrl C to exit'
+        console.log('Ctrl C to exit')
       }
     })
 
