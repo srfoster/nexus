@@ -33,7 +33,8 @@ const handleGet = async (req, res) => {
           page_size, (page_size * (page-1))
         ]
       )
-
+    
+    // TODO: Does this return is_deleted flags?
     spells = spells.rows
     spells = spells.map(spell => {
       spell.tags = spell.tags ? spell.tags.split(',') : []
@@ -42,6 +43,7 @@ const handleGet = async (req, res) => {
     })
 
     res.send({spells, total: Number(totalSpells.rows[0].count)})
+
   } catch (error) {
     console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
