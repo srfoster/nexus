@@ -1,3 +1,4 @@
+
 # Use postgres/example user/password credentials
 version: '3.1'
 
@@ -38,4 +39,3 @@ services:
     container_name: frontend
     env_file:
       - ./frontend/.env
-
