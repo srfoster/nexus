@@ -1,14 +1,15 @@
 const helpers = require('../endpoint-helpers')
 
-const handleGet = (req, res) => {
-  req.app.get('db')('spells')
-  .where({id: req.params.id, is_public: true, is_deleted: false})
-  .first()
-  .then((displaySpell) => {
-    delete displaySpell.is_deleted
-    // console.log(displaySpell);
+const handleGet = async (req, res) => {
+  try{
+    let displaySpell = await req.app.get('db')('spells')
+    .where({id: req.params.id})
+    .first()
 
-    // TODO: Send back message if undefined
+    if(displaySpell.is_deleted === true) res.send({error: 'This spell does not exist'})
+    delete displaySpell.is_deleted
+
+    if(displaySpell.is_public === false) res.send({error: 'This spell is private. Flag as public to call it.'})
 
     req.app.get('db')('tags')
     .where({spell_id: displaySpell.id})
@@ -16,7 +17,10 @@ const handleGet = (req, res) => {
       displaySpell.tags = tags
       res.send(displaySpell)
     })
-  })
+  } catch (error) {
+    console.log('Catch error: ', error);
+    res.send({error: 'Uh oh. Something went wrong.'})
+  }
 }
 
 module.exports = {

@@ -1,5 +1,12 @@
 # nexus
 
+Pre-Installation:
+(Windows users only)
+
+```
+git config --global core.autocrlf false
+```
+
 Installation:
 
 ```
@@ -21,6 +28,6 @@ Now you should be able to edit files in `frontend/` or `backend/`.  Reloading sh
 Running tests:
 
 ```
-docker exec -it [backend container id] bash
-npm run test
+docker exec -it backend npm run test
+docker exec -it frontend npm run test
 ```
