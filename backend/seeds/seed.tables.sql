@@ -27,6 +27,7 @@ INSERT INTO follows (user_id, follower_id)
 VALUES
   (1, 2),
   (1, 3),
-  (1, 3);
+  (1, 5);
+
   
 COMMIT;

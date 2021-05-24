@@ -16,6 +16,7 @@ import UserProfile from './Components/UserProfile';
 import NotFound from './Components/NotFound';
 import SpellsApiService from './Services/spells-api-service';
 import Downloads from './Components/Dashboard/Downloads';
+import Follows from './Components/Dashboard/Follows';
 require('codemirror/mode/scheme/scheme');
 
 
@@ -62,7 +63,7 @@ function App() {
           />
           <Route
             path={'/friends'}
-            component={(props) => <Dashboard child={<div>Friends Coming Soon</div>}></Dashboard>}
+            component={(props) => <Dashboard child={<Follows/>}></Dashboard>}
           />
           <Route
             path={'/gallery'}
