@@ -4,23 +4,24 @@ const { requireAuth } = require('../middleware/jwt-auth')
 const handleGet = (req, res) => {
   try{
     req.app.get('db')('spells')
-    .where({id: req.params.id})
-    .first()
-    .then((displaySpell) => {
-      if( !displaySpell || displaySpell.is_deleted === true) return res.status(400).send({error: "This spell does not exist."})
-      delete displaySpell.is_deleted
+      .where({id: req.params.id})
+      .first()
+      .then((displaySpell) => {
+        
+        if( !displaySpell || displaySpell.is_deleted === true) return res.status(400).send({error: "This spell does not exist."})
+        delete displaySpell.is_deleted
 
-      if(displaySpell.is_public === false && req.user.id !== displaySpell.user_id) {
-        return res.status(400).send({error: "This is a private spell that you do not own."})
-      }
+        if(displaySpell.is_public === false && req.user.id !== displaySpell.user_id) {
+          return res.status(400).send({error: "This is a private spell that you do not own."})
+        }
 
-      req.app.get('db')('tags')
-      .where({spell_id: displaySpell.id})
-      .then(tags => {
-        displaySpell.tags = tags
-        res.send(displaySpell)
+        req.app.get('db')('tags')
+        .where({spell_id: displaySpell.id})
+        .then(tags => {
+          displaySpell.tags = tags
+          res.send(displaySpell)
+        })
       })
-    })
   } catch (error) {
     console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})

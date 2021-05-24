@@ -2,17 +2,15 @@ const helpers = require('../endpoint-helpers')
 
 const handlePost = async (req, res, next) =>{
   try{
-    // console.log("Req: ", req.spells);
     // let public = user_id === req.user.id ? is_public: true : is_public: false;
 
-    // console.log(req.body)
     let displaySpell = await req.app.get('db')('spells')
     .where({id: req.params.id})
     .first()
 
     if(displaySpell){
       const {name, description, text} = displaySpell
-      // console.log(req.user.id)
+
       let newSpell = await req.app.get('db')('spells')
       .insert({user_id: req.user.id, name: name+' (Fork)', description: description,
                 text: text, date_created: new Date(), date_modified: new Date()})

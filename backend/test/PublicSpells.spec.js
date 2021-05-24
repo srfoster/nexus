@@ -53,7 +53,8 @@ describe('Public Spells', () => {
       )
     )
 
-    it(`GET ${epPublicSpells} responds with 200`, () => {
+    //1
+    it.only(`GET ${epPublicSpells} responds with 200`, () => {
       return supertest(app)
         .get(epPublicSpells)
         .expect(200)
@@ -123,6 +124,7 @@ describe('Public Spells', () => {
       })
     })
 
+    //2
     // Example /spells?page=2&page_size=5
     // For user[0], page 2 with a page size of 5 should return 5 spells
     let page = 2;
@@ -144,6 +146,7 @@ describe('Public Spells', () => {
       })
     })
 
+    //3
     it(`only returns the first page with a size of 9 when no page or page size is specified`, () => {
       return supertest(app)
       .get(`/gallery`)
@@ -180,6 +183,7 @@ describe('Public Spells', () => {
       })
     })
 
+    //4
     let sortQuery = 'description'
     it(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
       return supertest(app)

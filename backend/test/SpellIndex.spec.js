@@ -190,7 +190,7 @@ describe('Spell Index', () => {
     })
 
     let sortQuery = 'description'
-    it.only(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
+    it(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
       return supertest(app)
       .get(`/spells?sort=${sortQuery}`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
