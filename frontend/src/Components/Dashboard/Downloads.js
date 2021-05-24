@@ -18,7 +18,7 @@ function Downloads() {
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = React.useState('');
   const [games, setGames] = React.useState([]);
-  const [totalGames, setTotalGames] = React.useState(0);
+  const [totalGames, setTotalGames] = React.useState();
     
   useEffect(() => {
     SpellsApiService.getDownloads()

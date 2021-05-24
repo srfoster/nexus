@@ -2,6 +2,7 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import { Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from 'history';
+import {Helmet} from "react-helmet";
 import ReactGA from 'react-ga';
 import AuthApiService from './Services/auth-api-service';
 // import IdleService from './Services/idle-service';
@@ -41,6 +42,10 @@ function App() {
 
   return (
     <div className="App">
+      <Helmet>
+        <title>CodeSpells Nexus</title>
+        <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
+      </Helmet>
       <div >
         <Switch>
           <Route
