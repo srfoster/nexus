@@ -33,7 +33,7 @@ const handlePost = async (req, res, next) =>{
       res.status(401).send({error: 'That spell is private'})
     }
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }

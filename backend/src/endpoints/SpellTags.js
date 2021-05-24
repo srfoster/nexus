@@ -25,7 +25,7 @@ const handleGet = async (req, res) => {
       res.send(tags[0])
     })
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }
@@ -46,7 +46,7 @@ const handleDelete = async (req, res) => {
         res.send({tags})
       })
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }

@@ -18,7 +18,7 @@ const handleGet = async (req, res) => {
       res.send(displaySpell)
     })
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }

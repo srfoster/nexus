@@ -73,7 +73,7 @@ const handleGet = async (req, res) => {
     res.send({spells, total: Number(totalSpells.rows[0].count)})
 
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }
@@ -91,7 +91,7 @@ const handlePost = (req, res, next) => {
     })
 
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }

@@ -6,9 +6,9 @@ const handleGet = async (req, res) => {
       .count()
     let games = await req.app.get('db')('downloads')
     res.send({games, total: Number(totalGames[0].count)})
-    
+
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }

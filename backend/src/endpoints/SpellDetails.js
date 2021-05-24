@@ -22,7 +22,7 @@ const handleGet = (req, res) => {
       })
     })
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }
@@ -45,7 +45,7 @@ const handleDelete = async (req, res) => {
         }
       })
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }
@@ -74,7 +74,7 @@ const handlePut = async (req, res, next) => {
       }
     })
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }

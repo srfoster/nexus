@@ -33,7 +33,7 @@ const handleSignup = (req, res, next) => {
           })
       })
   } catch (error) {
-    console.log(error);
+    console.log('Catch error: ', error);
     res.send({error: 'Uh oh. Something went wrong.'})
   }
 }
