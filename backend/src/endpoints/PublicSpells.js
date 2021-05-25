@@ -5,7 +5,21 @@ const handleGet = async (req, res) => {
     let page = req.query.page ? req.query.page : 1;
     let page_size = req.query.page_size ? req.query.page_size : 9;
     let searchTerm = req.query.search ? `%${req.query.search.toLowerCase()}%` : `%%`
-    let sortQuery = req.query.sort ? req.query.sort : 'date_modified'
+    let sortQuery;
+    let sortDirection;
+
+    if(req.query.sort){
+      sortQuery = helpers.sanitizeSortQuery(req.query.sort, sortQuery);
+    }
+
+    if(req.query.sortDirection){
+      sortDirection = helpers.sanitizeSortDirection(req.query.sortDirection, sortDirection);
+    } else {
+      // If there's a sort but not sort direction sent, default to ascending
+      if(req.query.sort){
+        sortDirection = 'asc'
+      } 
+    }
 
     let totalSpells = await req.app.get('db')
       .raw(`
@@ -16,7 +30,7 @@ const handleGet = async (req, res) => {
         where spells.is_deleted = false and spells.is_public = true
         group by spells.id, users.username) as spellsWithTags
         where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ? or lower(author) like ?) as searchedSpells`, 
-        ['%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%']
+        [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm]
       )
 
     let spells = await req.app.get('db')
@@ -28,14 +42,16 @@ const handleGet = async (req, res) => {
         group by spells.id, users.username) as spellsWithTags
         where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ? or lower(author) like ?
         limit ? offset ?)
-        order by date_modified desc`, 
-        ['%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%',
+        order by ${sortQuery ? sortQuery : 'date_modified'} ${sortDirection}`, 
+        [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm,
           page_size, (page_size * (page-1))
         ]
       )
+      // console.log(spells);
     
     // TODO: Does this return is_deleted flags?
     spells = spells.rows
+    console.log(spells.map(spell => spell.id).toString());
     spells = spells.map(spell => {
       spell.tags = spell.tags ? spell.tags.split(',') : []
       spell.tags = spell.tags.map(tag => {return {id: tag, name: tag}})

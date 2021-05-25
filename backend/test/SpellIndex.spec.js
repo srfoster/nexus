@@ -114,7 +114,7 @@ describe('Spell Index', () => {
     })
 
     // page and page_size defined at top of describe
-    it(`responds with the page ${page} and ${page_size} results when given ?page=${page}&page_size=${page_size}`, () => {
+    it.only(`responds with the page ${page} and ${page_size} results when given ?page=${page}&page_size=${page_size}`, () => {
       return supertest(app)
       .get(`/spells?page=${page}&page_size=${page_size}`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
