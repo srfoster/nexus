@@ -4,6 +4,7 @@ import SpellChart from './SpellChart';
 import Dashboard from './Dashboard';
 import SpellsApiService from '../../Services/spells-api-service';
 import FabAddIcon from './FabAddIcon';
+import {Helmet} from "react-helmet";
 
 function SpellIndex(props) {
   const [spells, setSpells] = useState([])
@@ -37,30 +38,36 @@ function SpellIndex(props) {
   }
 
   return (
-    <Dashboard
-      spells={spells}
-      setSpells={setSpells}
-      createSpell={createSpell}
-      child={<SpellChart
-        setCurrentPage={setCurrentPage}
-        setSearch={setSearch}
-        setSortDirection={setSortDirection}
-        sortDirection={sortDirection}
-        orderBy={orderBy}
-        setOrderBy={setOrderBy}
-        spells={spells}
-        totalSpells={totalSpells}
-        onChange={(changedSpell) => setSpells(spells.map(spell => changedSpell.id === spell.id ? changedSpell : spell))}
-        onDelete={(deletedSpellID) => setSpells(spells.filter(spell => spell.id !== deletedSpellID))}
-        setRefresh={setRefresh}
-      />}
-      fabIcon={<FabAddIcon
+    <>
+      <Helmet>
+        <title>Spells | CodeSpells Nexus</title>
+        <meta name="description" content="Create and edit your spells. Spells that you make public can be cast inside of CodeSpells games." />
+      </Helmet>
+      <Dashboard
         spells={spells}
         setSpells={setSpells}
-        clickIcon={createSpell}
-      />}
-    >
-    </Dashboard>
+        createSpell={createSpell}
+        child={<SpellChart
+          setCurrentPage={setCurrentPage}
+          setSearch={setSearch}
+          setSortDirection={setSortDirection}
+          sortDirection={sortDirection}
+          orderBy={orderBy}
+          setOrderBy={setOrderBy}
+          spells={spells}
+          totalSpells={totalSpells}
+          onChange={(changedSpell) => setSpells(spells.map(spell => changedSpell.id === spell.id ? changedSpell : spell))}
+          onDelete={(deletedSpellID) => setSpells(spells.filter(spell => spell.id !== deletedSpellID))}
+          setRefresh={setRefresh}
+        />}
+        fabIcon={<FabAddIcon
+          spells={spells}
+          setSpells={setSpells}
+          clickIcon={createSpell}
+        />}
+      >
+      </Dashboard>
+    </>
   )
 }
 

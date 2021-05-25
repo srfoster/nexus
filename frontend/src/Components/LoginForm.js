@@ -46,8 +46,8 @@ const LoginForm = (props) => {
     return (
     <>
       <Helmet>
-        <title>CodeSpells Nexus</title>
-        <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
+        <title>Login | CodeSpells Nexus</title>
+        <meta name="description" content="Log into the CodeSpells Nexus to create & save spells that you can cast in CodeSpells games and connect with other CodeSpells witches & wizards." />
       </Helmet>
       <Route
         path={'/'}
