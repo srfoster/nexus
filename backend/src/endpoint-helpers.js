@@ -39,7 +39,7 @@ let sanitizeSortQuery = (startingSortQuery, sortQuery) => {
   // These are front end table column names
   let whiteListColumnNames = ['modified', 'created', 'name', 'description', 'public']
   if(insecureSortQuery && whiteListColumnNames.indexOf(insecureSortQuery) < 0){
-    return res.status(400).send({error: "Not an expected sort column."})
+    return res.status(401).send({error: "Not an expected sort column."})
   }
   sortQuery = insecureSortQuery
 
@@ -55,7 +55,7 @@ let sanitizeSortDirection = (paramSortDirection, sortDirection) => {
   let insecure_sort_direction = paramSortDirection 
 
   if(insecure_sort_direction && ['asc', 'desc'].indexOf(insecure_sort_direction) < 0){
-    return res.status(400).send({error: "Not an expected sort direction."})
+    return res.status(401).send({error: "Not an expected sort direction."})
   }
 
   return sortDirection = insecure_sort_direction

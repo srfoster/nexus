@@ -10,32 +10,6 @@ const handleGet = async (req, res) => {
     let sortQuery;
     let sortDirection;
 
-    // // If sort value, resolve security risks
-    // // This value needs to go into an insecure order by clause later
-    // if(req.query.sort){
-    //   // Should all sorts take the name as a secondary sort by default?
-    //   let insecureSortQuery = req.query.sort 
-
-    //   // These are front end table column names
-    //   let whiteListColumnNames = ['modified', 'created', 'name', 'description', 'public']
-    //   if(insecureSortQuery && whiteListColumnNames.indexOf(insecureSortQuery) < 0){
-    //     return res.status(400).send({error: "Not an expected sort column."})
-    //   }
-    //   sortQuery = insecureSortQuery
-
-    //   // These are converting to back end table column names
-    //   if(sortQuery === 'created') sortQuery = 'date_created';
-    //   if(sortQuery === 'modified') sortQuery = 'date_modified';
-    //   if(sortQuery === 'public') sortQuery = 'is_public';
-
-    //   let insecure_sort_direction = req.query.sortDirection 
-    //   if(insecure_sort_direction && ['asc', 'desc'].indexOf(insecure_sort_direction) < 0){
-    //     return res.status(400).send({error: "Not an expected sort direction."})
-    //   }
-    //   sort_direction = insecure_sort_direction
-    //   // console.log(sort_direction);
-    // }
-
     if(req.query.sort){
       sortQuery = helpers.sanitizeSortQuery(req.query.sort, sortQuery);
     }
@@ -43,10 +17,13 @@ const handleGet = async (req, res) => {
     if(req.query.sortDirection){
       sortDirection = helpers.sanitizeSortDirection(req.query.sortDirection, sortDirection);
     } else {
-      // If there's a sort but not sort direction sent, default to ascending
       if(req.query.sort){
+        // If there's a sort but no sort direction, default to ascending
         sortDirection = 'asc'
-      } 
+      } else {
+        // If there's neither a sort nor a sort direction, default to descending
+        sortDirection = 'desc'
+      }
     }
 
     let totalSpells = await req.app.get('db')

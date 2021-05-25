@@ -18,7 +18,9 @@ const handleGet = async (req, res) => {
       // If there's a sort but not sort direction sent, default to ascending
       if(req.query.sort){
         sortDirection = 'asc'
-      } 
+      } else {
+        sortDirection = 'desc'
+      }
     }
 
     let totalSpells = await req.app.get('db')
