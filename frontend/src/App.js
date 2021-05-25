@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 import {Helmet} from "react-helmet";
-import ReactGA from 'react-ga';
 import AuthApiService from './Services/auth-api-service';
 // import IdleService from './Services/idle-service';
 import TokenService from './Services/token-service';
@@ -21,11 +20,6 @@ import SpellsApiService from './Services/spells-api-service';
 import Downloads from './Components/Dashboard/Downloads';
 require('codemirror/mode/scheme/scheme');
 
-ReactGA.initialize('UA-197643998-1')
-const browserHistory = createBrowserHistory()
-browserHistory.listen((location, action) => {
-  ReactGA.pageview(location.pathname + location.search)
-})
 
 function App() {
   const paper = outerPaper();
@@ -33,7 +27,6 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
 
   useEffect(() => {
-    ReactGA.pageview(window.location.pathname + window.location.search)
     // Only running this to check if logged in
     SpellsApiService.getUserById('me')
       .then((user) => setIsLoggedIn(true))
@@ -43,8 +36,14 @@ function App() {
   return (
     <div className="App">
       <Helmet>
-        <title>CodeSpells Nexus</title>
-        <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-J6N2NMKYC9"></script>
+        <script>
+          {`window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', 'G-J6N2NMKYC9');`}
+        </script>
       </Helmet>
       <div >
         <Switch>
