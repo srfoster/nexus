@@ -2,8 +2,7 @@ import './App.css';
 import React, { useEffect, useState } from 'react';
 import { Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from 'history';
-import ReactGA from 'react-ga';
-import AuthApiService from './Services/auth-api-service';
+import ReactGA from 'react-ga'; import AuthApiService from './Services/auth-api-service';
 // import IdleService from './Services/idle-service';
 import TokenService from './Services/token-service';
 import LoginForm from './Components/LoginForm';
@@ -18,6 +17,7 @@ import UserProfile from './Components/UserProfile';
 import NotFound from './Components/NotFound';
 import SpellsApiService from './Services/spells-api-service';
 import Downloads from './Components/Dashboard/Downloads';
+import Docs from './Components/Docs/Docs';
 require('codemirror/mode/scheme/scheme');
 
 ReactGA.initialize('UA-197643998-1')
@@ -85,6 +85,14 @@ function App() {
             component={(props) => <Dashboard child={<Downloads/>}></Dashboard>}
           />
           <Route
+            path={'/docs/:page'}
+            component={(props) => <Dashboard child={<Docs match={props.match} />}></Dashboard>}
+	    />
+          <Route
+            path={'/docs'}
+            component={(props) => <Dashboard child={<Docs match={{params: {page: "docs"}}} />}></Dashboard>}
+          />
+          <Route
             component={(props) => <Dashboard child={<NotFound/>}></Dashboard>}
           />
         </Switch>
@@ -106,3 +114,5 @@ const outerPaper = makeStyles((theme) => ({
 }));
 
 export default App;
+
+
