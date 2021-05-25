@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import SpellsApiService from '../../Services/spells-api-service';
+import FollowCard from '../FollowCard'
 
 function Follows() {
   const [follows, setFollows] = useState()
@@ -25,7 +26,7 @@ function Follows() {
 
   return(
     <>
-      <div>Adding friends stuff now</div>
+      <FollowCard>Adding friends stuff now</FollowCard>
       {follows && follows.map(follow => {
         return <p>user: {follow.user_id} follows: {follow.follower_id}</p>
       })}

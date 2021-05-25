@@ -84,10 +84,7 @@ const UserProfile = (props) => {
           />
         </div>
       </>
-    : 
-    <>
-      <h3 style={{fontWeight: '400'}}>Please <Button color="primary" onClick={() => history.push('/login')}>Sign In</Button>/<Button color="primary" onClick={() => history.push('/signup')}>Sign Up</Button> to view this page.</h3>
-    </>
+    : ''
   );
 };
 

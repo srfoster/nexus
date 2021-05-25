@@ -526,7 +526,14 @@ const useStyles = makeStyles((theme) => ({
   // List Items
   listIcon: {
     backgroundColor: 'rgb(100,149,237)',
+  },
+
+  //follow Cards
+  followCardBody: {
+    height: '1000px',
+    color: 'red',
   }
 }));
+
 
 export default useStyles
