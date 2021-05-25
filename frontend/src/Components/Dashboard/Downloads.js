@@ -9,6 +9,7 @@ import { SearchBar } from '../../Util.js'
 import SpellsApiService from '../../Services/spells-api-service';
 import Title from './Title';
 import styles from '../../styles.js'
+import { Helmet } from "react-helmet";
 
 function Downloads() {
   const classes = useStyles();
@@ -32,6 +33,10 @@ function Downloads() {
 
   return (
     <>
+     <Helmet>
+        <title>Downloads | CodeSpells Nexus</title>
+        <meta name="description" content="Download the latest CodeSpells video games. The spells you write here in the Nexus can be cast inside of these games!" />
+      </Helmet>
       <div className={classes.headBar}>
         <div className={classes.headLeft}></div>
         <Title className={classes.headTitle}>Downloads</Title>
