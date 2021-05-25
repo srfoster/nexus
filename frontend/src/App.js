@@ -87,7 +87,7 @@ function App() {
           <Route
             path={'/docs/:page'}
             component={(props) => <Dashboard child={<Docs match={props.match} />}></Dashboard>}
-	    />
+	        />
           <Route
             path={'/docs'}
             component={(props) => <Dashboard child={<Docs match={{params: {page: "docs"}}} />}></Dashboard>}
