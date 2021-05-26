@@ -56,9 +56,25 @@ describe('Spell Index', () => {
       )
     )
 
+    // Does not supply any spells with the deleted = true flag
+
     it(`GET ${epSpellIndex} responds with 401 if not logged in`, () => {
       return supertest(app)
         .get(epSpellIndex)
+        .expect(401)
+    })
+
+    it(`GET ${epSpellIndex} responds with 401 if attempting to sort by an invalid column name`, () => {
+      return supertest(app)
+        .get(`/spells?sort=hax`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(401)
+    })
+
+    it(`GET ${epSpellIndex} responds with 401 if attempting to sort by an invalid sort direction`, () => {
+      return supertest(app)
+        .get(`/spells?sortDirection=hax`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(401)
     })
 
@@ -84,6 +100,7 @@ describe('Spell Index', () => {
               expect(res.body[i].tags.map((t) => t.id).toString())
               .to.equal(testTags.filter((t) => t.spell_id === testSpells[0].id).map(t => t.id).toString())
             } 
+            
             expect(res.body[i].tags.length).to.equal(testTags.filter((t) => t.spell_id === testSpells[i].id).length)
           }
         })
@@ -122,20 +139,14 @@ describe('Spell Index', () => {
       .then(async (res) => {
         let allTestSpells = 
           await db
-            .raw(`
-              (select * from (select spells.*, users.username as author, string_agg(tags.name, ',') as tags from spells 
-              left join tags on spells.id = tags.spell_id 
-              left join users on users.id = spells.user_id
-              where spells.user_id = ? and spells.is_deleted = false
-              group by spells.id, users.username) as spellsWithTags
-              limit ? offset ?)
-              order by date_modified desc`, 
-              [testUser.id, page_size, (page_size * (page-1))]
-            )
+            .from('spells')
+            .select('*')
+            .where({user_id: testUsers[0].id, is_deleted: false})
+            .orderBy('date_modified', 'desc')
 
         expect(res.body.spells.length).to.equal(page_size)
         expect(res.body.spells.map(spell => spell.id).toString())
-          .to.equal(allTestSpells.rows.map(spell => spell.id).toString())
+          .to.equal(allTestSpells.map(spell => spell.id).slice(page_size * (page-1), page_size*page).toString())
       })
     })
 
@@ -147,20 +158,18 @@ describe('Spell Index', () => {
       .then(async (res) => {
         let allTestSpells = 
           await db
-          .raw(`
-            (select * from (select spells.*, users.username as author, string_agg(tags.name, ',') as tags from spells 
-            left join tags on spells.id = tags.spell_id 
-            left join users on users.id = spells.user_id
-            where spells.user_id = ? and spells.is_deleted = false
-            group by spells.id, users.username) as spellsWithTags
-            limit ? offset ?)
-            order by date_modified desc`, 
-            [testUser.id, 10, 0]
-          )
+            .from('spells')
+            .select('*')
+            .where({user_id: testUsers[0].id, is_deleted: false})
+            .orderBy('date_modified', 'desc')
+            .limit(10)
 
         expect(res.body.spells.length).to.equal(10)
         expect(res.body.spells.map(spell => spell.id).toString())
-          .to.equal(allTestSpells.rows.map(spell => spell.id).toString())
+          .to.equal(allTestSpells.map(spell => spell.id).toString())
+        // Manual input, this may change with new seed data
+        expect(res.body.spells.map(spell => Number(spell.id)).toString())
+          .to.equal([1,2,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].reverse().slice(0,10).toString())
       })
     })
 
@@ -171,11 +180,11 @@ describe('Spell Index', () => {
     
     it(`responds with the spell "Apple Storm" when given the query ?search=apple`, () => {
       return supertest(app)
-      .get(`/spells?search=seeded`)
+      .get(`/spells?search=apple`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then(async (res) => {
-        let searchTerm = '%seeded%'
+        let searchTerm = '%apple%'
         
         let allSearchResults = 
           await db
@@ -183,6 +192,7 @@ describe('Spell Index', () => {
             .select('*')
             .where({user_id: testUsers[0].id, is_deleted: false})
             .whereRaw("LOWER(name) like LOWER(?)", [searchTerm])
+            .orderBy('date_modified', 'desc')
 
         expect(res.body.spells[0].name).to.equal(allSearchResults[0].name)
         expect(res.body.total).to.equal(allSearchResults.length)

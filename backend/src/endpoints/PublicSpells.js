@@ -5,7 +5,28 @@ const handleGet = async (req, res) => {
     let page = req.query.page ? req.query.page : 1;
     let page_size = req.query.page_size ? req.query.page_size : 9;
     let searchTerm = req.query.search ? `%${req.query.search.toLowerCase()}%` : `%%`
-    let sortQuery = req.query.sort ? req.query.sort : 'date_modified'
+    let sortQuery;
+    let sortDirection;
+
+    // Sanitize sort
+    if(req.query.sort){
+      sortQuery = helpers.sanitizeSortQuery(req.query.sort, sortQuery);
+      if(sortQuery === 'Invalid') return res.status(401).send({error: "Not an expected sort column."})
+    }
+
+    // Sanitize sort direction
+    if(req.query.sortDirection){
+      sortDirection = helpers.sanitizeSortDirection(req.query.sortDirection, sortDirection);
+      if(sortDirection === 'Invalid') return res.status(401).send({error: "Not an expected sort direction."})
+    } else {
+      if(req.query.sort){
+        // If there's a sort but no sort direction, default to ascending
+        sortDirection = 'asc'
+      } else {
+        // If there's neither a sort nor a sort direction, default to descending
+        sortDirection = 'desc'
+      }
+    }
 
     let totalSpells = await req.app.get('db')
       .raw(`
@@ -16,7 +37,7 @@ const handleGet = async (req, res) => {
         where spells.is_deleted = false and spells.is_public = true
         group by spells.id, users.username) as spellsWithTags
         where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ? or lower(author) like ?) as searchedSpells`, 
-        ['%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%']
+        [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm]
       )
 
     let spells = await req.app.get('db')
@@ -28,15 +49,15 @@ const handleGet = async (req, res) => {
         group by spells.id, users.username) as spellsWithTags
         where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ? or lower(author) like ?
         limit ? offset ?)
-        order by date_modified desc`, 
-        ['%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%',
+        order by ${sortQuery ? sortQuery : 'date_modified'} ${sortDirection}`, 
+        [searchTerm, searchTerm, searchTerm, searchTerm, searchTerm,
           page_size, (page_size * (page-1))
         ]
       )
     
-    // TODO: Does this return is_deleted flags?
     spells = spells.rows
     spells = spells.map(spell => {
+      delete spell.is_deleted
       spell.tags = spell.tags ? spell.tags.split(',') : []
       spell.tags = spell.tags.map(tag => {return {id: tag, name: tag}})
       return spell

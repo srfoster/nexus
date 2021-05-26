@@ -149,10 +149,11 @@ describe('Wizard Details', () => {
             .from('spells')
             .select('*')
             .where({user_id: testUsers[0].id, is_public: true, is_deleted: false})
-
+            .orderBy('date_modified', 'desc')
+        
         expect(res.body.spells.length).to.equal(page_size)
         expect(res.body.spells.map(spell => spell.id).toString())
-          .to.equal(allTestSpells.sort(byName).map(spell => spell.id).slice(page_size * (page-1), page_size*page).toString())
+          .to.equal(allTestSpells.map(spell => spell.id).slice(page_size * (page-1), page_size*page).toString())
       })
     })
 
@@ -167,10 +168,11 @@ describe('Wizard Details', () => {
             .from('spells')
             .select('*')
             .where({user_id: testUsers[0].id, is_public: true, is_deleted: false})
+            .orderBy('date_modified', 'desc')
 
         expect(res.body.spells.length).to.equal(9)
         expect(res.body.spells.map(spell => spell.id).toString())
-          .to.equal(allTestSpells.sort(byName).map(spell => spell.id).slice(0, 9).toString())
+          .to.equal(allTestSpells.map(spell => spell.id).slice(0, 9).toString())
       })
     })
 
@@ -208,7 +210,8 @@ describe('Wizard Details', () => {
             .where({user_id: testUsers[0].id, is_public: true, is_deleted: false})
             .orderBy(`${sortQuery}`, 'asc')
 
-        expect(res.body.spells[0].description.toString()).to.equal(sortedSpells[0].description.toString())
+        expect(res.body.spells[0].description.toString())
+          .to.equal(sortedSpells[0].description.toString())
       })
     })
 
