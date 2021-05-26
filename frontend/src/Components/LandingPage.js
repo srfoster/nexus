@@ -21,7 +21,6 @@ const LandingPage = (props) => {
         component={Header}
       />
       <div className={classes.landingDisplay}>
-        <ConnectionIndicator/>
         <div>
           <h1>
             CodeSpells Spell Sharing

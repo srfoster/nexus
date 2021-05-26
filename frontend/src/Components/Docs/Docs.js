@@ -6,7 +6,7 @@ const linkTo = (s,t) => <a href={"/docs/"+s}>{t}</a>
 const topDocLink = linkTo("docs", "Back to Top")
 
 const docPageContent = {
- docs: <>
+  docs: <>
         <p>Welcome to the Nexus!</p>
         <p>The Nexus is a hub for the CodeSpells community where we can write, save, share, and find spells that can be cast in game, 
           download CodeSpells authored works, and connect with other Mages.</p>
@@ -47,6 +47,7 @@ const docPageContent = {
   </>,
   "getting-started": <>
     {topDocLink}
+    <ConnectionIndicator/>
     <p>Gotta start somewhere!</p>
   </>,
   "people": <>
