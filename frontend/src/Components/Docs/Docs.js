@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import GettingStarted from './GettingStarted.js';
+import People from './People.js';
 import {kabobCaseToTitleCase} from '../../Util.js';
 import {linkTo, topDocLink} from './util.js';
 
@@ -15,8 +16,8 @@ const docPageContent = {
           <li>{linkTo("orb-lab", "Orb Lab")}</li>
           <li>{linkTo("building-new-games", "Building New Games")}</li>
         </ul>
-        <p>If you just want to write spells and you're looking for the spell-crafting APIs, you can find them here: {linkTo("langs", "APIs")}</p>
-        <p>Above all, CodeSpells is a community, and the Nexus is the hub we are building for ourselves.  Learn more about the people involved in the community here: {linkTo("people", "People")}.</p>
+        <p>If you just want to write spells and you're looking for the spell-crafting APIs, you can find them in our {linkTo("langs", "Langs")} section.</p>
+        <p>Above all, CodeSpells is a community, and the Nexus is the hub we are building for ourselves.  Learn more about the people involved in the community in the {linkTo("people", "People")} section.</p>
       </>,
   "orb-world": <>
     {topDocLink}
@@ -47,8 +48,7 @@ const docPageContent = {
     <GettingStarted/> 
   </>,
   "people": <>
-    {topDocLink}
-    <p>Our community is amazing!</p>
+    <People/>
   </>,
   "building-new-games": <>
     {topDocLink}
@@ -66,8 +66,8 @@ function Docs(props) {
   return (
     <>
       <div style={{textAlign: "left"}}>
-      <h1>{kabobCaseToTitleCase(page)}</h1>
-      {docPageContent[page]}
+        <h1>{kabobCaseToTitleCase(page)}</h1>
+        {docPageContent[page]}
       </div>
     </>
   );
