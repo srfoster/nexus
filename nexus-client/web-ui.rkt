@@ -7,13 +7,14 @@
          unreal
          unreal/libs/actors
          unreal/libs/basic-types
-         orb-game-1/lang
-         orb-game-1/runner/main)
+         unreal/external-runtime/main
+
+         orb-game-1/lang)
 
 (define (start-ui)
   (ws-serve* #:port 8082 
              (ws-service-mapper
-              ["/test" ; the URL path (regular expression)
+              ["/test" 
                [(#f) ; if client did not request any subprotocol
                 (lambda (c) 
                   (displayln "Connection established")
@@ -42,15 +43,16 @@
                     
                     (define (spawn-other-orb loc)
                       @unreal-value{
-                                    var Spawn = Root.ResolveClass('PickupMini');
-                                        var spawn = new Spawn(GWorld, @(->unreal-value loc));
-                                        spawn.SetText("");
-                                        
-                                        return spawn;
-                                        })
+                                var Spawn = Root.ResolveClass('PickupMini');
+                                var spawn = new Spawn(GWorld, @(->unreal-value loc));
+                                spawn.SetText("");
+                                
+                                return spawn;
+                                })
                     
                     (define other (unreal-eval-js (spawn-other-orb loc)))
                     
+                    (spell-language-module 'orb-game-1/run-lang-external)
                     (add-spawn! (hash-ref other 'id) other)
                     
                     (run-spell (hash-ref other 'id)
@@ -68,19 +70,4 @@
   
   (let loop ()
     (sleep 10000)
-    (loop))
-  )
-
-#|
-(require web-server/servlet
-         web-server/servlet-env)
-
-(define (start req)
-  (response/xexpr
-   `(html (head (title "Hello world!"))
-          (body (p "Hey out there!")))))
-
-(define (start-ui)
-  (serve/servlet start
-                 #:port 8082))
-|#
+    (loop)))
