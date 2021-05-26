@@ -58,6 +58,8 @@ describe('Spell Index', () => {
 
     // Does not supply any spells with the deleted = true flag
 
+    // If no sort query, default sort direction to desc
+
     it(`GET ${epSpellIndex} responds with 401 if not logged in`, () => {
       return supertest(app)
         .get(epSpellIndex)
