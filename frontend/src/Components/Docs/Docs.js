@@ -1,53 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {titleCase} from '../../Util.js';
-import CodeMirror from 'codemirror';
-import {UnControlled as ReactCodeMirror} from 'react-codemirror2';
+import GettingStarted from './GettingStarted.js';
 import {kabobCaseToTitleCase} from '../../Util.js';
-
-const linkTo = (s,t) => <a href={"/docs/"+s}>{t}</a>
-
-const topDocLink = linkTo("docs", "Back to Top")
-
-
-function GettingStarted(props){
-  return <>{topDocLink}
-		
-		<p>We think the best way to get started with CodeSpells is to cast a spell as soon as possible.</p>
-
-		<p>You should know that whenver we say "cast a spell", we simultaneously mean "run some code."  In CodeSpells, code and spells are the same.</p>
-
-		<p>Here's the spell we are going to cast:</p>
-
-            <ReactCodeMirror
-	value={
-`(loop 
-
-  (define foods (find-all-nearby))
-
-  (map (lambda (f)
-	 (eat f 100))
-	foods)
-
-  )`
-	}
-              options={{
-                lineWrapping: true,
-                mode: 'scheme',
-                theme: 'material',
-                lineNumbers: true,
-                matchBrackets: true,
-                autoCloseBrackets: true,
-                styleActiveLine: true,
-              }}
-            /> :
-		<pre>
-		  <code>
-		  </code>
-		</pre>
-
-		<p>[TODO: Talk about mana system!!]</p>
-	</>
-}
+import {linkTo, topDocLink} from './util.js';
 
 const docPageContent = {
   docs: <>
@@ -57,25 +11,13 @@ const docPageContent = {
 	      <p>If it's your first time here, we recommend beginning your journey in our {linkTo("getting-started", "Getting Started")} section.</p>
         <p>There are two CodeSpells worlds in the <a href="/downloads">Downloads</a> section right now.  You can read more about those here, as well as learn how to create your own CodeSpells authored works:</p>
         <ul>
-<<<<<<< HEAD
-          <li>{linkTo("orb world",      "Orb World")}</li>
-          <li>{linkTo("orb lab",        "Orb Lab")}</li>
-          <li>{linkTo("world building", "Make your own world")}</li>
-=======
           <li>{linkTo("orb-world", "Orb World")}</li>
           <li>{linkTo("orb-lab", "Orb Lab")}</li>
           <li>{linkTo("building-new-games", "Building New Games")}</li>
->>>>>>> 51fc962c33cd621c33132041617e74faf4af4347
         </ul>
         <p>If you just want to write spells and you're looking for the spell-crafting APIs, you can find them here: {linkTo("langs", "APIs")}</p>
         <p>Above all, CodeSpells is a community, and the Nexus is the hub we are building for ourselves.  Learn more about the people involved in the community here: {linkTo("people", "People")}.</p>
       </>,
-<<<<<<< HEAD
- "orb world": <>{topDocLink}<p>Wanna know about the Orb World?</p></>,
- "orb lab": <>{topDocLink}<p>What is Orb Lab?  Many have asked.  Few know.</p></>,
- "langs": <>{topDocLink}<p>Here are the APIs...</p></>,
- "getting started": <GettingStarted />,
-=======
   "orb-world": <>
     {topDocLink}
     <h2>About</h2>
@@ -102,9 +44,7 @@ const docPageContent = {
     <p>You can find the API for the <a href="https://www.twitch.tv/codespells" target="_blank">Twitch</a> chat here: Twitch Chat - API coming soon</p>
   </>,
   "getting-started": <>
-    {topDocLink}
-    <ConnectionIndicator/>
-    <p>Gotta start somewhere!</p>
+    <GettingStarted/> 
   </>,
   "people": <>
     {topDocLink}

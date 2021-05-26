@@ -3,7 +3,6 @@ import { Switch, Route, Link, useHistory } from "react-router-dom";
 import Header from './Header';
 import Button from '@material-ui/core/Button';
 import useStyles from '../styles.js';
-import ConnectionIndicator from './Client/ConnectionIndicator';
 
 const LandingPage = (props) => {
   let history = useHistory();

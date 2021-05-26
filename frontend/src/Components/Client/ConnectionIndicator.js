@@ -12,11 +12,12 @@ const ConnectionIndicator = (props) => {
         s.open = function (event) {
             console.log("Open...");
         }
+        window.CodeSpellsSocket = s;
     },[])
 
     return (
     <>
-            {connected ? "Connected" : "Not Connected"}
+            {connected ? <><p>Connected</p>{props.afterConnection}</> : "Not Connected"}
     </>
   )
 };
