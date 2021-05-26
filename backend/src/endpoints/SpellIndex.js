@@ -10,12 +10,16 @@ const handleGet = async (req, res) => {
     let sortQuery;
     let sortDirection;
 
+    // Sanitize sort
     if(req.query.sort){
       sortQuery = helpers.sanitizeSortQuery(req.query.sort, sortQuery);
+      if(sortQuery === 'Invalid') return res.status(401).send({error: "Not an expected sort column."})
     }
 
+    // Sanitize sort direction
     if(req.query.sortDirection){
       sortDirection = helpers.sanitizeSortDirection(req.query.sortDirection, sortDirection);
+      if(sortDirection === 'Invalid') return res.status(401).send({error: "Not an expected sort direction."})
     } else {
       if(req.query.sort){
         // If there's a sort but no sort direction, default to ascending
@@ -35,7 +39,7 @@ const handleGet = async (req, res) => {
         where spells.user_id = ? and spells.is_deleted = false
         group by spells.id, users.username) as spellsWithTags
         where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?) as searchedSpells`, 
-        [req.user.id, '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%']
+        [req.user.id, searchTerm, searchTerm, searchTerm, searchTerm]
       )
 
     let spells = await req.app.get('db')
@@ -48,13 +52,13 @@ const handleGet = async (req, res) => {
         where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?
         limit ? offset ?)
         order by ${sortQuery ? sortQuery : 'date_modified'} ${sortDirection}`, 
-        [req.user.id, '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%', '%' + searchTerm + '%',
-          page_size, (page_size * (page-1))
-        ]
+        [req.user.id, searchTerm, searchTerm, searchTerm, searchTerm,
+          page_size, (page_size * (page-1))]
       )
     
     spells = spells.rows
     spells = spells.map(spell => {
+      delete spell.is_deleted
       spell.tags = spell.tags ? spell.tags.split(',') : []
       spell.tags = spell.tags.map(tag => {return {id: tag, name: tag}})
       return spell

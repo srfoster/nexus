@@ -8,17 +8,22 @@ const handleGet = async (req, res) => {
     let sortQuery;
     let sortDirection;
 
+    // Sanitize sort
     if(req.query.sort){
       sortQuery = helpers.sanitizeSortQuery(req.query.sort, sortQuery);
+      if(sortQuery === 'Invalid') return res.status(401).send({error: "Not an expected sort column."})
     }
 
+    // Sanitize sort direction
     if(req.query.sortDirection){
       sortDirection = helpers.sanitizeSortDirection(req.query.sortDirection, sortDirection);
+      if(sortDirection === 'Invalid') return res.status(401).send({error: "Not an expected sort direction."})
     } else {
-      // If there's a sort but not sort direction sent, default to ascending
       if(req.query.sort){
+        // If there's a sort but no sort direction, default to ascending
         sortDirection = 'asc'
       } else {
+        // If there's neither a sort nor a sort direction, default to descending
         sortDirection = 'desc'
       }
     }
@@ -49,12 +54,10 @@ const handleGet = async (req, res) => {
           page_size, (page_size * (page-1))
         ]
       )
-      // console.log(spells);
     
-    // TODO: Does this return is_deleted flags?
     spells = spells.rows
-    console.log(spells.map(spell => spell.id).toString());
     spells = spells.map(spell => {
+      delete spell.is_deleted
       spell.tags = spell.tags ? spell.tags.split(',') : []
       spell.tags = spell.tags.map(tag => {return {id: tag, name: tag}})
       return spell

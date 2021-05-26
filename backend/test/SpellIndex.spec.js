@@ -7,7 +7,7 @@ const config = require('../src/config')
 const bcrypt = require('bcryptjs')
 const supertest = require('supertest')
 
-describe.only('Spell Index', () => {
+describe('Spell Index', () => {
   let db
 
   let {
@@ -56,22 +56,24 @@ describe.only('Spell Index', () => {
       )
     )
 
+    // Does not supply any spells with the deleted = true flag
+
     it(`GET ${epSpellIndex} responds with 401 if not logged in`, () => {
       return supertest(app)
         .get(epSpellIndex)
         .expect(401)
     })
 
-    it.skip(`GET ${epSpellIndex} responds with 401 if attempting to sort by an invalid column name`, () => {
+    it(`GET ${epSpellIndex} responds with 401 if attempting to sort by an invalid column name`, () => {
       return supertest(app)
-        .get(`/spells?sort=purple`)
+        .get(`/spells?sort=hax`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(401)
     })
 
-    it.skip(`GET ${epSpellIndex} responds with 401 if attempting to sort by an invalid sort direction`, () => {
+    it(`GET ${epSpellIndex} responds with 401 if attempting to sort by an invalid sort direction`, () => {
       return supertest(app)
-        .get(`/spells?sortDirection=purple`)
+        .get(`/spells?sortDirection=hax`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(401)
     })

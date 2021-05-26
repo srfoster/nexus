@@ -31,7 +31,7 @@ describe('Public Spells', () => {
 
   before('cleanup', () => helpers.cleanTables(db))
 
-  // afterEach('cleanup', () => helpers.cleanTables(db))
+  afterEach('cleanup', () => helpers.cleanTables(db))
 
   describe(`GET ${epPublicSpells}`, () => {
     beforeEach('insert users', () =>
@@ -53,7 +53,21 @@ describe('Public Spells', () => {
       )
     )
 
-    it(`GET ${epPublicSpells} responds with 200`, () => {
+    it(`GET ${epPublicSpells} responds with 401 if attempting to sort by an invalid column name`, () => {
+      return supertest(app)
+        .get(`/gallery?sort=hax`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(401)
+    })
+
+    it(`GET ${epPublicSpells} responds with 401 if attempting to sort by an invalid sort direction`, () => {
+      return supertest(app)
+        .get(`/gallery?sortDirection=hax`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(401)
+    })
+
+    it(`GET ${epPublicSpells} responds with 200 and returns the first page of public spells`, () => {
       return supertest(app)
         .get(epPublicSpells)
         .expect(200)
@@ -61,12 +75,12 @@ describe('Public Spells', () => {
           let byId = (a, b) => a-b
 
           expect(res.body.spells.length).to.equal(9)
-          expect([2,6,7,8,9,10,11,12,13].toString())
-            .to.equal(res.body.spells.map(spell => Number(spell.id)).sort(byId).toString())
+          expect([2,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].reverse().splice(0,9).toString())
+            .to.equal(res.body.spells.map(spell => spell.id).toString())
         })
     })
 
-    it(`does not show any spells with the deleted flag`, async () => {
+    it(`does not show any spells with the deleted = true flag`, async () => {
       await db('spells')
       .where({id: 1})
       .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
@@ -117,8 +131,6 @@ describe('Public Spells', () => {
       })
     })
 
-    // Example /spells?page=2&page_size=5
-    // For user[0], page 2 with a page size of 6 should return 6 spells
     let page = 2;
     let page_size = 6;
     it(`responds with the page ${page} and ${page_size} results when given ?page=${page}&page_size=${page_size}`, () => {
@@ -126,10 +138,18 @@ describe('Public Spells', () => {
       .get(`/gallery?page=${page}&page_size=${page_size}`)
       .expect(200)
       .then(async (res) => {
+        let allTestSpells = 
+          await db
+            .from('spells')
+            .select('*')
+            .where({is_public: true, is_deleted: false})
+            .orderBy('date_modified', 'desc')
 
         expect(res.body.spells.length).to.equal(page_size)
         expect(res.body.spells.map(spell => spell.id).toString())
-          .to.equal([11,12,13,14,15,16].toString())
+          .to.equal(allTestSpells.map(spell => spell.id).slice(page_size * (page-1), page_size*page).toString())
+        expect(res.body.spells.map(spell => spell.id).toString())
+          .to.equal([2,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].reverse().splice(6,6).toString())
       })
     })
 
@@ -146,7 +166,7 @@ describe('Public Spells', () => {
 
         expect(res.body.spells.length).to.equal(9)
         expect(res.body.spells.map(spell => spell.id).toString())
-          .to.equal([2,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].slice(0, 9).toString())
+          .to.equal([2,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].reverse().slice(0, 9).toString())
       })
     })
 
@@ -169,9 +189,8 @@ describe('Public Spells', () => {
       })
     })
 
-    //4
     let sortQuery = 'description'
-    it.skip(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
+    it(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
       return supertest(app)
       .get(`/gallery?sort=${sortQuery}`)
       .expect(200)
@@ -183,15 +202,10 @@ describe('Public Spells', () => {
             .where({is_public: true, is_deleted: false})
             .orderBy(`${sortQuery}`, 'asc')
 
-        expect(res.body.spells[0].description.toString()).to.equal(sortedSpells[0].description.toString())
+        expect(res.body.spells[0].description.toString())
+          .to.equal(sortedSpells[0].description.toString())
       })
     })
-
-    // for(let i=extraSpells[0].id; i<extraSpells.length + extraSpells[0].id; i++){
-    //   console.log(i);
-    //   testSpells = testSpells.filter(spell => spell.id !== i)
-    // }
-    // console.log(testSpells);
 
   })
 
