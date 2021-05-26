@@ -3,6 +3,7 @@ import { Switch, Route, Link, useHistory } from "react-router-dom";
 import Header from './Header';
 import Button from '@material-ui/core/Button';
 import useStyles from '../styles.js';
+import ConnectionIndicator from './Client/ConnectionIndicator';
 
 const LandingPage = (props) => {
   let history = useHistory();
@@ -20,6 +21,7 @@ const LandingPage = (props) => {
         component={Header}
       />
       <div className={classes.landingDisplay}>
+        <ConnectionIndicator/>
         <div>
           <h1>
             CodeSpells Spell Sharing
