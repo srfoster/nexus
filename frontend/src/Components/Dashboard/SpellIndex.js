@@ -34,6 +34,7 @@ function SpellIndex(props) {
       .then(spell => {
         setSpells([...spells, spell])
       })
+    console.log(spells)
   }
 
   return (

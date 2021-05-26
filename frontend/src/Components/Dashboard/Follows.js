@@ -22,14 +22,11 @@ function Follows() {
     }
   }, [])
 
-  console.log(follows)
-
   return(
     <>
-      <FollowCard>Adding friends stuff now</FollowCard>
-      {follows && follows.map(follow => {
-        return <p>user: {follow.user_id} follows: {follow.follower_id}</p>
-      })}
+      {follows && follows.map(follow => (
+        <FollowCard follow={follow} key={'Key ', follow.id}/>
+      ))}
     </>
   )
 }

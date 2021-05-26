@@ -529,9 +529,17 @@ const useStyles = makeStyles((theme) => ({
   },
 
   //follow Cards
+  followCard: {
+    height: '200px',
+    backgroundColor: 'white',
+    margin: "5px",
+    color: 'black',
+  },
   followCardBody: {
-    height: '1000px',
-    color: 'red',
+    display: 'flex',
+    justifyContent: 'space-between',
+    height: '200px',
+    alignContent: 'center',
   }
 }));
 
