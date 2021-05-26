@@ -5,6 +5,7 @@ import Spellbook from './Spellbook';
 import Pagination from '@material-ui/lab/Pagination';
 import {SearchBar} from '../Util.js'
 import useStyles from '../styles.js';
+import { Helmet } from "react-helmet";
 
 const UserProfile = (props) => {
   const classes = useStyles();
@@ -31,6 +32,10 @@ const UserProfile = (props) => {
   return (
     user ?
       <>
+        <Helmet>
+        <title>{`${user.username} `}| CodeSpells Nexus</title>
+        <meta name="description" content="Download the latest CodeSpells video games. The spells you write here in the Nexus can be cast inside of these games!" />
+      </Helmet>
         <div className={classes.userProfileHeadBar}>
           <div className={classes.userProfileHeadLeft}></div>
           <div className={classes.userProfileHeadTitle}>{`Spellbook of ${user.username}`}</div>

@@ -27,6 +27,7 @@ import 'codemirror/addon/edit/matchbrackets.js'
 import 'codemirror/addon/edit/closebrackets.js'
 import 'codemirror/addon/selection/active-line.js'
 import CallSplitIcon from '@material-ui/icons/CallSplit';
+import {Helmet} from "react-helmet";
 
 
 let debounceTimer
@@ -218,12 +219,16 @@ export default function SpellDetails(props) {
 
   return (
     <>
-    <Prompt 
-      when={isSaving}
-      message='Spell is not saved yet'
-    />
+      <Prompt 
+        when={isSaving}
+        message='Spell is not saved yet'
+      />
       {spell ?
       <div>
+        <Helmet>
+          <title>{spell.name} | CodeSpells Nexus</title>
+          <meta name="description" content={spell.description} />
+        </Helmet>
         <div className={classes.titleRow}>
           <div className={classes.metaID}>ID: {spell.id}</div>
           <div className={classes.metaTitle}>

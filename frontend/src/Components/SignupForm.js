@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import {Helmet} from "react-helmet";
 import Header from './Header';
 import useStyles from '../styles.js';
 
@@ -49,6 +50,10 @@ const SignupForm = (props) => {
 
     return (
     <>
+      <Helmet>
+        <title>Signup | CodeSpells Nexus</title>
+        <meta name="description" content="Sign up for a CodeSpells Nexus account and start writing and saving your spells today." />
+      </Helmet>
       <Route
         path={'/'}
         component={Header}

@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Header from './Header';
 import useStyles from '../styles.js';
+import {Helmet} from "react-helmet";
 
 const LoginForm = (props) => {
   const classes = useStyles();
@@ -44,6 +45,10 @@ const LoginForm = (props) => {
 
     return (
     <>
+      <Helmet>
+        <title>Login | CodeSpells Nexus</title>
+        <meta name="description" content="Log into the CodeSpells Nexus to create & save spells that you can cast in CodeSpells games and connect with other CodeSpells witches & wizards." />
+      </Helmet>
       <Route
         path={'/'}
         component={Header}
