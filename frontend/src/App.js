@@ -40,7 +40,7 @@ function App() {
     return () => {
       isMounted = false
     }
-  }, [path])
+  }, [])
 
   let path = window.location.pathname
 
