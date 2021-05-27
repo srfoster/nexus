@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 import {Helmet} from "react-helmet";
 import AuthApiService from './Services/auth-api-service';
@@ -18,22 +18,33 @@ import UserProfile from './Components/UserProfile';
 import NotFound from './Components/NotFound';
 import SpellsApiService from './Services/spells-api-service';
 import Downloads from './Components/Dashboard/Downloads';
+import FabAddIcon from './Components/Dashboard/FabAddIcon';
+
 require('codemirror/mode/scheme/scheme');
 
 
 function App() {
   const paper = outerPaper();
+  let history = useHistory();
 
   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
 
   useEffect(() => {
+    let isMounted = true
+    console.log('App effect');
     // Only running this to check if logged in
     SpellsApiService.getUserById('me')
       .then((user) => setIsLoggedIn(true))
       .catch(() => setIsLoggedIn(false))
-  }, [])
 
-  return (
+    return () => {
+      isMounted = false
+    }
+  }, [path])
+
+  let path = window.location.pathname
+
+  return ( 
     <div className="App">
       <Helmet>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-J6N2NMKYC9"></script>
@@ -46,52 +57,64 @@ function App() {
         </script>
       </Helmet>
       <div >
-        <Switch>
-          <Route
-            exact path={'/'}
-            component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
-          />
-          <Route
-            exact path={'/panel.html'}
-            component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
-          />
-          <Route
-            path={'/signup'}
-            component={SignupForm}
-          />
-          <Route
-            path={'/login'}
-            component={LoginForm}
-          />
-          <Route
-            path={'/spells/:id'}
-            // component={SpellDetails}
-            component={(props) => <Dashboard child={<SpellDetails/>} isLoggedIn={isLoggedIn}></Dashboard>}
-          />
-          <Route
-            path={'/spells'}
-            component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}></SpellIndex>}
-          />
-          <Route
-            path={'/friends'}
-            component={(props) => <Dashboard child={<div>Friends Coming Soon</div>}></Dashboard>}
-          />
-          <Route
-            path={'/gallery'}
-            component={(props) => <Dashboard child={<PublicSpells/>} isLoggedIn={isLoggedIn}></Dashboard>}
-          />
-          <Route
-            path={'/wizards/:id'}
-            component={(props) => <Dashboard child={<UserProfile match={props.match}/>}></Dashboard>}
-          />
-           <Route
-            path={'/downloads'}
-            component={(props) => <Dashboard child={<Downloads/>}></Dashboard>}
-          />
-          <Route
-            component={(props) => <Dashboard child={<NotFound/>}></Dashboard>}
-          />
-        </Switch>
+        {console.log('Before Dashboard')}
+        <Dashboard
+          isLoggedIn={isLoggedIn} 
+          setIsLoggedIn={setIsLoggedIn}
+          child={
+            <Switch>
+              <Route
+                exact path={'/'}
+                component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
+              />
+              <Route
+                exact path={'/panel.html'}
+                component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
+              />
+              <Route
+                exact path={'/signup'}
+                component={SignupForm}
+              />
+              <Route
+                exact path={'/login'}
+                component={LoginForm}
+              />
+              <Route
+                path={'/spells/:id'}
+                component={(props) => <SpellDetails/>}
+              />
+              <Route
+                exact path={'/spells'}
+                component={(props) => 
+                  <SpellIndex 
+                    isLoggedIn={isLoggedIn} 
+                    setIsLoggedIn={setIsLoggedIn}
+                  />
+                }
+              />
+              <Route
+                exact path={'/friends'}
+                component={(props) => <div>Friends Coming Soon</div>}
+              />
+              <Route
+                exact path={'/gallery'}
+                component={(props) => <PublicSpells/>}
+              />
+              <Route
+                path={'/wizards/:id'}
+                component={(props) => <UserProfile match={props.match}/>}
+              />
+              <Route
+                exact path={'/downloads'}
+                component={(props) => <Downloads/>}
+              />
+              <Route
+                component={(props) => <NotFound/>}
+              />
+            </Switch>
+          }
+        >
+        </Dashboard>
       </div>
     </div>
   );
