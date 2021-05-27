@@ -85,12 +85,7 @@ function App() {
               />
               <Route
                 exact path={'/spells'}
-                component={(props) => 
-                  <SpellIndex 
-                    isLoggedIn={isLoggedIn} 
-                    setIsLoggedIn={setIsLoggedIn}
-                  />
-                }
+                component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}
               />
               <Route
                 exact path={'/friends'}
