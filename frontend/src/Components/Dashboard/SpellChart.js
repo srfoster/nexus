@@ -74,7 +74,6 @@ export default function SpellChart(props) {
       const newSelecteds = props.spells
         .map((spell) => {
           if (spell.locked) {
-            console.log(spell.locked)
           } else return spell.id
         })
       setSelected(newSelecteds);
@@ -389,7 +388,6 @@ export default function SpellChart(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* {console.log(props.spells)} */}
         <div className={classes.pagi}>
           <Pagination count={Math.ceil(props.totalSpells / spellsPerPage)}
             onChange={(event, page) => {
