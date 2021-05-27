@@ -102,11 +102,11 @@ function App() {
               />
               <Route
                 path={'/docs/:page'}
-                component={(props) => <Dashboard child={<Docs match={props.match} />}></Dashboard>}
+                component={(props) => <Docs match={props.match} />}
               />
               <Route
                 path={'/docs'}
-                component={(props) => <Dashboard child={<Docs match={{params: {page: "docs"}}} />}></Dashboard>}
+                component={(props) => <Docs match={{params: {page: "docs"}}} />}
               />
               <Route
                 exact path={'/downloads'}
