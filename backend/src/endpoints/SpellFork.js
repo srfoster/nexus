@@ -2,14 +2,19 @@ const helpers = require('../endpoint-helpers')
 
 const handlePost = async (req, res, next) =>{
   try{
-    // let public = user_id === req.user.id ? is_public: true : is_public: false;
+    // let public = user_id === req.user.id ? is_public === true : is_public === false;
 
-    let displaySpell = await req.app.get('db')('spells')
-    .where({id: req.params.id})
+    let forkSpell = await req.app.get('db')('spells')
+    .where({id: req.params.id, is_deleted: false})
     .first()
 
-    if(displaySpell){
-      const {name, description, text} = displaySpell
+    if(forkSpell){
+      if(forkSpell.is_public === false && forkSpell.user_id !== req.user.id){
+        return res.status(401).send({error: "That is a private spell you don't own"})
+      }
+      delete forkSpell.is_deleted
+
+      const {name, description, text} = forkSpell
 
       let newSpell = await req.app.get('db')('spells')
       .insert({user_id: req.user.id, name: name+' (Fork)', description: description,
@@ -27,8 +32,6 @@ const handlePost = async (req, res, next) =>{
         res.send(newSpell[0])
       }
 
-    } else{
-      res.status(401).send({error: 'That spell is private'})
     }
   } catch (error) {
     console.log('Catch error: ', error);
