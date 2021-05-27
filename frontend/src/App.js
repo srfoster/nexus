@@ -18,6 +18,7 @@ import UserProfile from './Components/UserProfile';
 import NotFound from './Components/NotFound';
 import SpellsApiService from './Services/spells-api-service';
 import Downloads from './Components/Dashboard/Downloads';
+import Docs from './Components/Docs/Docs';
 import FabAddIcon from './Components/Dashboard/FabAddIcon';
 
 require('codemirror/mode/scheme/scheme');
@@ -128,3 +129,5 @@ const outerPaper = makeStyles((theme) => ({
 }));
 
 export default App;
+
+
