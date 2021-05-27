@@ -54,10 +54,10 @@ const SignupForm = (props) => {
         <title>Signup | CodeSpells Nexus</title>
         <meta name="description" content="Sign up for a CodeSpells Nexus account and start writing and saving your spells today." />
       </Helmet>
-      <Route
+      {/* <Route
         path={'/'}
         component={Header}
-      />
+      /> */}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.signupFormPaper}>

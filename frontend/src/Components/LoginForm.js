@@ -49,10 +49,10 @@ const LoginForm = (props) => {
         <title>Login | CodeSpells Nexus</title>
         <meta name="description" content="Log into the CodeSpells Nexus to create & save spells that you can cast in CodeSpells games and connect with other CodeSpells witches & wizards." />
       </Helmet>
-      <Route
+      {/* <Route
         path={'/'}
         component={Header}
-      />
+      /> */}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.loginFormPaper}>

@@ -20,10 +20,10 @@ const LandingPage = (props) => {
         <title>CodeSpells Nexus</title>
         <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
       </Helmet>
-      <Route
+      {/* <Route
         path={'/'}
         component={Header}
-      />
+      /> */}
       <div className={classes.landingDisplay}>
         <div>
           <h1>

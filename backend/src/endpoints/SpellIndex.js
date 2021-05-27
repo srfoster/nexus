@@ -51,7 +51,7 @@ const handleGet = async (req, res) => {
         group by spells.id, users.username) as spellsWithTags
         where lower(name) like ? or lower(description) like ? or lower(tags) like ? or id::text like ?
         limit ? offset ?)
-        order by ${sortQuery ? sortQuery : 'date_modified'} ${sortDirection}`, 
+        order by ${sortQuery ? sortQuery : 'date_modified'} ${sortQuery ? sortDirection : 'desc'}`, 
         [req.user.id, searchTerm, searchTerm, searchTerm, searchTerm,
           page_size, (page_size * (page-1))]
       )
