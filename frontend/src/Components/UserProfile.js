@@ -14,7 +14,7 @@ const UserProfile = (props) => {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [currentPage, setCurrentPage] = useState(1)
   const [search, setSearch] = React.useState('');
-  const [follow, setFollow] = React.useState(false)
+  const [follow, setFollow] = React.useState(undefined)
   const [isLoading, setIsLoading] = React.useState(false)
   let history = useHistory();
 
@@ -23,6 +23,10 @@ const UserProfile = (props) => {
   useEffect(() => {
     let isMounted = true
     const { id } = props.match.params
+    SpellsApiService.getFollows(id)
+    .then(follows => {
+      setFollow(follows.is_following)
+    })
 
     SpellsApiService.getUserById(id, currentPage, search)
       .then(user => {
@@ -46,6 +50,7 @@ const UserProfile = (props) => {
             setIsLoading={setIsLoading}
             user={user}
             setFollow={setFollow}
+            match={props.match} 
             />
           </div>
           <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>

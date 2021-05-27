@@ -166,8 +166,8 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  getFollows(){
-    return fetch(`${config.API_ENDPOINT}/follows`, {
+  getFollows(id){
+    return fetch(`${config.API_ENDPOINT}/follows/${id}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -180,6 +180,21 @@ const SpellsApiService = {
           : res.json()
       )
   },
+  postFollows(id, follow_id){
+    return fetch(`${config.API_ENDPOINT}/follows/${id}?following=${follow_id}`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+  
 
 }
 

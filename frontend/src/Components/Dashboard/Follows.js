@@ -8,7 +8,7 @@ function Follows() {
   useEffect(() => {
     let isMounted = true
 
-    SpellsApiService.getFollows()
+    SpellsApiService.getFollows('me')
       .then(follows => {
         if (isMounted) {
           setFollows(follows.follows)
@@ -30,6 +30,7 @@ function Follows() {
     </>
   )
 }
+
 
 
 export default Follows;

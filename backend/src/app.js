@@ -44,7 +44,7 @@ let epSpellsFork = '/spells/:id/fork'
 let epSpellTags = '/spells/:id/tags/:tag'
 let epSpellTagsIndex = '/spells/:id/tags'
 let epDownloads = '/downloads'
-let epFollows = '/follows'
+let epFollows = '/follows/:id'
 
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, SpellIndex.handleGet)
@@ -87,6 +87,9 @@ app.get(`${epDownloads}`, Downloads.handleGet)
 
 // Retrieves follow info
 app.get(`${epFollows}`,requireAuth, Follows.handleGet)
+
+// creates new follow in join table
+app.post(`${epFollows}`,requireAuth, Follows.handlePost)
 
 app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
