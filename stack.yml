@@ -20,7 +20,7 @@ services:
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules
-    command: "scripts/setup-and-run.sh"
+        #command: "scripts/setup-and-run.sh"
     container_name: backend
     env_file:
       - ./backend/.env
