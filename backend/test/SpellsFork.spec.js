@@ -49,7 +49,7 @@ describe('Spells Fork', () => {
 
     it(`responds 200 if user is logged`, () => {
       return supertest(app)
-      .post("/spells/4/fork")
+      .post("/spells/2/fork")
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
     })
@@ -68,7 +68,7 @@ describe('Spells Fork', () => {
         .length
 
       return supertest(app)
-      .post("/spells/4/fork")
+      .post("/spells/2/fork")
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then((res) => {

@@ -63,6 +63,17 @@ describe('Spell Details', () => {
         .expect(401)
     })
 
+    // TODO: 
+    // res.status(401).send({error: "You cannot alter a locked spell. Fork it instead."})
+    // it(`GET ${epSpellIndex} responds with 401 if attempting to alter a forked spell`, () => {
+    //   return supertest(app)
+    //     .get(epSpellIndex)
+    //     .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+    //     .expect(401)
+    //     .then((res) => {
+    //     })
+    // })
+
     it(`GET ${epSpellDetails} does not respond with data from any other spell`, () => {
       return supertest(app)
         .get(`/spells/${testSpells[0].id}`)
