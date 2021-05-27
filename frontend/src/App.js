@@ -86,12 +86,7 @@ function App() {
               />
               <Route
                 exact path={'/spells'}
-                component={(props) => 
-                  <SpellIndex 
-                    isLoggedIn={isLoggedIn} 
-                    setIsLoggedIn={setIsLoggedIn}
-                  />
-                }
+                component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}
               />
               <Route
                 exact path={'/friends'}
@@ -104,6 +99,14 @@ function App() {
               <Route
                 path={'/wizards/:id'}
                 component={(props) => <UserProfile match={props.match}/>}
+              />
+              <Route
+                path={'/docs/:page'}
+                component={(props) => <Docs match={props.match} />}
+              />
+              <Route
+                path={'/docs'}
+                component={(props) => <Docs match={{params: {page: "docs"}}} />}
               />
               <Route
                 exact path={'/downloads'}

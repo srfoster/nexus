@@ -36,7 +36,8 @@ export function PublicListItems(props) {
   <>
     <div>
     <ListItem button onClick={() => handleClickButton('/spells')} 
-      className={path === '/spells' ? classes.listIcon : ''}>
+      // className={path === '/spells' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <ViewListIcon />
       </ListItemIcon>
@@ -44,7 +45,8 @@ export function PublicListItems(props) {
     </ListItem>
 
     <ListItem button onClick={() => handleClickButton('/friends')}
-      className={path === '/friends' ? classes.listIcon : ''}>
+      // className={path === '/friends' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
@@ -52,7 +54,8 @@ export function PublicListItems(props) {
     </ListItem>
 
     <ListItem button onClick={() => handleClickButton('/gallery')}
-      className={path === '/gallery' ? classes.listIcon : ''}>
+      // className={path === '/gallery' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <PhotoAlbumIcon />
       </ListItemIcon>
@@ -62,14 +65,16 @@ export function PublicListItems(props) {
     <Divider />
     <div>
     <ListItem button onClick={() => handleClickButton('/wizards/me')}
-      className={path.includes('/wizards') ? classes.listIcon : ''}>
+      // className={path.includes('/wizards') ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <AccountCircleIcon />
       </ListItemIcon>
       <ListItemText primary="My Profile" />
     </ListItem>
     <ListItem button onClick={() => handleClickButton('/downloads')}
-      className={path === '/downloads' ? classes.listIcon : ''}>
+      // className={path === '/downloads' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <GetAppIcon />
       </ListItemIcon>
@@ -110,14 +115,16 @@ export function PrivateListItems() {
   <>
     <div>
     <ListItem button onClick={() => handleClickButton('/gallery')}
-      className={path === '/gallery' ? classes.listIcon : ''}>
+      // className={path === '/gallery' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
       <PhotoAlbumIcon />
       </ListItemIcon>
       <ListItemText primary="Public Spells" />
     </ListItem>
     <ListItem button onClick={() => handleClickButton('/downloads')}
-      className={path === '/downloads' ? classes.listIcon : ''}>
+      // className={path === '/downloads' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <GetAppIcon />
       </ListItemIcon>
