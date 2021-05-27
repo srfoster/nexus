@@ -74,7 +74,6 @@ export default function SpellChart(props) {
       const newSelecteds = props.spells
         .map((spell) => {
           if (spell.locked) {
-            console.log(spell.locked)
           } else return spell.id
         })
       setSelected(newSelecteds);
@@ -139,7 +138,6 @@ export default function SpellChart(props) {
     setPopText('Click To Copy')
   }
 
-  console.log('In SpellChart');
   return (
     props.spells ?
     <React.Fragment>

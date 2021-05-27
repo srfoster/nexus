@@ -44,7 +44,6 @@ function SpellIndex(props) {
       })
   }
 
-  console.log('In SpellIndex');
   return (
     <>
       <Helmet>

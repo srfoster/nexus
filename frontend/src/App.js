@@ -101,6 +101,14 @@ function App() {
                 component={(props) => <UserProfile match={props.match}/>}
               />
               <Route
+                path={'/docs/:page'}
+                component={(props) => <Dashboard child={<Docs match={props.match} />}></Dashboard>}
+              />
+              <Route
+                path={'/docs'}
+                component={(props) => <Dashboard child={<Docs match={{params: {page: "docs"}}} />}></Dashboard>}
+              />
+              <Route
                 exact path={'/downloads'}
                 component={(props) => <Downloads/>}
               />
