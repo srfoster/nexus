@@ -14,6 +14,8 @@ import {linkTo, topDocLink} from './util.js';
 // Need to figure out how to make Download & Setup require the Connected status before
 //  moving on...
 
+// Chosen -> Initiate -> Novice -> Apprentice -> Adept 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -83,7 +85,7 @@ function Intro(props){
 function DownloadAndSetup(props){
     return (<>
         <p>But first, you're gonna have to download a CodeSpells world. Download Orb World <a href="https://codespells-org.s3.amazonaws.com/StandaloneBuilds/orb-world/0.0/OrbWorld.7z">here</a>.</p>
-        <p>Double click the executable that downloaded to your computer. When the game starts, you should notice the connection indicator below say "Connected".</p>
+        <p>Unzip the downloaded file and double click the executable <tt>main.exe</tt> that downloaded to your computer. When the game starts, you should notice the connection indicator below say "Connected".</p>
         <ConnectionIndicator />
     </>);
 }
