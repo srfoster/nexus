@@ -22,7 +22,7 @@ import { makeStyles} from '@material-ui/core/styles';
 
 function Dashboard(props) {
   const classes = useStyles();
-  const [isLoggedIn, setIsLoggedIn] = useState(undefined);
+  // const [isLoggedIn, setIsLoggedIn] = useState(undefined);
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -32,16 +32,14 @@ function Dashboard(props) {
   };
   const fixedHeightPaper = clsx(classes.dashPaper, classes.fixedHeight);
 
-  useEffect(() => {
-    // Only running this to check if logged in
-    SpellsApiService.getUserById('me')
-      .then((user) => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false))
-  }, [])
+  // useEffect(() => {
+  //   // Only running this to check if logged in
+  //   SpellsApiService.getUserById('me')
+  //     .then((user) => setIsLoggedIn(true))
+  //     .catch(() => setIsLoggedIn(false))
+  // }, [])
 
   return (
-    isLoggedIn === undefined ?
-    '': 
     <div className={classes.dashRoot}>
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
@@ -77,7 +75,7 @@ function Dashboard(props) {
         </div>
         <Divider />
         <List>
-          {isLoggedIn ? <PublicListItems/> : <PrivateListItems/>}
+          {props.isLoggedIn ? <PublicListItems/> : <PrivateListItems/>}
         </List>
       </Drawer>
       <main className={classes.content}>
@@ -91,8 +89,6 @@ function Dashboard(props) {
               </Paper>
             </Grid>
           </Grid>
-          {/* Inserts relevant fab icon by page */}
-          {isLoggedIn ? props.fabIcon : ''}
         </Container>
       </main>
     </div>

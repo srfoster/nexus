@@ -139,6 +139,7 @@ export default function SpellChart(props) {
     setPopText('Click To Copy')
   }
 
+  console.log('In SpellChart');
   return (
     props.spells ?
     <React.Fragment>
@@ -389,7 +390,6 @@ export default function SpellChart(props) {
           </TableBody>
         </Table>
       </TableContainer>
-      {/* {console.log(props.spells)} */}
         <div className={classes.pagi}>
           <Pagination count={Math.ceil(props.totalSpells / spellsPerPage)}
             onChange={(event, page) => {

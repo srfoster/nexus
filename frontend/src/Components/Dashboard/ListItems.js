@@ -17,12 +17,15 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import useStyles from '../../styles.js';
 import { TwitchIcon } from '../../Assets/TwitchIcon.png';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import Link from '@material-ui/core/Link';
 
 export function PublicListItems(props) {
   const classes = useStyles();
   let history = useHistory();
+  const [test, setTest] = React.useState(undefined)
 
   const handleClickButton = (path) => {
+
     if(path === '/login') TokenService.clearAuthToken();
     history.push(path)
   }  
@@ -32,7 +35,6 @@ export function PublicListItems(props) {
   return (
   <>
     <div>
-
     <ListItem button onClick={() => handleClickButton('/spells')} 
       className={path === '/spells' ? classes.listIcon : ''}>
       <ListItemIcon>

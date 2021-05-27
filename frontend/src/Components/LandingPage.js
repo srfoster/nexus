@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, Link, useHistory } from "react-router-dom";
+import {Helmet} from "react-helmet";
 import Header from './Header';
 import Button from '@material-ui/core/Button';
 import useStyles from '../styles.js';
@@ -15,10 +16,14 @@ const LandingPage = (props) => {
 
   return (
     <>
-      <Route
+      <Helmet>
+        <title>CodeSpells Nexus</title>
+        <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
+      </Helmet>
+      {/* <Route
         path={'/'}
         component={Header}
-      />
+      /> */}
       <div className={classes.landingDisplay}>
         <div>
           <h1>
