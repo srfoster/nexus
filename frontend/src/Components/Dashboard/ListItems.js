@@ -18,6 +18,7 @@ import useStyles from '../../styles.js';
 import { TwitchIcon } from '../../Assets/TwitchIcon.png';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import Link from '@material-ui/core/Link';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 export function PublicListItems(props) {
   const classes = useStyles();
@@ -71,6 +72,14 @@ export function PublicListItems(props) {
         <AccountCircleIcon />
       </ListItemIcon>
       <ListItemText primary="My Profile" />
+    </ListItem>
+    <ListItem button onClick={() => handleClickButton('/Docs')}
+      // className={path === '/downloads' ? classes.listIcon : ''}
+      >
+      <ListItemIcon>
+        <AssignmentIcon />
+      </ListItemIcon>
+      <ListItemText primary="Docs" />
     </ListItem>
     <ListItem button onClick={() => handleClickButton('/downloads')}
       // className={path === '/downloads' ? classes.listIcon : ''}

@@ -115,6 +115,8 @@ function GettingStarted(props) {
   const steps = getSteps();
 
   const isStepOptional = (step) => {
+    //This would set the 2nd step to be optional:
+    //return step === 1;
     return false;
   };
 

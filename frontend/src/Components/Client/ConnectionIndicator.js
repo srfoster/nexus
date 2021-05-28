@@ -6,7 +6,6 @@ import Chip from '@material-ui/core/Chip';
 const tryToConnect = (onSuccess) => {
     let s = new WebSocket("ws://localhost:8082/test");
     s.onerror = function (event) {
-        onSuccess()
         console.log("Websocket connection failed, retrying...", event)
         setTimeout(() => tryToConnect(onSuccess), 1000)
     }
