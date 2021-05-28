@@ -17,6 +17,6 @@ describe('When Docs first renders', () => {
       expect(screen.getByText('Docs')).toBeInTheDocument()
     });
     it('shows docs header' , () => {
-      expect(screen.getAllByRole('heading')).toContain([<h1>Docs</h1>])
+      expect(screen.getByRole('heading')).toHaveTextContent("Docs")
     });
 });
