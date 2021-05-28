@@ -34,7 +34,8 @@ docker exec -it frontend npm run test
 ```
 
 Or you can run a specific test with this command:
-```docker exec -it frontend npm test -- FileTo.test.js
+```
+docker exec -it frontend npm test -- FileTo.test.js
 docker exec -it backend npm test -- FileTo.test.js
 ```
 
