@@ -91,6 +91,9 @@ app.get(`${epFollows}`,requireAuth, Follows.handleGet)
 // creates new follow in join table
 app.post(`${epFollows}`,requireAuth, Follows.handlePost)
 
+// deletes follow in join table
+app.delete(`${epFollows}`,requireAuth, Follows.handleDelete)
+
 app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
     .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})

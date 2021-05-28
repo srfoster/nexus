@@ -21,7 +21,7 @@ export default function FollowCard(props) {
 
   useEffect(() => {
     let isMounted = true
-    const { follower_id }= follow
+    const { follower_id } = follow
   
     SpellsApiService.getUserById(follower_id)
       .then(user => {
@@ -31,6 +31,8 @@ export default function FollowCard(props) {
         isMounted = false
       }
   },[path])
+
+  
   return (
     <>
     {user && (<div className={classes.root}>
@@ -42,7 +44,7 @@ export default function FollowCard(props) {
               </Typography>
           </Tooltip> 
           <Tooltip title={`unfollow ${user.username}`}>
-            <IconButton aria-label="remove-mage">
+            <IconButton aria-label="remove-mage" onClick={() => props.deleteFollow('me', user.id)}>
               <PersonAddDisabledIcon />
             </IconButton>
           </Tooltip>

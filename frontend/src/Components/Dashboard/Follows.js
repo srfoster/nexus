@@ -5,6 +5,7 @@ import FollowCard from '../FollowCard'
 function Follows() {
   const [follows, setFollows] = useState()
   const [error, setError] = useState(null);
+  const [changed, setChanged] = useState(false)
   useEffect(() => {
     let isMounted = true
 
@@ -20,12 +21,20 @@ function Follows() {
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [changed])
+
+  const deleteFollow = (user, following) => {
+    SpellsApiService.deleteFollows(user, following)
+    .then(res => {
+      setChanged(true)
+      setChanged(false)
+    })
+  }
 
   return(
     <>
       {follows && follows.map(follow => (
-        <FollowCard follow={follow} key={'Key ', follow.id}/>
+        <FollowCard follow={follow} deleteFollow={deleteFollow} key={'Key ', follow.id}/>
       ))}
     </>
   )

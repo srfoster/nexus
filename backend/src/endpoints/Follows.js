@@ -23,8 +23,17 @@ const handlePost = async (req, res) =>{
   res.send({newFollow})
 } 
 
-const handleDelete = (req, res) => {
-  
+const handleDelete = async (req, res) => {
+  let userId = req.user.id
+  let following = req.query.following 
+  console.log('delete userId', userId)
+  console.log('delete following', following)
+  await req.app.get('db')('follows')
+    .where({user_id: userId, follower_id: following})
+    .delete({})
+    .then((follows) => {
+      res.send({follows})
+    })
 }
 
 module.exports = {

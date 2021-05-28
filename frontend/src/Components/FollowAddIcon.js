@@ -20,14 +20,24 @@ function FollowAddIcon(props) {
     })
     setTimeout(() => {setIsLoading(false)}, 1000)
   }
+  const deleteFollow = () => {
+    setIsLoading(true)
+    SpellsApiService.deleteFollows('me', +id)
+    .then(() => {
+      setTimeout(() => {setFollow(!follow)}, 1000)
+    })
+    setTimeout(() => {setIsLoading(false)}, 1000)
+  }
   console.log('icon', +id, 'me') 
+  console.log('followaddicon', follow) 
+
   return(
       <>
         {isLoading ? 
             <CircularProgress size={48}/>
         : follow ? 
             <Tooltip title={`Remove ${user.username}`}>
-                <IconButton aria-label="remove-mage" onClick={() => updateFollow()}>
+                <IconButton aria-label="remove-mage" onClick={() => deleteFollow()}>
                 <PersonAddDisabledIcon />
                 </IconButton>
             </Tooltip>
