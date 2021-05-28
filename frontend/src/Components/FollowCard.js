@@ -10,14 +10,39 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled';
 import Tooltip from '@material-ui/core/Tooltip';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
 
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export default function FollowCard(props) {
   const classes = useStyles();
   let history = useHistory();
   const [user, setUser] = useState(undefined)
+  const [open, setOpen] = React.useState(false);
   const {follow} = props
   let path = window.location.pathname
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleCloseDisagree = () => {
+    setOpen(false);
+  };
+
+  const handleCloseAgree = () => {
+    setOpen(false);
+    props.deleteFollow('me', user.id)
+  };
+
 
   useEffect(() => {
     let isMounted = true
@@ -44,12 +69,35 @@ export default function FollowCard(props) {
               </Typography>
           </Tooltip> 
           <Tooltip title={`unfollow ${user.username}`}>
-            <IconButton aria-label="remove-mage" onClick={() => props.deleteFollow('me', user.id)}>
+            <IconButton aria-label="remove-mage" onClick={handleClickOpen}>
               <PersonAddDisabledIcon />
             </IconButton>
           </Tooltip>
         </Toolbar>
       </Paper>
+      <Dialog
+        open={open}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleCloseDisagree}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">{"Do you really want to unfollow this mage?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            You can only follow them back once you land upon their mage page again. 
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDisagree} color="primary">
+            Disagree
+          </Button>
+          <Button onClick={handleCloseAgree} color="primary">
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>)}
     </>
   );

@@ -44,21 +44,25 @@ const UserProfile = (props) => {
       {/* //logged in for profile page */}
         <div className={classes.userProfileHeadBar}>
           <div className={classes.userProfileHeadLeft}>
-          <FollowAddIcon 
-            follow={follow} 
-            isLoading={isLoading} 
-            setIsLoading={setIsLoading}
-            user={user}
-            setFollow={setFollow}
-            match={props.match} 
-            />
-          </div>
+            {props.match.params.id === 'me' ?
+              ''
+            :  
+              <FollowAddIcon 
+                  follow={follow} 
+                  isLoading={isLoading} 
+                  setIsLoading={setIsLoading}
+                  user={user}
+                  setFollow={setFollow}
+                  match={props.match} 
+                />
+              }
+            </div>
           <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>
           <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
         </div>
 
         <Spellbook spells={user.spells}/>
-        
+
         <div className={classes.userProfileRoot}>
           <Pagination count={Math.ceil(user.total / rowsPerPage)}
             onChange={(event, page) => {setCurrentPage(page)}}
