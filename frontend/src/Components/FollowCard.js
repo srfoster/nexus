@@ -16,6 +16,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
+import Avatar from '@material-ui/core/Avatar';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -57,17 +58,27 @@ export default function FollowCard(props) {
       }
   },[path])
 
-  
   return (
     <>
     {user && (<div className={classes.root}>
       <Paper className={classes.followCard} position="static">
         <Toolbar className={classes.followCardBody}>
+          <div><Tooltip title={`${user.username}`} placement='top'>
+            <Button onClick={() => history.push(`/wizards/${user.id}`)}>
+              <Avatar aria-label="User Avatar" >
+                {user.username.slice(0,1).toUpperCase()}
+              </Avatar>
+            </Button>
+          </Tooltip>
           <Tooltip title={`Go to Mage Page`}> 
             <Typography onClick={() => history.push(`/wizards/${user.id}`)} variant="h6">
                 {`${user.username}`}
               </Typography>
           </Tooltip> 
+          </div>
+          <Typography variant="h6">
+                {`Total Spells: ${user.total}`}
+              </Typography>
           <Tooltip title={`unfollow ${user.username}`}>
             <IconButton aria-label="remove-mage" onClick={handleClickOpen}>
               <PersonAddDisabledIcon />

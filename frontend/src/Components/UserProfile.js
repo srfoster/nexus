@@ -36,7 +36,7 @@ const UserProfile = (props) => {
         isMounted = false
       }
   },[currentPage, search, path])
-
+console.log('user',user)
 //logged in for profile page
   return (
     user ?
@@ -44,7 +44,7 @@ const UserProfile = (props) => {
       {/* //logged in for profile page */}
         <div className={classes.userProfileHeadBar}>
           <div className={classes.userProfileHeadLeft}>
-            {props.match.params.id === 'me' ?
+            {props.match.params.id === 'me'   ?
               ''
             :  
               <FollowAddIcon 
