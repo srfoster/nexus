@@ -123,4 +123,3 @@ describe('After spell is loaded', () => {
 //     })
 //   })
 })
-
