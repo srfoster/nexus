@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {Helmet} from "react-helmet";
 import Markdown from 'markdown-to-jsx';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -70,7 +71,7 @@ const docPageContent = {
   </>,
   "langs": <>
     {topDocLink}
-    <p>You can find the API here:</p>
+    <p>You can run all of these functions in Orb World and Orb Lab:</p>
     <APIDocs />
   </>,
   "getting-started": <>
@@ -116,6 +117,10 @@ function Docs(props) {
   
   return (
     <>
+      <Helmet>
+        <title>{page=="docs"?"Docs":kabobCaseToTitleCase(page) + " | Docs"} | CodeSpells Nexus</title>
+        <meta name="description" content="Learn more about how the Nexus interfaces with CodeSpells games, how to write spells, and more!" />
+      </Helmet>
       <div style={{textAlign: "left"}}>
         <h1>{kabobCaseToTitleCase(page)}</h1>
         {docPageContent[page]}
