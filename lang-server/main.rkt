@@ -2,8 +2,9 @@
 
 (provide doc! documented-function)
 
-(require web-server/servlet
-         web-server/servlet-env)
+(require web-server/http/json
+        web-server/servlet
+        web-server/servlet-env)
 
 (define documented-functions (make-parameter '()))
 
@@ -51,4 +52,6 @@
 
   (serve/servlet my-app
                  #:port 8090
+                 #:listen-ip #f
+                 #:launch-browser? #f
                  #:servlet-path "/api"))
