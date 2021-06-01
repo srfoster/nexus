@@ -1,8 +1,41 @@
 import React, { useState, useEffect } from 'react';
+import Markdown from 'markdown-to-jsx';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import GettingStarted from './GettingStarted.js';
 import People from './People.js';
-import {kabobCaseToTitleCase} from '../../Util.js';
 import {linkTo, topDocLink} from './util.js';
+import { kabobCaseToTitleCase } from '../../Util.js';
+
+//TODO: Move to its own service file...
+const ApiService = {
+  getDocumentedFunctions(){
+    return fetch(`http://localhost:8090/api`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  }
+}
+
+function APIDocs(props) {
+  const [functions, setFunctions] = useState()
+
+  useEffect(() => {
+    ApiService.getDocumentedFunctions()
+      .then((fs) => {
+        setFunctions(fs)
+      })
+  },[])
+
+  return !functions ? <p>Loading...</p> : functions.map(e => <FunctionDoc {...e} />)
+}
 
 const docPageContent = {
   docs: <>
@@ -37,12 +70,8 @@ const docPageContent = {
   </>,
   "langs": <>
     {topDocLink}
-    <p>Each authored work has its own API. You can find the APIs of the currently available Authored Works here:</p>
-    <ul>
-      <li>Orb World - API coming soon</li>
-      <li>Orb Lab - API coming soon</li>
-    </ul>
-    <p>You can find the API for the <a href="https://www.twitch.tv/codespells" target="_blank">Twitch</a> chat here: Twitch Chat - API coming soon</p>
+    <p>You can find the API here:</p>
+    <APIDocs />
   </>,
   "getting-started": <>
     <GettingStarted/> 
@@ -54,6 +83,28 @@ const docPageContent = {
     {topDocLink}
     <p>Want to know how to build your own CodeSpells games?</p>
 </>,
+}
+
+function FunctionDoc(props) {
+  return (
+    <><Card style={{margin: 10}}>
+      <CardContent>
+        <p><code>(<strong>{props.name + " "}</strong> {props.parameters.map(e => e.name).join(" ")}) → {props.returnType} </code></p>
+        <div style={{paddingLeft: 10, paddingBottom: 10}}>{props.parameters.map(e => (<div><code>{e.name} : {e.type}</code></div>))}</div>
+        <Markdown>{props.content}</Markdown>
+      </CardContent>
+    </Card>
+    </>
+ ) 
+}
+
+function Param(props) {
+  return (
+    <p>
+      {props.name}
+      {props.type}
+   </p>
+ ) 
 }
 
 function Docs(props) {

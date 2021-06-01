@@ -180,6 +180,13 @@ function GettingStarted(props) {
           <div>
             <Typography className={classes.instructions}>
               You did it! You cast your first spells! Now, head over to your Spells page to start making your own!  
+
+              <AwardAchievementOnRender
+                id="Z2V0dGluZy1zdGFydGVk"
+                name="getting-started" 
+                description="You did the full Getting Started tutorial"
+              />
+
             </Typography>
             <Button onClick={handleReset} className={classes.button}>
               Reset
