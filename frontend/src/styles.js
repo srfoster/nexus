@@ -540,7 +540,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     height: '200px',
     alignContent: 'center',
+  },
+  followCardGrid:{
+    height: '150px',
+  },
+  followSpellCard:{
+    flexShrink: '5',
   }
+
 }));
 
 

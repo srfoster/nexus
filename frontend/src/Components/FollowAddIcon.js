@@ -53,9 +53,6 @@ function FollowAddIcon(props) {
     deleteFollow()
   };
 
-  console.log('icon', +id, 'me') 
-  console.log('followaddicon', follow) 
-
   return(
     <>
       {isLoading ? 

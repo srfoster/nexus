@@ -36,15 +36,16 @@ const UserProfile = (props) => {
         isMounted = false
       }
   },[currentPage, search, path])
-console.log('user',user)
 //logged in for profile page
   return (
     user ?
       <>
+      {console.log('user number', props.match.params.id),
+      console.log('user number 1',user.id)}
       {/* //logged in for profile page */}
         <div className={classes.userProfileHeadBar}>
           <div className={classes.userProfileHeadLeft}>
-            {props.match.params.id === 'me'   ?
+            {(props.match.params.id === 'me' || props.match.params.id === user.id) ?
               ''
             :  
               <FollowAddIcon 

@@ -17,6 +17,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
+import Spellcard from './Spellcard';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -29,6 +32,7 @@ export default function FollowCard(props) {
   const [user, setUser] = useState(undefined)
   const [open, setOpen] = React.useState(false);
   const {follow} = props
+  const [cardImage, setCardImage] = useState(undefined);
   let path = window.location.pathname
 
   const handleClickOpen = () => {
@@ -60,12 +64,13 @@ export default function FollowCard(props) {
 
   return (
     <>
-    {user && (<div className={classes.root}>
+    {user && 
+    (<div className={classes.root}>
       <Paper className={classes.followCard} position="static">
         <Toolbar className={classes.followCardBody}>
           <div><Tooltip title={`${user.username}`} placement='top'>
             <Button onClick={() => history.push(`/wizards/${user.id}`)}>
-              <Avatar aria-label="User Avatar" >
+              <Avatar aria-label="User Avatar" className={classes.spellcardAvatar}>
                 {user.username.slice(0,1).toUpperCase()}
               </Avatar>
             </Button>
@@ -75,6 +80,15 @@ export default function FollowCard(props) {
                 {`${user.username}`}
               </Typography>
           </Tooltip> 
+          </div>
+          <div>
+              <Container className={classes.followCardGrid} maxWidth="md">
+                <Grid container spacing={4}>
+                  {user.spells.slice(0,3).map((spell) => (  
+                    <Spellcard className={classes.followSpellCard} cardImage={cardImage} spell={spell} key={'key ' + spell.id}/>
+                  ))}
+                </Grid>
+              </Container>
           </div>
           <Typography variant="h6">
                 {`Total Spells: ${user.total}`}
