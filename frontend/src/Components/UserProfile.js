@@ -10,9 +10,10 @@ import { Helmet } from "react-helmet";
 const UserProfile = (props) => {
   const classes = useStyles();
   const [user, setUser] = useState(undefined)
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1)
-  const [search, setSearch] = React.useState('');
+  const [search, setSearch] = useState('');
+  const [badges, setBadges] = useState('');
 
   let path = window.location.pathname
 
@@ -24,9 +25,17 @@ const UserProfile = (props) => {
       .then(user => {
         if(isMounted) setUser(user)
       })
-      return () => {
-        isMounted = false
-      }
+      console.log('before api')
+    SpellsApiService.getBadgesByUser(id)
+      
+      .then(badges => {
+        console.log('string', badges)
+        if(isMounted) setBadges(badges)
+      })
+
+    return () => {
+      isMounted = false
+    }
   },[currentPage, search, path])
 
   return (
@@ -46,6 +55,8 @@ const UserProfile = (props) => {
             />
           </div>
         </div>
+      {  console.log(badges)}
+        <div>{badges.map(badge => badge.name)}</div>
 
         <Spellbook spells={user.spells}/>
         

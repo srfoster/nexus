@@ -9,6 +9,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {linkTo, topDocLink} from './util.js';
+import AddBadgeOnRender from '../AddBadgeOnRender';
 
 // TODO
 // Need to figure out how to make Download & Setup require the Connected status before
@@ -184,6 +185,7 @@ function GettingStarted(props) {
             <Typography className={classes.instructions}>
               You did it! You cast your first spells! Now, head over to your Spells page to start making your own!  
             </Typography>
+            <AddBadgeOnRender name='Getting-Started'/>
             <Button onClick={handleReset} className={classes.button}>
               Reset
             </Button>
