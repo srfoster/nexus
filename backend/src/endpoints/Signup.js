@@ -8,7 +8,6 @@ const handleSignup = (req, res, next) => {
     req.app.get('db')('users')
       .where({username: req.body.username})
       .then(async (usersWithUsername) => {
-        // console.log("Inside then");
         let { username, password } = req.body
 
         if (usersWithUsername.length !== 0){return res.status(400).send({error: "Username already taken"})}

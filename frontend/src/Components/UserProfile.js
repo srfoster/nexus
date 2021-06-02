@@ -26,11 +26,9 @@ const UserProfile = (props) => {
       .then(user => {
         if(isMounted) setUser(user)
       })
-      console.log('before api')
     SpellsApiService.getBadgesByUser(id)
       
       .then(badges => {
-        console.log('string', badges)
         if(isMounted) setBadges(badges)
       })
 

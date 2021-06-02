@@ -73,7 +73,6 @@ export default function SpellDetails(props) {
     SpellsApiService.getSpellById(id)
       .then(spell => {
         if (isMounted) {
-          // console.log("spell" , spell)
           setSpell(spell)
           setSpellText(spell.text);
         }
@@ -208,12 +207,9 @@ export default function SpellDetails(props) {
   }
 
   const clickForkIcon = (id) => {
-    // console.log("Before API ", id);
     SpellsApiService.forkSpellById(id)
     .then((spell) => {
       history.push(`/spells/${spell.id}`)
-      // console.log("After history ", spell.id);
-      // console.log(object);
     })
   }
 

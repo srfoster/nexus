@@ -6,7 +6,6 @@ const handleGet = (req, res) => {
     req.app.get('db')('tags')
     .where({spell_id: req.params.id})
     .then((displayTags) => {
-      // console.log(displayTags)
       res.send(displayTags)
     })
   } catch (error) {

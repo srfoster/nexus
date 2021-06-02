@@ -8,7 +8,6 @@ import useStyles from '../styles.js';
 import {Helmet} from "react-helmet";
 
 export default function PublicSpells(props) {
-  // console.log("From index: ", props);
   const [spells, setSpells] = useState([])
   const classes = useStyles();
   const [rowsPerPage, setRowsPerPage] = React.useState(9);

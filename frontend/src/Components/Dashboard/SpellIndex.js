@@ -19,7 +19,6 @@ function SpellIndex(props) {
   
   useEffect(() => {
     let isMounted = true
-    console.log('Index effect');
     // SpellsApiService.getUserById('me')
     //   .then((user) => props.setIsLoggedIn(true))
     //   .catch(() => props.setIsLoggedIn(false))

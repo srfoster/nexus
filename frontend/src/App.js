@@ -32,7 +32,6 @@ function App() {
 
   useEffect(() => {
     let isMounted = true
-    console.log('App effect');
     // Only running this to check if logged in
     SpellsApiService.getUserById('me')
       .then((user) => setIsLoggedIn(true))
@@ -58,7 +57,6 @@ function App() {
         </script>
       </Helmet>
       <div >
-        {console.log('Before Dashboard')}
         <Dashboard
           isLoggedIn={isLoggedIn} 
           setIsLoggedIn={setIsLoggedIn}

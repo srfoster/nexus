@@ -37,11 +37,9 @@ const handleDelete = async (req, res) => {
       .andWhere('id', 'in', req.params.id.split(','))
       .update({is_deleted: true, date_modified: new Date()}, ['id', 'user_id', 'text', 'name', 'description', 'is_deleted'])
       .then((spells) => {
-        // console.log('Spells: ', spells);
         if(spells.length){
           res.send(spells[0])
         } else {
-          // console.log('Inside else');
           res.status(401).send({error: 'This spell is not yours! Go away!'})
         }
       })
