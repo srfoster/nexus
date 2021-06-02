@@ -18,7 +18,7 @@ const UserProfile = (props) => {
   const [search, setSearch] = React.useState('');
   const [follow, setFollow] = React.useState(undefined)
   const [isLoading, setIsLoading] = React.useState(false)
-  const [badges, setBadges] = useState('');
+  const [badges, setBadges] = useState([]);
   let history = useHistory();
 
   let path = window.location.pathname
@@ -70,7 +70,7 @@ const UserProfile = (props) => {
           <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>
           <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
         </div>
-        <div>{badges ? badges.map(badge => badgeOnWhitelist(badge.name) ? badge.name : '') : ''}</div>
+        <div>{badges.map(badge => badgeOnWhitelist(badge.name) ? badge.name : '')}</div>
 
         <Spellbook spells={user.spells}/>
         <div className={classes.userProfileRoot}>
