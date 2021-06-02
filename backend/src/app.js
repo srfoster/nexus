@@ -99,6 +99,8 @@ app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
     .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})
     .first()
     .then((matchingSpell) => {
+      if(!matchingSpell) return res.status(404).send({error: "You're spell isn't showing."})
+
       delete matchingSpell.is_deleted
 
       let boolean = !!matchingSpell

@@ -158,7 +158,9 @@ function cleanTables(db) {
       `TRUNCATE
         users,
         spells,
-        tags
+        tags,
+        follows,
+        badges
       `
     )
     .then(() =>
@@ -166,9 +168,13 @@ function cleanTables(db) {
         trx.raw(`ALTER SEQUENCE users_id_seq minvalue 0 START WITH 1`),
         trx.raw(`ALTER SEQUENCE spells_id_seq minvalue 0 START WITH 1`),
         trx.raw(`ALTER SEQUENCE tags_id_seq minvalue 0 START WITH 1`),
+        trx.raw(`ALTER SEQUENCE follows_id_seq minvalue 0 START WITH 1`),
+        trx.raw(`ALTER SEQUENCE badges_id_seq minvalue 0 START WITH 1`),
         trx.raw(`SELECT setval('users_id_seq', 0)`),
         trx.raw(`SELECT setval('spells_id_seq', 0)`),
         trx.raw(`SELECT setval('tags_id_seq', 0)`),
+        trx.raw(`SELECT setval('follows_id_seq', 0)`),
+        trx.raw(`SELECT setval('badges_id_seq', 0)`),
       ])
     )
   )
