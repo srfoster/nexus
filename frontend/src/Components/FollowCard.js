@@ -87,15 +87,6 @@ export default function FollowCard(props) {
               </Typography>
           </Tooltip> 
           </div>
-          {/* <div>
-              <Container className={classes.followCardGrid} maxWidth="md">
-                <Grid container spacing={4}>
-                  {user.spells.slice(0,3).map((spell) => (  
-                    <Spellcard className={classes.followSpellCard} cardImage={cardImage} spell={spell} key={'key ' + spell.id}/>
-                  ))}
-                </Grid>
-              </Container>
-          </div> */}
           <Typography variant="h6">
             {`Total Spells: ${user.total}`}
           </Typography>
