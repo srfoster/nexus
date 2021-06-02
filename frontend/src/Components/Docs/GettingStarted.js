@@ -10,8 +10,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {MagicMirror, CastButton} from '../MagicMirror.js';
 import {linkTo, topDocLink} from './util.js';
-import AddBadgeOnRender from '../AddBadgeOnRender';
-import { CustomizedSnackbars } from '../../Util';
+import { BadgeConfirmation } from '../Badges/badgeUtil';
+import AddBadgeOnRender from '../Badges/AddBadgeOnRender';
 
 // Chosen -> Initiate -> Novice -> Apprentice -> Adept 
 
@@ -112,6 +112,7 @@ function GettingStarted(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
+  const startBadge = "getting-started"
 
   const isStepOptional = (step) => {
     //This would set the 2nd step to be optional:
@@ -183,8 +184,8 @@ function GettingStarted(props) {
             <Typography className={classes.instructions}>
               You did it! You cast your first spell! Now, head over to your Spells page to start making your own!  
             </Typography>
-            <CustomizedSnackbars />
-            <AddBadgeOnRender name='Getting-Started'/>
+            <BadgeConfirmation name={startBadge}/>
+            <AddBadgeOnRender name={startBadge}/>
             <Button onClick={handleReset} className={classes.button}>
               Reset
             </Button>

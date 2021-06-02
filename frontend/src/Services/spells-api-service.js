@@ -166,6 +166,48 @@ const SpellsApiService = {
           : res.json()
       )
   },
+  getFollows(id){
+    return fetch(`${config.API_ENDPOINT}/follows/${id}`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+  postFollows(id, follow_id){
+    return fetch(`${config.API_ENDPOINT}/follows/${id}?following=${follow_id}`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+  deleteFollows(id, follow_id){
+    return fetch(`${config.API_ENDPOINT}/follows/${id}?following=${follow_id}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
   addBadgeToUser(name){
     return fetch(`${config.API_ENDPOINT}/users/me/badges/${name}`, {
       method: 'POST',

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import SpellsApiService from '../Services/spells-api-service';
+import SpellsApiService from '../../Services/spells-api-service';
 
 function AddBadgeOnRender(props) {
   useEffect(() => {

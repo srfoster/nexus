@@ -18,6 +18,7 @@ const SpellTagsIndex = require('./endpoints/SpellTagsIndex')
 const SpellTags = require('./endpoints/SpellTags')
 const SpellsFork = require('./endpoints/SpellFork')
 const Downloads = require('./endpoints/Downloads')
+const Follows = require('./endpoints/Follows')
 
 const app = express()
 // testing branches
@@ -43,6 +44,7 @@ let epSpellsFork = '/spells/:id/fork'
 let epSpellTags = '/spells/:id/tags/:tag'
 let epSpellTagsIndex = '/spells/:id/tags'
 let epDownloads = '/downloads'
+let epFollows = '/follows/:id'
 
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, SpellIndex.handleGet)
@@ -82,6 +84,15 @@ app.post(`${epSpellsFork}`, requireAuth, SpellsFork.handlePost)
 
 // Retreives download information
 app.get(`${epDownloads}`, Downloads.handleGet)
+
+// Retrieves follow info
+app.get(`${epFollows}`,requireAuth, Follows.handleGet)
+
+// creates new follow in join table
+app.post(`${epFollows}`,requireAuth, Follows.handlePost)
+
+// deletes follow in join table
+app.delete(`${epFollows}`,requireAuth, Follows.handleDelete)
 
 app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
@@ -162,5 +173,6 @@ module.exports = {
   epSpellsFork,
   epSpellTags,
   epSpellTagsIndex,
-  epDownloads
+  epDownloads,
+  epFollows
 }
