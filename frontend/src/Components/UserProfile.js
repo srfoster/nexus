@@ -7,6 +7,7 @@ import {SearchBar} from '../Util.js'
 import useStyles from '../styles.js';
 import { Helmet } from "react-helmet";
 
+
 const UserProfile = (props) => {
   const classes = useStyles();
   const [user, setUser] = useState(undefined)
@@ -55,7 +56,6 @@ const UserProfile = (props) => {
             />
           </div>
         </div>
-      {  console.log(badges)}
         <div>{badges.map(badge => badge.name)}</div>
 
         <Spellbook spells={user.spells}/>

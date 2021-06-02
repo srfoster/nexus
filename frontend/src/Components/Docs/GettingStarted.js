@@ -183,7 +183,7 @@ function GettingStarted(props) {
         {activeStep === steps.length ? (
           <div>
             <Typography className={classes.instructions}>
-              You did it! You cast your first spells! Now, head over to your Spells page to start making your own!  
+              You did it! You cast your first spell! Now, head over to your Spells page to start making your own!  
             </Typography>
             <AddBadgeOnRender name='Getting-Started'/>
             <Button onClick={handleReset} className={classes.button}>
