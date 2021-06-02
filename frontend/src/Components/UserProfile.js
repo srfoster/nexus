@@ -7,7 +7,6 @@ import {SearchBar} from '../Util.js'
 import useStyles from '../styles.js';
 import { Helmet } from "react-helmet";
 
-
 const UserProfile = (props) => {
   const classes = useStyles();
   const [user, setUser] = useState(undefined)
@@ -17,7 +16,6 @@ const UserProfile = (props) => {
   const [badges, setBadges] = useState('');
 
   let path = window.location.pathname
-
   useEffect(() => {
     let isMounted = true
     const { id } = props.match.params
