@@ -40,7 +40,7 @@ const UserProfile = (props) => {
   return (
     user ?
       <>
-        <Helmet>
+      <Helmet>
         <title>{`${user.username} `}| CodeSpells Nexus</title>
         <meta name="description" content="Download the latest CodeSpells video games. The spells you write here in the Nexus can be cast inside of these games!" />
       </Helmet>
@@ -54,7 +54,7 @@ const UserProfile = (props) => {
             />
           </div>
         </div>
-        <div>{badges.map(badge => badge.name)}</div>
+        <div>{badges ? badges.map(badge => badge.name) : ''}</div>
 
         <Spellbook spells={user.spells}/>
         

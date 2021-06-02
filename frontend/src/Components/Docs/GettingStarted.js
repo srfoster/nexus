@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import {MagicMirror, CastButton} from '../MagicMirror.js';
 import {linkTo, topDocLink} from './util.js';
 import AddBadgeOnRender from '../AddBadgeOnRender';
+import { CustomizedSnackbars } from '../../Util';
 
 // Chosen -> Initiate -> Novice -> Apprentice -> Adept 
 
@@ -182,6 +183,7 @@ function GettingStarted(props) {
             <Typography className={classes.instructions}>
               You did it! You cast your first spell! Now, head over to your Spells page to start making your own!  
             </Typography>
+            <CustomizedSnackbars />
             <AddBadgeOnRender name='Getting-Started'/>
             <Button onClick={handleReset} className={classes.button}>
               Reset
