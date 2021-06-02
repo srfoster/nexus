@@ -96,6 +96,38 @@ app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
     })
 })
 
+app.post(`/badgerMe/:name`, requireAuth, async (req, res) => {
+
+  let repeatCheck = await req.app.get('db')('badges')
+    .where({user_id: req.user.id, name: req.params.name})
+  console.log('repeat', repeatCheck)
+  if (repeatCheck.length) return res.send({message: 'You already earned this badge!'})
+  
+  let badges = await req.app.get('db')('badges')
+  .where({user_id: req.user.id})
+
+  console.log('badges', badges)
+  req.app.get('db')('badges')
+    // .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})
+    .insert({user_id: req.user.id, name: req.params.name, date_created: new Date(), date_modified: new Date()})
+    .returning('*')
+    .then((badges) => {
+      res.send(badges[0])
+    })
+})
+
+app.get(`/badgerMe/:id`, requireAuth, async (req, res) => {
+  let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+  // console.log(userId)
+
+  req.app.get('db')('badges')
+  .where({user_id: userId})
+  .then((badges) => {
+    // console.log('these', badges)
+    res.send(badges)
+  })
+})
+
 app.post(epLogin, handleLogin)
 
 app.post(epSignup, handleSignup)
