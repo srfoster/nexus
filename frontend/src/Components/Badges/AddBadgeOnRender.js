@@ -8,7 +8,6 @@ function AddBadgeOnRender(props) {
   useEffect(() => {
     SpellsApiService.addBadgeToUser(props.name)
       .then((resp) => {
-        console.log(resp)
         if (resp.id) //A successful response returns a badge with an id. Otherwise {message: ...}
           setGotBadge(true)
       })
