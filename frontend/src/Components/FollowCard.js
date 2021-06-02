@@ -81,7 +81,7 @@ export default function FollowCard(props) {
               </Typography>
           </Tooltip> 
           </div>
-          <div>
+          {/* <div>
               <Container className={classes.followCardGrid} maxWidth="md">
                 <Grid container spacing={4}>
                   {user.spells.slice(0,3).map((spell) => (  
@@ -89,10 +89,13 @@ export default function FollowCard(props) {
                   ))}
                 </Grid>
               </Container>
-          </div>
+          </div> */}
           <Typography variant="h6">
-                {`Total Spells: ${user.total}`}
-              </Typography>
+            {`Total Spells: ${user.total}`}
+          </Typography>
+          <Typography variant="h6">
+            Achievements:
+          </Typography>
           <Tooltip title={`unfollow ${user.username}`}>
             <IconButton aria-label="remove-mage" onClick={handleClickOpen}>
               <PersonAddDisabledIcon />
