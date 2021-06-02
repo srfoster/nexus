@@ -7,11 +7,12 @@ import GettingStarted from './GettingStarted.js';
 import People from './People.js';
 import {linkTo, topDocLink} from './util.js';
 import { kabobCaseToTitleCase } from '../../Util.js';
+import config from '../../config'
 
 //TODO: Move to its own service file...
 const ApiService = {
   getDocumentedFunctions(){
-    return fetch(`http://localhost:8090/api`, {
+    return fetch(`${config.LANG_SERVER}/api`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
