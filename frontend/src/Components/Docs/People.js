@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {linkTo, topDocLink} from './util.js';
+import Link from '@material-ui/core/Link';
+import LanguageIcon from '@material-ui/icons/Language';
 
 function People(props) {
 
@@ -9,8 +11,8 @@ function People(props) {
 
         <h2>Current CodeSpells Devs</h2>
         <ul>
-            <li>Stephen Foster</li>
-            <li>Lindsey Handley</li>
+            <li>Stephen Foster <Link href="http://stephenfoster.us/" target="_blank"><LanguageIcon/></Link></li>
+            <li>Lindsey Handley <Link href="http://lindseyhandley.com/" target="_blank"><LanguageIcon/></Link></li>
             <li>Justin Foster (Astrum)</li>
             <li>Eric Stevens (Trithir)</li>
             <li>Deven Perkins (dperkheezy)</li>

@@ -22,7 +22,8 @@ import LockIcon from '@material-ui/icons/Lock';
 import useStyles from '../../styles.js';
 import CheckIcon from '@material-ui/icons/Check';
 import CodeMirror from 'codemirror';
-import {UnControlled as ReactCodeMirror} from 'react-codemirror2';
+import { MagicMirror } from '../MagicMirror.js';
+import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import 'codemirror/addon/edit/matchbrackets.js'
 import 'codemirror/addon/edit/closebrackets.js'
 import 'codemirror/addon/selection/active-line.js'
@@ -393,7 +394,7 @@ export default function SpellDetails(props) {
         <p></p> 
         <div className={classes.spellDetailsCodeMirror}>
           {spell.locked || !userOwnsSpell ?
-            <ReactCodeMirror
+            <MagicMirror
               className={classes.spellDetailsCodeMirror}
               value={spellText ? spellText : ''}
               options={{
@@ -406,7 +407,7 @@ export default function SpellDetails(props) {
                 styleActiveLine: true,
               }}
             /> :
-            <ReactCodeMirror
+            <MagicMirror
               className={classes.spellDetailsCodeMirror}
               value={spellText ? spellText : ''}
               options={{

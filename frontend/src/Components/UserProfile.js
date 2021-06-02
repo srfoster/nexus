@@ -49,7 +49,7 @@ const UserProfile = (props) => {
   return (
     user ?
       <>
-        <Helmet>
+      <Helmet>
         <title>{`${user.username} `}| CodeSpells Nexus</title>
         <meta name="description" content="Download the latest CodeSpells video games. The spells you write here in the Nexus can be cast inside of these games!" />
       </Helmet>
@@ -71,7 +71,7 @@ const UserProfile = (props) => {
           <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>
           <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
         </div>
-        <div>{badges.map(badge => badge.name)}</div>
+        <div>{badges ? badges.map(badge => badge.name) : ''}</div>
 
         <Spellbook spells={user.spells}/>
 

@@ -11,7 +11,10 @@
 
          orb-game-1/lang)
 
+
 (define (start-ui)
+  (spell-language-module 'orb-game-1/run-lang-external)
+  (preload-spell-sandbox)
   (ws-serve* #:port 8082 
              (ws-service-mapper
               ["/test" 
@@ -52,11 +55,10 @@
                     
                     (define other (unreal-eval-js (spawn-other-orb loc)))
                     
-                    (spell-language-module 'orb-game-1/run-lang-external)
                     (add-spawn! (hash-ref other 'id) other)
                     
                     (run-spell (hash-ref other 'id)
-                               (read (open-input-string msg))
+                               (read (open-input-string (~a "(let ()" msg ")")))
                                '())
                   
                   (ws-send! c msg)

@@ -1,1 +1,0 @@
-import {SpellIndex} from '../SpellIndex';

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import CodeMirror from 'codemirror';
-import {UnControlled as ReactCodeMirror} from 'react-codemirror2';
+import ConnectionIndicator from './Client/ConnectionIndicator.js';
+import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import Button from '@material-ui/core/Button';
 
 export function MagicMirror(props) {
@@ -9,22 +10,26 @@ export function MagicMirror(props) {
     return <>
         <ReactCodeMirror
             value={
-                props.code
+                props.code || props.value
             }
-            options={{
-                lineWrapping: true,
-                mode: 'scheme',
-                theme: 'material',
-                lineNumbers: true,
-                matchBrackets: true,
-                autoCloseBrackets: true,
-                styleActiveLine: true,
-            }}
+            options={props.options ||
+        {
+            lineWrapping: true,
+            mode: 'scheme',
+            theme: 'material',
+            lineNumbers: true,
+            matchBrackets: true,
+            autoCloseBrackets: true,
+            styleActiveLine: true,
+        }}
             onChange={(editor, data, value) => {
                 setCode(value);
-            }}
+                if (props.onChange) {
+                    props.onChange(editor, data, value);
+                }
+        }}
         />
-        <CastButton code={code} />
+        <ConnectionIndicator afterConnection={<CastButton code={code} />}></ConnectionIndicator>
     </>
 }
 

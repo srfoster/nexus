@@ -267,6 +267,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
 
+  // Snackbar //
+  snackbarRoot: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+
   // SpellDetails //
   spellDetailsDescription: {
     margin: theme.spacing(1),
