@@ -71,7 +71,7 @@ const UserProfile = (props) => {
           <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>
           <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
         </div>
-        <div>{badges ? badges.map(badge => badge.name) : ''}</div>
+        <div>{badges ? badges.slice(0,3).map(badge => `|  ${badge.name}  |`) : ''}</div>
 
         <Spellbook spells={user.spells}/>
 
@@ -85,4 +85,4 @@ const UserProfile = (props) => {
   );
 };
 
-export default UserProfile;
+export default UserProfile; 

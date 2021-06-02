@@ -31,8 +31,9 @@ export default function FollowCard(props) {
   let history = useHistory();
   const [user, setUser] = useState(undefined)
   const [open, setOpen] = React.useState(false);
-  const {follow} = props
+  const [badges, setBadges] = useState('');
   const [cardImage, setCardImage] = useState(undefined);
+  const {follow} = props
   let path = window.location.pathname
 
   const handleClickOpen = () => {
@@ -57,9 +58,14 @@ export default function FollowCard(props) {
       .then(user => {
         if(isMounted) setUser(user)
       })
-      return () => {
-        isMounted = false
-      }
+    SpellsApiService.getBadgesByUser(follower_id)
+      
+      .then(badges => {
+        if(isMounted) setBadges(badges)
+      })  
+    return () => {
+      isMounted = false
+    }
   },[path])
 
   return (
@@ -94,7 +100,7 @@ export default function FollowCard(props) {
             {`Total Spells: ${user.total}`}
           </Typography>
           <Typography variant="h6">
-            Achievements:
+            Badges: {badges ? badges.length : '0'}
           </Typography>
           <Tooltip title={`unfollow ${user.username}`}>
             <IconButton aria-label="remove-mage" onClick={handleClickOpen}>
