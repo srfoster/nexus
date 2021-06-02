@@ -7,7 +7,7 @@ import { MemoryRouter, Route, useParams, useRouteMatch } from "react-router";
 
 
 
-describe('When SpellDetail first renders', () => {
+describe('When LandingPage first renders', () => {
     beforeEach(() => {
       const isLoggedIn = false 
         render(
@@ -24,6 +24,6 @@ describe('When SpellDetail first renders', () => {
     });
     it('shows landing page header' , () => {
 
-    expect(screen.getAllByRole('heading')).toContain([<h6 class="MuiTypography-root makeStyles-headerTitle-176 MuiTypography-h6" />, <h1>CodeSpells Spell Sharing</h1>])
+    expect(screen.getByRole('heading')).toHaveTextContent("CodeSpells Spell Sharing")
     });
 });

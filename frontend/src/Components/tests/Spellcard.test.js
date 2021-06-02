@@ -1,1 +1,0 @@
-import {Spellcard} from '../Spellcard';
