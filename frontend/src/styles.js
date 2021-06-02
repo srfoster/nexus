@@ -534,7 +534,29 @@ const useStyles = makeStyles((theme) => ({
   // List Items
   listIcon: {
     backgroundColor: 'rgb(100,149,237)',
+  },
+
+  //follow Cards
+  followCard: {
+    height: '200px',
+    backgroundColor: 'white',
+    margin: "5px",
+    color: 'black',
+  },
+  followCardBody: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    height: '200px',
+    alignContent: 'center',
+  },
+  followCardGrid:{
+    height: '150px',
+  },
+  followSpellCard:{
+    flexShrink: '5',
   }
+
 }));
+
 
 export default useStyles
