@@ -7,7 +7,7 @@ export const badgeWhitelist = ['getting-started']
 
 export function badgeFilter(badgeName) {
   let boolean = badgeWhitelist.includes(badgeName)
-  return  boolean
+  return boolean
 }
 
 //Badge success popup
@@ -31,12 +31,8 @@ export function BadgeConfirmation(props) {
   };
   let showAlert = badgeFilter(props.name) 
 
-  return ( showAlert ? '' :
+  return ( !showAlert ? '' :
     <div className={classes.snackbarRoot}>
-      {/* <Button variant="outlined" onClick={handleClick}>
-        Open success snackbar
-      </Button> */}
-      {/* severity setting/color: error/red, warning/orange, info/blue, succecss/green */}
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="info">
           You conjured a badge! View your mage page for more details on it.

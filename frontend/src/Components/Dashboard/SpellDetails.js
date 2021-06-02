@@ -68,7 +68,7 @@ export default function SpellDetails(props) {
 
     SpellsApiService.checkForSpellOwnership(id)
       .then(res => {
-        setUserOwnsSpell(res.userOwnsSpell)
+        if(isMounted) setUserOwnsSpell(res.userOwnsSpell)
       })
     
     SpellsApiService.getSpellById(id)
