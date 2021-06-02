@@ -167,7 +167,7 @@ const SpellsApiService = {
       )
   },
   addBadgeToUser(name){
-    return fetch(`${config.API_ENDPOINT}/badgerMe/${name}`, {
+    return fetch(`${config.API_ENDPOINT}/users/me/badges/${name}`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -181,7 +181,7 @@ const SpellsApiService = {
       )
   },
   getBadgesByUser(id){
-    return fetch(`${config.API_ENDPOINT}/badgerMe/${id}`, {
+    return fetch(`${config.API_ENDPOINT}/users/${id}/badges`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
