@@ -1,4 +1,5 @@
 TRUNCATE
   users,
-  spells
+  spells,
+  follows,
   RESTART IDENTITY CASCADE;

@@ -18,6 +18,7 @@ const SpellTagsIndex = require('./endpoints/SpellTagsIndex')
 const SpellTags = require('./endpoints/SpellTags')
 const SpellsFork = require('./endpoints/SpellFork')
 const Downloads = require('./endpoints/Downloads')
+const Follows = require('./endpoints/Follows')
 
 const app = express()
 // testing branches
@@ -43,6 +44,7 @@ let epSpellsFork = '/spells/:id/fork'
 let epSpellTags = '/spells/:id/tags/:tag'
 let epSpellTagsIndex = '/spells/:id/tags'
 let epDownloads = '/downloads'
+let epFollows = '/follows/:id'
 
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, SpellIndex.handleGet)
@@ -83,6 +85,15 @@ app.post(`${epSpellsFork}`, requireAuth, SpellsFork.handlePost)
 // Retreives download information
 app.get(`${epDownloads}`, Downloads.handleGet)
 
+// Retrieves follow info
+app.get(`${epFollows}`,requireAuth, Follows.handleGet)
+
+// creates new follow in join table
+app.post(`${epFollows}`,requireAuth, Follows.handlePost)
+
+// deletes follow in join table
+app.delete(`${epFollows}`,requireAuth, Follows.handleDelete)
+
 app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
     .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})
@@ -95,10 +106,16 @@ app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
     })
 })
 
-app.post(`/badgerMe/:name`, requireAuth, async (req, res) => {
+const giveBadge = async (req, res) => {
+  let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+
+  //When/if we have admin roles, we can enhance the security logic here.
+  if(req.user.id !== userId) {
+    return res.status(403).send({error: "You can only give badges to yourself at this time."})
+  }
 
   let repeatCheck = await req.app.get('db')('badges')
-    .where({user_id: req.user.id, name: req.params.name})
+    .where({user_id: userId, name: req.params.badgeName})
   if (repeatCheck.length) return res.send({message: 'You already earned this badge!'})
   
   let badges = await req.app.get('db')('badges')
@@ -106,14 +123,17 @@ app.post(`/badgerMe/:name`, requireAuth, async (req, res) => {
 
   req.app.get('db')('badges')
     // .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})
-    .insert({user_id: req.user.id, name: req.params.name, date_created: new Date(), date_modified: new Date()})
+    .insert({user_id: req.user.id, name: req.params.badgeName, date_created: new Date(), date_modified: new Date()})
     .returning('*')
     .then((badges) => {
       res.send(badges[0])
     })
-})
+}
+app.post(`/users/:id/badges/:badgeName`, requireAuth, giveBadge)
 
-app.get(`/badgerMe/:id`, requireAuth, async (req, res) => {
+
+
+const getBadges = async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
 
   req.app.get('db')('badges')
@@ -121,7 +141,9 @@ app.get(`/badgerMe/:id`, requireAuth, async (req, res) => {
   .then((badges) => {
     res.send(badges)
   })
-})
+  }
+app.get(`/users/:id/badges`, requireAuth, getBadges)
+
 
 app.post(epLogin, handleLogin)
 
@@ -151,5 +173,6 @@ module.exports = {
   epSpellsFork,
   epSpellTags,
   epSpellTagsIndex,
-  epDownloads
+  epDownloads,
+  epFollows
 }
