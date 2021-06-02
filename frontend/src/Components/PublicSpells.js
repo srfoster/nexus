@@ -5,9 +5,9 @@ import Spellbook from './Spellbook';
 import Pagination from '@material-ui/lab/Pagination';
 import {SearchBar} from '../Util.js'
 import useStyles from '../styles.js';
+import {Helmet} from "react-helmet";
 
 export default function PublicSpells(props) {
-  // console.log("From index: ", props);
   const [spells, setSpells] = useState([])
   const classes = useStyles();
   const [rowsPerPage, setRowsPerPage] = React.useState(9);
@@ -31,6 +31,10 @@ export default function PublicSpells(props) {
 console.log(spells)
   return (
     <>
+      <Helmet>
+        <title>Public Spells | CodeSpells Nexus</title>
+        <meta name="description" content="You can find all spells that have been made public here. These spells can be cast inside of CodeSpells game, or forked and edited!" />
+      </Helmet>
       <div className={classes.headBar}>
         <div className={classes.headLeft}></div>
         <h4 className={classes.headTitle}>Public Spells</h4>

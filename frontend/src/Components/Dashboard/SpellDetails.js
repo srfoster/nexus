@@ -27,6 +27,7 @@ import 'codemirror/addon/edit/matchbrackets.js'
 import 'codemirror/addon/edit/closebrackets.js'
 import 'codemirror/addon/selection/active-line.js'
 import CallSplitIcon from '@material-ui/icons/CallSplit';
+import {Helmet} from "react-helmet";
 
 
 let debounceTimer
@@ -72,7 +73,6 @@ export default function SpellDetails(props) {
     SpellsApiService.getSpellById(id)
       .then(spell => {
         if (isMounted) {
-          // console.log("spell" , spell)
           setSpell(spell)
           setSpellText(spell.text);
         }
@@ -207,23 +207,24 @@ export default function SpellDetails(props) {
   }
 
   const clickForkIcon = (id) => {
-    // console.log("Before API ", id);
     SpellsApiService.forkSpellById(id)
     .then((spell) => {
       history.push(`/spells/${spell.id}`)
-      // console.log("After history ", spell.id);
-      // console.log(object);
     })
   }
 
   return (
     <>
-    <Prompt 
-      when={isSaving}
-      message='Spell is not saved yet'
-    />
+      <Prompt 
+        when={isSaving}
+        message='Spell is not saved yet'
+      />
       {spell ?
       <div>
+        <Helmet>
+          <title>{spell.name} | CodeSpells Nexus</title>
+          <meta name="description" content={spell.description} />
+        </Helmet>
         <div className={classes.titleRow}>
           <div className={classes.metaID}>ID: {spell.id}</div>
           <div className={classes.metaTitle}>

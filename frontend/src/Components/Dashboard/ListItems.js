@@ -17,12 +17,16 @@ import ViewListIcon from '@material-ui/icons/ViewList';
 import useStyles from '../../styles.js';
 import { TwitchIcon } from '../../Assets/TwitchIcon.png';
 import GetAppIcon from '@material-ui/icons/GetApp';
+import Link from '@material-ui/core/Link';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 export function PublicListItems(props) {
   const classes = useStyles();
   let history = useHistory();
+  const [test, setTest] = React.useState(undefined)
 
   const handleClickButton = (path) => {
+
     if(path === '/login') TokenService.clearAuthToken();
     history.push(path)
   }  
@@ -32,9 +36,9 @@ export function PublicListItems(props) {
   return (
   <>
     <div>
-
     <ListItem button onClick={() => handleClickButton('/spells')} 
-      className={path === '/spells' ? classes.listIcon : ''}>
+      // className={path === '/spells' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <ViewListIcon />
       </ListItemIcon>
@@ -42,7 +46,8 @@ export function PublicListItems(props) {
     </ListItem>
 
     <ListItem button onClick={() => handleClickButton('/friends')}
-      className={path === '/friends' ? classes.listIcon : ''}>
+      // className={path === '/friends' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
@@ -50,7 +55,8 @@ export function PublicListItems(props) {
     </ListItem>
 
     <ListItem button onClick={() => handleClickButton('/gallery')}
-      className={path === '/gallery' ? classes.listIcon : ''}>
+      // className={path === '/gallery' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <PhotoAlbumIcon />
       </ListItemIcon>
@@ -60,14 +66,24 @@ export function PublicListItems(props) {
     <Divider />
     <div>
     <ListItem button onClick={() => handleClickButton('/wizards/me')}
-      className={path.includes('/wizards') ? classes.listIcon : ''}>
+      // className={path.includes('/wizards') ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <AccountCircleIcon />
       </ListItemIcon>
       <ListItemText primary="My Profile" />
     </ListItem>
+    <ListItem button onClick={() => handleClickButton('/Docs')}
+      // className={path === '/downloads' ? classes.listIcon : ''}
+      >
+      <ListItemIcon>
+        <AssignmentIcon />
+      </ListItemIcon>
+      <ListItemText primary="Docs" />
+    </ListItem>
     <ListItem button onClick={() => handleClickButton('/downloads')}
-      className={path === '/downloads' ? classes.listIcon : ''}>
+      // className={path === '/downloads' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <GetAppIcon />
       </ListItemIcon>
@@ -108,14 +124,16 @@ export function PrivateListItems() {
   <>
     <div>
     <ListItem button onClick={() => handleClickButton('/gallery')}
-      className={path === '/gallery' ? classes.listIcon : ''}>
+      // className={path === '/gallery' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
       <PhotoAlbumIcon />
       </ListItemIcon>
       <ListItemText primary="Public Spells" />
     </ListItem>
     <ListItem button onClick={() => handleClickButton('/downloads')}
-      className={path === '/downloads' ? classes.listIcon : ''}>
+      // className={path === '/downloads' ? classes.listIcon : ''}
+      >
       <ListItemIcon>
         <GetAppIcon />
       </ListItemIcon>

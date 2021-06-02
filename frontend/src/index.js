@@ -6,7 +6,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {SpellContextProvider} from './Components/Context';
 
-
 ReactDOM.render(
   // <SpellContextProvider>
     <BrowserRouter>
