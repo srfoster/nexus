@@ -6,6 +6,7 @@ import Pagination from '@material-ui/lab/Pagination';
 import {SearchBar} from '../Util.js'
 import useStyles from '../styles.js';
 import { Helmet } from "react-helmet";
+import { badgeOnWhitelist } from './Badges/badgeUtil';
 
 const UserProfile = (props) => {
   const classes = useStyles();
@@ -52,10 +53,12 @@ const UserProfile = (props) => {
             />
           </div>
         </div>
-        <div>{badges ? badges.map(badge => badge.name) : ''}</div>
+        {console.log(badges)}
+        {console.log(badges.map(badge => (badge.name)))}
+        {console.log(badges.map(badge => badgeOnWhitelist(badge.name)))}
+        <div>{badges ? badges.map(badge => badgeOnWhitelist(badge.name) ? badge.name : '') : ''}</div>
 
         <Spellbook spells={user.spells}/>
-        
         <div className={classes.userProfileRoot}>
           <Pagination count={Math.ceil(user.total / rowsPerPage)}
             onChange={(event, page) => {setCurrentPage(page)}}

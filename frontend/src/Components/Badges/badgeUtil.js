@@ -3,9 +3,9 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import useStyles from '../../styles';
 
-export const badgeWhitelist = ['getting-started']
+export const badgeWhitelist = ['Getting-Started']
 
-export function badgeFilter(badgeName) {
+export function badgeOnWhitelist(badgeName) {
   let boolean = badgeWhitelist.includes(badgeName)
   return  boolean
 }
@@ -29,9 +29,9 @@ export function BadgeConfirmation(props) {
     }
     setOpen(false);
   };
-  let showAlert = badgeFilter(props.name) 
+  let dontShowAlert = badgeOnWhitelist(props.name) 
 
-  return ( showAlert ? '' :
+  return ( dontShowAlert ? '' :
     <div className={classes.snackbarRoot}>
       {/* <Button variant="outlined" onClick={handleClick}>
         Open success snackbar

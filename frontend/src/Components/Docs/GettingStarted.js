@@ -112,7 +112,7 @@ function GettingStarted(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
-  const startBadge = "getting-started"
+  const startBadge = "Getting-Started"
 
   const isStepOptional = (step) => {
     //This would set the 2nd step to be optional:
