@@ -44,3 +44,13 @@ services:
     container_name: prod-frontend
     env_file:
       - ./frontend/.prod-env
+
+  prod-lang-server:
+    image: codespells-lang-server
+    build: ./lang-server
+    restart: always
+    ports:
+      - 8090:8090
+    volumes:
+      - ./lang-server:/usr/src/app
+    container_name: prod-lang-server
