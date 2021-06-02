@@ -8,11 +8,9 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import {MagicMirror, CastButton} from '../MagicMirror.js';
 import {linkTo, topDocLink} from './util.js';
-
-// TODO
-// Need to figure out how to make Download & Setup require the Connected status before
-//  moving on...
+import AddBadgeOnRender from '../Badges/AddBadgeOnRender';
 
 // Chosen -> Initiate -> Novice -> Apprentice -> Adept 
 
@@ -113,8 +111,11 @@ function GettingStarted(props) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
   const steps = getSteps();
+  const startBadge = "Getting-Started"
 
   const isStepOptional = (step) => {
+    //This would set the 2nd step to be optional:
+    //return step === 1;
     return false;
   };
 
@@ -180,8 +181,9 @@ function GettingStarted(props) {
         {activeStep === steps.length ? (
           <div>
             <Typography className={classes.instructions}>
-              You did it! You cast your first spells! Now, head over to your Spells page to start making your own!  
+              You did it! You cast your first spell! Now, head over to your Spells page to start making your own!  
             </Typography>
+            <AddBadgeOnRender name={startBadge}/>
             <Button onClick={handleReset} className={classes.button}>
               Reset
             </Button>
@@ -218,42 +220,6 @@ function GettingStarted(props) {
       </div>
     </div>
   );
-}
-
-function MagicMirror(props) {
-    const [code, setCode] = useState(props.code);
-
-    return <>
-        <ReactCodeMirror
-            value={
-                props.code
-            }
-            options={{
-                lineWrapping: true,
-                mode: 'scheme',
-                theme: 'material',
-                lineNumbers: true,
-                matchBrackets: true,
-                autoCloseBrackets: true,
-                styleActiveLine: true,
-            }}
-            onChange={(editor, data, value) => {
-                setCode(value);
-            }}
-        />
-        <CastButton code={code} />
-    </>
-}
-
-function CastButton(props) {
-    return <><Button
-        onClick={() => {
-            window.CodeSpellsSocket.send(props.code);
-        }}
-        variant="contained"
-        color="secondary">
-            Cast
-        </Button></>
 }
 
 export default GettingStarted;

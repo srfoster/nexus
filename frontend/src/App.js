@@ -18,6 +18,7 @@ import UserProfile from './Components/UserProfile';
 import NotFound from './Components/NotFound';
 import SpellsApiService from './Services/spells-api-service';
 import Downloads from './Components/Dashboard/Downloads';
+import Follows from './Components/Dashboard/Follows';
 import Docs from './Components/Docs/Docs';
 import FabAddIcon from './Components/Dashboard/FabAddIcon';
 
@@ -32,7 +33,6 @@ function App() {
 
   useEffect(() => {
     let isMounted = true
-    console.log('App effect');
     // Only running this to check if logged in
     SpellsApiService.getUserById('me')
       .then((user) => setIsLoggedIn(true))
@@ -58,7 +58,6 @@ function App() {
         </script>
       </Helmet>
       <div >
-        {console.log('Before Dashboard')}
         <Dashboard
           isLoggedIn={isLoggedIn} 
           setIsLoggedIn={setIsLoggedIn}
@@ -90,7 +89,7 @@ function App() {
               />
               <Route
                 exact path={'/friends'}
-                component={(props) => <div>Friends Coming Soon</div>}
+                component={(props) => <Follows />}
               />
               <Route
                 exact path={'/gallery'}

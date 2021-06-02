@@ -18,7 +18,6 @@ function FabAddIcon(props) {
     let randomTitle = haikunator.haikunate({tokenLength: 0, delimiter: " "})
       .split(' ').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')
 
-    // console.log(randomTitle);
     
     SpellsApiService.postNewSpell(randomTitle)
     .then((spell) => {

@@ -37,35 +37,26 @@ describe('When Public Spells first renders',  () => {
     });
     it('shows public spells' , () => {
     //Checks to see if the heading of "Public Spells" Can be searched as regular text or as regex
-    expect(screen.getByRole('heading', {name: "Public Spells"})).toBeInTheDocument()
+      expect(screen.getByRole('heading', {name: "Public Spells"})).toBeInTheDocument()
     });
     it('shows search icon' , () => {
-
-    expect(screen.getByRole('button' , {name:/search icon/i})).toBeInTheDocument()
+      expect(screen.getByRole('button' , {name:/search icon/i})).toBeInTheDocument()
     });
     it('shows search bar' , () => {
-
-    expect(screen.getByRole('textbox' , {name:/search/i})).toBeInTheDocument()
+      expect(screen.getByRole('textbox' , {name:/search/i})).toBeInTheDocument()
     });
     it('shows go to previous page button' , () => {
-
-    expect(screen.getByRole('button' , {name:/Go to previous page/i})).toBeInTheDocument()
+      expect(screen.getByRole('button' , {name:/Go to previous page/i})).toBeInTheDocument()
     });
-
     it('shows go to next page button' , () => {
-
-    expect(screen.getByRole('button' , {name:/Go to next page/i})).toBeInTheDocument()
+      expect(screen.getByRole('button' , {name:/Go to next page/i})).toBeInTheDocument()
     });
     it('shows pagination nav' , () => {
-
-    expect(screen.getByRole('heading' , {name:/pagination navigation/i})).toBeInTheDocument()
+      expect(screen.getByRole('navigation' , {name: 'pagination navigation'})).toBeInTheDocument()
     });
     it('shows pagination button' , () => {
-
-    
-    render(<Pagination count={1} />)
-
-    expect(screen.getByRole('button' , {name:"page 1"})).toBeInTheDocument()
+      render(<Pagination count={1} />)
+      expect(screen.getByRole('button' , {name:"page 1"})).toBeInTheDocument()
     });
 });
     describe('What user interacts with on the screen',  () => {

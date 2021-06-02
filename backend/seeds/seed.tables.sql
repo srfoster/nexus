@@ -2,7 +2,8 @@ BEGIN;
 
 TRUNCATE
   users,
-  spells
+  spells,
+  follows,
   RESTART IDENTITY CASCADE;
 
 INSERT INTO users (username, password)
@@ -22,4 +23,11 @@ VALUES
   (1, 'Neither deleted nor public', 'Test', '(displayln "Hello")', false, false, false),
   (1, 'Safely Locked!', 'This spell is set as locked by default', '(displayln "Go Away")', true, false, true);
 
+INSERT INTO follows (user_id, follower_id)
+VALUES
+  (1, 2),
+  (1, 3),
+  (1, 5);
+
+  
 COMMIT;

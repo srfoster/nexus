@@ -29,8 +29,6 @@ function Downloads() {
       })
   }, [])
 
-  console.log(games, totalGames)
-
   return (
     <>
      <Helmet>

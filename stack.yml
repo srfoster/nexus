@@ -20,7 +20,7 @@ services:
     volumes:
       - ./backend:/usr/src/app
       - /usr/src/app/node_modules
-    command: "scripts/setup-and-run.sh"
+        #command: "scripts/setup-and-run.sh"
     container_name: backend
     env_file:
       - ./backend/.env
@@ -39,3 +39,13 @@ services:
     container_name: frontend
     env_file:
       - ./frontend/.env
+
+  lang-server:
+    image: codespells-lang-server
+    build: ./lang-server
+    restart: always
+    ports:
+      - 8090:8090
+    volumes:
+      - ./lang-server:/usr/src/app
+    container_name: lang-server
