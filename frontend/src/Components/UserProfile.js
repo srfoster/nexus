@@ -22,6 +22,7 @@ const UserProfile = (props) => {
   let history = useHistory();
 
   let path = window.location.pathname
+
   useEffect(() => {
     let isMounted = true
     const { id } = props.match.params
@@ -44,14 +45,15 @@ const UserProfile = (props) => {
       isMounted = false
     }
   },[currentPage, search, path])
+
 //logged in for profile page
   return (
     user ?
       <>
-      <Helmet>
-        <title>{`${user.username} `}| CodeSpells Nexus</title>
-        <meta name="description" content="Download the latest CodeSpells video games. The spells you write here in the Nexus can be cast inside of these games!" />
-      </Helmet>
+        <Helmet>
+          <title>{`${user.username} `}| CodeSpells Nexus</title>
+          <meta name="description" content="Download the latest CodeSpells video games. The spells you write here in the Nexus can be cast inside of these games!" />
+        </Helmet>
         <div className={classes.userProfileHeadBar}>
           <div className={classes.userProfileHeadLeft}>
             {(props.match.params.id === 'me' || props.match.params.id === user.id) ?
@@ -73,6 +75,7 @@ const UserProfile = (props) => {
         <div>{badges.map(badge => badgeOnWhitelist(badge.name) ? badge.name : '')}</div>
 
         <Spellbook spells={user.spells}/>
+        
         <div className={classes.userProfileRoot}>
           <Pagination count={Math.ceil(user.total / rowsPerPage)}
             onChange={(event, page) => {setCurrentPage(page)}}
