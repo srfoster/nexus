@@ -1,8 +1,7 @@
 #lang racket
 
-(provide 
-        documented-function
-        run-server)
+(provide documented-function
+         run-server)
 
 (require web-server/http
         web-server/servlet
@@ -21,11 +20,11 @@
                                                   "void?"
                                                   "Force is a function that applies a force to an orb in a direction given by a vector with `x`, `y`, and `z` components. 
                         
-                        Code Examples: 
-                        * `(force 500 200 800)`
-                        * ```(force (random -100 100)
-                                    (random -100 100)
-                                    (random -100 100))```")
+### Code Examples: 
+<ul><li>`(force 500 200 800)`</li>
+<li>```(force (random -100 100)
+(random -100 100)
+(random -100 100))```</li></ul>")
                               
                               (documented-function "anchor"
                                                   (list 
@@ -34,10 +33,10 @@
                                                   "void?"
                                                   "Anchor is a function that allows an orb to anchor to an orb of a given name or referenced directly. 
                         
-                        Code Examples: 
-                        * `(anchor \"laurond\")`
-                        * `(anchor (with-name \"trithir\"))`
-                        ")
+### Code Examples: 
+<ul><li>`(anchor \"laurond\")`</li>
+<li>`(anchor (with-name \"trithir\"))`</li></ul>
+")
                               
                               (documented-function "color"
                                                   (list 
@@ -46,19 +45,18 @@
                                                   "void?"
                                                   "Color is a function that allows an orb to change colors. Colors can be specified by hex code (e.g. #FF1155) or by referencing one of a small selection of named colors (green, blue, red, and orange.) 
                         
-                        Code Examples: 
-                        * `(color \"green\")`
-                        * `(color \"#FF5577\")`
-                        ")
+### Code Examples: 
+<ul><li>`(color \"green\")`</li>
+<li>`(color \"#FF5577\")`</li>
+</ul>")
                               
                               (documented-function "de-anchor"
                                                   (list )
                                                   "void?"
                                                   "De-anchor removes all anchors currently attached to your orb.
                         
-                        Code Example:
-                        * `(de-anchor)`")
-                              
+### Code Example:
+<ul><li>`(de-anchor)`</li></ul>")
                               ))
 
 
