@@ -8,4 +8,4 @@ RUN raco pkg install --deps search-auto web-server reloadable
 COPY . .
 
 EXPOSE 8090
-CMD [ "racket", "reload.rkt" ]
+CMD [ "racket", "main.rkt" ]
