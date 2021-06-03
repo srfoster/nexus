@@ -44,7 +44,7 @@ let epSpellsFork = '/spells/:id/fork'
 let epSpellTags = '/spells/:id/tags/:tag'
 let epSpellTagsIndex = '/spells/:id/tags'
 let epDownloads = '/downloads'
-let epFollows = '/follows/:id'
+let epFollows = '/users/:id/follows'
 
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, SpellIndex.handleGet)

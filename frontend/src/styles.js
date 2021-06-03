@@ -554,6 +554,11 @@ const useStyles = makeStyles((theme) => ({
   },
   followSpellCard:{
     flexShrink: '5',
+  },
+  followRoot:{
+    '& > *': {
+      marginTop: theme.spacing(2),
+    },
   }
 
 }));
