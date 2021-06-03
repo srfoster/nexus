@@ -11,6 +11,7 @@
 (define (documented-function name params return-type content)
   (hash 'name name 'parameters params 'returnType return-type 'content content))
 
+;Multiline code examples not working yet
 (define (documented-functions) (list
                               (documented-function "force"
                                                   (list 
@@ -23,8 +24,8 @@
 ### Code Examples: 
 <ul><li>`(force 500 200 800)`</li>
 <li>```(force (random -100 100)
-(random -100 100)
-(random -100 100))```</li></ul>")
+              (random -100 100)
+              (random -100 100))```</li></ul>")
                               
                               (documented-function "anchor"
                                                   (list 
