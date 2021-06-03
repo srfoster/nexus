@@ -562,14 +562,6 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     },
   },
-  followName:{
-    maxWidth: '300px'
-  },
-  bagerTar:{
-    display: 'flex',
-    justifyContent: 'center'
-  }
-
 }));
 
 
