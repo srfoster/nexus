@@ -1,8 +1,10 @@
 #lang racket
 
-(provide doc! documented-function)
+(provide doc! 
+        documented-function
+        run-server)
 
-(require web-server/http/json
+(require web-server/http
         web-server/servlet
         web-server/servlet-env)
 
@@ -25,7 +27,7 @@
    (documented-functions)))
 
 
-(module+ main
+(define (run-server)
 
   (doc!
    (documented-function "force"
@@ -34,7 +36,13 @@
                          (hash 'name "y" 'type "number?")
                          (hash 'name "z" 'type "number?"))
                         "void?"
-                        "Force is a function that applies a force to an orb in a direction given by a vector with `x`, `y`, and `z` components."))
+                        "Force is a function that applies a force to an orb in a direction given by a vector with `x`, `y`, and `z` components. 
+                        
+                        Code Examples: 
+                        * `(force 500 200 800)`
+                        * ```(force (random -100 100)
+                                    (random -100 100)
+                                    (random -100 100))```"))
 
   (doc!
    (documented-function "anchor"
@@ -42,13 +50,34 @@
                          (hash  'name "name-or-ref" 
                                 'type "(or/c string? actor?)"))
                         "void?"
-                        "Anchor is a function that allows an orb to anchor to an orb of a given name or referenced directly."))
+                        "Anchor is a function that allows an orb to anchor to an orb of a given name or referenced directly. 
+                        
+                        Code Examples: 
+                        * `(anchor \"laurond\")`
+                        * `(anchor (with-name \"trithir\"))`
+                        "))
+  
+  (doc!
+   (documented-function "color"
+                        (list 
+                         (hash  'name "name-or-hex" 
+                                'type "string?"))
+                        "void?"
+                        "Color is a function that allows an orb to change colors. Colors can be specified by hex code (e.g. #FF1155) or by referencing one of a small selection of named colors (green, blue, red, and orange.) 
+                        
+                        Code Examples: 
+                        * `(color \"green\")`
+                        * `(color \"#FF5577\")`
+                        "))
 
   (doc!
-   (documented-function "deanchor"
+   (documented-function "de-anchor"
                         (list )
                         "void?"
-                        "Removes all anchors currently attached to the orb."))
+                        "De-anchor removes all anchors currently attached to your orb.
+                        
+                        Code Example:
+                        * `(de-anchor)`"))
 
   (serve/servlet my-app
                  #:port 8090
