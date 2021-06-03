@@ -45,7 +45,7 @@ export function PublicListItems(props) {
       <ListItemText primary="My Spells" />
     </ListItem>
 
-    <ListItem button onClick={() => handleClickButton('/friends')}
+    <ListItem button onClick={() => handleClickButton('/follows')}
       // className={path === '/friends' ? classes.listIcon : ''}
       >
       <ListItemIcon>

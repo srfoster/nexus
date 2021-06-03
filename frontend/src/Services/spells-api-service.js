@@ -168,8 +168,8 @@ const SpellsApiService = {
   },
 
   // change this to accept current page and need to do some backend stuff to accept current page and limit the payload
-  getFollows(id){
-    return fetch(`${config.API_ENDPOINT}/users/${id}/follows`, {
+  getFollows(id , page){
+    return fetch(`${config.API_ENDPOINT}/users/${id}/follows?page=${page}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',

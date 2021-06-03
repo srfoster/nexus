@@ -2,12 +2,20 @@ const helpers = require('../endpoint-helpers')
 
 const handleGet = async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+  let page = req.query.page ? req.query.page : 1;
+  let page_size = req.query.page_size ? req.query.page_size : 10;
+  let totalFollows = await req.app.get('db')('follows')
+    .where({user_id: req.user.id})
+    .count()
   let follows = await req.app.get('db')('follows')
     .where({user_id: req.user.id})
+    .limit(10)
+    .offset((page - 1) * page_size)
   let is_following = Boolean(follows.find(f => f.follower_id === +userId))
 
+  
 
-  res.send({follows, is_following})
+  res.send({total: Number(totalFollows[0].count), follows, is_following})
 }
 
 const handlePost = async (req, res) =>{

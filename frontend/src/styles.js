@@ -558,7 +558,12 @@ const useStyles = makeStyles((theme) => ({
   followRoot:{
     '& > *': {
       marginTop: theme.spacing(2),
+      display: 'flex',
+    justifyContent: 'center',
     },
+  },
+  followName:{
+    maxWidth: '300px'
   }
 
 }));
