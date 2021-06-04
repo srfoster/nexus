@@ -33,40 +33,52 @@ describe('App', () => {
 
   afterEach('cleanup', () => helpers.cleanTables(db))
 
-  beforeEach('insert users', () =>
-    helpers.seedUsers(
-      db,
-      testUsers,
+  describe(`GET /check-ownership/:spell_id`, () => { 
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
     )
-  )
-  beforeEach('insert spells', () =>
-    helpers.seedSpells(
-      db,
-      testSpells,
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
     )
-  )
-  beforeEach('insert tags', () =>
-    helpers.seedTags(
-      db,
-      testTags,
+    beforeEach('insert tags', () =>
+      helpers.seedTags(
+        db,
+        testTags,
+      )
     )
-  )
 
-  it.skip(`GET /check-ownership/:spell_id responds with 401 and false for spells the user doesn't own`, () => {
-    return supertest(app)
-      .get(`/check-ownership/3`)
-      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-      .expect(401)
-  })
+    it(`GET /check-ownership/:spell_id responds with 401 if not authorized`, () => {
+      return supertest(app)
+        .get(`/check-ownership/3`)
+        .expect(401)
+    })
 
-  it(`GET /check-ownership/:spell_id responds with 200 and true for spells the user owns`, () => {
-    return supertest(app)
-      .get(`/check-ownership/2`)
-      .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
-      .expect(200)
-      .then(async (res) => {
+    it(`GET /check-ownership/:spell_id responds with 200 and false for spells the user doesn't own`, () => {
+      return supertest(app)
+        .get(`/check-ownership/3`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .then(async (res) => {
 
-        expect(res.body.userOwnsSpell).to.equal(true)
-      })
+          expect(res.body.userOwnsSpell).to.equal(false)
+        })
+    })
+
+    it(`GET /check-ownership/:spell_id responds with 200 and true for spells the user owns`, () => {
+      return supertest(app)
+        .get(`/check-ownership/2`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .then(async (res) => {
+
+          expect(res.body.userOwnsSpell).to.equal(true)
+        })
+    })
   })
 })

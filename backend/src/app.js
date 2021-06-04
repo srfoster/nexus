@@ -96,15 +96,20 @@ app.delete(`${epFollows}`,requireAuth, Follows.handleDelete)
 
 app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
-    .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})
+    .where({id: req.params.spell_id})
     .first()
     .then((matchingSpell) => {
-      if(!matchingSpell) return res.status(404).send({error: "You're spell isn't showing."})
+      if(!matchingSpell || matchingSpell.is_deleted === true) return res.status(404).send({error: "This spell could not be found."})
 
       delete matchingSpell.is_deleted
 
-      let boolean = !!matchingSpell
-      res.send({userOwnsSpell: boolean})
+      if(matchingSpell.user_id === req.user.id) {
+        let boolean = !!matchingSpell
+        res.send({userOwnsSpell: boolean})
+      } else {
+        res.send({userOwnsSpell: false})
+      }
+
     })
 })
 

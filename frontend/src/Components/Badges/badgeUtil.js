@@ -29,9 +29,10 @@ export function BadgeConfirmation(props) {
     }
     setOpen(false);
   };
-  let dontShowAlert = badgeOnWhitelist(props.name) 
+  let showAlert = badgeOnWhitelist(props.name) 
 
-  return ( dontShowAlert ? '' :
+  return ( 
+    showAlert ? 
     <div className={classes.snackbarRoot}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="info">
@@ -39,5 +40,6 @@ export function BadgeConfirmation(props) {
         </Alert>
       </Snackbar>
     </div>
+    : ''
   );
 }
