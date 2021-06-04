@@ -166,8 +166,10 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  getFollows(id){
-    return fetch(`${config.API_ENDPOINT}/follows/${id}`, {
+
+  // change this to accept current page and need to do some backend stuff to accept current page and limit the payload
+  getFollows(id , page){
+    return fetch(`${config.API_ENDPOINT}/users/${id}/follows?page=${page}`, {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -181,7 +183,7 @@ const SpellsApiService = {
       )
   },
   postFollows(id, follow_id){
-    return fetch(`${config.API_ENDPOINT}/follows/${id}?following=${follow_id}`, {
+    return fetch(`${config.API_ENDPOINT}/users/${id}/follows?following=${follow_id}`, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
@@ -195,7 +197,7 @@ const SpellsApiService = {
       )
   },
   deleteFollows(id, follow_id){
-    return fetch(`${config.API_ENDPOINT}/follows/${id}?following=${follow_id}`, {
+    return fetch(`${config.API_ENDPOINT}/users/${id}/follows?following=${follow_id}`, {
       method: 'DELETE',
       headers: {
         'content-type': 'application/json',

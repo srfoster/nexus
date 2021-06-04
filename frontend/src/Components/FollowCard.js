@@ -58,11 +58,6 @@ export default function FollowCard(props) {
       .then(user => {
         if(isMounted) setUser(user)
       })
-    SpellsApiService.getBadgesByUser(follower_id)
-      
-      .then(badges => {
-        if(isMounted) setBadges(badges)
-      })  
     return () => {
       isMounted = false
     }
@@ -91,7 +86,7 @@ export default function FollowCard(props) {
             {`Total Spells: ${user.total}`}
           </Typography>
           <Typography variant="h6">
-            Badges: {badges ? badges.length : '0'}
+            Badges: {user.badges.length}
           </Typography>
           <Tooltip title={`unfollow ${user.username}`}>
             <IconButton aria-label="remove-mage" onClick={handleClickOpen}>
