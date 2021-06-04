@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet";
 import { badgeOnWhitelist } from './Badges/badgeUtil';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const UserProfile = (props) => {
   const classes = useStyles();
@@ -21,13 +22,14 @@ const UserProfile = (props) => {
   const [follow, setFollow] = React.useState(undefined)
   const [isLoading, setIsLoading] = React.useState(false)
   const [badges, setBadges] = useState([]);
+  const colors = ['#363C53', '#337A86', '#37929A', '#453F5E']
   let history = useHistory();
 
   let path = window.location.pathname
   useEffect(() => {
     let isMounted = true
     const { id } = props.match.params
-    SpellsApiService.getFollows(id)
+    SpellsApiService.getFollows(id, 1)
     .then(follows => {
       setFollow(follows.is_following)
     })
@@ -46,6 +48,12 @@ const UserProfile = (props) => {
       isMounted = false
     }
   },[currentPage, search, path])
+
+  const handleChipClick = (path) => {
+    console.log(path)
+  }
+
+
 //logged in for profile page
   return (
     user ?
@@ -72,8 +80,19 @@ const UserProfile = (props) => {
           <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>
           <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
         </div>
-        <div>{badges.map(badge => badgeOnWhitelist(badge.name) ? <Chip label={badge.name} size="small" color="primary" avatar={<Avatar>{badge.name.slice(0,1)}</Avatar>} /> : '')}</div>
-
+        <div>
+          {badges.map((badge, i)=> badgeOnWhitelist(badge.name) ? 
+            <Tooltip key={i} title='Badge Description'>
+              <Chip
+                onClick={() => handleChipClick('backend link')}
+                style={{backgroundColor: colors[i]}}
+                label={badge.name} 
+                size='small' 
+                color='primary' 
+              /> 
+            </Tooltip>
+          : '')}
+        </div>
         <Spellbook spells={user.spells}/>
         <div className={classes.userProfileRoot}>
           <Pagination count={Math.ceil(user.total / rowsPerPage)}
