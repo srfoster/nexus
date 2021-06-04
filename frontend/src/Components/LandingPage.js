@@ -1,18 +1,182 @@
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, Link, useHistory } from "react-router-dom";
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
+import SignupForm from "./SignupForm";
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import Header from './Header';
+import Snackbar from '@material-ui/core/Snackbar';
+import Grow from '@material-ui/core/Grow';
 import Button from '@material-ui/core/Button';
 import useStyles from '../styles.js';
+import ReactPlayer from 'react-player'
+import Stepper from '@material-ui/core/Stepper';
+import Step from '@material-ui/core/Step';
+import StepLabel from '@material-ui/core/StepLabel';
+import StepContent from '@material-ui/core/StepContent';
+import MuiAlert from '@material-ui/lab/Alert';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import AddBadgeOnRender from './Badges/AddBadgeOnRender';
 
-const LandingPage = (props) => {
+const GatewayVideo = (props) => {
   let history = useHistory();
   const classes = useStyles();
+  const [showMakeAccount, setShowMakeAccount] = useState(false)
+  const [started, setStarted] = useState(false)
+  const [playing, setPlaying] = useState(false)
+  const [activeStep, setActiveStep] = useState(0)
 
-  // If user has an auth token, send them to dashboard
-  if (props.isLoggedIn){
-    history.push('/spells')
+  return (
+    <>
+      {started ? "" :
+        <ShowAfter seconds={{
+          10: <p><strong>10 second hint:</strong> Try mousing over everything on the page...</p>,
+          20: <p><strong>20 second hint:</strong> Try mousing over the question...</p>,
+          30: <p><strong>30 second hint:</strong> OMG, just press the word "play"</p>,
+          40: <p><strong>40 second hint:</strong> Not to be rude, but you seem a little slow...</p>,
+          50: <p><strong>50 second hint:</strong> This isn't even a hint.  This is just an observation that you are not winning this game at the moment...</p>,
+        }} />}
+      {(started && showMakeAccount) ? 
+        <ShowAfter seconds={{
+          10: <p><strong>10 second hint:</strong> Try placing your cursor in one of the boxes</p>,
+          20: <p><strong>20 second hint:</strong> The username box is for your username, and the password box is for your password</p>,
+          30: <p><strong>30 second hint:</strong> You've signed up for things before, right?</p>,
+          40: <p><strong>40 second hint:</strong> Look, there's only so much help I can give you. This is the last hint.</p>,
+          50: <p><strong>50 second hint:</strong> Seriously.  This is the last one.</p>,
+          60: <p><strong>60 second hint:</strong> Okay, fine you did it.  Click this button, and you'll be rewarded later.
+          <Button onClick={() => {
+            window.localStorage.setItem("I am stubborn", true)
+            }}>Reward me later</Button>
+          Now make an account!!
+          </p>
+        }} /> : ""}
+
+      <Grid container spacing={3}>
+        <Grid item xs={6}>
+          <Card>
+          <h2>Can you figure out how to
+        <span style={{ cursor: "pointer" }}
+              onClick={() => {
+                setPlaying(!playing);
+                setStarted(true);
+                //setActiveStep(1)
+              }}> {playing ? " pause " : " play "} </span>
+           the video?</h2>
+          <ReactPlayer
+            url="http://localhost:2222/e1.mp4"
+            playing={playing}
+            progressInterval={100}
+            onProgress={(p) => {
+              if (!showMakeAccount && p.playedSeconds >= 43) {
+                setShowMakeAccount(true)
+                setActiveStep(activeStep + 1)
+              }
+            }}
+          />
+          </Card>
+        </Grid>
+
+        <Grid item xs={6}>
+          <Card style={{height: "100%"}}>
+            <CardContent>
+              {showMakeAccount ? <SignupForm
+                history={history}
+                showTopContent={false}
+                signupButtonContent={"Make Account"}
+              ></SignupForm> :
+                <p>
+                  <Avatar className={classes.signupFormAvatar}>
+                    <LockOutlinedIcon />
+                  </Avatar>
+                  This card is blank...
+                </p>
+              }
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </>
+  )
+}
+
+const ShowAfter = (props) => {
+  const [shown, setShown] = useState(false);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    let mounted = true
+
+    Object.keys(props.seconds).map((k) => {
+      setTimeout(() => {
+        let value = props.seconds[k];
+        if (mounted) {
+          setShown(true);
+          setMessage(value);
+        }
+      },
+        k * 1000);
+    })
+
+    return () => {
+      mounted = false
+    }
+  }, []);
+
+
+  function GrowTransition(props) {
+    return <Grow {...props} />;
   }
+
+  function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+  }
+
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={shown}
+      TransitionComponent={GrowTransition}>
+      <Alert severity="info">{message}</Alert>
+    </Snackbar>
+  );
+}
+
+const HintButton = (props) => {
+  const [showHint, setShowHint] = useState(false);
+
+  return (
+    <>
+      <p>
+        <Button
+          onClick={() => setShowHint(true)}>Hint</Button>
+        {showHint ? props.hint : ""}</p>
+    </>
+  );
+}
+
+const Chapter = (props) => {
+  return (
+    <>
+      <Card>
+        <CardHeader title={"CodeSpells, the Story (Level " + props.number + ")"}
+          subheader={props.subtitle}>
+        </CardHeader>
+        <CardContent>
+          {props.children}
+        </CardContent>
+      </Card>
+    </>
+  );
+}
+
+const LandingPage = (props) => {
+  const classes = useStyles();
 
   return (
     <>
@@ -20,44 +184,15 @@ const LandingPage = (props) => {
         <title>CodeSpells Nexus</title>
         <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
       </Helmet>
-      {/* <Route
-        path={'/'}
-        component={Header}
-      /> */}
-      <div className={classes.landingDisplay}>
-        <div>
-          <h1>
-            CodeSpells Spell Sharing
-          </h1>
-        </div>
-        <div className={classes.landingIntro}>
-          <p>
-            Welcome to the CodeSpells Spell Sharing Server!
-          </p>
-          
-          <p>
-            Witches and wizards can use this Spell Sharing Server to save, organize, and share their favorite spells.
-            Spells made public on this server can be executed on our <a href='https://www.twitch.tv/codespells'>live Twitch dev stream </a> 
-              by typing <code>!!run &lt;spell-id&gt;</code>  into chat after spawning a mini with <code>!!mini</code>.
-          </p>
-
-          <p>
-            To find a current list of functions that can be executed in the CodeSpells Twitch chat, 
-              check out the documentation <a href='https://docs.racket-lang.org/codespells-live/index.html'>here</a>.
-          </p>
-
-          <p>
-            The Spell Sharing Server is still under development. Bugs can be reported in the Github 
-              repository <a href='https://github.com/srfoster/codespells-spell-sharing-front-end'>here</a>. 
-           </p>
-          <Link to='/signup' >
-            <Button variant="contained" color="primary">
-              Create Account
-            </Button>
-            {/* <button>Create Account</button> */}
-          </Link>
-        </div>
-      </div>
+      {props.isLoggedIn ?
+        <Chapter number={2} subtitle={"Beyond the gate"}>
+          <AddBadgeOnRender name={"Reached:ch2:Beyond-the-Gate"} />
+        </Chapter>
+        :
+        < Chapter number={1} subtitle={"At the threshold"}>
+          <GatewayVideo />
+        </Chapter>
+      }
     </>
   );
 }

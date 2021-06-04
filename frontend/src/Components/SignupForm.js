@@ -19,6 +19,11 @@ const SignupForm = (props) => {
   let passwordInput = React.createRef()
   let passConfirmInput = React.createRef()
   const [error, setError] = useState(null);
+  
+  let showTopContent = true;
+  if (props.showTopContent !== undefined) { showTopContent = props.showTopContent;}
+
+  let signupButtonContent = props.signupButtonContent || "Sign Up"
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -60,13 +65,13 @@ const SignupForm = (props) => {
       /> */}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <div className={classes.signupFormPaper}>
-          <Avatar className={classes.signupFormAvatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
+          <div className={classes.signupFormPaper}>
+            {showTopContent ? <><Avatar className={classes.signupFormAvatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign up
+          </Typography></> : ""}
           <form className={classes.signupFormForm} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -119,7 +124,7 @@ const SignupForm = (props) => {
               className={classes.signupFormSubmit}
               onClick={(e) => handleSubmit(e)}
             >
-              Sign Up
+                { signupButtonContent}
             </Button>
             <Grid container justify="flex-end">
               <Grid item>
