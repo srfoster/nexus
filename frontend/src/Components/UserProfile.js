@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import FollowAddIcon from './FollowAddIcon';
 import { Helmet } from "react-helmet";
 import { badgeOnWhitelist } from './Badges/badgeUtil';
+import Chip from '@material-ui/core/Chip';
 
 const UserProfile = (props) => {
   const classes = useStyles();
@@ -72,7 +73,10 @@ const UserProfile = (props) => {
           <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>
           <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
         </div>
-        <div>{badges.map(badge => badgeOnWhitelist(badge.name) ? badge.name : '')}</div>
+
+        <div>
+          {badges.map(badge => badgeOnWhitelist(badge.name) ? <Chip label={badge.name} /> : '')}
+        </div>
 
         <Spellbook spells={user.spells}/>
         
