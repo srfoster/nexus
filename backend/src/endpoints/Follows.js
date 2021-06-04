@@ -3,6 +3,14 @@ const helpers = require('../endpoint-helpers')
 const handleGet = async (req, res) => {
   console.log('backend', req.user.id)
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+  if(Number.isNaN(Number(userId))){
+    let user = await req.app.get('db')('users')
+      .where({username: userId})
+      .first()
+
+    userId = user.id
+  }
+  
   let follows = await req.app.get('db')('follows')
     .where({user_id: req.user.id})
 

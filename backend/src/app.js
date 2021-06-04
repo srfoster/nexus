@@ -166,6 +166,13 @@ app.post(`/users/:id/badges/:badgeName`, requireAuth, giveBadge)
 
 const getBadges = async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+  if(Number.isNaN(Number(userId))){
+    let user = await req.app.get('db')('users')
+      .where({username: userId})
+      .first()
+
+    userId = user.id
+  }
 
   req.app.get('db')('badges')
   .where({user_id: userId})
