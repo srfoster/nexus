@@ -3,6 +3,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import useStyles from '../../styles';
 
+//Don't forget to complete the badge data in backend/src/badgeDataList.js
 export const badgeWhitelist = ['Getting-Started']
 
 export function badgeOnWhitelist(badgeName) {

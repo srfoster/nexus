@@ -19,6 +19,7 @@ const SpellTags = require('./endpoints/SpellTags')
 const SpellsFork = require('./endpoints/SpellFork')
 const Downloads = require('./endpoints/Downloads')
 const Follows = require('./endpoints/Follows')
+const badgeDataList = require('./badgeDataList')
 
 const app = express()
 // testing branches
@@ -107,9 +108,17 @@ app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
       res.send({userOwnsSpell: boolean})
     })
 })
+// addresses.filter(function(val) { return val !== null; }).join(", ")
+// let badgeObject = badgeDataList.badgeDataList.map(object => {
+//   return object.name === 'Getting-Started' ? object  : null
+// }).filter(function(val) { return val !== null; })[0]
 
+// console.log(badgeObject)
+
+// badgeDataList.badgeDataList.map(object => console.log(object.name=== 'Getting-Started' ? object : ''))
 const giveBadge = async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+  let badgeLink, badgeDescription
 
   //When/if we have admin roles, we can enhance the security logic here.
   if(req.user.id !== userId) {
@@ -123,9 +132,16 @@ const giveBadge = async (req, res) => {
   let badges = await req.app.get('db')('badges')
   .where({user_id: req.user.id})
 
+  let badgeObject = badgeDataList.badgeDataList.map(object => {
+    return object.name === req.params.badgeName ? object  : null
+  }).filter(function(val) { return val !== null; })[0]
+
+  badgeLink = badgeObject.link
+  badgeDescription = badgeObject.description
+  
   req.app.get('db')('badges')
     // .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})
-    .insert({user_id: req.user.id, name: req.params.badgeName, date_created: new Date(), date_modified: new Date()})
+    .insert({user_id: req.user.id, name: req.params.badgeName, link:badgeLink, description: badgeDescription, date_created: new Date(), date_modified: new Date()})
     .returning('*')
     .then((badges) => {
       res.send(badges[0])

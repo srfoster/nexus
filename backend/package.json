@@ -16,7 +16,11 @@
     "add:download": "node src/server-scripts/add-download.js",
     "delete:download": "node src/server-scripts/delete-download.js",
     "edit:download": "node src/server-scripts/edit-download.js",
-    "print:downloads": "node src/server-scripts/print-downloads.js"
+    "print:downloads": "node src/server-scripts/print-downloads.js",
+    "add:badge": "node src/server-scripts/add-badge.js",
+    "delete:badge": "node src/server-scripts/delete-badge.js",
+    "edit:badge": "node src/server-scripts/edit-badge.js",
+    "print:badges": "node src/server-scripts/print-badges.js"
   },
   "keywords": [],
   "engines": {
