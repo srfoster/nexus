@@ -42,20 +42,6 @@ const GatewayVideo = (props) => {
           40: <p><strong>40 second hint:</strong> Not to be rude, but you seem a little slow...</p>,
           50: <p><strong>50 second hint:</strong> This isn't even a hint.  This is just an observation that you are not winning this game at the moment...</p>,
         }} />}
-      {(started && showMakeAccount) ? 
-        <ShowAfter seconds={{
-          10: <p><strong>10 second hint:</strong> Try placing your cursor in one of the boxes</p>,
-          20: <p><strong>20 second hint:</strong> The username box is for your username, and the password box is for your password</p>,
-          30: <p><strong>30 second hint:</strong> You've signed up for things before, right?</p>,
-          40: <p><strong>40 second hint:</strong> Look, there's only so much help I can give you. This is the last hint.</p>,
-          50: <p><strong>50 second hint:</strong> Seriously.  This is the last one.</p>,
-          60: <p><strong>60 second hint:</strong> Okay, fine you did it.  Click this button, and you'll be rewarded later.
-          <Button onClick={() => {
-            window.localStorage.setItem("I am stubborn", true)
-            }}>Reward me later</Button>
-          Now make an account!!
-          </p>
-        }} /> : ""}
 
       <Grid container spacing={3}>
         <Grid item xs={6}>
@@ -69,7 +55,7 @@ const GatewayVideo = (props) => {
               }}> {playing ? " pause " : " play "} </span>
            the video?</h2>
           <ReactPlayer
-            url="http://localhost:2222/e1.mp4"
+            url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1.mp4"
             playing={playing}
             progressInterval={100}
             onProgress={(p) => {
@@ -90,12 +76,9 @@ const GatewayVideo = (props) => {
                 showTopContent={false}
                 signupButtonContent={"Make Account"}
               ></SignupForm> :
-                <p>
                   <Avatar className={classes.signupFormAvatar}>
                     <LockOutlinedIcon />
                   </Avatar>
-                  This card is blank...
-                </p>
               }
             </CardContent>
           </Card>

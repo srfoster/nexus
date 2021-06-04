@@ -4,7 +4,12 @@ let badgeDataList = [
   {
     name: 'Getting-Started',
     description: 'You got started!',
-    link: 'Must find zelda!',
+    link: '/docs/getting-started',
+  },
+  {
+    name: 'Reached:ch2:Beyond-the-Gate',
+    description: 'You made an account.  You\'ve taken the first step in a journey that is going to be weird.',
+    link: '/ch2',
   },
 
 ]

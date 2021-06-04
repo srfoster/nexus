@@ -40,7 +40,7 @@ const LoginForm = (props) => {
 
     const handleLoginSuccess = () => {
       const { history } = props
-      history.push('/spells')
+      history.push('/')
     }
 
     return (

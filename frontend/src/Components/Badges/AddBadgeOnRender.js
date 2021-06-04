@@ -3,7 +3,7 @@ import SpellsApiService from '../../Services/spells-api-service';
 import { BadgeConfirmation } from './badgeUtil';
 
 //Don't forget to complete the badge data in backend/src/badgeDataList.js
-export const badgeWhitelist = ['Getting-Started']
+export const badgeWhitelist = ['Getting-Started', 'Reached:ch2:Beyond-the-Gate']
 
 export function badgeOnWhitelist(badgeName) {
   let boolean = badgeWhitelist.includes(badgeName)
