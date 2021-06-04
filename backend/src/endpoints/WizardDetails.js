@@ -1,4 +1,5 @@
 const helpers = require('../endpoint-helpers')
+const { requireAuth } = require('../middleware/jwt-auth')
 
 const handleGet = async (req, res) => {
   try{

@@ -3,13 +3,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import useStyles from '../../styles';
 
-export const badgeWhitelist = ['Getting-Started']
-
-export function badgeOnWhitelist(badgeName) {
-  let boolean = badgeWhitelist.includes(badgeName)
-  return boolean
-}
-
 //Badge success popup
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -29,10 +22,10 @@ export function BadgeConfirmation(props) {
     }
     setOpen(false);
   };
-  let showAlert = badgeOnWhitelist(props.name) 
+  // let showAlert = badgeOnWhitelist(props.name) 
 
   return ( 
-    showAlert ? 
+    // showAlert ? 
     <div className={classes.snackbarRoot}>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="info">
@@ -40,6 +33,6 @@ export function BadgeConfirmation(props) {
         </Alert>
       </Snackbar>
     </div>
-    : ''
+    // : ''
   );
 }

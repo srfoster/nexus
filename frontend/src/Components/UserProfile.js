@@ -10,6 +10,7 @@ import FollowAddIcon from './FollowAddIcon';
 import { Helmet } from "react-helmet";
 import { badgeOnWhitelist } from './Badges/badgeUtil';
 import Chip from '@material-ui/core/Chip';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const UserProfile = (props) => {
   const classes = useStyles();
@@ -27,6 +28,7 @@ const UserProfile = (props) => {
   useEffect(() => {
     let isMounted = true
     const { id } = props.match.params
+
     SpellsApiService.getFollows(id)
     .then(follows => {
       setFollow(follows.is_following)
@@ -36,8 +38,8 @@ const UserProfile = (props) => {
       .then(user => {
         if(isMounted) setUser(user)
       })
+
     SpellsApiService.getBadgesByUser(id)
-      
       .then(badges => {
         if(isMounted) setBadges(badges)
       })
@@ -75,7 +77,11 @@ const UserProfile = (props) => {
         </div>
 
         <div>
-          {badges.map(badge => badgeOnWhitelist(badge.name) ? <Chip label={badge.name} /> : '')}
+          {badges.map(badge => 
+            <Tooltip title={badge.description} key={'Badge: ', badge.id}>
+              <Chip label={badge.name} />
+            </Tooltip>
+          )}
         </div>
 
         <Spellbook spells={user.spells}/>
