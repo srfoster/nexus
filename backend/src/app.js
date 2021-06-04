@@ -47,6 +47,14 @@ let epSpellTagsIndex = '/spells/:id/tags'
 let epDownloads = '/downloads'
 let epFollows = '/users/:id/follows'
 
+const requireAuthIfMe = (req, res, next) => {
+  if(req.params.id === 'me'){
+    requireAuth(req, res, next)
+  } else {
+    next()
+  }
+}
+
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, SpellIndex.handleGet)
 
@@ -60,7 +68,7 @@ app.get(`${epSpellDetails}`, requireAuth, SpellDetails.handleGet)
 app.get(`${epPublicSpellDetails}`, PublicSpellDetails.handleGet)
 
 // Retrieve specific user information
-app.get(`${epWizardDetails}`, requireAuth, WizardDetails.handleGet)
+app.get(`${epWizardDetails}`, requireAuthIfMe, WizardDetails.handleGet)
 
 // Get all tags on specific spell
 app.get(`${epSpellTagsIndex}`, requireAuth, SpellTagsIndex.handleGet)
@@ -87,7 +95,7 @@ app.post(`${epSpellsFork}`, requireAuth, SpellsFork.handlePost)
 app.get(`${epDownloads}`, Downloads.handleGet)
 
 // Retrieves follow info
-app.get(`${epFollows}`,requireAuth, Follows.handleGet)
+app.get(`${epFollows}`, requireAuthIfMe, Follows.handleGet)
 
 // creates new follow in join table
 app.post(`${epFollows}`,requireAuth, Follows.handlePost)
@@ -97,15 +105,20 @@ app.delete(`${epFollows}`,requireAuth, Follows.handleDelete)
 
 app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
   req.app.get('db')('spells')
-    .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})
+    .where({id: req.params.spell_id})
     .first()
     .then((matchingSpell) => {
-      if(!matchingSpell) return res.status(404).send({error: "You're spell isn't showing."})
+      if(!matchingSpell || matchingSpell.is_deleted === true) return res.status(404).send({error: "This spell could not be found."})
 
       delete matchingSpell.is_deleted
 
-      let boolean = !!matchingSpell
-      res.send({userOwnsSpell: boolean})
+      if(matchingSpell.user_id === req.user.id) {
+        let boolean = !!matchingSpell
+        res.send({userOwnsSpell: boolean})
+      } else {
+        res.send({userOwnsSpell: false})
+      }
+
     })
 })
 // addresses.filter(function(val) { return val !== null; }).join(", ")
@@ -141,7 +154,7 @@ const giveBadge = async (req, res) => {
   
   req.app.get('db')('badges')
     // .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})
-    .insert({user_id: req.user.id, name: req.params.badgeName, link:badgeLink, description: badgeDescription, date_created: new Date(), date_modified: new Date()})
+    .insert({user_id: req.user.id, name: req.params.badgeName, link: badgeLink, description: badgeDescription, date_created: new Date(), date_modified: new Date()})
     .returning('*')
     .then((badges) => {
       res.send(badges[0])
@@ -153,6 +166,13 @@ app.post(`/users/:id/badges/:badgeName`, requireAuth, giveBadge)
 
 const getBadges = async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+  if(Number.isNaN(Number(userId))){
+    let user = await req.app.get('db')('users')
+      .where({username: userId})
+      .first()
+
+    userId = user.id
+  }
 
   req.app.get('db')('badges')
   .where({user_id: userId})
@@ -160,7 +180,7 @@ const getBadges = async (req, res) => {
     res.send(badges)
   })
   }
-app.get(`/users/:id/badges`, requireAuth, getBadges)
+app.get(`/users/:id/badges`, requireAuthIfMe, getBadges)
 
 
 app.post(epLogin, handleLogin)
