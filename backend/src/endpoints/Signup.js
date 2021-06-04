@@ -1,4 +1,6 @@
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const config = require('../config')
 
 const handleSignup = (req, res, next) => {
   try{
@@ -27,13 +29,21 @@ const handleSignup = (req, res, next) => {
           .into('users')
           .returning('*')
           .then((users) => {
-            users[0].password = undefined;
-            res.send(users[0])
+            let user = users[0]
+            user.password = undefined;
+            res.send({
+              user: user,
+              authToken: jwt.sign({ user_id: user.id }, config.JWT_SECRET, {
+                subject: user.username,
+                expiresIn: config.JWT_EXPIRY,
+                algorithm: 'HS256',
+              })
+            })
           })
       })
   } catch (error) {
     console.log('Catch error: ', error);
-    res.send({error: 'Uh oh. Something went wrong.'})
+    res.send({ error: 'Uh oh. Something went wrong.' })
   }
 }
 

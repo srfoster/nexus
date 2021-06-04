@@ -41,7 +41,7 @@ const SignupForm = (props) => {
         usernameInput.current.value = ''
         passwordInput.current.value = ''
         passConfirmInput.current.value = ''
-        handleSignupSuccess()
+        setTimeout(handleSignupSuccess, 1000) //Hacky. Why necessary to time out?
       })
       .catch(res => {
         setError(res.error);
@@ -50,7 +50,7 @@ const SignupForm = (props) => {
   
     const handleSignupSuccess = () => {
       const { history } = props
-      history.push('/login')
+      history.push('/')
     }
 
     return (

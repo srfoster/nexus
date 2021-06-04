@@ -19,6 +19,7 @@ import Link from '@material-ui/core/Link';
 import SpellsApiService from '../../Services/spells-api-service';
 // import useStyles from '../../styles.js';
 import { makeStyles} from '@material-ui/core/styles';
+import TokenService from '../../Services/token-service';
 
 function Dashboard(props) {
   const classes = useStyles();
@@ -56,7 +57,7 @@ function Dashboard(props) {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.dashTitle}>
             {/* Admin */}
           </Typography>
-          <Link href='https://codespells.org/index.html' className={classes.link}>
+          <Link href='/' className={classes.link}>
             <img src={CodeSpells} alt="CodeSpells" width="100%"></img>
           </Link>
         </Toolbar>
@@ -75,7 +76,7 @@ function Dashboard(props) {
         </div>
         <Divider />
         <List>
-          {props.isLoggedIn ? <PublicListItems/> : <PrivateListItems/>}
+          {TokenService.hasAuthToken() ? <PublicListItems/> : <PrivateListItems/>}
         </List>
       </Drawer>
       <main className={classes.content}>

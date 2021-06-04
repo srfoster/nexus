@@ -23,6 +23,7 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import AddBadgeOnRender from './Badges/AddBadgeOnRender';
+import TokenService from '../Services/token-service';
 
 const GatewayVideo = (props) => {
   let history = useHistory();
@@ -76,7 +77,12 @@ const GatewayVideo = (props) => {
                 showTopContent={false}
                 signupButtonContent={"Make Account"}
               ></SignupForm> :
-                  <Avatar className={classes.signupFormAvatar}>
+                <Avatar
+                  onClick={(e) => {
+                    if(e.ctrlKey)
+                      setShowMakeAccount(true)
+                  }}
+                  className={classes.signupFormAvatar}>
                     <LockOutlinedIcon />
                   </Avatar>
               }
@@ -167,7 +173,7 @@ const LandingPage = (props) => {
         <title>CodeSpells Nexus</title>
         <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
       </Helmet>
-      {props.isLoggedIn ?
+      {TokenService.hasAuthToken() ?
         <Chapter number={2} subtitle={"Beyond the gate"}>
           <AddBadgeOnRender name={"Reached:ch2:Beyond-the-Gate"} />
         </Chapter>
