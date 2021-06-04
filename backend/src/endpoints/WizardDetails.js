@@ -75,7 +75,10 @@ const handleGet = async (req, res) => {
       return spell
     })
     
-    let userData = {...user, spells}
+    let badges = await req.app.get('db')('badges')
+      .where({user_id: userId})
+
+    let userData = {...user, spells, badges}
 
     delete userData.password
     res.send({...userData, total: Number(totalSpells.rows[0].count)})

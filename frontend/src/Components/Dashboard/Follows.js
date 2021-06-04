@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react'
+import useStyles from '../../styles.js';
 import SpellsApiService from '../../Services/spells-api-service';
 import FollowCard from '../FollowCard'
+import Pagination from '@material-ui/lab/Pagination';
 
 function Follows() {
+  const classes = useStyles();
   const [follows, setFollows] = useState()
   const [error, setError] = useState(null);
   const [changed, setChanged] = useState(false)
+  const [totalFollows, setTotalFollows] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [rowsPerPage, setRowsPerPage] = useState(10)
   useEffect(() => {
     let isMounted = true
 
-    SpellsApiService.getFollows('me')
+    SpellsApiService.getFollows('me',currentPage)
       .then(follows => {
         if (isMounted) {
           setFollows(follows.follows)
+          setTotalFollows(follows.total)
+          console.log(follows)
         }
       })
       .catch(res => {
@@ -21,7 +29,7 @@ function Follows() {
     return () => {
       isMounted = false
     }
-  }, [changed])
+  }, [currentPage, changed])
 
   const deleteFollow = (user, following) => {
     SpellsApiService.deleteFollows(user, following)
@@ -30,12 +38,16 @@ function Follows() {
       setChanged(false)
     })
   }
-
   return(
     <>
       {follows && follows.map(follow => (
         <FollowCard follow={follow} deleteFollow={deleteFollow} key={'Key ', follow.id}/>
       ))}
+      {follows && <div className={classes.followRoot}>
+        <Pagination count={Math.ceil(totalFollows / rowsPerPage)}
+        onChange={(event, page) => {setCurrentPage(page)}}
+         /> 
+      </div>}
     </>
   )
 }

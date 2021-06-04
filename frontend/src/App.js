@@ -88,7 +88,7 @@ function App() {
                 component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}
               />
               <Route
-                exact path={'/friends'}
+                exact path={'/follows'}
                 component={(props) => <Follows />}
               />
               <Route

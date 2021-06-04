@@ -45,7 +45,7 @@ let epSpellsFork = '/spells/:id/fork'
 let epSpellTags = '/spells/:id/tags/:tag'
 let epSpellTagsIndex = '/spells/:id/tags'
 let epDownloads = '/downloads'
-let epFollows = '/follows/:id'
+let epFollows = '/users/:id/follows'
 
 const requireAuthIfMe = (req, res, next) => {
   if(req.params.id === 'me'){
