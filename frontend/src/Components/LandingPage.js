@@ -13,6 +13,9 @@ import Level7 from "./NewUserFlow/Level7";
 import Level8 from "./NewUserFlow/Level8";
 import LastLevel from "./NewUserFlow/LastLevel";
 
+//Drafts...
+import Level20 from "./NewUserFlow/Level20";
+import Level57 from "./NewUserFlow/Level57";
 
 // Badge -> Boolean
 function finished(badge) {
@@ -26,10 +29,33 @@ function currentLevelNum(badges) {
   return badges.filter(finished).length + 2;
 }
 
+function SecretLevels(props) {
+  //const [selection, setSelection] = useState(0)
+
+  let Secrets = [
+    <Level20
+      setBadges={props.setBadges}
+      badges={props.badges}
+      badgeName={"Finished:ch20:What-to-Call-This??"}
+    />,
+    <Level57
+      setBadges={props.setBadges}
+      badges={props.badges}
+      badgeName={"Finished:ch57:??"}
+    />,
+  ]
+
+  return <>
+    <h2>Secret Levels</h2>
+    {Secrets}
+  </>
+}
+
 
 const LandingPage = (props) => {
   const [hasFetchedBadges, setHasFetchedBadges] = useState(false);
   const [badges, setBadges] = useState(undefined);
+  const [showSecrets, setShowSecrets] = useState(undefined);
 
   const levels = [
     <Level2
@@ -89,10 +115,18 @@ const LandingPage = (props) => {
         <title>CodeSpells Nexus</title>
         <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
       </Helmet>
+      <div onClick={(e) => {
+        if (e.ctrlKey) {
+          setShowSecrets(!showSecrets)
+          console.log("SHOW SECRETS")
+        }
+      }}>
       {TokenService.hasAuthToken() ?
-        currentLevel :
-        <Level1 setBadges={ setBadges } />
-      }
+          (showSecrets ? <SecretLevels badges={badges} setBadges={ setBadges } /> : currentLevel) :
+          < Level1 setBadges={setBadges} />
+           
+        }
+      </div>
     </>
   );
 }
