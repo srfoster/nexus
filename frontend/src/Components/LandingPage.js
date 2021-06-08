@@ -51,7 +51,6 @@ function SecretLevels(props) {
   </>
 }
 
-
 const LandingPage = (props) => {
   const [hasFetchedBadges, setHasFetchedBadges] = useState(false);
   const [badges, setBadges] = useState(undefined);
