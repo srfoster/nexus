@@ -224,6 +224,20 @@ const SpellsApiService = {
           : res.json()
       )
   },
+  deleteBadgeFromUser(userId,name){
+    return fetch(`${config.API_ENDPOINT}/users/${userId}/badges/${name}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
   getBadgesByUser(id){
     return fetch(`${config.API_ENDPOINT}/users/${id}/badges`, {
       method: 'GET',

@@ -50,7 +50,7 @@ const SignupForm = (props) => {
   
     const handleSignupSuccess = () => {
       const { history } = props
-      history.push('/')
+      window.location = "/"; //History.push would be faster but doesn't trigger reload of app component
     }
 
     return (
