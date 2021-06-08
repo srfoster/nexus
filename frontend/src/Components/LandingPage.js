@@ -9,6 +9,9 @@ import Chapter2 from "./NewUserFlow/Level2";
 import Chapter3 from "./NewUserFlow/Level3";
 import LastChapter from "./NewUserFlow/LastLevel";
 
+//Drafts...
+import Chapter20 from "./NewUserFlow/Level20";
+import Chapter57 from "./NewUserFlow/Level57";
 
 // Badge -> Boolean
 function finished(badge) {
@@ -22,10 +25,33 @@ function currentChapterNum(badges) {
   return badges.filter(finished).length + 2;
 }
 
+function SecretChapters(props) {
+  //const [selection, setSelection] = useState(0)
+
+  let Secrets = [
+    <Chapter20
+      setBadges={props.setBadges}
+      badges={props.badges}
+      badgeName={"Finished:ch20:What-to-Call-This??"}
+    />,
+    <Chapter57
+      setBadges={props.setBadges}
+      badges={props.badges}
+      badgeName={"Finished:ch57:??"}
+    />,
+  ]
+
+  return <>
+    <h2>Secret Chapters!</h2>
+    {Secrets}
+  </>
+}
+
 
 const LandingPage = (props) => {
   const [hasFetchedBadges, setHasFetchedBadges] = useState(false);
   const [badges, setBadges] = useState(undefined);
+  const [showSecrets, setShowSecrets] = useState(undefined);
 
   const chapters = [
     <Chapter2
@@ -60,10 +86,18 @@ const LandingPage = (props) => {
         <title>CodeSpells Nexus</title>
         <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
       </Helmet>
+      <div onClick={(e) => {
+        if (e.ctrlKey) {
+          setShowSecrets(!showSecrets)
+          console.log("SHOW SECRETS")
+        }
+      }}>
       {TokenService.hasAuthToken() ?
-        currentChapter :
-        <Chapter1 setBadges={ setBadges } />
-      }
+          (showSecrets ? <SecretChapters badges={badges} setBadges={ setBadges } /> : currentChapter) :
+          < Chapter1 setBadges={setBadges} />
+           
+        }
+      </div>
     </>
   );
 }
