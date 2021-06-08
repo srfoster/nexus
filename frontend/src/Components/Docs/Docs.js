@@ -83,7 +83,7 @@ const docPageContent = {
   </>,
   "building-new-games": <>
     {topDocLink}
-    <p>Want to know how to build your own CodeSpells games?</p>
+    <p>Want to know how to build your own CodeSpells games??</p>
 </>,
 }
 

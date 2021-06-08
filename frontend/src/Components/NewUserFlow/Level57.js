@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Chapter, ContinueButton } from './Chapter';
+import { Level, ContinueButton } from './Level';
 
-function Chapter57(props) {
-  return (<Chapter number={57} subtitle={"Hmmm, what to call it???"}>
+function Level57(props) {
+  return (<Level number={57} subtitle={"Hmmm, what to call it???"}>
     <ContinueButton
       onComplete={() => {
         props.setBadges(props.badges.concat([{ name: props.badgeName }]));
       }}
     ></ContinueButton>
-  </Chapter>)
+  </Level>)
 }
 
-export default Chapter57;
+export default Level57;

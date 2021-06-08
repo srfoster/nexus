@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
-import { Chapter, ShowAfter } from "./Chapter";
+import { Level, ShowAfter } from "./Level";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ReactPlayer from 'react-player'
@@ -80,9 +80,9 @@ const GatewayVideo = (props) => {
 }
 
 function Level1(props) {
-    return(<Chapter setBadges={props.setBadges} number={1} subtitle={"At the threshold"}>
+    return(<Level setBadges={props.setBadges} number={1} subtitle={"At the threshold"}>
         <GatewayVideo />
-    </Chapter>)
+    </Level>)
 }
 
 export default Level1
