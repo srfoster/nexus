@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Chapter, ContinueButton } from './Chapter';
+import { Level, ContinueButton } from './Level';
 
 
-export function Chapter2(props) {
+export function Level2(props) {
   return (
     <>
-      <Chapter number={2} subtitle={"Beyond the Gate"}>
+      <Level number={2} subtitle={"Beyond the Gate"}>
         <ContinueButton
           onComplete={() => {
             props.setBadges(props.badges.concat([{ name: props.badgeName }]));
           }
           }></ContinueButton>
-      </Chapter>
+      </Level>
     </>
   )
 }
 
-export default Chapter2;
+export default Level2;

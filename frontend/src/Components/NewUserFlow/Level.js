@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import MuiAlert from '@material-ui/lab/Alert';
 import AddBadgeOnRender from '../Badges/AddBadgeOnRender';
 
-const Chapter = (props) => {
+const Level = (props) => {
   return (
     <>
       <Card>
@@ -78,16 +78,16 @@ const HintButton = (props) => {
 }
 
 const ContinueButton = (props) => {
-    const [chapterComplete, setChapterComplete] = useState(false)
+    const [levelComplete, setLevelComplete] = useState(false)
 
     return <>
         <Button onClick={() => {
-            setChapterComplete(true);
+            setLevelComplete(true);
             props.onComplete()
         }}>Continue</Button>
-        { chapterComplete ? <AddBadgeOnRender name={props.badgeName} /> : ""}
+        { levelComplete ? <AddBadgeOnRender name={props.badgeName} /> : ""}
     </>
 }
 
 
-export { Chapter, HintButton, ShowAfter, ContinueButton };
+export { Level, HintButton, ShowAfter, ContinueButton };
