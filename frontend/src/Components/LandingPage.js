@@ -116,7 +116,7 @@ const LandingPage = (props) => {
         <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
       </Helmet>
       <div onClick={(e) => {
-        if (e.ctrlKey) {
+        if (e.ctrlKey || e.metaKey) {
           setShowSecrets(!showSecrets)
           console.log("SHOW SECRETS")
         }
