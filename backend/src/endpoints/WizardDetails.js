@@ -1,8 +1,16 @@
 const helpers = require('../endpoint-helpers')
+const { requireAuth } = require('../middleware/jwt-auth')
 
 const handleGet = async (req, res) => {
   try{
     let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+    if(Number.isNaN(Number(userId))){
+      let user = await req.app.get('db')('users')
+        .where({username: userId})
+        .first()
+
+      userId = user.id
+    }
     let page = req.query.page ? req.query.page : 1;
     let page_size = req.query.page_size ? req.query.page_size : 9;
     let searchTerm = req.query.search ? `%${req.query.search.toLowerCase()}%` : `%%`

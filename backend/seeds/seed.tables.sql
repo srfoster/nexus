@@ -3,7 +3,7 @@ BEGIN;
 TRUNCATE
   users,
   spells,
-  follows,
+  follows
   RESTART IDENTITY CASCADE;
 
 INSERT INTO users (username, password)
@@ -27,7 +27,7 @@ INSERT INTO follows (user_id, follower_id)
 VALUES
   (1, 2),
   (1, 3),
-  (1, 5);
+  (1, 4);
 
   
 COMMIT;
