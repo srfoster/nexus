@@ -95,7 +95,7 @@ app.post(`${epSpellsFork}`, requireAuth, SpellsFork.handlePost)
 app.get(`${epDownloads}`, Downloads.handleGet)
 
 // Retrieves follow info
-app.get(`${epFollows}`, requireAuthIfMe, Follows.handleGet)
+app.get(`${epFollows}`, requireAuth, Follows.handleGet)
 
 // creates new follow in join table
 app.post(`${epFollows}`,requireAuth, Follows.handlePost)

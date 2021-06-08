@@ -9,7 +9,6 @@ const handleGet = async (req, res) => {
 
     userId = user.id
   }
-  
   let page = req.query.page ? req.query.page : 1;
   let page_size = req.query.page_size ? req.query.page_size : 10;
   let totalFollows = await req.app.get('db')('follows')

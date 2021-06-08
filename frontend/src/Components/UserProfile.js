@@ -59,24 +59,24 @@ const UserProfile = (props) => {
         </Helmet>
         <div className={classes.userProfileHeadBar}>
           <div className={classes.userProfileHeadLeft}>
-            {(props.match.params.id === 'me' || props.match.params.id === user.id) ?
-              ''
-            :  
+            {(props.match.params.id !== 'me') ?
               <FollowAddIcon 
-                  follow={follow} 
-                  isLoading={isLoading} 
-                  setIsLoading={setIsLoading}
-                  user={user}
-                  setFollow={setFollow}
-                  match={props.match} 
-                />
-              }
+              follow={follow} 
+              isLoading={isLoading} 
+              setIsLoading={setIsLoading}
+              user={user}
+              setFollow={setFollow}
+              match={props.match} 
+              />
+            :  
+              ''
+            }
             </div>
-          <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>
-          <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
-        </div>
-
-        <div>
+            <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>
+            <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
+            </div>
+            
+            <div>
           {badges.map(badge => 
             <Tooltip title={badge.description} key={'Badge: ', badge.id}>
               <Chip label={badge.name} />

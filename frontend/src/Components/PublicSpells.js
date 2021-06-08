@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Title from './Dashboard/Title';
 import SpellsApiService from '../Services/spells-api-service';
+import Typography from '@material-ui/core/Typography';
 import Spellbook from './Spellbook';
 import Pagination from '@material-ui/lab/Pagination';
 import {SearchBar} from '../Util.js'
@@ -35,7 +36,7 @@ export default function PublicSpells(props) {
         <title>Public Spells | CodeSpells Nexus</title>
         <meta name="description" content="You can find all spells that have been made public here. These spells can be cast inside of CodeSpells game, or forked and edited!" />
       </Helmet>
-      <div className={classes.headBar}>
+      <div className={props.darkMode ? classes.darkHeadBar : classes.headBar}>
         <div className={classes.headLeft}></div>
         <h4 className={classes.headTitle}>Public Spells</h4>
         <div className={classes.headRight}><SearchBar setSearch={setSearch} setCurrentPage={setCurrentPage}/></div>

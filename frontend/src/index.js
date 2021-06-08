@@ -5,9 +5,25 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {SpellContextProvider} from './Components/Context';
+// import { ThemeProvider, createMuiTheme, CssBaseline } from "@material-ui/core";
+
+
+// const darkTheme = createMuiTheme({
+//   palette: {
+//     type: 'dark'
+//   }
+// }); 
+
+// const lightTheme = createMuiTheme({})
 
 ReactDOM.render(
   // <SpellContextProvider>
+      // <ThemeProvider theme={darkTheme ? darkTheme : lightTheme}>
+      //   <CssBaseline />
+      //   <BrowserRouter>
+      //     <App />
+      //   </BrowserRouter>,
+      // </ThemeProvider>,
     <BrowserRouter>
       <App />
     </BrowserRouter>,

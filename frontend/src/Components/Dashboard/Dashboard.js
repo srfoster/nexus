@@ -18,7 +18,11 @@ import CodeSpells from '../../Assets/CodeSpells.png';
 import Link from '@material-ui/core/Link';
 import SpellsApiService from '../../Services/spells-api-service';
 // import useStyles from '../../styles.js';
-import { makeStyles} from '@material-ui/core/styles';
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
+import NightsStayIcon from '@material-ui/icons/NightsStay';
+import { purple } from '@material-ui/core/colors';
+import { makeStyles, withStyles} from '@material-ui/core/styles';
+import Switch from '@material-ui/core/Switch';
 
 function Dashboard(props) {
   const classes = useStyles();
@@ -31,6 +35,40 @@ function Dashboard(props) {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.dashPaper, classes.fixedHeight);
+  
+  const AntSwitch = withStyles((theme) => ({
+    root: {
+      width: 28,
+      height: 16,
+      padding: 0,
+      display: 'flex',
+    },
+    switchBase: {
+      padding: 2,
+      color: theme.palette.grey[500],
+      '&$checked': {
+        transform: 'translateX(12px)',
+        color: theme.palette.common.white,
+        '& + $track': {
+          opacity: 1,
+          backgroundColor: purple[300],
+          borderColor: theme.palette.primary.main,
+        },
+      },
+    },
+    thumb: {
+      width: 12,
+      height: 12,
+      boxShadow: 'none',
+    },
+    track: {
+      border: `1px solid ${theme.palette.grey[500]}`,
+      borderRadius: 16 / 2,
+      opacity: 1,
+      backgroundColor: theme.palette.common.white,
+    },
+    checked: {},
+  }))(Switch);
 
   // useEffect(() => {
   //   // Only running this to check if logged in
@@ -55,6 +93,15 @@ function Dashboard(props) {
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.dashTitle}>
             {/* Admin */}
+          </Typography>
+          <Typography component="div">
+            <Grid component="label" container alignItems="center" spacing={1}>
+              <Grid item><WbSunnyIcon fontSize='small'/></Grid>
+              <Grid item>
+                <AntSwitch checked={props.darkMode} onChange={() => props.setDarkMode(!props.darkMode)} />
+              </Grid>
+              <Grid item><NightsStayIcon fontSize='small'/></Grid>
+            </Grid>
           </Typography>
           <Link href='https://codespells.org/index.html' className={classes.link}>
             <img src={CodeSpells} alt="CodeSpells" width="100%"></img>
