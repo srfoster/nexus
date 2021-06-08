@@ -6,6 +6,11 @@ import TokenService from '../Services/token-service';
 import Level1 from "./NewUserFlow/Level1";
 import Level2 from "./NewUserFlow/Level2";
 import Level3 from "./NewUserFlow/Level3";
+import Level4 from "./NewUserFlow/Level4";
+import Level5 from "./NewUserFlow/Level5";
+import Level6 from "./NewUserFlow/Level6";
+import Level7 from "./NewUserFlow/Level7";
+import Level8 from "./NewUserFlow/Level8";
 import LastLevel from "./NewUserFlow/LastLevel";
 
 
@@ -36,6 +41,31 @@ const LandingPage = (props) => {
       setBadges={setBadges}
       badges={badges}
       badgeName={"Finished:ch3:Light-Mage-or-Dark-Mage"}
+    />,
+    <Level4
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch4:TBD"}
+    />,
+    <Level5
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch5:TBD"}
+    />,
+    <Level6
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch6:TBD"}
+    />,
+    <Level7
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch7:TBD"}
+    />,
+    <Level8
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch8:TBD"}
     />,
     <LastLevel setBadges={ setBadges } badges={ badges }/>
   ];
