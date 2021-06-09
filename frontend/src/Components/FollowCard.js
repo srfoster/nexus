@@ -70,14 +70,14 @@ export default function FollowCard(props) {
       <Paper className={classes.followCard} position="static">
         <Toolbar className={classes.followCardBody}>
           <div><Tooltip title={`${user.username}`} placement='top'>
-            <Button onClick={() => history.push(`/wizards/${user.id}`)}>
+            <Button onClick={() => history.push(`/mages/${user.id}`)}>
               <Avatar aria-label="User Avatar" className={classes.spellcardAvatar}>
                 {user.username.slice(0,1).toUpperCase()}
               </Avatar>
             </Button>
           </Tooltip>
           <Tooltip title={`Go to Mage Page`}> 
-            <Typography onClick={() => history.push(`/wizards/${user.id}`)} variant="h6">
+            <Typography onClick={() => history.push(`/mages/${user.id}`)} variant="h6">
                 {`${user.username}`}
               </Typography>
           </Tooltip> 

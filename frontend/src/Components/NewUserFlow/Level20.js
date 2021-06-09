@@ -9,17 +9,18 @@ function Level20(props) {
   return (
     <Level number={20} subtitle={"What is the title???"}>
       <ReactTerminal setShowButton={setShowButton} />
-        {showButton ?   
-      <Button variant="contained" color="primary">
-        Button
-      </Button>
-      : ''}
     <ContinueButton
       onComplete={() => {
         props.setBadges(props.badges.concat([{ name: props.badgeName }]));
       }}
     >      
     </ContinueButton>
+    {showButton ?   
+      <Button variant="contained" color="primary">
+        Button
+      </Button>
+      : ''}
+
   </Level>)
 }
 

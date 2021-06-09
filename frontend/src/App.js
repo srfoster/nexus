@@ -35,6 +35,7 @@ function App() {
     let isMounted = true
     // Only running this to check if logged in
     SpellsApiService.getUserById('me')
+    .catch(() => console.log('something'))
       .then((user) => setIsLoggedIn(true))
       .catch(() => setIsLoggedIn(false))
 
@@ -96,7 +97,7 @@ function App() {
                 component={(props) => <PublicSpells/>}
               />
               <Route
-                path={'/wizards/:id'}
+                path={'/mages/:id'}
                 component={(props) => <UserProfile match={props.match}/>}
               />
               <Route

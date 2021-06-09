@@ -1,8 +1,11 @@
+import React, { Component } from 'react';
 import Terminal from 'react-console-emulator'
 import Button from '@material-ui/core/Button';
-import React, { Component } from 'react';
+
 
 function ReactTerminal(props) {
+    const [showButton, setShowButton] = React.useState(false)
+
   const commands = {
     echo: {
       description: 'Echo a typed string.',
@@ -16,6 +19,7 @@ function ReactTerminal(props) {
       usage: 'renderButton',
       fn: function () {
         return (
+          // <Button>STUFF</Button>
           props.setShowButton(true)
         )
       }
@@ -23,6 +27,7 @@ function ReactTerminal(props) {
   }
 
   return (
+
     <div>
       <Terminal
       commands={commands}
@@ -43,6 +48,6 @@ export default ReactTerminal;
   // <ReactTerminal/>
   // {showButton ?   
   //   <Button variant="contained" color="primary">
-  //     Primary
+  //   Primary
   //   </Button>
-  //   : ''}
+  // : ''}
