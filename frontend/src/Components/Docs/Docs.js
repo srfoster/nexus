@@ -83,7 +83,7 @@ const docPageContent = {
   </>,
   "building-new-games": <>
     {topDocLink}
-    <p>Want to know how to build your own CodeSpells games??</p>
+    <p>Want to know how to build your own CodeSpells games?</p>
 </>,
 }
 
@@ -91,12 +91,8 @@ function FunctionDoc(props) {
   return (
     <><Card style={{margin: 10}}>
       <CardContent>
-        <h2>{props.name}</h2>
-        <h3>Syntax → Return Value</h3>
         <p><code>(<strong>{props.name + " "}</strong> {props.parameters.map(e => e.name).join(" ")}) → {props.returnType} </code></p>
-        <h3>Parameters</h3>
-        <div style={{paddingLeft: 10, paddingBottom: 10}}>{props.parameters.length == 0 ? <p>This function does not require any parameters.</p> : props.parameters.map(e => (<div><code>{e.name} : {e.type}</code></div>))}</div>
-        <h3>Description</h3>
+        <div style={{paddingLeft: 10, paddingBottom: 10}}>{props.parameters.map(e => (<div><code>{e.name} : {e.type}</code></div>))}</div>
         <Markdown>{props.content}</Markdown>
       </CardContent>
     </Card>
