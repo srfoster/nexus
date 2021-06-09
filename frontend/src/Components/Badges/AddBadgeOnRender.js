@@ -3,7 +3,10 @@ import SpellsApiService from '../../Services/spells-api-service';
 import { BadgeConfirmation } from './badgeUtil';
 
 //Don't forget to complete the badge data in backend/src/badgeDataList.js
-export const badgeWhitelist = ['Getting-Started']
+export const badgeWhitelist = ['Getting-Started',
+  'Finished:ch2:Beyond-the-Gate',
+  'Finished:ch3:Light-Mage-or-Dark-Mage'
+]
 
 export function badgeOnWhitelist(badgeName) {
   let boolean = badgeWhitelist.includes(badgeName)
@@ -11,7 +14,8 @@ export function badgeOnWhitelist(badgeName) {
 }
 
 function AddBadgeOnRender(props) {
-  const [gotBadge,setGotBadge] = useState(false)
+  const [gotBadge, setGotBadge] = useState(false)
+  console.log("Badge added...")
 
   if(!badgeOnWhitelist(props.name)){
     throw 'Badge not on white list: ' + props.name 

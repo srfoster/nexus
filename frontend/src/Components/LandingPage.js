@@ -1,62 +1,130 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route, Link, useHistory } from "react-router-dom";
-import {Helmet} from "react-helmet";
-import Header from './Header';
-import Button from '@material-ui/core/Button';
-import useStyles from '../styles.js';
+import { useHistory } from "react-router-dom";
+import SpellsApiService from '../Services/spells-api-service';
+import { Helmet } from "react-helmet";
+import TokenService from '../Services/token-service';
+import Level1 from "./NewUserFlow/Level1";
+import Level2 from "./NewUserFlow/Level2";
+import Level3 from "./NewUserFlow/Level3";
+import Level4 from "./NewUserFlow/Level4";
+import Level5 from "./NewUserFlow/Level5";
+import Level6 from "./NewUserFlow/Level6";
+import Level7 from "./NewUserFlow/Level7";
+import Level8 from "./NewUserFlow/Level8";
+import LastLevel from "./NewUserFlow/LastLevel";
+
+//Drafts...
+import Level20 from "./NewUserFlow/Level20";
+import Level57 from "./NewUserFlow/Level57";
+
+// Badge -> Boolean
+function finished(badge) {
+  console.log(badge)
+  return badge.name.startsWith("Finished:")
+}
+
+// Badges -> Integer between 2 - infinity
+// If you're not logged in, you see Ch 1
+function currentLevelNum(badges) {
+  return badges.filter(finished).length + 2;
+}
+
+function SecretLevels(props) {
+  //const [selection, setSelection] = useState(0)
+
+  let Secrets = [
+    <Level20
+      setBadges={props.setBadges}
+      badges={props.badges}
+      badgeName={"Finished:ch20:What-to-Call-This??"}
+    />,
+    <Level57
+      setBadges={props.setBadges}
+      badges={props.badges}
+      badgeName={"Finished:ch57:??"}
+    />,
+  ]
+
+  return <>
+    <h2>Secret Levels</h2>
+    {Secrets}
+  </>
+}
 
 const LandingPage = (props) => {
-  let history = useHistory();
-  const classes = useStyles();
+  const [hasFetchedBadges, setHasFetchedBadges] = useState(false);
+  const [badges, setBadges] = useState(undefined);
+  const [showSecrets, setShowSecrets] = useState(undefined);
 
-  // If user has an auth token, send them to dashboard
-  if (props.isLoggedIn){
-    history.push('/spells')
+  const levels = [
+    <Level2
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch2:Beyond-the-Gate"}
+    />,
+    <Level3
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch3:Light-Mage-or-Dark-Mage"}
+    />,
+    <Level4
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch4:TBD"}
+    />,
+    <Level5
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch5:TBD"}
+    />,
+    <Level6
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch6:TBD"}
+    />,
+    <Level7
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch7:TBD"}
+    />,
+    <Level8
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch8:TBD"}
+    />,
+    <LastLevel setBadges={ setBadges } badges={ badges }/>
+  ];
+
+  useEffect(() => {
+    SpellsApiService.getBadgesByUser("me")
+      .then(badges => {
+        setHasFetchedBadges(true);
+        setBadges(badges);
+      })
+  }, [])
+
+  let currentLevel = undefined;
+  if (hasFetchedBadges && badges !== undefined && badges.length !== undefined) {
+    currentLevel = levels[currentLevelNum(badges) - 2];
   }
-
+  
   return (
     <>
       <Helmet>
         <title>CodeSpells Nexus</title>
         <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
       </Helmet>
-      {/* <Route
-        path={'/'}
-        component={Header}
-      /> */}
-      <div className={classes.landingDisplay}>
-        <div>
-          <h1>
-            CodeSpells Spell Sharing
-          </h1>
-        </div>
-        <div className={classes.landingIntro}>
-          <p>
-            Welcome to the CodeSpells Spell Sharing Server!
-          </p>
-          
-          <p>
-            Witches and wizards can use this Spell Sharing Server to save, organize, and share their favorite spells.
-            Spells made public on this server can be executed on our <a className={ props.darkMode ?classes.darkLinkColor : classes.linkColor } href='https://www.twitch.tv/codespells'>live Twitch dev stream </a> 
-              by typing <code>!!run &lt;spell-id&gt;</code>  into chat after spawning a mini with <code>!!mini</code>.
-          </p>
-
-          <p>
-            To find a current list of functions that can be executed in the CodeSpells Twitch chat, 
-              check out the documentation <a className={ props.darkMode ?classes.darkLinkColor : classes.linkColor } href='https://docs.racket-lang.org/codespells-live/index.html'>here</a>.
-          </p>
-
-          <p>
-            The Spell Sharing Server is still under development. Bugs can be reported in the Github 
-              repository <a className={ props.darkMode ?classes.darkLinkColor : classes.linkColor } href='https://github.com/srfoster/codespells-spell-sharing-front-end'>here</a>. 
-           </p>
-          <Link to='/signup' >
-            <Button variant="contained" color="primary">
-              Create Account
-            </Button>
-            {/* <button>Create Account</button> */}
-          </Link>
-        </div>
+      <div onClick={(e) => {
+        if (e.ctrlKey || e.metaKey) {
+          setShowSecrets(!showSecrets)
+          console.log("SHOW SECRETS")
+        }
+      }}>
+      {TokenService.hasAuthToken() ?
+          (showSecrets ? <SecretLevels badges={badges} setBadges={ setBadges } /> : currentLevel) :
+          < Level1 setBadges={setBadges} />
+           
+        }
       </div>
     </>
   );

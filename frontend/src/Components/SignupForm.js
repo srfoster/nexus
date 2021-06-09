@@ -19,6 +19,11 @@ const SignupForm = (props) => {
   let passwordInput = React.createRef()
   let passConfirmInput = React.createRef()
   const [error, setError] = useState(null);
+  
+  let showTopContent = true;
+  if (props.showTopContent !== undefined) { showTopContent = props.showTopContent;}
+
+  let signupButtonContent = props.signupButtonContent || "Sign Up"
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -36,7 +41,7 @@ const SignupForm = (props) => {
         usernameInput.current.value = ''
         passwordInput.current.value = ''
         passConfirmInput.current.value = ''
-        handleSignupSuccess()
+        setTimeout(handleSignupSuccess, 1000) //Hacky. Why necessary to time out?
       })
       .catch(res => {
         setError(res.error);
@@ -45,7 +50,7 @@ const SignupForm = (props) => {
   
     const handleSignupSuccess = () => {
       const { history } = props
-      history.push('/login')
+      window.location = "/"; //History.push would be faster but doesn't trigger reload of app component
     }
 
     return (
@@ -60,13 +65,13 @@ const SignupForm = (props) => {
       /> */}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <div className={classes.signupFormPaper}>
-          <Avatar className={classes.signupFormAvatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign up
-          </Typography>
+          <div className={classes.signupFormPaper}>
+            {showTopContent ? <><Avatar className={classes.signupFormAvatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+              <Typography component="h1" variant="h5">
+                Sign up
+          </Typography></> : ""}
           <form className={classes.signupFormForm} noValidate>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -119,7 +124,7 @@ const SignupForm = (props) => {
               className={classes.signupFormSubmit}
               onClick={(e) => handleSubmit(e)}
             >
-              Sign Up
+                { signupButtonContent}
             </Button>
             <Grid container justify="flex-end">
               <Grid item>

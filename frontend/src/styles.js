@@ -451,7 +451,6 @@ const useStyles = makeStyles((theme) => ({
 
   // SignupForm //
   signupFormPaper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
