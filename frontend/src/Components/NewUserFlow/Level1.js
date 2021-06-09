@@ -22,11 +22,12 @@ const GatewayVideo = (props) => {
     <>
       {started ? "" :
         <ShowAfter seconds={{
-          10: <p><strong>10 second hint:</strong> Try mousing over everything on the page...</p>,
-          20: <p><strong>20 second hint:</strong> Try mousing over the question...</p>,
-          30: <p><strong>30 second hint:</strong> OMG, just press the word "play"</p>,
-          40: <p><strong>40 second hint:</strong> Not to be rude, but you seem a little slow...</p>,
+          10: <p><strong>10 second hint:</strong> Having trouble? Try mousing over everything on the page!</p>,
+          20: <p><strong>20 second hint:</strong> Try mousing over the question!</p>,
+          30: <p><strong>30 second hint:</strong> What if you press the word "play"?</p>,
+          40: <p><strong>40 second hint:</strong> Maybe you walked away from the computer? Rude!</p>,
           50: <p><strong>50 second hint:</strong> This isn't even a hint.  This is just an observation that you are not winning this game at the moment...</p>,
+          60: <p><strong>1 minute hint:</strong> If you want to move forward, do me a favor and just click on the word "play" in the question below!</p>,
         }} />}
 
       <Grid container spacing={3}>
