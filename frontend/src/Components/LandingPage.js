@@ -37,18 +37,18 @@ const LandingPage = (props) => {
           
           <p>
             Witches and wizards can use this Spell Sharing Server to save, organize, and share their favorite spells.
-            Spells made public on this server can be executed on our <a href='https://www.twitch.tv/codespells'>live Twitch dev stream </a> 
+            Spells made public on this server can be executed on our <a className={ props.darkMode ?classes.darkLinkColor : classes.linkColor } href='https://www.twitch.tv/codespells'>live Twitch dev stream </a> 
               by typing <code>!!run &lt;spell-id&gt;</code>  into chat after spawning a mini with <code>!!mini</code>.
           </p>
 
           <p>
             To find a current list of functions that can be executed in the CodeSpells Twitch chat, 
-              check out the documentation <a href='https://docs.racket-lang.org/codespells-live/index.html'>here</a>.
+              check out the documentation <a className={ props.darkMode ?classes.darkLinkColor : classes.linkColor } href='https://docs.racket-lang.org/codespells-live/index.html'>here</a>.
           </p>
 
           <p>
             The Spell Sharing Server is still under development. Bugs can be reported in the Github 
-              repository <a href='https://github.com/srfoster/codespells-spell-sharing-front-end'>here</a>. 
+              repository <a className={ props.darkMode ?classes.darkLinkColor : classes.linkColor } href='https://github.com/srfoster/codespells-spell-sharing-front-end'>here</a>. 
            </p>
           <Link to='/signup' >
             <Button variant="contained" color="primary">

@@ -57,7 +57,7 @@ const UserProfile = (props) => {
           <title>{`${user.username} `}| CodeSpells Nexus</title>
           <meta name="description" content="Download the latest CodeSpells video games. The spells you write here in the Nexus can be cast inside of these games!" />
         </Helmet>
-        <div className={classes.userProfileHeadBar}>
+        <div className={props.darkMode ? classes.darkUserProfileHeadBar : classes.userProfileHeadBar}>
           <div className={classes.userProfileHeadLeft}>
             {(props.match.params.id !== 'me') ?
               <FollowAddIcon 
@@ -72,7 +72,7 @@ const UserProfile = (props) => {
               ''
             }
             </div>
-            <div className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</div>
+            <h4 className={classes.userProfileHeadTitle}>{ user.username.charAt(user.username.length-1).toLowerCase() === "s"  ? `${user.username}' Mage Page` : `${user.username}'s Mage Page`}</h4>
             <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
             </div>
             

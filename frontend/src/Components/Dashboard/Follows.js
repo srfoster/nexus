@@ -3,8 +3,9 @@ import useStyles from '../../styles.js';
 import SpellsApiService from '../../Services/spells-api-service';
 import FollowCard from '../FollowCard'
 import Pagination from '@material-ui/lab/Pagination';
+import {SearchBar} from '../../Util.js'
 
-function Follows() {
+function Follows(props) {
   const classes = useStyles();
   const [follows, setFollows] = useState()
   const [error, setError] = useState(null);
@@ -40,6 +41,11 @@ function Follows() {
   }
   return(
     <>
+      <div className={props.darkMode ? classes.darkHeadBar : classes.headBar}>
+        <div className={classes.headLeft}></div>
+        <h4 className={classes.headTitle}>Mages you follow</h4>
+        <div className={classes.headRight}></div>
+      </div>
       {follows && follows.map(follow => (
         <FollowCard follow={follow} deleteFollow={deleteFollow} key={'Key ', follow.id}/>
       ))}

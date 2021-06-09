@@ -538,6 +538,17 @@ const useStyles = makeStyles((theme) => ({
     letterSpacing: '0em',
     color: '#3f51b5',
   },
+  darkUserProfileHeadBar: {
+    justifyContent: 'space-between',
+    fontSize: '1.5rem',
+    display: 'inline-flex',
+    width: 'auto',
+    fontFamily: "Roboto",
+    fontWeight: '400',
+    lineHeight: '1.334',
+    letterSpacing: '0em',
+    color: 'white',
+  },
   userProfileHeadLeft: {
     flexGrow: '5',
     display: 'inline-flex',
@@ -585,8 +596,15 @@ const useStyles = makeStyles((theme) => ({
   },
   followName:{
     maxWidth: '300px'
-  }
-
+  },
+  linkColor:{
+    color: 'blue',
+    textDecoration: 'none'
+  },
+  darkLinkColor:{
+    color: '#f48fb1',
+    textDecoration: 'none'
+  },
 }));
 
 

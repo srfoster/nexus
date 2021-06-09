@@ -11,7 +11,7 @@ import Title from './Title';
 import styles from '../../styles.js'
 import { Helmet } from "react-helmet";
 
-function Downloads() {
+function Downloads(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [rowsPerPage, setRowsPerPage] = React.useState(9);
@@ -35,10 +35,10 @@ function Downloads() {
         <title>Downloads | CodeSpells Nexus</title>
         <meta name="description" content="Download the latest CodeSpells video games. The spells you write here in the Nexus can be cast inside of these games!" />
       </Helmet>
-      <div className={classes.headBar}>
+      <div className={props.darkMode ? classes.darkHeadBar : classes.headBar}>
         <div className={classes.headLeft}></div>
-        <Title className={classes.headTitle}>Downloads</Title>
-        {/* <div className={classes.headRight}><SearchBar setSearch={setSearch} setCurrentPage={setCurrentPage}/></div> */}
+        <h4 className={classes.headTitle}>Downloads</h4>
+        <div className={classes.headRight}></div>
       </div>
       
       <Container className={classes.cardGrid} maxWidth="md">
@@ -92,4 +92,40 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
   },
+  headBar: {
+    justifyContent: 'space-between',
+    fontSize: '1.5rem',
+    display: 'inline-flex',
+    width: 'auto',
+    fontFamily: "Roboto",
+    fontWeight: '400',
+    lineHeight: '1.334',
+    letterSpacing: '0em',
+    color: '#3f51b5',
+  },
+  darkHeadBar: {
+    justifyContent: 'space-between',
+    fontSize: '1.5rem',
+    display: 'inline-flex',
+    width: 'auto',
+    fontFamily: "Roboto",
+    fontWeight: '400',
+    lineHeight: '1.334',
+    letterSpacing: '0em',
+    color: 'white',
+  },
+  headLeft: {
+    flexGrow: '5',
+    display: 'inline-flex',
+  },
+  headTitle: {
+    flexGrow: '3',
+    display: 'inline-flex',
+  },
+  headRight: {
+    flexGrow: '1',
+    width: '120px',
+    display: 'inline-flex',
+    justifyContent: 'flex-end',
+  },  
 }));

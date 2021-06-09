@@ -141,9 +141,9 @@ export default function SpellChart(props) {
   return (
     props.spells ?
     <React.Fragment>
-      <div className={classes.headBar}>
+      <div className={props.darkMode ? classes.darkHeadBar : classes.headBar}>
         <div className={classes.headLeft}></div>
-        <div className={classes.headTitle}>My Spells</div>
+        <h4 className={classes.headTitle}>My Spells</h4>
         <div className={classes.headRight}>
           <SearchBar 
             setSearch={props.setSearch}
