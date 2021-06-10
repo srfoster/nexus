@@ -79,7 +79,7 @@ function App() {
               <Switch>
                 <Route
                   exact path={'/'}
-                  component={(props) => <LandingPage darkMode={darkMode} isLoggedIn={isLoggedIn}></LandingPage >}
+                  component={(props) => <LandingPage darkMode={darkMode} setDarkMode={setDarkMode} isLoggedIn={isLoggedIn}></LandingPage >}
                 />
                 <Route
                   exact path={'/panel.html'}

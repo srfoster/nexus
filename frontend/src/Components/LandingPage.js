@@ -31,7 +31,7 @@ function currentLevelNum(badges) {
 
 function SecretLevels(props) {
   //const [selection, setSelection] = useState(0)
-
+  console.log('landingpage:', props)
   let Secrets = [
     <Level20
       setBadges={props.setBadges}
@@ -42,6 +42,8 @@ function SecretLevels(props) {
       setBadges={props.setBadges}
       badges={props.badges}
       badgeName={"Finished:ch57:??"}
+      darkMode={props.darkMode}
+      setDarkMode={props.setDarkMode}
     />,
   ]
 
@@ -121,7 +123,8 @@ const LandingPage = (props) => {
         }
       }}>
       {TokenService.hasAuthToken() ?
-          (showSecrets ? <SecretLevels badges={badges} setBadges={ setBadges } /> : currentLevel) :
+          (showSecrets ? <SecretLevels badges={badges} setBadges={ setBadges } darkMode={props.darkMode}
+      setDarkMode={props.setDarkMode} /> : currentLevel) :
           < Level1 setBadges={setBadges} />
            
         }
