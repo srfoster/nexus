@@ -12,7 +12,7 @@ const Level = (props) => {
   return (
     <>
       <Card>
-        <CardHeader title={"CodeSpells, the Story (Level " + props.number + ")"}
+        <CardHeader title={"Level " + props.number + ""}
           subheader={props.subtitle}>
         </CardHeader>
         <CardContent>

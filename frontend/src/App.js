@@ -57,78 +57,83 @@ function App() {
           gtag('config', 'G-J6N2NMKYC9');`}
         </script>
       </Helmet>
-      <div >
-        <Dashboard
-          isLoggedIn={isLoggedIn} 
-          setIsLoggedIn={setIsLoggedIn}
-          child={
-            <Switch>
-              <Route
-                exact path={'/'}
-                component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
-              />
-              <Route
-                exact path={'/panel.html'}
-                component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
-              />
-              <Route
-                exact path={'/signup'}
-                component={SignupForm}
-              />
-              <Route
-                exact path={'/login'}
-                component={LoginForm}
-              />
-              <Route
-                path={'/spells/:id'}
-                component={(props) => <SpellDetails/>}
-              />
-              <Route
-                exact path={'/spells'}
-                component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>}
-              />
-              <Route
-                exact path={'/follows'}
-                component={(props) => <Follows />}
-              />
-              <Route
-                exact path={'/gallery'}
-                component={(props) => <PublicSpells/>}
-              />
-              <Route
-                path={'/wizards/:id'}
-                component={(props) => <UserProfile match={props.match}/>}
-              />
-              <Route
-                path={'/docs/:page'}
-                component={(props) => <Docs match={props.match} />}
-              />
-              <Route
-                path={'/docs'}
-                component={(props) => <Docs match={{params: {page: "docs"}}} />}
-              />
-              <Route
-                exact path={'/downloads'}
-                component={(props) => <Downloads/>}
-              />
-              <Route
-                component={(props) => <NotFound/>}
-              />
-            </Switch>
-          }
-        >
-        </Dashboard>
-      </div>
+      <Switch>
+          <Route
+            exact path={'/'}
+            component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
+          />
+          <Route
+            exact path={'*'}
+            component={(props) =>
+              <Dashboard
+                isLoggedIn={isLoggedIn}
+                setIsLoggedIn={setIsLoggedIn}
+                child={
+                  <Switch>
+                    <Route
+                      exact path={'/panel.html'}
+                      component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
+                    />
+                    <Route
+                      exact path={'/signup'}
+                      component={SignupForm}
+                    />
+                    <Route
+                      exact path={'/login'}
+                      component={LoginForm}
+                    />
+                    <Route
+                      path={'/spells/:id'}
+                      component={(props) => <SpellDetails />}
+                    />
+                    <Route
+                      exact path={'/spells'}
+                      component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />}
+                    />
+                    <Route
+                      exact path={'/follows'}
+                      component={(props) => <Follows />}
+                    />
+                    <Route
+                      exact path={'/gallery'}
+                      component={(props) => <PublicSpells />}
+                    />
+                    <Route
+                      path={'/wizards/:id'}
+                      component={(props) => <UserProfile match={props.match} />}
+                    />
+                    <Route
+                      path={'/docs/:page'}
+                      component={(props) => <Docs match={props.match} />}
+                    />
+                    <Route
+                      path={'/docs'}
+                      component={(props) => <Docs match={{ params: { page: "docs" } }} />}
+                    />
+                    <Route
+                      exact path={'/downloads'}
+                      component={(props) => <Downloads />}
+                    />
+                    <Route
+                      component={(props) => <NotFound />}
+                    />
+                  </Switch>
+                }
+              >
+              </Dashboard>
+            }
+          />
+      </Switch>
     </div>
   );
 }
 
 const outerPaper = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
+        root: {
+        display: 'flex',
     flexWrap: 'wrap',
     '& > *': {
-      margin: theme.spacing(2),
+        margin: theme.spacing(2),
       width: theme.spacing(50),
       height: theme.spacing(50),
     },
