@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Level, ContinueButton } from './Level';
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
 import NightsStayIcon from '@material-ui/icons/NightsStay';
@@ -9,8 +9,10 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import useStyles from '../../styles.js';
 import Typography from '@material-ui/core/Typography';
+import { DarkModeContext } from '../Context';
 
 function Level57(props) {
+  const [darkMode, setDarkMode] = useContext(DarkModeContext);
   const classes = useStyles();
   const AntSwitch = withStyles((theme) => ({
     root: {
@@ -52,7 +54,7 @@ function Level57(props) {
         <Grid component="label" container alignItems="center" spacing={1}>
             <Grid item><WbSunnyIcon fontSize='small'/></Grid>
               <Grid item>
-                 <AntSwitch checked={props.darkMode} onChange={() => props.setDarkMode(!props.darkMode)} />
+                 <AntSwitch checked={darkMode} onChange={() => setDarkMode(!darkMode)} />
                 </Grid>
               <Grid item><NightsStayIcon fontSize='small'/></Grid>
             </Grid>

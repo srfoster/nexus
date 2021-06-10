@@ -8,6 +8,12 @@ function Level4(props) {
         props.setBadges(props.badges.concat([{ name: props.badgeName }]));
       }}
     ></ContinueButton>
+      <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
   </Level>)
 }
 

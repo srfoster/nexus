@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+
+export const DarkModeContext = React.createContext();
+
+/*
 import TokenService from '../Services/token-service';
 import config from '../config';
 import { useHistory } from "react-router-dom";
@@ -54,3 +58,4 @@ export function UserContextProvider(props) {
 }
 
 export const useContext = () => React.useContext(UserContext);
+*/

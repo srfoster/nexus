@@ -22,8 +22,10 @@ import Downloads from './Components/Dashboard/Downloads';
 import Follows from './Components/Dashboard/Follows';
 import Docs from './Components/Docs/Docs';
 import FabAddIcon from './Components/Dashboard/FabAddIcon';
+import { DarkModeContext } from './Components/Context';
 
 require('codemirror/mode/scheme/scheme');
+
 
 
 function App() {
@@ -56,6 +58,7 @@ function App() {
   let path = window.location.pathname
 
   return ( 
+    <DarkModeContext.Provider value={[darkMode,  setDarkMode]}>
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <div className="App">
@@ -135,15 +138,16 @@ function App() {
         </div>
       </div>
     </ThemeProvider>
+    </DarkModeContext.Provider>
   );
 }
 
 const outerPaper = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
+        root: {
+        display: 'flex',
     flexWrap: 'wrap',
     '& > *': {
-      margin: theme.spacing(2),
+        margin: theme.spacing(2),
       width: theme.spacing(50),
       height: theme.spacing(50),
     },

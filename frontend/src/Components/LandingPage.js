@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import SpellsApiService from '../Services/spells-api-service';
 import { Helmet } from "react-helmet";
 import TokenService from '../Services/token-service';
+import Container from '@material-ui/core/Container';
+
 import Level1 from "./NewUserFlow/Level1";
 import Level2 from "./NewUserFlow/Level2";
 import Level3 from "./NewUserFlow/Level3";
@@ -13,9 +15,14 @@ import Level7 from "./NewUserFlow/Level7";
 import Level8 from "./NewUserFlow/Level8";
 import LastLevel from "./NewUserFlow/LastLevel";
 
+
 //Drafts...
 import Level20 from "./NewUserFlow/Level20";
 import Level57 from "./NewUserFlow/Level57";
+import Level101 from "./NewUserFlow/Level101";
+
+import { makeStyles } from '@material-ui/core/styles';
+
 
 // Badge -> Boolean
 function finished(badge) {
@@ -44,6 +51,11 @@ function SecretLevels(props) {
       badgeName={"Finished:ch57:??"}
       darkMode={props.darkMode}
       setDarkMode={props.setDarkMode}
+    />,
+    <Level101
+      setBadges={props.setBadges}
+      badges={props.badges}
+      badgeName={"Finished:ch101:??"}
     />,
   ]
 
@@ -116,19 +128,22 @@ const LandingPage = (props) => {
         <title>CodeSpells Nexus</title>
         <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
       </Helmet>
-      <div onClick={(e) => {
-        if (e.ctrlKey || e.metaKey) {
-          setShowSecrets(!showSecrets)
-          console.log("SHOW SECRETS")
-        }
-      }}>
-      {TokenService.hasAuthToken() ?
-          (showSecrets ? <SecretLevels badges={badges} setBadges={ setBadges } darkMode={props.darkMode}
-      setDarkMode={props.setDarkMode} /> : currentLevel) :
-          < Level1 setBadges={setBadges} />
-           
-        }
-      </div>
+      <Container
+        maxWidth="sm">
+        <div style={{padding: 10}}>
+          <div onClick={(e) => {
+            if (e.ctrlKey || e.metaKey) {
+              setShowSecrets(!showSecrets)
+            }
+          }}>
+            {TokenService.hasAuthToken() ?
+              (showSecrets ? <SecretLevels badges={badges} setBadges={setBadges} /> : currentLevel) :
+              < Level1 setBadges={setBadges} />
+
+            }
+          </div>
+        </div>
+      </Container>
     </>
   );
 }
