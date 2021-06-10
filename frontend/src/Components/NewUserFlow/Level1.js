@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { Level, ShowAfter } from "./Level";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Fade from '@material-ui/core/Fade';
 import ReactPlayer from 'react-player'
@@ -13,26 +14,66 @@ import Typography from '@material-ui/core/Typography';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import useStyles from '../../styles.js';
 import SignupForm from '../../Components/SignupForm';
-
+import DarkModeSwitch from '../Widgets/DarkModeSwitch';
+import TextField from '@material-ui/core/TextField';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 const MeetYourTeacher = (props) => {
-  let [darkMode, setDarkMode] = useState(undefined);
-  let [username, setUsername] = useState(undefined);
+  let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
+  let [usernameDecisionMade, setUsernameDecisionMade] = useState(undefined);
   let [password, setPassword] = useState(undefined);
 
+  console.log("RENDER", darkModeDecisionMade)
   //Light Mage or Dark Mage Toggle
 
   function LightOrDark(props) {
-    return(<div>
-      <p>Light or dark</p>
-      <Button onClick={() => setDarkMode(!darkMode)}>Toggle</Button>
-    </div>)
+    return (<>
+      <Fade in={true} timeout={1000}>
+        <div>
+          <span>Dark or Light?</span>
+          <DarkModeSwitch
+            onChange={(darkMode) => {
+              //Triggers re-render, so we'll use local storage instead of state
+            }}
+          />
+        </div>
+      </Fade>
+      {window.localStorage.getItem("dark-mode") ?
+          <div style={{textAlign: "center", paddingTop: 20}}>
+          <Fade in={true} timeout={1000}>
+            <Button size="small" onClick={() => {
+              setDarkModeDecisionMade(true)
+            }}>Next</Button>
+          </Fade>
+        </div>
+        : ""}
+    </>)
   }
 
   function UserNameForm(props) {
+    let [username, setUsername] = useState(undefined);
+    let [usernameConfirmed, setUsernameConfirmed] = useState(undefined);
     return(<div>
-      <p>Input for username</p>
-      <Button onClick={() => setUsername("Bob")}>Set Username</Button>
+      <span>What shall we call you?</span>
+      <Grid container spacing={1} alignItems="flex-end">
+        <Grid item>
+          <AccountCircle />
+        </Grid>
+        <Grid item>
+          <TextField
+            onChange={(e) => 
+              setUsername(e.target.value)
+            }
+            id="input-with-icon-grid" label={<span>Character name</span>} />
+        </Grid>
+      </Grid>
+      {username === undefined ? "" :
+        <Fade in={true} timeout={ 1000}><Button onClick={() => setUsernameConfirmed(true)}>Check Availability</Button>
+        </Fade>
+        }
+      {usernameConfirmed === undefined ? "" :
+        <Fade in={true} timeout={ 1000}><Button onClick={() => setUsernameDecisionMade(true)}>Next</Button></Fade>
+        }
     </div>)
   }
 
@@ -105,8 +146,8 @@ const MeetYourTeacher = (props) => {
 
   return (
     <>
-      {darkMode === undefined ? <LightOrDark /> :
-        (username === undefined ? <UserNameForm /> :
+      {(darkModeDecisionMade === undefined) ? <LightOrDark /> :
+        (usernameDecisionMade === undefined ? <UserNameForm /> :
           (password === undefined ? <SockPuppetPasswordRequester />
             : <Level1CompleteScreen/>
           ))}
