@@ -1,5 +1,5 @@
 // DownloadCards
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import DownloadCard from './DownloadCard'
 import Grid from '@material-ui/core/Grid';
@@ -10,6 +10,7 @@ import SpellsApiService from '../../Services/spells-api-service';
 import Title from './Title';
 import styles from '../../styles.js'
 import { Helmet } from "react-helmet";
+import { DarkModeContext } from '../Context';
 
 function Downloads(props) {
   const classes = useStyles();
@@ -20,6 +21,8 @@ function Downloads(props) {
   const [search, setSearch] = React.useState('');
   const [games, setGames] = React.useState([]);
   const [totalGames, setTotalGames] = React.useState();
+  const [darkMode, setDarkMode] = useContext(DarkModeContext);
+
     
   useEffect(() => {
     SpellsApiService.getDownloads()
@@ -35,7 +38,7 @@ function Downloads(props) {
         <title>Downloads | CodeSpells Nexus</title>
         <meta name="description" content="Download the latest CodeSpells video games. The spells you write here in the Nexus can be cast inside of these games!" />
       </Helmet>
-      <div className={props.darkMode ? classes.darkHeadBar : classes.headBar}>
+      <div className={darkMode ? classes.darkHeadBar : classes.headBar}>
         <div className={classes.headLeft}></div>
         <h4 className={classes.headTitle}>Downloads</h4>
         <div className={classes.headRight}></div>

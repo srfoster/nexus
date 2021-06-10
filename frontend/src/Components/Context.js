@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { ThemeProvider, createMuiTheme, CssBaseline } from "@material-ui/core";
 
-export const DarkModeContext = React.createContext();
+
+export const DarkModeContext = React.createContext();{
+
+}
 
 /*
 import TokenService from '../Services/token-service';

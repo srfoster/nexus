@@ -76,13 +76,11 @@ function App() {
           <Dashboard
             isLoggedIn={isLoggedIn} 
             setIsLoggedIn={setIsLoggedIn}
-            setDarkMode={setDarkMode}
-            darkMode={darkMode}
             child={
               <Switch>
                 <Route
                   exact path={'/'}
-                  component={(props) => <LandingPage darkMode={darkMode} setDarkMode={setDarkMode} isLoggedIn={isLoggedIn}></LandingPage >}
+                  component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage >}
                 />
                 <Route
                   exact path={'/panel.html'}
@@ -102,19 +100,19 @@ function App() {
                 />
                 <Route
                   exact path={'/spells'}
-                  component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} darkMode={darkMode} />}
+                  component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}  />}
                 />
                 <Route
                   exact path={'/follows'}
-                  component={(props) => <Follows darkMode={darkMode} />}
+                  component={(props) => <Follows  />}
                 />
                 <Route
                   exact path={'/gallery'}
-                  component={(props) => <PublicSpells darkMode={darkMode}/>}
+                  component={(props) => <PublicSpells />}
                 />
                 <Route
                   path={'/wizards/:id'}
-                  component={(props) => <UserProfile darkMode={darkMode} match={props.match}/>}
+                  component={(props) => <UserProfile  match={props.match}/>}
                 />
                 <Route
                   path={'/docs/:page'}
@@ -122,11 +120,11 @@ function App() {
                 />
                 <Route
                   path={'/docs'}
-                  component={(props) => <Docs darkMode={darkMode} match={{params: {page: "docs"}}} />}
+                  component={(props) => <Docs  match={{params: {page: "docs"}}} />}
                 />
                 <Route
                   exact path={'/downloads'}
-                  component={(props) => <Downloads darkMode={darkMode}/>}
+                  component={(props) => <Downloads />}
                 />
                 <Route
                   component={(props) => <NotFound/>}

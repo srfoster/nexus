@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useContext } from 'react';
 import Title from './Dashboard/Title';
 import SpellsApiService from '../Services/spells-api-service';
 import Spellbook from './Spellbook';
@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet";
 import { badgeOnWhitelist } from './Badges/badgeUtil';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '@material-ui/core/Tooltip';
+import { DarkModeContext } from '../Components/Context';
 
 const UserProfile = (props) => {
   const classes = useStyles();
@@ -21,6 +22,7 @@ const UserProfile = (props) => {
   const [follow, setFollow] = React.useState(undefined)
   const [isLoading, setIsLoading] = React.useState(false)
   const [badges, setBadges] = useState([]);
+  const [darkMode, setDarkMode] = useContext(DarkModeContext);
   let history = useHistory();
 
   let path = window.location.pathname
@@ -57,7 +59,7 @@ const UserProfile = (props) => {
           <title>{`${user.username} `}| CodeSpells Nexus</title>
           <meta name="description" content="Download the latest CodeSpells video games. The spells you write here in the Nexus can be cast inside of these games!" />
         </Helmet>
-        <div className={props.darkMode ? classes.darkUserProfileHeadBar : classes.userProfileHeadBar}>
+        <div className={darkMode ? classes.darkUserProfileHeadBar : classes.userProfileHeadBar}>
           <div className={classes.userProfileHeadLeft}>
             {(props.match.params.id !== 'me') ?
               <FollowAddIcon 
