@@ -17,20 +17,40 @@ import SignupForm from '../../Components/SignupForm';
 import DarkModeSwitch from '../Widgets/DarkModeSwitch';
 import TextField from '@material-ui/core/TextField';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormLabel from '@material-ui/core/FormLabel';
+
+const ContinueButton = (props) => {
+  return (
+    <div style={{ textAlign: "center", paddingTop: 20 }}>
+      <Fade in={true} timeout={1000}>
+        <Button size="small" onClick={props.onClick}>Next</Button>
+      </Fade>
+    </div>
+  );
+ }
 
 const MeetYourTeacher = (props) => {
   let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
+  let [username, setUsername] = useState(undefined);
   let [usernameDecisionMade, setUsernameDecisionMade] = useState(undefined);
+  let [teacherDecisionMade, setTeacherDecisionMade] = useState(undefined);
+  let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
   let [password, setPassword] = useState(undefined);
 
   console.log("RENDER", darkModeDecisionMade)
-  //Light Mage or Dark Mage Toggle
 
   function LightOrDark(props) {
+    //Add sounds effects to Light vs Dark mode
     return (<>
       <Fade in={true} timeout={1000}>
         <div>
-          <span>Dark or Light?</span>
+          <p style={{marginBottom:10}}>Let's make this cozier...</p>
+          <p style={{marginBottom:0}}>Light or Dark?</p>
           <DarkModeSwitch
             onChange={(darkMode) => {
               //Triggers a re-render, so we'll use local storage instead of state
@@ -39,19 +59,11 @@ const MeetYourTeacher = (props) => {
         </div>
       </Fade>
       {window.localStorage.getItem("dark-mode") ?
-          <div style={{textAlign: "center", paddingTop: 20}}>
-          <Fade in={true} timeout={1000}>
-            <Button size="small" onClick={() => {
-              setDarkModeDecisionMade(true)
-            }}>Next</Button>
-          </Fade>
-        </div>
-        : ""}
+        <ContinueButton onClick={() => { setDarkModeDecisionMade(true) }}/> : ""}
     </>)
   }
 
   function UserNameForm(props) {
-    let [username, setUsername] = useState(undefined);
     let [usernameConfirmed, setUsernameConfirmed] = useState(undefined);
     return(<div>
       <span>What shall we call you?</span>
@@ -72,32 +84,66 @@ const MeetYourTeacher = (props) => {
         </Fade>
         }
       {usernameConfirmed === undefined ? "" :
-        <Fade in={true} timeout={ 1000}><Button onClick={() => setUsernameDecisionMade(true)}>Next</Button></Fade>
+        <ContinueButton onClick={()=> setUsernameDecisionMade(true)}/>
         }
     </div>)
   }
 
-  function WhyIsMyTeacherASock(props) {
-    return(<div>
-       <Typography color="textSecondary" gutterBottom>
-          Why do you think your teacher is a sock?
-        </Typography>
-      <Typography variant="h5" component="h2">
-        A. I am not worthy of having a non-sock teacher.
-        </Typography>
-      <Typography variant="h5" component="h2">
-        B. Socks make the best teachers
-        </Typography>
-      <Typography variant="h5" component="h2">
-        C. The Sock is not a teacher and cannot be trusted
-        </Typography>
-      <Typography variant="h5" component="h2">
-        D. All of the above
-        </Typography>
-      <Typography variant="h5" component="h2">
-        E. One of the above
-        </Typography>
-    </div>)
+  function MultipleChoiceQuestion(props) {
+    const [value, setValue] = React.useState('');
+    const [error, setError] = React.useState(false);
+    const [helperText, setHelperText] = React.useState('Choose wisely');
+    
+    const handleRadioChange = (event) => {
+      setValue(event.target.value);
+      setHelperText(' ');
+      setError(false);
+    };
+
+    const handleSubmit = () => {
+      let selection = props.answers.filter((e) => e.text == value)[0]
+      setHelperText(selection.feedback);
+      setError(!selection.correct);
+      if (selection.correct) {
+        props.onCorrect();
+      }
+    }
+
+    return (
+      <>
+        <form onSubmit={handleSubmit}>
+          <FormControl component="fieldset" error={error}>
+            <FormLabel component="legend">{ props.question }</FormLabel>
+            <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
+              {props.answers.map((e) => { return <FormControlLabel value={e.text} control={<Radio />} label={ e.text } /> })}
+            </RadioGroup>
+            <FormHelperText>{helperText}</FormHelperText>
+          </FormControl>
+        </form>
+        <Button onClick={handleSubmit} type="submit" variant="solid" color="primary">{ props.buttonText }</Button>
+      </>
+    );
+
+  }
+
+  function ChooseYourTeacher(props) {
+    const [teacherAvailable, setTeacherAvailable] = React.useState(false);
+
+    return (
+      <>
+        <MultipleChoiceQuestion question="Which is your preferred teacher?" answers={[
+          { correct: true, text: "Sock Puppet", feedback: "It's available!" },
+          { correct: false, text: "A Wizard from the Forest", feedback: "Sorry, your current level is too low to unlock this teacher." },
+          { correct: false, text: "Super Intelligent AI", feedback: "Sorry, your current level is too low to unlock this teacher." },
+          { correct: false, text: "The Creators of this EdTech Software", feedback: "Sorry, your current level is too low to unlock this teacher." },
+        ]}
+          buttonText="Check Availability"
+          onCorrect={()=>setTeacherAvailable(true)}
+          onIncorrect={()=>setTeacherAvailable(false)}
+        />
+        {teacherAvailable ? <ContinueButton onClick={() => setTeacherDecisionMade(true)}/> : ""}
+      </>
+    );
   }
 
   //Choose your username
@@ -108,15 +154,16 @@ const MeetYourTeacher = (props) => {
     return (
       <SBS
         leftSideTitle={<>
-          <p>Congratulations, you've unlocked your first teacher!</p>
-          <Button onClick={() => { setPlaying(true) }}>
-            {playing ? "Pause" : "Play"} Video
-            </Button>
+          <p>Congratulations, you've unlocked Sock Puppet!</p>
         </>}
         leftSide={
           <>
             <ReactPlayer
+            playsInline
+            fluid={false}
+        width={"100%"}
               url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-2.mp4"
+              controls={true}
               style={{}}
               playing={playing}
               onEnded={() => setVideoFinished(true)}
@@ -127,10 +174,28 @@ const MeetYourTeacher = (props) => {
         }
         rightSide={videoFinished ?
           <><WhyIsMyTeacherASock />
-            <Button onClick={() => setPassword("SECUREpassword1!")}>Set Password</Button>
+            <ContinueButton onClick={console.log("Finished!")}/>
           </> : ""}
       />
     );
+  }
+ 
+  // Decision: Do we need this question? What purpose does it serve?
+  // Pro: breaks up video content, nice gamification rhythm
+  function WhyIsMyTeacherASock(props) {
+    const [response, setResponse] = React.useState(false);
+    return (<MultipleChoiceQuestion
+      question="Do you think a sock can teach?"
+      answers={[
+          { correct: true, text: "Yes, if a sock can't teach something, it cannot be taught!", feedback: "Personality assessment result: User with name \"" + username + "\" is an optimist who like socks." },
+          { correct: true, text: "Yes, socks can teach you what not to do.", feedback: "" },
+          { correct: true, text: "No, socks are inanimate objects.", feedback: "" },
+          { correct: true, text: "No, ...", feedback: "" },
+        ]}
+          buttonText="Submit Answer"
+          onCorrect={()=>setTeacherReflectionDone(true)}
+          onIncorrect={()=>setTeacherReflectionDone(false)}
+    />)
   }
   
   function Level1CompleteScreen(props) {
@@ -148,9 +213,10 @@ const MeetYourTeacher = (props) => {
     <>
       {(darkModeDecisionMade === undefined) ? <LightOrDark /> :
         (usernameDecisionMade === undefined ? <UserNameForm /> :
-          (password === undefined ? <SockPuppetPasswordRequester />
-            : <Level1CompleteScreen/>
-          ))}
+          (teacherDecisionMade === undefined ? <ChooseYourTeacher /> :
+              (password === undefined ? <SockPuppetPasswordRequester />
+                : <Level1CompleteScreen />
+            )))}
     </>
   );
  }
@@ -158,8 +224,6 @@ const MeetYourTeacher = (props) => {
 const SBS = (props) => {
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
           <Card>
             <CardHeader title={
               <span style={{ fontSize: 16 }}>  
@@ -168,16 +232,11 @@ const SBS = (props) => {
             }></CardHeader>
             { props.leftSide }
           </Card>
-        </Grid>
-
-        <Grid item xs={6}>
           <Card style={{ height: "100%" }}>
             <CardContent>
               {props.rightSide }
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
     </>)
 }
 

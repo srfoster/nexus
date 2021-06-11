@@ -73,81 +73,88 @@ function App() {
           </script>
         </Helmet>
         <div >
-          <Dashboard
-            isLoggedIn={isLoggedIn} 
-            setIsLoggedIn={setIsLoggedIn}
-            setDarkMode={setDarkMode}
-            darkMode={darkMode}
-            child={
-              <Switch>
-                <Route
-                  exact path={'/'}
-                  component={(props) => <LandingPage darkMode={darkMode} setDarkMode={setDarkMode} isLoggedIn={isLoggedIn}></LandingPage >}
-                />
-                <Route
-                  exact path={'/panel.html'}
-                  component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
-                />
-                <Route
-                  exact path={'/signup'}
-                  component={SignupForm}
-                />
-                <Route
-                  exact path={'/login'}
-                  component={LoginForm}
-                />
-                <Route
-                  path={'/spells/:id'}
-                  component={(props) => <SpellDetails/>}
-                />
-                <Route
-                  exact path={'/spells'}
-                  component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} darkMode={darkMode} />}
-                />
-                <Route
-                  exact path={'/follows'}
-                  component={(props) => <Follows darkMode={darkMode} />}
-                />
-                <Route
-                  exact path={'/gallery'}
-                  component={(props) => <PublicSpells darkMode={darkMode}/>}
-                />
-                <Route
-                  path={'/wizards/:id'}
-                  component={(props) => <UserProfile darkMode={darkMode} match={props.match}/>}
-                />
-                <Route
-                  path={'/docs/:page'}
-                  component={(props) => <Docs match={props.match} />}
-                />
-                <Route
-                  path={'/docs'}
-                  component={(props) => <Docs darkMode={darkMode} match={{params: {page: "docs"}}} />}
-                />
-                <Route
-                  exact path={'/downloads'}
-                  component={(props) => <Downloads darkMode={darkMode}/>}
-                />
-                <Route
-                  component={(props) => <NotFound/>}
-                />
-              </Switch>
-            }
-          >
-          </Dashboard>
+            <Switch>
+              <Route
+                exact path={'/'}
+                component={(props) => <LandingPage darkMode={darkMode} setDarkMode={setDarkMode} isLoggedIn={isLoggedIn}></LandingPage >}
+              />
+              <Route
+                exact path={'*'}
+                component={(props) =>
+                  <Dashboard
+                    isLoggedIn={isLoggedIn}
+                    setIsLoggedIn={setIsLoggedIn}
+                    setDarkMode={setDarkMode}
+                    darkMode={darkMode}
+                    child={
+                      <Switch>
+                        <Route
+                          exact path={'/panel.html'}
+                          component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
+                        />
+                        <Route
+                          exact path={'/signup'}
+                          component={SignupForm}
+                        />
+                        <Route
+                          exact path={'/login'}
+                          component={LoginForm}
+                        />
+                        <Route
+                          path={'/spells/:id'}
+                          component={(props) => <SpellDetails />}
+                        />
+                        <Route
+                          exact path={'/spells'}
+                          component={(props) => <SpellIndex isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} darkMode={darkMode} />}
+                        />
+                        <Route
+                          exact path={'/follows'}
+                          component={(props) => <Follows darkMode={darkMode} />}
+                        />
+                        <Route
+                          exact path={'/gallery'}
+                          component={(props) => <PublicSpells darkMode={darkMode} />}
+                        />
+                        <Route
+                          path={'/wizards/:id'}
+                          component={(props) => <UserProfile darkMode={darkMode} match={props.match} />}
+                        />
+                        <Route
+                          path={'/docs/:page'}
+                          component={(props) => <Docs match={props.match} />}
+                        />
+                        <Route
+                          path={'/docs'}
+                          component={(props) => <Docs darkMode={darkMode} match={{ params: { page: "docs" } }} />}
+                        />
+                        <Route
+                          exact path={'/downloads'}
+                          component={(props) => <Downloads darkMode={darkMode} />}
+                        />
+                        <Route
+                          component={(props) => <NotFound />}
+                        />
+                      </Switch>
+                    }
+                  >
+                  </Dashboard>
+                }
+              />
+            </Switch>
+          </div>
         </div>
-      </div>
-    </ThemeProvider>
+      </ThemeProvider>
     </DarkModeContext.Provider>
   );
 }
 
 const outerPaper = makeStyles((theme) => ({
-        root: {
-        display: 'flex',
+  root: {
+    display: 'flex',
     flexWrap: 'wrap',
     '& > *': {
-        margin: theme.spacing(2),
+      margin: theme.spacing(2),
       width: theme.spacing(50),
       height: theme.spacing(50),
     },
