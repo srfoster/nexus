@@ -51,9 +51,9 @@ function DarkModeSwitch(props) {
               <Grid item>
                <AntSwitch checked={darkMode}
                    onChange={() => {
-                       setDarkMode(!darkMode);
-                       window.localStorage.setItem("dark-mode", ""+ !darkMode)
-                       props.onChange(!darkMode)
+                      setDarkMode(!darkMode);
+                      window.localStorage.setItem("dark-mode", ""+ !darkMode)
+                      //  props.onChange(!darkMode)
                        console.log("HERE")
                    }} />
                 </Grid>
