@@ -33,7 +33,7 @@ const MeetYourTeacher = (props) => {
           <span>Dark or Light?</span>
           <DarkModeSwitch
             onChange={(darkMode) => {
-              //Triggers re-render, so we'll use local storage instead of state
+              //Triggers a re-render, so we'll use local storage instead of state
             }}
           />
         </div>
