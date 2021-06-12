@@ -36,8 +36,15 @@ const MeetYourTeacher = (props) => {
   let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
   let [password, setPassword] = useState(undefined);
 
-  let setTitle = props.setTitle
-  let setActions = props.setActions
+  
+  //let setTitle = props.setTitle
+  //let setActions = props.setActions
+  const [currentPart,setCurrentPart] = useState(0) 
+  const [canContinue,setCanContinue] = useState(false) 
+  let reallyContinue = () => {
+    setCanContinue(false);
+    setCurrentPart(1 + currentPart)
+  }
 
   function LightOrDark(props) {
     //Add sounds effects to Light vs Dark mode
@@ -150,7 +157,7 @@ const MeetYourTeacher = (props) => {
   }
 
   //Choose your username
-  function SockPuppetPasswordRequestor(props) {
+  function SockPuppetTeacherIntroduction(props) {
     let [videoFinished, setVideoFinished] = useState(false);
     let [playing, setPlaying] = useState(false);
 
@@ -206,7 +213,7 @@ const MeetYourTeacher = (props) => {
             },
             {
               correct: false, text: "These answers are too restrictive",
-              feedback: `Personality assessment result: User with name "${username}" is a narcisist who thinks their special snowflake-like personality is too complex to be assessed by multiple-choice questions. User may not continue.`
+              feedback: `Personality assessment result: User with name "${username}" is a narcisist who thinks their snowflake-like personality is too complex to be assessed by multiple-choice questions. User may not continue.`
             },
           ]}
           buttonText="Submit Answer"
@@ -216,32 +223,64 @@ const MeetYourTeacher = (props) => {
       </>
     )
   }
+
+  function SockPuppetPasswordLesson(props){
+    let [videoFinished, setVideoFinished] = useState(false);
+    let [playing, setPlaying] = useState(false);
+
+    return(
+      <SBS
+        leftSideTitle={<p>Are you ready for your first lesson? Sock Puppet is going to teach you the First Rule of magic.</p>}
+        leftSide={
+          <>
+            <ReactPlayer
+              playsInline
+              fluid={false}
+              width={"100%"}
+              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-2.mp4"
+              controls={true}
+              style={{}}
+              playing={playing}
+              onEnded={() => setVideoFinished(true)}
+              progressInterval={100}
+              onProgress={(p) => { }}
+            />
+          </>
+        }
+        rightSide={videoFinished ?
+          <><PasswordInput setCanContinue={ props.setCanContinue} />
+          </> : ""}
+      />
+
+    )
+  }
+
+  function PasswordInput(props){
+  
+    return (<>
+      <h1 onClick={ () => props.setCanContinue(true) }>Put your password here...</h1>
+       
+    </>)
+  }  
   
   function Level1CompleteScreen(props) {
     return (
       <>
-        <p>Sock puppet video congratulating you and graduating you to story time level.</p>
+        <p>Congratulations! You've completed Level 1! You're on your way to being a Mage!</p>
         <Button onClick={() => { }}>Continue</Button>
       </>
     );
   }
 
   //Choose a password
-
-  
-  const [currentPart,setCurrentPart] = useState(0) 
-  const [canContinue,setCanContinue] = useState(false) 
-  let reallyContinue = () => {
-    setCanContinue(false);
-    setCurrentPart(1 + currentPart)
-  }
   
   return (
     <>
       {[<LightOrDark setCanContinue={ setCanContinue }/>,
        <UserNameForm setCanContinue={ setCanContinue }/>,
        <ChooseYourTeacher setCanContinue={ setCanContinue }/>,
-       <SockPuppetPasswordRequestor setCanContinue={ setCanContinue }/>,
+       <SockPuppetTeacherIntroduction setCanContinue={ setCanContinue }/>,
+       <SockPuppetPasswordLesson setCanContinue={ setCanContinue }/>,
        <Level1CompleteScreen />][currentPart]}
 
       <div>
