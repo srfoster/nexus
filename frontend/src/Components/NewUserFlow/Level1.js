@@ -22,11 +22,9 @@ import Chip from '@material-ui/core/Chip';
 
 const ContinueButton = (props) => {
   return (
-    <div style={{ textAlign: "center", paddingTop: 20 }}>
-      <Fade in={true} timeout={1000}>
-        <Button size="small" onClick={props.onClick}>Next</Button>
-      </Fade>
-    </div>
+    <Fade in={true} timeout={1000}>
+      <Button size="small" onClick={props.onClick}>Next</Button>
+    </Fade>
   );
  }
 
@@ -38,10 +36,19 @@ const MeetYourTeacher = (props) => {
   let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
   let [password, setPassword] = useState(undefined);
 
-  console.log("RENDER", darkModeDecisionMade)
+  let setTitle = props.setTitle
+  let setActions = props.setActions
 
   function LightOrDark(props) {
     //Add sounds effects to Light vs Dark mode
+
+    useEffect(() => {
+      if (window.localStorage.getItem("dark-mode")) {
+        console.log("HEREERE")
+        props.setCanContinue(true)
+      }
+    })
+
     return (<>
       <Fade in={true} timeout={1000}>
         <div>
@@ -50,12 +57,14 @@ const MeetYourTeacher = (props) => {
           <DarkModeSwitch
             onChange={(darkMode) => {
               //Triggers a re-render, so we'll use local storage instead of state
+              setDarkModeDecisionMade(true)
+
+              props.setCanContinue(true)
             }}
           />
+
         </div>
       </Fade>
-      {window.localStorage.getItem("dark-mode") ?
-        <ContinueButton onClick={() => { setDarkModeDecisionMade(true) }}/> : ""}
     </>)
   }
 
@@ -76,12 +85,10 @@ const MeetYourTeacher = (props) => {
         </Grid>
       </Grid>
       {username === undefined ? "" :
-        <Fade in={true} timeout={ 1000}><Button onClick={() => setUsernameConfirmed(true)}>Check Availability</Button>
+        <Fade in={true} timeout={ 1000}><Button onClick={() => props.setCanContinue(true)}>Check Availability</Button>
         </Fade>
         }
-      {usernameConfirmed === undefined ? "" :
-        <ContinueButton onClick={()=> setUsernameDecisionMade(true)}/>
-        }
+      
     </div>)
   }
 
@@ -135,16 +142,15 @@ const MeetYourTeacher = (props) => {
           { correct: false, text: "None of these", feedback: "Sorry, your current level is to low for you to continue without a teacher." },
         ]}
           buttonText="Check Availability"
-          onCorrect={()=>setTeacherAvailable(true)}
-          onIncorrect={()=>setTeacherAvailable(false)}
+          onCorrect={()=>props.setCanContinue(true)}
+          onIncorrect={()=>props.setCanContinue(false)}
         />
-        {teacherAvailable ? <ContinueButton onClick={() => setTeacherDecisionMade(true)}/> : ""}
       </>
     );
   }
 
   //Choose your username
-  function SockPuppetPasswordRequester(props) {
+  function SockPuppetPasswordRequestor(props) {
     let [videoFinished, setVideoFinished] = useState(false);
     let [playing, setPlaying] = useState(false);
 
@@ -168,7 +174,7 @@ const MeetYourTeacher = (props) => {
           </>
         }
         rightSide={videoFinished ?
-          <><WhyIsMyTeacherASock />
+          <><WhyIsMyTeacherASock setCanContinue={ props.setCanContinue } />
           </> : ""}
       />
     );
@@ -177,7 +183,6 @@ const MeetYourTeacher = (props) => {
   // Decision: Do we need this question? What purpose does it serve?
   // Pro: breaks up video content, nice gamification rhythm
   function WhyIsMyTeacherASock(props) {
-    const [answerChosen, setAnswerChosen] = React.useState(false);
     return (
       <>
         <MultipleChoiceQuestion
@@ -185,7 +190,7 @@ const MeetYourTeacher = (props) => {
           answers={[
             {
               correct: true, text: "Yes, if a sock can't teach something, it cannot be taught!",
-              feedback: `Personality assessment result: User with name "${username}" is an optimist who like socks.  User may continue.`
+              feedback: `Personality assessment result: User with name "${username}" is an optimist who likes socks.  User may continue.`
             },
             {
               correct: true, text: "Yes, socks can teach you what NOT to do.",
@@ -205,10 +210,9 @@ const MeetYourTeacher = (props) => {
             },
           ]}
           buttonText="Submit Answer"
-          onCorrect={() => setAnswerChosen(true)}
-          onIncorrect={() => setAnswerChosen(false)}
+          onCorrect={() => props.setCanContinue(true)}
+          onIncorrect={() => props.setCanContinue(false)}
         />
-        {answerChosen ? <ContinueButton onClick={ () => setTeacherReflectionDone(true)} /> : ""}
       </>
     )
   }
@@ -224,17 +228,30 @@ const MeetYourTeacher = (props) => {
 
   //Choose a password
 
+  
+  const [currentPart,setCurrentPart] = useState(0) 
+  const [canContinue,setCanContinue] = useState(false) 
+  let reallyContinue = () => {
+    setCanContinue(false);
+    setCurrentPart(1 + currentPart)
+  }
+  
   return (
     <>
-      {(darkModeDecisionMade === undefined) ? <LightOrDark /> :
-        (usernameDecisionMade === undefined ? <UserNameForm /> :
-          (teacherDecisionMade === undefined ? <ChooseYourTeacher /> :
-              (password === undefined ? <SockPuppetPasswordRequester />
-                : <Level1CompleteScreen />
-            )))}
+      {[<LightOrDark setCanContinue={ setCanContinue }/>,
+       <UserNameForm setCanContinue={ setCanContinue }/>,
+       <ChooseYourTeacher setCanContinue={ setCanContinue }/>,
+       <SockPuppetPasswordRequestor setCanContinue={ setCanContinue }/>,
+       <Level1CompleteScreen />][currentPart]}
+
+      <div>
+        {currentPart > 0 ? <Button onClick={() => { setCurrentPart(currentPart - 1); setCanContinue(false) }}>Back</Button> : ""}
+        {canContinue ? <ContinueButton onClick={reallyContinue} /> : ""}
+      </div>
     </>
   );
  }
+
 
 const SBS = (props) => {
   return (
@@ -262,9 +279,11 @@ MEET YOUR TEACHER! (Googly eye sock puppet)
 First law of magic: Choose a secret name (mini password lesson, special character and number)
 */
 function Level1(props) {
-    return(<Level setBadges={props.setBadges} number={1} subtitle={"Character creation"}>
-      <MeetYourTeacher />
-    </Level>)
+  const [title, setTitle] = useState("Character creation");
+  const [actions, setActions] = useState([]);
+  return (<Level setBadges={props.setBadges} number={1} subtitle={title} actions={actions} >
+    <MeetYourTeacher setTitle={setTitle} setActions={ setActions} />
+  </Level>)
 }
 
 export default Level1
