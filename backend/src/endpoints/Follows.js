@@ -28,7 +28,14 @@ const handleGet = async (req, res) => {
 
 const handlePost = async (req, res) =>{
   let userId = req.user.id
-  let following = req.query.following 
+  let following = req.query.following
+  if(Number.isNaN(Number(following))){
+    let user = await req.app.get('db')('users')
+      .where({username: following})
+      .first()
+
+    following = user.id
+  } 
 
   let newFollow = await req.app.get('db')('follows')
     .insert({user_id: userId, follower_id: following, date_created: new Date(), date_modified: new Date()})
@@ -38,7 +45,14 @@ const handlePost = async (req, res) =>{
 
 const handleDelete = async (req, res) => {
   let userId = req.user.id
-  let following = req.query.following 
+  let following = req.query.following
+  if(Number.isNaN(Number(following))){
+    let user = await req.app.get('db')('users')
+      .where({username: following})
+      .first()
+
+    following = user.id
+  } 
   await req.app.get('db')('follows')
     .where({user_id: userId, follower_id: following})
     .delete({})
