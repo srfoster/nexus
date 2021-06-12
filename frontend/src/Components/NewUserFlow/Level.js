@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import Box from '@material-ui/core/Box';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import Snackbar from '@material-ui/core/Snackbar';
 import Grow from '@material-ui/core/Grow';
 import Button from '@material-ui/core/Button';
@@ -17,12 +15,7 @@ const Level = (props) => {
         <CardHeader title={"Level " + props.number + ""}
           subheader={props.subtitle}>
         </CardHeader>
-        <CardContent>
-          {props.children}
-        </CardContent>
-        <CardActions >
-          {props.actions}
-        </CardActions>
+        {props.children}
       </Card>
     </>
   );

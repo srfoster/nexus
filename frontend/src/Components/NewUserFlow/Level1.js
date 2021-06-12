@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Level } from "./Level";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Fade from '@material-ui/core/Fade';
 import ReactPlayer from 'react-player'
@@ -18,6 +19,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
 import Chip from '@material-ui/core/Chip';
+import Typography from '@material-ui/core/Typography';
 
 
 const ContinueButton = (props) => {
@@ -27,6 +29,76 @@ const ContinueButton = (props) => {
     </Fade>
   );
  }
+
+  const UserNameForm = (props) => {
+    const [usernameConfirmed, setUsernameConfirmed] = useState(undefined);
+    const [checking, setChecking] = useState(false);
+    const [available, setAvailable] = useState(false);
+    const [username, setUsernameLocal] = useState(undefined);
+
+    function checkAvailability(){
+      setChecking(true)
+
+      //Would do network call here...
+      setTimeout(()=>{
+        setChecking(false) 
+        setAvailable(true) 
+
+        //Causing annoying re-render...
+        //setUsername(username); 
+        props.setCanContinue(true)
+      },1000)
+    }
+ 
+    function OneMoment(props) {
+      return (
+        <Grid container spacing={1} alignItems="flex-end">
+          <Grid item> <AccountCircle /> </Grid>
+          <Grid item> <Typography style={{ paddingTop: 24 }}>One moment...</Typography> </Grid>
+        </Grid>)
+    }
+
+    function UsernameInput(){
+      return(
+        <Grid container spacing={1} alignItems="flex-end">
+          <Grid item>
+            <AccountCircle /> 
+          </Grid>
+          <Grid item>
+            {available ?
+              <Typography style={{ paddingTop: 24 }}>{username}</Typography>
+              :
+              <TextField
+                onChange={(e) =>
+                  setUsernameLocal(e.target.value)
+                }
+                id="input-with-icon-grid" 
+                label={<span>Character name...</span>} />}
+
+          </Grid>
+        </Grid>
+      )
+  }
+
+    return (<div>
+      <span>What shall we call you?</span>
+      {checking ? OneMoment() :  UsernameInput() 
+      
+      }
+      {username === undefined ? "" :
+        <Fade key="check-available" in={true} timeout={1000}><Button onClick={() => {
+          if(!available){
+            checkAvailability()
+          } else{
+            setAvailable(undefined)
+            props.setCanContinue(false)
+          }
+        }
+        }>{!available ? "Check Availability" : "Undo"}</Button>
+        </Fade>}
+
+    </div>)
+  }
 
 const MeetYourTeacher = (props) => {
   let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
@@ -70,29 +142,6 @@ const MeetYourTeacher = (props) => {
     </>)
   }
 
-  function UserNameForm(props) {
-    let [usernameConfirmed, setUsernameConfirmed] = useState(undefined);
-    let [username, setUsernameLocal] = useState(undefined);
-    return(<div>
-      <span>What shall we call you?</span>
-      <Grid container spacing={1} alignItems="flex-end">
-        <Grid item>
-          <AccountCircle />
-        </Grid>
-        <Grid item>
-          <TextField
-            onChange={(e) => 
-              setUsernameLocal(e.target.value)
-            }
-            id="input-with-icon-grid" label={<span>Character name</span>} />
-        </Grid>
-      </Grid>
-      {username === undefined ? "" :
-        <Fade in={true} timeout={ 1000}><Button onClick={() => {setUsername(username); props.setCanContinue(true)}}>Check Availability</Button>
-        </Fade>}
-      
-    </div>)
-  }
 
   function MultipleChoiceQuestion(props) {
     const [value, setValue] = React.useState('');
@@ -267,39 +316,36 @@ const MeetYourTeacher = (props) => {
     );
   }
 
+
   //let setTitle = props.setTitle
-  let setActions = props.setActions
   const [currentPart,setCurrentPart] = useState(0) 
   const [canContinue,setCanContinue] = useState(false) 
 
-  let actions = []
-
-  useEffect(()=>{
-	  if(currentPart){
-		  actions.push(<Button onClick={() => { setCurrentPart(currentPart - 1); setCanContinue(false) }}>Back</Button> )
-	  }
-
-	  if(canContinue){
-		  actions.push(<ContinueButton onClick={reallyContinue} />)
-	  }
-
-
-	  setActions(actions)
-  },[currentPart, canContinue])
   
   return (
     <>
-      {[<LightOrDark setCanContinue={ setCanContinue }/>,
-       <UserNameForm setCanContinue={ setCanContinue }/>,
-       <ChooseYourTeacher setCanContinue={ setCanContinue }/>,
-       <SockPuppetTeacherIntroduction setCanContinue={ setCanContinue }/>,
-       <SockPuppetPasswordLesson setCanContinue={ setCanContinue }/>,
-       <Level1CompleteScreen />][currentPart]}
+      <CardContent>
+        {[
+          <UserNameForm setCanContinue={setCanContinue} />,
+          <LightOrDark setCanContinue={setCanContinue} />,
+          <ChooseYourTeacher setCanContinue={setCanContinue} />,
+          <SockPuppetTeacherIntroduction setCanContinue={setCanContinue} />,
+          <SockPuppetPasswordLesson setCanContinue={setCanContinue} />,
+          <Level1CompleteScreen />][currentPart]}
+      </CardContent>
 
+      <CardActions>
+       {currentPart ? 
+        <Button key="back-button" onClick={() => { setCurrentPart(currentPart - 1); setCanContinue(false) }}>Back</Button> :
+        ""}
+
+       {canContinue ?
+        <ContinueButton key="continue-button" onClick={reallyContinue} />
+      : ""}
+      </CardActions>
     </>
   );
  }
-
 
 const SBS = (props) => {
   return (
@@ -328,9 +374,8 @@ First law of magic: Choose a secret name (mini password lesson, special characte
 */
 function Level1(props) {
   const [title, setTitle] = useState("Character creation");
-  const [actions, setActions] = useState([]);
-  return (<Level setBadges={props.setBadges} number={1} subtitle={title} actions={actions} >
-    <MeetYourTeacher setTitle={setTitle} setActions={ setActions} />
+  return (<Level setBadges={props.setBadges} number={1} subtitle={title} >
+    <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle}  />
   </Level>)
 }
 
