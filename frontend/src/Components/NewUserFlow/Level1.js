@@ -1,58 +1,78 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
-import { Level, ShowAfter } from "./Level";
+import { Level } from "./Level";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Fade from '@material-ui/core/Fade';
 import ReactPlayer from 'react-player'
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import useStyles from '../../styles.js';
-import SignupForm from '../../Components/SignupForm';
 import DarkModeSwitch from '../Widgets/DarkModeSwitch';
 import TextField from '@material-ui/core/TextField';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormLabel from '@material-ui/core/FormLabel';
+import Chip from '@material-ui/core/Chip';
+
+
+const ContinueButton = (props) => {
+  return (
+    <Fade in={true} timeout={1000}>
+      <Button style={{marginLeft: "auto"}} onClick={props.onClick}>Next</Button>
+    </Fade>
+  );
+ }
 
 const MeetYourTeacher = (props) => {
   let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
+  let [username, setUsername] = useState(undefined);
   let [usernameDecisionMade, setUsernameDecisionMade] = useState(undefined);
+  let [teacherDecisionMade, setTeacherDecisionMade] = useState(undefined);
+  let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
   let [password, setPassword] = useState(undefined);
 
-  console.log("RENDER", darkModeDecisionMade)
-  //Light Mage or Dark Mage Toggle
+  
+  let reallyContinue = () => {
+    setCanContinue(false);
+    setCurrentPart(1 + currentPart)
+  }
 
   function LightOrDark(props) {
+    //Add sounds effects to Light vs Dark mode
+
+    useEffect(() => {
+      if (window.localStorage.getItem("dark-mode")) {
+        props.setCanContinue(true)
+      }
+    })
+
     return (<>
       <Fade in={true} timeout={1000}>
         <div>
-          <span>Dark or Light?</span>
+          <p style={{marginBottom:10}}>Let's make this cozier...</p>
+          <p style={{marginBottom:0}}>Light or Dark?</p>
           <DarkModeSwitch
             onChange={(darkMode) => {
-              //Triggers re-render, so we'll use local storage instead of state
+              //Triggers a re-render, so we'll use local storage instead of state
+              setDarkModeDecisionMade(true)
+
+              props.setCanContinue(true)
             }}
           />
+
         </div>
       </Fade>
-      {window.localStorage.getItem("dark-mode") ?
-          <div style={{textAlign: "center", paddingTop: 20}}>
-          <Fade in={true} timeout={1000}>
-            <Button size="small" onClick={() => {
-              setDarkModeDecisionMade(true)
-            }}>Next</Button>
-          </Fade>
-        </div>
-        : ""}
     </>)
   }
 
   function UserNameForm(props) {
-    let [username, setUsername] = useState(undefined);
     let [usernameConfirmed, setUsernameConfirmed] = useState(undefined);
+    let [username, setUsernameLocal] = useState(undefined);
     return(<div>
       <span>What shall we call you?</span>
       <Grid container spacing={1} alignItems="flex-end">
@@ -62,61 +82,91 @@ const MeetYourTeacher = (props) => {
         <Grid item>
           <TextField
             onChange={(e) => 
-              setUsername(e.target.value)
+              setUsernameLocal(e.target.value)
             }
             id="input-with-icon-grid" label={<span>Character name</span>} />
         </Grid>
       </Grid>
       {username === undefined ? "" :
-        <Fade in={true} timeout={ 1000}><Button onClick={() => setUsernameConfirmed(true)}>Check Availability</Button>
-        </Fade>
-        }
-      {usernameConfirmed === undefined ? "" :
-        <Fade in={true} timeout={ 1000}><Button onClick={() => setUsernameDecisionMade(true)}>Next</Button></Fade>
-        }
+        <Fade in={true} timeout={ 1000}><Button onClick={() => {setUsername(username); props.setCanContinue(true)}}>Check Availability</Button>
+        </Fade>}
+      
     </div>)
   }
 
-  function WhyIsMyTeacherASock(props) {
-    return(<div>
-       <Typography color="textSecondary" gutterBottom>
-          Why do you think your teacher is a sock?
-        </Typography>
-      <Typography variant="h5" component="h2">
-        A. I am not worthy of having a non-sock teacher.
-        </Typography>
-      <Typography variant="h5" component="h2">
-        B. Socks make the best teachers
-        </Typography>
-      <Typography variant="h5" component="h2">
-        C. The Sock is not a teacher and cannot be trusted
-        </Typography>
-      <Typography variant="h5" component="h2">
-        D. All of the above
-        </Typography>
-      <Typography variant="h5" component="h2">
-        E. One of the above
-        </Typography>
-    </div>)
+  function MultipleChoiceQuestion(props) {
+    const [value, setValue] = React.useState('');
+    const [error, setError] = React.useState(false);
+    const [helperText, setHelperText] = React.useState('Choose wisely');
+    
+    const handleRadioChange = (event) => {
+      setValue(event.target.value);
+      setHelperText(' ');
+      setError(false);
+    };
+
+    const handleSubmit = () => {
+      let selection = props.answers.filter((e) => e.text == value)[0]
+      setHelperText(selection.feedback);
+      setError(!selection.correct);
+      if (selection.correct) {
+        props.onCorrect();
+      }
+    }
+
+    return (
+      <>
+        <form onSubmit={handleSubmit}>
+          <FormControl component="fieldset" error={error}>
+            <FormLabel component="legend">{ props.question }</FormLabel>
+            <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
+              {props.answers.map((e) => { return <FormControlLabel value={e.text} control={<Radio />} label={ e.text } /> })}
+            </RadioGroup>
+            <FormHelperText>{helperText}</FormHelperText>
+          </FormControl>
+        </form>
+        <Button onClick={handleSubmit} type="submit" variant="solid" color="primary">{ props.buttonText }</Button>
+      </>
+    );
+
+  }
+
+  function ChooseYourTeacher(props) {
+    const [teacherAvailable, setTeacherAvailable] = React.useState(false);
+
+    return (
+      <>
+        <MultipleChoiceQuestion question="Which is your preferred teacher?" answers={[
+          { correct: true, text: "Sock Puppet", feedback: "It's available!" },
+          { correct: false, text: "A Wizard from the Forest", feedback: "Sorry, your current level is too low to unlock this teacher." },
+          { correct: false, text: "Super Intelligent AI", feedback: "Sorry, your current level is too low to unlock this teacher." },
+          { correct: false, text: "The Creators of nexus.codespells.org", feedback: "Sorry, your current level is too low to unlock this teacher." },
+          { correct: false, text: "None of these", feedback: "Sorry, your current level is to low for you to continue without a teacher." },
+        ]}
+          buttonText="Check Availability"
+          onCorrect={()=>props.setCanContinue(true)}
+          onIncorrect={()=>props.setCanContinue(false)}
+        />
+      </>
+    );
   }
 
   //Choose your username
-  function SockPuppetPasswordRequester(props) {
+  function SockPuppetTeacherIntroduction(props) {
     let [videoFinished, setVideoFinished] = useState(false);
     let [playing, setPlaying] = useState(false);
 
     return (
       <SBS
-        leftSideTitle={<>
-          <p>Congratulations, you've unlocked your first teacher!</p>
-          <Button onClick={() => { setPlaying(true) }}>
-            {playing ? "Pause" : "Play"} Video
-            </Button>
-        </>}
+        leftSideTitle={<>You've unlocked:<Chip avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />} label="Sock Puppet"></Chip></>}
         leftSide={
           <>
             <ReactPlayer
+              playsInline
+              fluid={false}
+              width={"100%"}
               url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-2.mp4"
+              controls={true}
               style={{}}
               playing={playing}
               onEnded={() => setVideoFinished(true)}
@@ -126,40 +176,134 @@ const MeetYourTeacher = (props) => {
           </>
         }
         rightSide={videoFinished ?
-          <><WhyIsMyTeacherASock />
-            <Button onClick={() => setPassword("SECUREpassword1!")}>Set Password</Button>
+          <><WhyIsMyTeacherASock setCanContinue={ props.setCanContinue } />
           </> : ""}
       />
     );
   }
+ 
+  // Decision: Do we need this question? What purpose does it serve?
+  // Pro: breaks up video content, nice gamification rhythm
+  function WhyIsMyTeacherASock(props) {
+    return (
+      <>
+        <MultipleChoiceQuestion
+          question="Your feelings matter.  Do you think a sock can teach?"
+          answers={[
+            {
+              correct: true, text: "Yes, if a sock can't teach something, it cannot be taught!",
+              feedback: `Personality assessment result: User with name "${username}" is an optimist who likes socks.  User may continue.`
+            },
+            {
+              correct: true, text: "Yes, socks can teach you what NOT to do.",
+              feedback: `Personality assessment result: User with name "${username}" harbors mild anti-sock tendencies and should be monitored.  User may continue.`
+            },
+            {
+              correct: true, text: "No, socks are inanimate objects",
+              feedback: `Personality assessment result: User with name "${username}" considers themselves to be far superior to socks.  Recommended for sock sympathy training.  User may continue.`
+            },
+            {
+              correct: true, text: "No, I do not trust socks",
+              feedback: `Personality assessment result: User with name "${username}" has likely had bad experiences with socks in the past.  Recommended for sock exposure therapy.  User may continue.`
+            },
+            {
+              correct: false, text: "These answers are too restrictive",
+              feedback: `Personality assessment result: User with name "${username}" is a narcisist who thinks their snowflake-like personality is too complex to be assessed by multiple-choice questions. User may not continue.`
+            },
+          ]}
+          buttonText="Submit Answer"
+          onCorrect={() => props.setCanContinue(true)}
+          onIncorrect={() => props.setCanContinue(false)}
+        />
+      </>
+    )
+  }
+
+  function SockPuppetPasswordLesson(props){
+    let [videoFinished, setVideoFinished] = useState(false);
+    let [playing, setPlaying] = useState(false);
+
+    return(
+      <SBS
+        leftSideTitle={<p>Are you ready for your first lesson? Sock Puppet is going to teach you the First Rule of magic.</p>}
+        leftSide={
+          <>
+            <ReactPlayer
+              playsInline
+              fluid={false}
+              width={"100%"}
+              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-2.mp4"
+              controls={true}
+              style={{}}
+              playing={playing}
+              onEnded={() => setVideoFinished(true)}
+              progressInterval={100}
+              onProgress={(p) => { }}
+            />
+          </>
+        }
+        rightSide={videoFinished ?
+          <><PasswordInput setCanContinue={ props.setCanContinue} />
+          </> : ""}
+      />
+
+    )
+  }
+
+  function PasswordInput(props){
+  
+    return (<>
+      <h1 onClick={ () => props.setCanContinue(true) }>Put your password here...</h1>
+       
+    </>)
+  }  
   
   function Level1CompleteScreen(props) {
     return (
       <>
-        <p>Sock puppet video congratulating you and graduating you to story time level.</p>
+        <p>Congratulations! You've completed Level 1! You're on your way to being a Mage!</p>
         <Button onClick={() => { }}>Continue</Button>
       </>
     );
   }
 
-  //Choose a password
+  //let setTitle = props.setTitle
+  let setActions = props.setActions
+  const [currentPart,setCurrentPart] = useState(0) 
+  const [canContinue,setCanContinue] = useState(false) 
 
+  let actions = []
+
+  useEffect(()=>{
+	  if(currentPart){
+		  actions.push(<Button onClick={() => { setCurrentPart(currentPart - 1); setCanContinue(false) }}>Back</Button> )
+	  }
+
+	  if(canContinue){
+		  actions.push(<ContinueButton onClick={reallyContinue} />)
+	  }
+
+
+	  setActions(actions)
+  },[currentPart, canContinue])
+  
   return (
     <>
-      {(darkModeDecisionMade === undefined) ? <LightOrDark /> :
-        (usernameDecisionMade === undefined ? <UserNameForm /> :
-          (password === undefined ? <SockPuppetPasswordRequester />
-            : <Level1CompleteScreen/>
-          ))}
+      {[<LightOrDark setCanContinue={ setCanContinue }/>,
+       <UserNameForm setCanContinue={ setCanContinue }/>,
+       <ChooseYourTeacher setCanContinue={ setCanContinue }/>,
+       <SockPuppetTeacherIntroduction setCanContinue={ setCanContinue }/>,
+       <SockPuppetPasswordLesson setCanContinue={ setCanContinue }/>,
+       <Level1CompleteScreen />][currentPart]}
+
     </>
   );
  }
 
+
 const SBS = (props) => {
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
           <Card>
             <CardHeader title={
               <span style={{ fontSize: 16 }}>  
@@ -168,16 +312,11 @@ const SBS = (props) => {
             }></CardHeader>
             { props.leftSide }
           </Card>
-        </Grid>
-
-        <Grid item xs={6}>
           <Card style={{ height: "100%" }}>
             <CardContent>
               {props.rightSide }
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
     </>)
 }
 
@@ -188,9 +327,11 @@ MEET YOUR TEACHER! (Googly eye sock puppet)
 First law of magic: Choose a secret name (mini password lesson, special character and number)
 */
 function Level1(props) {
-    return(<Level setBadges={props.setBadges} number={1} subtitle={"Character creation"}>
-      <MeetYourTeacher />
-    </Level>)
+  const [title, setTitle] = useState("Character creation");
+  const [actions, setActions] = useState([]);
+  return (<Level setBadges={props.setBadges} number={1} subtitle={title} actions={actions} >
+    <MeetYourTeacher setTitle={setTitle} setActions={ setActions} />
+  </Level>)
 }
 
 export default Level1
