@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocalStorage } from "../../Util";
 import { Level } from "./Level";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -22,6 +23,57 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
+  function MultipleChoiceQuestion(props) {
+    const [value, setValue] = React.useState('');
+    const [error, setError] = React.useState(false);
+    const [helperText, setHelperText] = React.useState(' ');
+    
+    const handleRadioChange = (event) => {
+      setValue(event.target.value);
+      setHelperText(' ');
+      setError(false);
+    };
+
+    const handleSubmit = () => {
+      let selection = props.answers[Number(value)]
+      if (selection) {
+        setHelperText(selection.feedback);
+        setError(!selection.correct);
+        if (selection.correct) {
+          props.onCorrect();
+        }
+      }
+    }
+
+    return (
+      <>
+        <Fade in={true} timeout={ 1000 }>
+          <div>
+          <form onSubmit={handleSubmit}>
+            <FormControl component="fieldset" error={error}>
+              <FormLabel component="legend">{props.question}</FormLabel>
+              <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
+                {props.answers.map((e,i) => { return <FormControlLabel value={""+i} control={<Radio />} label={e.text} /> })}
+              </RadioGroup>
+              <FormHelperText>{helperText}</FormHelperText>
+            </FormControl>
+          </form>
+          <Button size="small" onClick={handleSubmit} type="submit" variant="solid" color="primary">{props.buttonText}</Button>
+          </div>
+        </Fade>
+      </>
+    );
+  }
+
+
+
+  function SockPuppetChip(){
+    return <Chip avatar={<Avatar alt="Sock Puppet" src="/static/images/avatar/1.jpg" />} label="Sock Puppet"></Chip>
+  }
+
+  function FakeChip(props){
+    return <Chip avatar={<Avatar alt={props.name} src="/static/images/avatar/1.jpg" />} label={props.name}></Chip>
+  }
 
 const ContinueButton = (props) => {
   return (
@@ -63,6 +115,7 @@ const ContinueButton = (props) => {
         <Chip avatar={<AccountCircle />}
           label={username} />
         : (<TextField
+          autoFocus
           onChange={(e) =>
             setUsernameLocal(e.target.value)
           }
@@ -79,9 +132,12 @@ const ContinueButton = (props) => {
   }
 
     return (<Grid container spacing={1}>
+      <Fade in={true} timeout={1000}>
       <Grid item xs={6} >
-        <Typography>What shall we call you?</Typography>
+          <Typography>What shall we call you?</Typography>
       </Grid>
+      </Fade>
+      <Fade in={true} timeout={2000}>
       <Grid item xs={6}>
       {checking ? OneMoment() :  UsernameInput() 
       
@@ -101,7 +157,45 @@ const ContinueButton = (props) => {
         </Fade>}
 
       </Grid>
+      </Fade>
     </Grid>)
+  }
+
+
+
+
+  function ChooseYourTeacher(props) {
+    const [teacherAvailable, setTeacherAvailable] = React.useState(false);
+
+    return (
+      <>
+        <Grid container spacing={1}>
+          <Fade in={true} timeout={1000}>
+            <Grid item xs={6}>
+              <Typography>In the nexus,
+                <br />
+                we try to accomodate...
+              </Typography>
+            </Grid>
+          </Fade>
+          <Fade in={true} timeout={2000}>
+            <Grid item xs={6}>
+              <MultipleChoiceQuestion question="Select your teacher preference" answers={[
+                { correct: true, text: <SockPuppetChip />, feedback: "Available!" },
+                { correct: false, text: <FakeChip name="The Wizard of the Forest" />, feedback: "Sorry, your current level is too low for you to perfer this teacher." },
+                { correct: false, text: <FakeChip name="A Super Intelligent AI" />, feedback: "Sorry, your current level would make the super intelligent AI laugh." },
+                { correct: false, text: <FakeChip name={<span>Devs of<br/>nexus.codespells.org</span>} />,feedback: "Sorry, your current level is too low for us to bother the Devs at this time." },
+                { correct: false, text: "None of these", feedback: "Sorry, your current level is to low for you to continue without a teacher." },
+              ]}
+                buttonText="Check Availability"
+                onCorrect={() => props.setCanContinue(true)}
+                onIncorrect={() => props.setCanContinue(false)}
+              />
+            </Grid>
+          </Fade>
+        </Grid>
+      </>
+    );
   }
 
 const MeetYourTeacher = (props) => {
@@ -125,21 +219,21 @@ const MeetYourTeacher = (props) => {
       if (window.localStorage.getItem("dark-mode")) {
         props.setCanContinue(true)
       }
-    })
+    }, [])
 
     return (<>
       <Grid container spacing={1}>
         <Grid item xs={6}>
           <Fade in={true} timeout={1000}>
-            <p style={{ marginBottom: 10 }}>In the nexus,
+            <Typography style={{ marginBottom: 10 }}>In the nexus,
             <br/>
-            Your preferences matter</p>
+            your preferences matter</Typography>
           </Fade>
         </Grid>
         <Grid item xs={6}>
           <Fade in={true} timeout={2000}>
             <div>
-              <p style={{ marginBottom: 0 }}>Light or Dark?</p>
+              <Typography>Light or Dark?</Typography>
               <DarkModeSwitch
                 onChange={(darkMode) => {
                   //Triggers a re-render, so we'll use local storage instead of state
@@ -155,62 +249,7 @@ const MeetYourTeacher = (props) => {
   }
 
 
-  function MultipleChoiceQuestion(props) {
-    const [value, setValue] = React.useState('');
-    const [error, setError] = React.useState(false);
-    const [helperText, setHelperText] = React.useState('Choose wisely');
-    
-    const handleRadioChange = (event) => {
-      setValue(event.target.value);
-      setHelperText(' ');
-      setError(false);
-    };
 
-    const handleSubmit = () => {
-      let selection = props.answers.filter((e) => e.text == value)[0]
-      setHelperText(selection.feedback);
-      setError(!selection.correct);
-      if (selection.correct) {
-        props.onCorrect();
-      }
-    }
-
-    return (
-      <>
-        <form onSubmit={handleSubmit}>
-          <FormControl component="fieldset" error={error}>
-            <FormLabel component="legend">{ props.question }</FormLabel>
-            <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
-              {props.answers.map((e) => { return <FormControlLabel value={e.text} control={<Radio />} label={ e.text } /> })}
-            </RadioGroup>
-            <FormHelperText>{helperText}</FormHelperText>
-          </FormControl>
-        </form>
-        <Button onClick={handleSubmit} type="submit" variant="solid" color="primary">{ props.buttonText }</Button>
-      </>
-    );
-
-  }
-
-  function ChooseYourTeacher(props) {
-    const [teacherAvailable, setTeacherAvailable] = React.useState(false);
-
-    return (
-      <>
-        <MultipleChoiceQuestion question="Which is your preferred teacher?" answers={[
-          { correct: true, text: "Sock Puppet", feedback: "It's available!" },
-          { correct: false, text: "A Wizard from the Forest", feedback: "Sorry, your current level is too low to unlock this teacher." },
-          { correct: false, text: "Super Intelligent AI", feedback: "Sorry, your current level is too low to unlock this teacher." },
-          { correct: false, text: "The Creators of nexus.codespells.org", feedback: "Sorry, your current level is too low to unlock this teacher." },
-          { correct: false, text: "None of these", feedback: "Sorry, your current level is to low for you to continue without a teacher." },
-        ]}
-          buttonText="Check Availability"
-          onCorrect={()=>props.setCanContinue(true)}
-          onIncorrect={()=>props.setCanContinue(false)}
-        />
-      </>
-    );
-  }
 
   //Choose your username
   function SockPuppetTeacherIntroduction(props) {
@@ -219,7 +258,7 @@ const MeetYourTeacher = (props) => {
 
     return (
       <SBS
-        leftSideTitle={<>You've unlocked:<Chip avatar={<Avatar alt="Natacha" src="/static/images/avatar/1.jpg" />} label="Sock Puppet"></Chip></>}
+        leftSideTitle={<>You've unlocked: <SockPuppetChip /></>}
         leftSide={
           <>
             <ReactPlayer
@@ -330,7 +369,7 @@ const MeetYourTeacher = (props) => {
 
 
   //let setTitle = props.setTitle
-  const [currentPart,setCurrentPart] = useState(0) 
+  const [currentPart,setCurrentPart] = useLocalStorage("lvl1:currentPart", 0) 
   const [canContinue,setCanContinue] = useState(false) 
 
   
