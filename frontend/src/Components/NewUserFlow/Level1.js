@@ -20,12 +20,13 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormLabel from '@material-ui/core/FormLabel';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
+import InputAdornment from '@material-ui/core/InputAdornment';
 
 
 const ContinueButton = (props) => {
   return (
     <Fade in={true} timeout={1000}>
-      <Button style={{marginLeft: "auto"}} onClick={props.onClick}>Next</Button>
+      <Button color="secondary" style={{marginLeft: "auto"}} onClick={props.onClick}>Next</Button>
     </Fade>
   );
  }
@@ -52,41 +53,43 @@ const ContinueButton = (props) => {
  
     function OneMoment(props) {
       return (
-        <Grid container spacing={1} alignItems="flex-end">
-          <Grid item> <AccountCircle /> </Grid>
-          <Grid item> <Typography style={{ paddingTop: 24 }}>One moment...</Typography> </Grid>
-        </Grid>)
+        <Typography>One moment...</Typography>
+      )
     }
 
     function UsernameInput(){
-      return(
-        <Grid container spacing={1} alignItems="flex-end">
-          <Grid item>
-            <AccountCircle /> 
-          </Grid>
-          <Grid item>
-            {available ?
-              <Typography style={{ paddingTop: 24 }}>{username}</Typography>
-              :
-              <TextField
-                onChange={(e) =>
-                  setUsernameLocal(e.target.value)
-                }
-                id="input-with-icon-grid" 
-                label={<span>Character name...</span>} />}
-
-          </Grid>
-        </Grid>
+    return (
+      available ?
+        <Chip avatar={<AccountCircle />}
+          label={username} />
+        : (<TextField
+          onChange={(e) =>
+            setUsernameLocal(e.target.value)
+          }
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <AccountCircle />
+              </InputAdornment>
+            ),
+          }}
+        />
+        )
       )
   }
 
-    return (<div>
-      <span>What shall we call you?</span>
+    return (<Grid container spacing={1}>
+      <Grid item xs={6} >
+        <Typography>What shall we call you?</Typography>
+      </Grid>
+      <Grid item xs={6}>
       {checking ? OneMoment() :  UsernameInput() 
       
       }
-      {username === undefined ? "" :
-        <Fade key="check-available" in={true} timeout={1000}><Button onClick={() => {
+
+      {username === undefined || checking ? "" :
+        <Fade key="check-available" in={true} timeout={1000}>
+          <Button size="small" onClick={() => {
           if(!available){
             checkAvailability()
           } else{
@@ -94,10 +97,11 @@ const ContinueButton = (props) => {
             props.setCanContinue(false)
           }
         }
-        }>{!available ? "Check Availability" : "Undo"}</Button>
+        }>{!available ? "Check Availability" : "Undo?"}</Button>
         </Fade>}
 
-    </div>)
+      </Grid>
+    </Grid>)
   }
 
 const MeetYourTeacher = (props) => {
@@ -124,21 +128,29 @@ const MeetYourTeacher = (props) => {
     })
 
     return (<>
-      <Fade in={true} timeout={1000}>
-        <div>
-          <p style={{marginBottom:10}}>Let's make this cozier...</p>
-          <p style={{marginBottom:0}}>Light or Dark?</p>
-          <DarkModeSwitch
-            onChange={(darkMode) => {
-              //Triggers a re-render, so we'll use local storage instead of state
-              setDarkModeDecisionMade(true)
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <Fade in={true} timeout={1000}>
+            <p style={{ marginBottom: 10 }}>In the nexus,
+            <br/>
+            Your preferences matter</p>
+          </Fade>
+        </Grid>
+        <Grid item xs={6}>
+          <Fade in={true} timeout={2000}>
+            <div>
+              <p style={{ marginBottom: 0 }}>Light or Dark?</p>
+              <DarkModeSwitch
+                onChange={(darkMode) => {
+                  //Triggers a re-render, so we'll use local storage instead of state
+                  setDarkModeDecisionMade(true)
 
-              props.setCanContinue(true)
-            }}
-          />
-
-        </div>
-      </Fade>
+                  props.setCanContinue(true)
+                }}
+              /></div>
+          </Fade>
+        </Grid>
+      </Grid>
     </>)
   }
 
