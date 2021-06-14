@@ -6,7 +6,11 @@ let badgeDataList = [
     description: 'You got started!',
     link: 'Must find zelda!',
   },
-
+  {
+    name: 'Test Badge',
+    description: 'For testing purposes only',
+    link: 'N/A',
+  },
 ]
 
 module.exports = {

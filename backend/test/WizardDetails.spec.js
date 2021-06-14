@@ -53,14 +53,7 @@ describe('Wizard Details', () => {
       )
     )
 
-    // TODO: Wizard profile should be publicly accessible
-    it(`GET ${epWizardDetails} responds with 401 if not logged in`, () => {
-      return supertest(app)
-        .get(epWizardDetails)
-        .expect(401)
-    })
-
-    it(`GET ${epWizardDetails} responds with 200 if logged in`, () => {
+    it(`GET ${epWizardDetails} responds with 200`, () => {
       return supertest(app)
         .get(`/wizards/${testUsers[0].id}`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))

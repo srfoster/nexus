@@ -1,6 +1,6 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
-import { Switch, Route, useHistory } from "react-router-dom";
+import { Switch, Route, useHistory, useLocation } from "react-router-dom";
 import { createBrowserHistory } from 'history';
 import {Helmet} from "react-helmet";
 import AuthApiService from './Services/auth-api-service';
@@ -28,11 +28,16 @@ require('codemirror/mode/scheme/scheme');
 function App() {
   const paper = outerPaper();
   let history = useHistory();
+  let location = useLocation()
 
   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
 
+  // let path = window.location.pathname
+  // let path = history.location.pathname
+
   useEffect(() => {
     let isMounted = true
+
     // Only running this to check if logged in
     SpellsApiService.getUserById('me')
       .then((user) => setIsLoggedIn(true))
@@ -41,9 +46,7 @@ function App() {
     return () => {
       isMounted = false
     }
-  }, [])
-
-  let path = window.location.pathname
+  }, [location])
 
   return ( 
     <div className="App">
@@ -61,6 +64,7 @@ function App() {
         <Dashboard
           isLoggedIn={isLoggedIn} 
           setIsLoggedIn={setIsLoggedIn}
+          location={location}
           child={
             <Switch>
               <Route

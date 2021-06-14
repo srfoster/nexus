@@ -11,6 +11,10 @@ import { Helmet } from "react-helmet";
 import { badgeOnWhitelist } from './Badges/badgeUtil';
 import Chip from '@material-ui/core/Chip';
 import Tooltip from '@material-ui/core/Tooltip';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
+import StarIcon from '@material-ui/icons/Star';
 
 const UserProfile = (props) => {
   const classes = useStyles();
@@ -76,13 +80,19 @@ const UserProfile = (props) => {
           <div className={classes.userProfileHeadRight}><SearchBar setSearch={setSearch}/></div>
         </div>
 
-        <div>
-          {badges.map(badge => 
-            <Tooltip title={badge.description} key={'Badge: ', badge.id}>
-              <Chip label={badge.name} />
-            </Tooltip>
-          )}
-        </div>
+        <Container className={classes.cardGrid} maxWidth="md">
+          <Grid item xs={12}>
+            <Paper style={{minHeight: '200px', padding: '10px'}}>
+              <h2>Badges</h2>
+              {badges.map(badge => 
+                // <Grid item xs={12}>
+                <Tooltip title={badge.description} key={'Badge: ', badge.id}>
+                  <Chip color="primary" variant="outlined" icon={<StarIcon />} label={badge.name}/>
+                </Tooltip>
+              )}
+            </Paper>
+          </Grid>
+        </Container>
 
         <Spellbook spells={user.spells}/>
         

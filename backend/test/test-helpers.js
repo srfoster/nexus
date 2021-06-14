@@ -152,6 +152,25 @@ function makeTagsArray() {
   ]
 }
 
+function makeBadgesArray() {
+  return [
+    {
+      id: 1,
+      user_id: 1,
+      name: 'Badge_1',
+      description: 'First Badge',
+      link: 'N/A',
+    },
+    {
+      id: 2,
+      user_id: 1,
+      name: 'Badge_1',
+      description: 'First Badge',
+      link: 'N/A',
+    },
+  ]
+}
+
 function cleanTables(db) {
   return db.transaction(trx =>
     trx.raw(
@@ -184,7 +203,8 @@ function makeSpellFixtures() {
   const testUsers = makeUsersArray()
   const testSpells = makeSpellsArray()
   const testTags = makeTagsArray()
-  return { testUsers, testSpells, testTags }
+  const testBadges = makeBadgesArray()
+  return { testUsers, testSpells, testTags, testBadges }
 }
 
 function seedUsers(db, users) {
@@ -230,6 +250,20 @@ function seedTags(db, tags) {
     )
 }
 
+function seedBadges(db, badges) {
+  const preppedBadges = badges.map(badge => ({
+    ...badge
+  }))
+  return db.into('badges').insert(preppedBadges)
+    .then(() =>
+      // update the auto sequence to stay in sync
+      db.raw(
+        `SELECT setval('badges_id_seq', ?)`,
+        [badges[badges.length - 1].id],
+      )
+    )
+}
+
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
   const token = jwt.sign({ user_id: user.id }, secret, {
     subject: user.username,
@@ -241,10 +275,12 @@ function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
 module.exports = {
   makeUsersArray,
   makeSpellsArray,
+  makeBadgesArray,
   cleanTables,
   makeSpellFixtures,
   seedUsers,
   seedSpells,
   seedTags,
+  seedBadges,
   makeAuthHeader
 }

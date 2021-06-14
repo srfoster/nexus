@@ -133,8 +133,11 @@ const giveBadge = async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
   let badgeLink, badgeDescription
 
+  // console.log("Req: ", req.user.id);
+  // console.log("user: ", userId);
+
   //When/if we have admin roles, we can enhance the security logic here.
-  if(req.user.id !== userId) {
+  if(req.user.id !== Number(userId)) {
     return res.status(403).send({error: "You can only give badges to yourself at this time."})
   }
 
@@ -149,6 +152,7 @@ const giveBadge = async (req, res) => {
     return object.name === req.params.badgeName ? object  : null
   }).filter(function(val) { return val !== null; })[0]
 
+  
   badgeLink = badgeObject.link
   badgeDescription = badgeObject.description
   
@@ -166,6 +170,8 @@ app.post(`/users/:id/badges/:badgeName`, requireAuth, giveBadge)
 
 const getBadges = async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+
+  // console.log(Number.isNaN(Number(2)));
   if(Number.isNaN(Number(userId))){
     let user = await req.app.get('db')('users')
       .where({username: userId})
@@ -175,11 +181,12 @@ const getBadges = async (req, res) => {
   }
 
   req.app.get('db')('badges')
-  .where({user_id: userId})
-  .then((badges) => {
-    res.send(badges)
-  })
-  }
+    .where({user_id: userId})
+    .then((badges) => {
+      res.send(badges)
+    })
+}
+
 app.get(`/users/:id/badges`, requireAuthIfMe, getBadges)
 
 

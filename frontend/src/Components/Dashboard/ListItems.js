@@ -30,6 +30,8 @@ export function PublicListItems(props) {
     if(path === '/login') TokenService.clearAuthToken();
     history.push(path)
   }  
+  
+  // console.log(['pageview', props.location.pathname])
 
   let path = window.location.pathname
 
@@ -37,17 +39,17 @@ export function PublicListItems(props) {
   <>
     <div>
     <ListItem button onClick={() => handleClickButton('/spells')} 
-      // className={path === '/spells' ? classes.listIcon : ''}
-      >
+      className={props.location.pathname === '/spells' ? classes.listIcon : ''}
+    >
       <ListItemIcon>
         <ViewListIcon />
       </ListItemIcon>
       <ListItemText primary="My Spells" />
     </ListItem>
 
-    <ListItem button onClick={() => handleClickButton('/follows')}
-      // className={path === '/friends' ? classes.listIcon : ''}
-      >
+    <ListItem button onClick={() => handleClickButton('/friends')}
+      className={props.location.pathname === '/friends' ? classes.listIcon : ''}
+    >
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
@@ -55,8 +57,8 @@ export function PublicListItems(props) {
     </ListItem>
 
     <ListItem button onClick={() => handleClickButton('/gallery')}
-      // className={path === '/gallery' ? classes.listIcon : ''}
-      >
+      className={props.location.pathname === '/gallery' ? classes.listIcon : ''}
+    >
       <ListItemIcon>
         <PhotoAlbumIcon />
       </ListItemIcon>
@@ -66,24 +68,24 @@ export function PublicListItems(props) {
     <Divider />
     <div>
     <ListItem button onClick={() => handleClickButton('/wizards/me')}
-      // className={path.includes('/wizards') ? classes.listIcon : ''}
-      >
+      className={props.location.pathname.includes('/wizards') ? classes.listIcon : ''}
+    >
       <ListItemIcon>
         <AccountCircleIcon />
       </ListItemIcon>
       <ListItemText primary="My Profile" />
     </ListItem>
     <ListItem button onClick={() => handleClickButton('/Docs')}
-      // className={path === '/downloads' ? classes.listIcon : ''}
-      >
+      className={props.location.pathname === '/Docs' ? classes.listIcon : ''}
+    >
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="Docs" />
     </ListItem>
     <ListItem button onClick={() => handleClickButton('/downloads')}
-      // className={path === '/downloads' ? classes.listIcon : ''}
-      >
+      className={props.location.pathname === '/downloads' ? classes.listIcon : ''}
+    >
       <ListItemIcon>
         <GetAppIcon />
       </ListItemIcon>
@@ -109,7 +111,7 @@ export function PublicListItems(props) {
   )
 };
 
-export function PrivateListItems() {
+export function PrivateListItems(props) {
   const classes = useStyles();
   let history = useHistory();
 
@@ -124,16 +126,16 @@ export function PrivateListItems() {
   <>
     <div>
     <ListItem button onClick={() => handleClickButton('/gallery')}
-      // className={path === '/gallery' ? classes.listIcon : ''}
-      >
+      className={props.location.pathname === '/gallery' ? classes.listIcon : ''}
+    >
       <ListItemIcon>
       <PhotoAlbumIcon />
       </ListItemIcon>
       <ListItemText primary="Public Spells" />
     </ListItem>
     <ListItem button onClick={() => handleClickButton('/downloads')}
-      // className={path === '/downloads' ? classes.listIcon : ''}
-      >
+      className={props.location.pathname === '/downloads' ? classes.listIcon : ''}
+    >
       <ListItemIcon>
         <GetAppIcon />
       </ListItemIcon>
@@ -143,13 +145,17 @@ export function PrivateListItems() {
 
     <Divider />
     <div>
-    <ListItem button onClick={() => history.push('/login')}>
+    <ListItem button onClick={() => history.push('/login')}
+      className={props.location.pathname === '/login' ? classes.listIcon : ''}
+    >
       <ListItemIcon>
       <PersonIcon />
       </ListItemIcon>
       <ListItemText primary="Login" />
     </ListItem>
-    <ListItem button onClick={() => history.push('/signup')}>
+    <ListItem button onClick={() => history.push('/signup')}
+      className={props.location.pathname === '/signup' ? classes.listIcon : ''}
+    >
       <ListItemIcon>
       <PersonAddIcon />
       </ListItemIcon>

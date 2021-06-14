@@ -6,6 +6,7 @@ const { DATABASE_URL, DATABASE_URL_QUERY } = require('../config')
 const prompt = require('prompt-sync')();
 
 let badgeName, badgeLink, badgeDescription
+badgeUserId = prompt('What is the ID of the user acquiring the badge?')
 badgeName = prompt('What is the name of this badge? ');
 badgeDescription = prompt('What is the description of this badge? ');
 badgeLink = prompt('Link where badge can be acquired? ');
@@ -15,7 +16,7 @@ const db = knex({
 })
 
 db('badges')
-.insert({name: badgeName, link: badgeLink, description: badgeDescription,
+.insert({user_id: badgeUserId, name: badgeName, link: badgeLink, description: badgeDescription,
           date_created: new Date(), date_modified: new Date()})
 .returning('*')
   .then((badges) => {

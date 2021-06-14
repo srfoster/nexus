@@ -33,11 +33,11 @@ function Dashboard(props) {
   const fixedHeightPaper = clsx(classes.dashPaper, classes.fixedHeight);
 
   // useEffect(() => {
-  //   // Only running this to check if logged in
-  //   SpellsApiService.getUserById('me')
-  //     .then((user) => setIsLoggedIn(true))
-  //     .catch(() => setIsLoggedIn(false))
-  // }, [])
+    
+
+  // }, [path])
+
+  // let path = window.location.pathname
 
   return (
     <div className={classes.dashRoot}>
@@ -75,7 +75,7 @@ function Dashboard(props) {
         </div>
         <Divider />
         <List>
-          {props.isLoggedIn ? <PublicListItems/> : <PrivateListItems/>}
+          {props.isLoggedIn ? <PublicListItems location={props.location}/> : <PrivateListItems location={props.location}/>}
         </List>
       </Drawer>
       <main className={classes.content}>

@@ -1,7 +1,7 @@
 if(process.env.REACT_APP_API_ENDPOINT.includes('8000')){
   console.log('ENDPOINT: Local host');
 } else {
-  console.log('ENDPOINT: Heroku');
+  console.log('ENDPOINT: Production');
 }
 
 export default {

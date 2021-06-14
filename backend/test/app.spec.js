@@ -14,10 +14,9 @@ describe('App', () => {
     testUsers,
     testSpells,
     testTags,
+    testBadges,
   } = helpers.makeSpellFixtures()
   const testUser = testUsers[0]
-
-  let byName = (a,b) => a.name < b.name ? -1 : 1;
 
   before('make knex instance', () => {
     db = knex({
@@ -81,4 +80,88 @@ describe('App', () => {
         })
     })
   })
+
+  describe(`GET /users/:id/badges`, () => { 
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+    beforeEach('insert tags', () =>
+      helpers.seedTags(
+        db,
+        testTags,
+      )
+    )
+    beforeEach('insert badges', () =>
+      helpers.seedBadges(
+        db,
+        testBadges,
+      )
+    )
+
+    it(`responds with 200 and a list of badges`, () => {
+      return supertest(app)
+        .get(`/users/1/badges`)
+        .expect(200)
+        .then(async (res) => {
+
+          expect(res.body.length).to.equal(testBadges.length)
+          expect(res.body.map(badge => badge.id).toString()).to.equal(testBadges.map(badge => badge.id).toString())
+        })
+    })
+  })
+
+  describe.only(`POST /users/:id/badges/:badgeName`, () => { 
+    beforeEach('insert users', () =>
+      helpers.seedUsers(
+        db,
+        testUsers,
+      )
+    )
+    beforeEach('insert spells', () =>
+      helpers.seedSpells(
+        db,
+        testSpells,
+      )
+    )
+    beforeEach('insert tags', () =>
+      helpers.seedTags(
+        db,
+        testTags,
+      )
+    )
+    beforeEach('insert badges', () =>
+      helpers.seedBadges(
+        db,
+        testBadges,
+      )
+    )
+
+    it(`POST responds with 401 if not authorized`, () => {
+      return supertest(app)
+        .post(`/users/1/badges/Badge_3`)
+        .expect(401)
+    })
+
+    it(`POST responds with 200 and new badge if authorized`, () => {
+      return supertest(app)
+        .post(`/users/1/badges/Test Badge`)
+        .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
+        .expect(200)
+        .then(async (res) => {
+
+          expect(res.body.name).to.equal('Test Badge')
+          expect(res.body.id).to.equal(3)
+        })
+    })
+  })
+
 })
