@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from "../../Util";
-import { Level } from "./Level";
+import { Level, LoginButton } from "./Level";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -27,8 +27,6 @@ import MailIcon from '@material-ui/icons/Mail';
 import Sound from 'react-sound';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typing from 'react-typing-animation';
-
-
 
 function Gong(){
   return <Sound
@@ -697,9 +695,8 @@ function Level1(props) {
   let [step, setStep] = useState(0);
     
     useEffect(() => {
-      setTimeout(()=>setStep(1), 1000)
-      setTimeout(()=>setStep(2), 3000)
-      setTimeout(()=>setStep(3), 6000)
+      setTimeout(()=>setStep(1), 2000)
+      setTimeout(()=>setStep(2), 4000)
     },[])
 
   const TitleScreen = (props) => {
@@ -709,27 +706,25 @@ function Level1(props) {
         <Fade in={true} timeout={1000}>
           <Card style={{ margin: 0, position: "absolute", top: "50%", left: "50%", msTransform: "translate(-50%,-50%)", transform: "translate(-50%,-50%)" }}>
             <CardContent>
-              {step >= 1 ?
               <div style={{ textAlign: "center", padding: "20px 40px 20px 40px" }}>
                 <h1>CodeSpells: The Nexus</h1>
                 <h2>A Game By ThoughtSTEM</h2>
               </div>
-                : ""}
-              {step >= 2 ?
+              {step >= 1 ?
                 <div style={{ textAlign: "center"}}>
                   <Typography paragraph>Would you like to play?</Typography>
                 </div>
                  : ""}
             </CardContent>
             <CardActions>
-              {step >= 3 ?
+              {step >= 2 ?
                 <ContinueButton onClick={() => setTitleScreenComplete(true)} />
                 : ""}
             </CardActions>
           </Card>
         </Fade>
+        <LoginButton/>
       </>
-
     );
   }
   
