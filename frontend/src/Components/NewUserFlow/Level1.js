@@ -100,7 +100,7 @@ function NewMessageNotification(props) {
         </Badge>
         <Typography>from</Typography>
         {props.from}
-        <Button size="small" onClick={ props.onOpenClicked() }>Open?</Button>
+        <Button size="small" onClick={ ()=>props.onOpenClicked() }>Open?</Button>
       </Grid>
     </Fade>
   </Grid>)
@@ -233,10 +233,10 @@ const ContinueButton = (props) => {
             <Grid item xs={6}>
               <MultipleChoiceQuestion question="Select your teacher preference" answers={[
                 { correct: true, text: <SockPuppetChip />, feedback: "Available!" },
-                { correct: false, text: <FakeChip name="Wizard of the Forest" />, feedback: "Sorry, your current level is too low for you to perfer this teacher." },
-                { correct: false, text: <FakeChip name="Super-intelligent AI" />, feedback: "Sorry, your current level would make the super intelligent AI laugh." },
+                { correct: false, text: <FakeChip name="Wizard of the Forest" />, feedback: "Sorry, your current level is too low for you to prefer this teacher." },
+                { correct: false, text: <FakeChip name="Super-intelligent AI" level={ 500 } />, feedback: "Sorry, your current level would make the super intelligent AI laugh." },
                 { correct: false, text: <FakeChip name={<span>The Nexus Devs</span>} />,feedback: "Sorry, your current level is too low for us to bother the Devs at this time." },
-                { correct: false, text: "None of these", feedback: "Sorry, your current level is to low for you to continue without a teacher." },
+                { correct: false, text: "None of these", feedback: "Sorry, your current level is too low for you to continue without a teacher." },
               ]}
                 buttonText="Check Availability"
                 onCorrect={() => props.setCanContinue(true)}
@@ -249,23 +249,21 @@ const ContinueButton = (props) => {
     );
   }
 
+
+
   // Decision: Do we need this question? What purpose does it serve?
   // Pro: breaks up video content, nice gamification rhythm
   function WhyIsMyTeacherASock(props) {
     return (
       <>
-        <Typography pargraph>I'm one of the Nexus's staff members.  I've written this personalized message to accompany the personalized introduction video above.</Typography>
-        <br />
-        <Typography pargraph>At the Nexus, we pride ourselves on how personal everything is.  If I sound funny, please know that the Nexus's algorithms will count how many times I say "personal," so when I write these personalized introductions, I try to make them very personal.</Typography>
-        <br />
-        <Typography pargraph>The Nexus is always listening.</Typography>
-        <br />
-        <Typography pargraph>Anyway, because I'm a Level 1 teacher, I'm allowed to attach a silly personality quiz at the end of this personalized message.</Typography>
-        <br />
-        <Typography pargraph>I wrote the questions and all the funny responses personally.  Please read all of them because the whole thing is supposed to buy me time to make your next video.</Typography>
-        <br />
-        <Typography pargraph>Sincerely,</Typography>
-        <Typography pargraph>Sock Puppet</Typography>
+        <Typography paragraph>Hi { props.username }!</Typography>
+        <Typography paragraph>I'm one of the Nexus's staff members.  I've written this personalized message to accompany the personalized introduction video above.</Typography>
+        <Typography paragraph>At the Nexus, we pride ourselves on how personal everything is.  If I sound funny, please know that the Nexus's algorithms will count how many times I say "personal," so when I write these personalized introductions, I try to make them very personal.</Typography>
+        <Typography paragraph>The Nexus is always listening.</Typography>
+        <Typography paragraph>Anyway, because I'm a Level 1 teacher, I'm allowed to attach a silly personality quiz at the end of this personalized message.</Typography>
+        <Typography paragraph>I wrote the questions and all the funny responses personally.  Please read all of them because the whole thing is supposed to buy me time to make your next video.</Typography>
+        <Typography paragraph>Sincerely,</Typography>
+        <Typography paragraph>Sock Puppet</Typography>
         <MultipleChoiceQuestion style={{marginTop: 50}}
           question="Your personal feelings matter.  Do you think a sock can teach?"
           answers={[
@@ -309,7 +307,7 @@ const ContinueButton = (props) => {
         <SBS
           leftSideTitle={<>
           <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
-          <Typography >Subject: Video Introduction!</Typography>
+          <Typography >Subject: Video Introduction!!</Typography>
           </>}
           leftSide={
             <div style={{backgroundColor: "black"}}>
@@ -345,7 +343,9 @@ const ContinueButton = (props) => {
 
   function PleaseWaitWhileSockPuppetCreatesContent(props) {
     var [step, setStep] = useState(0) 
-    useEffect(()=>{
+    var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-password-lesson-opened",false) 
+    
+    useEffect(() => {
       setTimeout(()=>setStep(1), 1000)
       setTimeout(()=>setStep(2), 3000)
       setTimeout(()=>setStep(3), 6000)
@@ -362,7 +362,7 @@ const ContinueButton = (props) => {
       setTimeout(()=>setStep(14), 39000)
     },[])
 
-    return (<div>
+    return (!messageOpened ? <div>
       {step >= 1 ?
           <Typography paragraph>
             <SockPuppetChip /> is making video content!
@@ -446,83 +446,64 @@ const ContinueButton = (props) => {
         <NewMessageNotification
           nexusSays={"Ah, here we go!"} 
           from={<SockPuppetChip />}
-          onOpenClicked={()=>{console.log("HI")}}
+          onOpenClicked={()=>{setMessageOpened(true)}}
           />  : ""
       }
 
       {step < 14 ? <CircularProgress style={{marginTop: 20}} /> : ""}
 
-      </div>)
-
+    </div> : <SockPuppetPasswordLesson setCanContinue={props.setCanContinue} username={ props.username }/>
+    )
   }
- 
-
-const MeetYourTeacher = (props) => {
-  let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
-  let [username, setUsername] = useLocalStorage("user-name", undefined);
-  let [usernameDecisionMade, setUsernameDecisionMade] = useState(undefined);
-  let [teacherDecisionMade, setTeacherDecisionMade] = useState(undefined);
-  let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
-  let [password, setPassword] = useState(undefined);
-
   
-  let reallyContinue = () => {
-    setCanContinue(false);
-    setCurrentPart(1 + currentPart)
-  }
-
-  function LightOrDark(props) {
-    //Add sounds effects to Light vs Dark mode
-
-    useEffect(() => {
-      if (window.localStorage.getItem("dark-mode")) {
-        props.setCanContinue(true)
-      }
-    }, [])
-
-    return (<>
-      <Grid container spacing={1}>
-        <Grid item xs={6}>
-          <Fade in={true} timeout={1000}>
-            <Typography style={{ marginBottom: 10 }}>In the Nexus,
-            <br/>
-            your preferences matter</Typography>
-          </Fade>
-        </Grid>
-        <Grid item xs={6}>
-          <Fade in={true} timeout={2000}>
-            <div>
-              <Typography>Light or Dark?</Typography>
-              <DarkModeSwitch
-                onChange={(darkMode) => {
-                  //Triggers a re-render, so we'll use local storage instead of state
-                  setDarkModeDecisionMade(true)
-
-                  props.setCanContinue(true)
-                }}
-              /></div>
-          </Fade>
-        </Grid>
-      </Grid>
-    </>)
-  }
-
-
-
-  function SockPuppetPasswordLesson(props){
+function SockPuppetPasswordLesson(props) {
     let [videoFinished, setVideoFinished] = useState(false);
     let [playing, setPlaying] = useState(false);
+    let [password, setPassword] = useState(undefined);
+    /*
+    *out of breath* I'm sorry! I was rushing to put together this content for you.
+   I didn't have time to memorize the Nexus' introductory script, so I'm
+   just going to read it to you:
 
-    return(
+   *someone holds up index card at edge of frame*
+   Welcome to the journey of a lifetime! I'm here to train you to become
+   a CODING WIZARD! 
+   
+   The first lesson of magic is that wizards have a public name *pause* AND 
+   a secret *true* name.
+   If someone knows your public name AND your secret true name, they can
+   steal all of your spells.
+
+   Remember, your secret true name needs to have a lower case letter, an
+   upper case letter, a special character, a number, another lower case
+   letter and any of the additional random constraints that the Nexus 
+   lists below.
+
+   *index card is put down, pause*
+
+   And just between you and me, the Nexus analytics show that this step is
+   where most users drop off. And it counts against me everytime one of my
+   students leaves before they've even started. So look I know you don't even
+   know me, and I know I'm just a sock puppet, but could you please 
+   enter a password... It would mean a lot to me. I would owe you a favor.
+
+    */
+  
+    return (
       <SBS
-        leftSideTitle={<p>Are you ready for your first lesson? Sock Puppet is going to teach you the First Rule of magic.</p>}
+        leftSideTitle={
+          <>
+            <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
+            <Typography >Subject: Your TRUE wizard name!</Typography>
+          </>}
         leftSide={
           <>
+          <div style={{backgroundColor: "black"}}>
             <ReactPlayer
               playsInline
               fluid={false}
               width={"100%"}
-              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-2.mp4"
+              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e2-sock.mp4"
               controls={true}
               style={{}}
               playing={playing}
@@ -530,84 +511,182 @@ const MeetYourTeacher = (props) => {
               progressInterval={100}
               onProgress={(p) => { }}
             />
+          </div>
           </>
         }
         rightSide={videoFinished ?
-          <><PasswordInput setCanContinue={ props.setCanContinue} />
-          </> : ""}
+          <Fade in={true} timeout={1000}>
+            <div>
+            <Typography paragraph>
+              Dear {props.username},
+            </Typography>
+            <Typography paragraph>
+              I promise that if you do this for me, I'll make it up to you.   
+            </Typography>
+            <Typography paragraph>
+              - Sock Puppet
+            </Typography>
+            <Typography paragraph>
+              P.S. Don't use a "true name" you use on other sites.
+            </Typography>
+            <PasswordInput setCanContinue={props.setCanContinue}>
+            </PasswordInput>
+            </div>
+          </Fade> : ""}
       />
 
     )
   }
 
-  function PasswordInput(props){
-  
+function PasswordInput(props) {
+    let [passwordInput, setPasswordInput] = useState(undefined);
+    let [passConfirmInput, setPasswConfirmInput] = useState(undefined);
+
     return (<>
-      <h1 onClick={ () => props.setCanContinue(true) }>Put your password here...</h1>
-       
-    </>)
-  }  
-  
+              <form  noValidate>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      name="password"
+                      label="True Name"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      inputRef={passwordInput}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      variant="outlined"
+                      required
+                      fullWidth
+                      name="confirm-password"
+                      label="Confirm True Name"
+                      type="password"
+                      id="confirm-password"
+                      autoComplete="current-password"
+                      inputRef={passConfirmInput}
+                    />
+                  </Grid>
+                </Grid>
+              </form>
+            </>)
+  }
+
+const MeetYourTeacher = (props) => {
+              let[darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
+  let [username, setUsername] = useLocalStorage("user-name", undefined);
+  let [usernameDecisionMade, setUsernameDecisionMade] = useState(undefined);
+  let [teacherDecisionMade, setTeacherDecisionMade] = useState(undefined);
+  let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
+
+  let reallyContinue = () => {
+              setCanContinue(false);
+    setCurrentPart(1 + currentPart)
+  }
+
+  function LightOrDark(props) {
+              //Add sounds effects to Light vs Dark mode
+
+              useEffect(() => {
+                if (window.localStorage.getItem("dark-mode")) {
+                  props.setCanContinue(true)
+                }
+              }, [])
+
+    return (<>
+              <Grid container spacing={1}>
+                <Grid item xs={6}>
+                  <Fade in={true} timeout={1000}>
+                    <Typography style={{ marginBottom: 10 }}>In the Nexus,
+            <br />
+            your preferences matter</Typography>
+                  </Fade>
+                </Grid>
+                <Grid item xs={6}>
+                  <Fade in={true} timeout={2000}>
+                    <div>
+                      <Typography>Light or Dark?</Typography>
+                      <DarkModeSwitch
+                        onChange={(darkMode) => {
+                          //Triggers a re-render, so we'll use local storage instead of state
+                          setDarkModeDecisionMade(true)
+
+                          props.setCanContinue(true)
+                        }}
+                      /></div>
+                  </Fade>
+                </Grid>
+              </Grid>
+            </>)
+  }
+
+
+
+
+
   function Level1CompleteScreen(props) {
     return (
-      <>
-        <p>Congratulations! You've completed Level 1! You're on your way to being a Mage!</p>
-        <Button onClick={() => { }}>Continue</Button>
-      </>
+            <>
+              <p>Congratulations! You've completed Level 1! You're on your way to being a Mage!</p>
+              <Button onClick={() => { }}>Continue</Button>
+            </>
     );
   }
 
 
   //let setTitle = props.setTitle
-  const [currentPart,setCurrentPart] = useLocalStorage("lvl1:currentPart", 0) 
-  const [canContinue,setCanContinue] = useState(false) 
+  const [currentPart,setCurrentPart] = useLocalStorage("lvl1:currentPart", 0)
+  const [canContinue,setCanContinue] = useState(false)
 
-  
+
   return (
-    <>
-      {currentPart == 0 && !canContinue ? <Gong /> : "" /* First visit */}
-      <CardContent>
-        {[
-          <UserNameForm setCanContinue={setCanContinue} setUsername={setUsername} username={username}/>,
-          <LightOrDark setCanContinue={setCanContinue} />,
-          <ChooseYourTeacher setCanContinue={setCanContinue} />,
-          <SockPuppetTeacherIntroduction setCanContinue={setCanContinue} username={username} />,
-          <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={setCanContinue} username={username} />,
-          <SockPuppetPasswordLesson setCanContinue={setCanContinue} />,
-          <Level1CompleteScreen />][currentPart]}
-      </CardContent>
+            <>
+              {currentPart == 0 && !canContinue ? <Gong /> : "" /* First visit */}
+              <CardContent>
+                {[
+                  <UserNameForm setCanContinue={setCanContinue} setUsername={setUsername} username={username} />,
+                  <LightOrDark setCanContinue={setCanContinue} />,
+                  <ChooseYourTeacher setCanContinue={setCanContinue} />,
+                  <SockPuppetTeacherIntroduction setCanContinue={setCanContinue} username={username} />,
+                  <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={setCanContinue} username={username} />,
+                  <Level1CompleteScreen />][currentPart]}
+              </CardContent>
 
 
-      <CardActions>
-       {currentPart ? 
-        <Button key="back-button" onClick={() => { setCurrentPart(currentPart - 1); setCanContinue(false) }}>Back</Button> :
-        ""}
+              <CardActions>
+                {currentPart ?
+                  <Button key="back-button" onClick={() => { setCurrentPart(currentPart - 1); setCanContinue(false) }}>Back</Button> :
+                  ""}
 
-       {canContinue ?
-        <ContinueButton key="continue-button" onClick={reallyContinue} />
-      : ""}
-      </CardActions>
-    </>
+                {canContinue ?
+                  <ContinueButton key="continue-button" onClick={reallyContinue} />
+                  : ""}
+              </CardActions>
+            </>
   );
  }
 
 const SBS = (props) => {
   return (
-    <>
-          <Card>
-            <CardHeader title={
-              <span style={{ fontSize: 16 }}>  
-                {props.leftSideTitle}
-              </span>
-            }></CardHeader>
-            { props.leftSide }
-          </Card>
-          <Card style={{ height: "100%" }}>
-            <CardContent>
-              {props.rightSide }
-            </CardContent>
-          </Card>
-    </>)
+            <>
+              <Card>
+                <CardHeader title={
+                  <span style={{ fontSize: 16 }}>
+                    {props.leftSideTitle}
+                  </span>
+                }></CardHeader>
+                {props.leftSide}
+              </Card>
+              <Card style={{ height: "100%" }}>
+                <CardContent>
+                  {props.rightSide}
+                </CardContent>
+              </Card>
+            </>)
 }
 
 /* Character Creation Mode
@@ -619,8 +698,8 @@ First law of magic: Choose a secret name (mini password lesson, special characte
 function Level1(props) {
   const [title, setTitle] = useState("Character creation");
   return (<Level setBadges={props.setBadges} number={1} subtitle={title} >
-    <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle}  />
-  </Level>)
+              <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle} />
+            </Level>)
 }
 
 export default Level1
