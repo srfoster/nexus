@@ -313,7 +313,7 @@ const UserNameForm = (props) => {
               <ReactPlayer
                 fluid={false}
                 width={"100%"}
-                url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-2.mp4"
+                url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-3.mp4"
                 controls={true}
                 style={{}}
                 playing={playing}
@@ -502,7 +502,7 @@ function SockPuppetPasswordLesson(props) {
               playsInline
               fluid={false}
               width={"100%"}
-              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e2-sock.mp4"
+              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e2-sock-2.mp4"
               controls={true}
               style={{}}
               playing={playing}
