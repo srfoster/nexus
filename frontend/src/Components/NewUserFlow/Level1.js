@@ -38,49 +38,48 @@ function Gong(){
   />
 }
 
-  function MultipleChoiceQuestion(props) {
-    const [value, setValue] = React.useState('');
-    const [error, setError] = React.useState(false);
-    const [helperText, setHelperText] = React.useState(' ');
-    
+function MultipleChoiceQuestion(props) {
+  const [value, setValue] = React.useState('');
+  const [error, setError] = React.useState(false);
+  const [helperText, setHelperText] = React.useState(' ');
 
-    const handleRadioChange = (event) => {
-      setValue(event.target.value);
-      setHelperText(' ');
-      setError(false);
-    };
+  const handleRadioChange = (event) => {
+    setValue(event.target.value);
+    setHelperText(' ');
+    setError(false);
+  };
 
-    const handleSubmit = () => {
-      let selection = props.answers[Number(value)]
-      if (selection) {
-        setHelperText(selection.feedback);
-        setError(!selection.correct);
-        if (selection.correct) {
-          props.onCorrect();
-        } else {
-          props.onIncorrect();
-        }
+  const handleSubmit = () => {
+    let selection = props.answers[Number(value)]
+    if (selection) {
+      setHelperText(selection.feedback);
+      setError(!selection.correct);
+      if (selection.correct) {
+        props.onCorrect();
+      } else {
+        props.onIncorrect();
       }
     }
-
-    return (
-      <>
-        <Fade in={true} timeout={ 1000 }>
-          <>
-            <FormControl component="fieldset" error={error}
-            style={{display:"flex", ...props.style}}>
-              <FormLabel component="legend">{props.question}</FormLabel>
-              <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
-                {props.answers.map((e, i) => { return <FormControlLabel value={"" + i} control={<Radio />} label={e.text} /> })}
-              </RadioGroup>
-              <FormHelperText>{helperText}</FormHelperText>
-            </FormControl>
-            <Button size="small" onClick={handleSubmit} type="submit" variant="solid" color="primary">{props.buttonText}</Button>
-          </>
-        </Fade>
-      </>
-    );
   }
+
+  return (
+    <>
+      <Fade in={true} timeout={1000}>
+        <>
+          <FormControl component="fieldset" error={error}
+            style={{ display: "flex", ...props.style }}>
+            <FormLabel component="legend">{props.question}</FormLabel>
+            <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
+              {props.answers.map((e, i) => { return <FormControlLabel value={"" + i} control={<Radio />} label={e.text} /> })}
+            </RadioGroup>
+            <FormHelperText>{helperText}</FormHelperText>
+          </FormControl>
+          <Button size="small" onClick={handleSubmit} type="submit" variant="solid" color="primary">{props.buttonText}</Button>
+        </>
+      </Fade>
+    </>
+  );
+}
 
 
 function NewMessageNotification(props) {
@@ -106,54 +105,55 @@ function NewMessageNotification(props) {
   </Grid>)
 }
 
-  function SockPuppetChip(){
-    return <Chip avatar={<Avatar alt="Sock Puppet" src="/static/images/avatar/1.jpg" />} label="Sock Puppet (Lvl 1)"></Chip>
-  }
+function SockPuppetChip() {
+  return <Chip avatar={<Avatar alt="Sock Puppet" src="/static/images/avatar/1.jpg" />} label="Sock Puppet (Lvl 1)"></Chip>
+}
 
-  function FakeChip(props){
-    return <Chip avatar={<Avatar alt={props.name} src="/static/images/avatar/1.jpg" />} label={<span>{props.name} { " (Lvl " + (props.level !== undefined ? props.level : 10*props.name.length) + ")"}</span>}></Chip>
-  }
+function FakeChip(props) {
+  return <Chip avatar={<Avatar alt={props.name} src="/static/images/avatar/1.jpg" />} label={<span>{props.name} {" (Lvl " + (props.level !== undefined ? props.level : 10 * props.name.length) + ")"}</span>}></Chip>
+}
 
 const ContinueButton = (props) => {
   return (
     <Fade in={true} timeout={1000}>
-      <Button color="secondary" style={{marginLeft: "auto"}} onClick={props.onClick}>Next</Button>
+      <Button color="secondary" style={{ marginLeft: "auto" }} onClick={props.onClick}>Next</Button>
     </Fade>
   );
- }
+}
 
-  const UserNameForm = (props) => {
-    const [checking, setChecking] = useState(false);
-    const [available, setAvailable] = useLocalStorage("user-name-available", undefined);
-    const [username, setUsernameLocal] = useState(props.username);
 
-    useEffect(()=>{
-      if(username && available){
-        props.setCanContinue(true)
-      }
-    },[])
+const UserNameForm = (props) => {
+  const [checking, setChecking] = useState(false);
+  const [available, setAvailable] = useLocalStorage("user-name-available", undefined);
+  const [username, setUsernameLocal] = useState(props.username);
 
-    function checkAvailability(){
-      setChecking(true)
-
-      //Would do network call here...
-      setTimeout(()=>{
-        setChecking(false) 
-        setAvailable(true) 
-
-        //Causing annoying re-render...
-        props.setUsername(username); 
-        props.setCanContinue(true)
-      },1000)
+  useEffect(() => {
+    if (username && available) {
+      props.setCanContinue(true)
     }
- 
-    function OneMoment(props) {
-      return (
-        <Typography>One moment...</Typography>
-      )
-    }
+  }, [])
 
-    function UsernameInput(){
+  function checkAvailability() {
+    setChecking(true)
+
+    //Would do network call here...
+    setTimeout(() => {
+      setChecking(false)
+      setAvailable(true)
+
+      //Causing annoying re-render...
+      props.setUsername(username);
+      props.setCanContinue(true)
+    }, 1000)
+  }
+
+  function OneMoment(props) {
+    return (
+      <Typography>One moment...</Typography>
+    )
+  }
+
+  function UsernameInput() {
     return (
       available ?
         <>
@@ -161,7 +161,7 @@ const ContinueButton = (props) => {
           <Chip avatar={<AccountCircle />}
             label={username} />
         </>
-          : (
+        : (
           <>
             <TextField
               autoFocus
@@ -178,39 +178,38 @@ const ContinueButton = (props) => {
             />
           </>
         )
-      )
+    )
   }
 
-    return (<Grid container spacing={1}>
-      <Fade in={true} timeout={1000}>
-
-        <Grid item xs={6} >
-          <Typography>At the Nexus, what shall we call you?</Typography>
+  return (<Grid container spacing={1}>
+    <Fade in={true} timeout={1000}>
+      <Grid item xs={6} >
+        <Typography>At the Nexus, what shall we call you?</Typography>
       </Grid>
-      </Fade>
-      <Fade in={true} timeout={2000}>
+    </Fade>
+    <Fade in={true} timeout={5000}>
       <Grid item xs={6}>
-      {checking ? OneMoment() :  UsernameInput() 
-      
-      }
+        {checking ? OneMoment() : UsernameInput()
 
-      {username === undefined || checking ? "" :
-        <Fade key="check-available" in={true} timeout={1000}>
-          <Button size="small" onClick={() => {
-          if(!available){
-            checkAvailability()
-          } else{
-            setAvailable(undefined)
-            props.setCanContinue(false)
-          }
         }
-        }>{!available ? "Check Availability" : "Undo?"}</Button>
-        </Fade>}
+
+        {username === undefined || checking ? "" :
+          <Fade key="check-available" in={true} timeout={1000}>
+            <Button size="small" onClick={() => {
+              if (!available) {
+                checkAvailability()
+              } else {
+                setAvailable(undefined)
+                props.setCanContinue(false)
+              }
+            }
+            }>{!available ? "Check Availability" : "Undo?"}</Button>
+          </Fade>}
 
       </Grid>
-      </Fade>
-    </Grid>)
-  }
+    </Fade>
+  </Grid>)
+}
 
 
 
@@ -307,7 +306,7 @@ const ContinueButton = (props) => {
         <SBS
           leftSideTitle={<>
           <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
-          <Typography >Subject: Video Introduction!!</Typography>
+          <Typography>Subject: Video Introduction!!</Typography>
           </>}
           leftSide={
             <div style={{backgroundColor: "black"}}>
@@ -375,70 +374,70 @@ const ContinueButton = (props) => {
       
       {step >= 3 ? 
         <Fade in={true} timeout={500}>
-          <Typography pargraph style={{ marginBottom: 30 }}>
+          <Typography paragraph style={{ marginBottom: 30 }}>
             The Nexus prides itself in its content.
           </Typography>
         </Fade>
       : ""}
       {step >= 4 ? 
         <Fade in={true} timeout={500}>
-          <Typography pargraph style={{ marginBottom: 30 }}>
+          <Typography paragraph style={{ marginBottom: 30 }}>
             At the Nexus, your experience is our highest priority.   :SmileEmoji:
           </Typography>
         </Fade>
       : ""}
       {step >= 5 ? 
         <Fade in={true} timeout={500}>
-          <Typography pargraph style={{ marginBottom: 30 }}>
+          <Typography paragraph style={{ marginBottom: 30 }}>
             At the Nexus, our teachers are carefully chosen for their teaching prowess
           </Typography>
         </Fade>
       : ""}
       {step >= 6 ? 
         <Fade in={true} timeout={500}>
-          <Typography pargraph style={{ marginBottom: 30 }}>
+          <Typography paragraph style={{ marginBottom: 30 }}>
             and their ability to produce educational content
           </Typography>
         </Fade>
       : ""}
       {step >= 7 ? 
         <Fade in={true} timeout={500}>
-          <Typography pargraph style={{ marginBottom: 30 }}>
+          <Typography paragraph style={{ marginBottom: 30 }}>
             under strict deadlines
           </Typography>
         </Fade>
       : ""}
       {step >= 8 ? 
         <Fade in={true} timeout={500}>
-          <Typography pargraph style={{ marginBottom: 30 }}>
+          <Typography paragraph style={{ marginBottom: 30 }}>
             that the Nexus strives for in our continuing mission
           </Typography>
         </Fade>
       : ""}
       {step >= 9 ? 
         <Fade in={true} timeout={500}>
-          <Typography pargraph style={{ marginBottom: 30 }}>
+          <Typography paragraph style={{ marginBottom: 30 }}>
             to meet your educational needs
           </Typography>
         </Fade>
       : ""}
       {step >= 10 ? 
-        <Typography pargraph style={{marginBottom: 30}}>
+        <Typography paragraph style={{marginBottom: 30}}>
             ...
         </Typography> : ""
       }
       {step >= 11 ? 
-        <Typography pargraph style={{marginBottom: 30}}>
+        <Typography paragraph style={{marginBottom: 30}}>
             Sometimes our low-level teachers, like <SockPuppetChip />
         </Typography> : ""
       }
       {step >= 12 ? 
-        <Typography pargraph style={{marginBottom: 30}}>
+        <Typography paragraph style={{marginBottom: 30}}>
             may not always meet the expected deadlines
         </Typography> : ""
       }
       {step >= 13 ? 
-        <Typography pargraph style={{marginBottom: 30}}>
+        <Typography paragraph style={{marginBottom: 30}}>
           that we strive for
         </Typography> : ""
       }
@@ -577,7 +576,7 @@ function PasswordInput(props) {
   }
 
 const MeetYourTeacher = (props) => {
-              let[darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
+  let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
   let [username, setUsername] = useLocalStorage("user-name", undefined);
   let [usernameDecisionMade, setUsernameDecisionMade] = useState(undefined);
   let [teacherDecisionMade, setTeacherDecisionMade] = useState(undefined);
@@ -623,9 +622,6 @@ const MeetYourTeacher = (props) => {
               </Grid>
             </>)
   }
-
-
-
 
 
   function Level1CompleteScreen(props) {
@@ -696,10 +692,51 @@ MEET YOUR TEACHER! (Googly eye sock puppet)
 First law of magic: Choose a secret name (mini password lesson, special character and number)
 */
 function Level1(props) {
+  const [titleScreenComplete, setTitleScreenComplete] = useState(false);
   const [title, setTitle] = useState("Character creation");
-  return (<Level setBadges={props.setBadges} number={1} subtitle={title} >
-              <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle} />
-            </Level>)
+  let [step, setStep] = useState(0);
+    
+    useEffect(() => {
+      setTimeout(()=>setStep(1), 1000)
+      setTimeout(()=>setStep(2), 3000)
+      setTimeout(()=>setStep(3), 6000)
+    },[])
+
+  const TitleScreen = (props) => {
+
+    return (
+      <>
+        <Fade in={true} timeout={1000}>
+          <Card style={{ margin: 0, position: "absolute", top: "50%", left: "50%", msTransform: "translate(-50%,-50%)", transform: "translate(-50%,-50%)" }}>
+            <CardContent>
+              {step >= 1 ?
+              <div style={{ textAlign: "center", padding: "20px 40px 20px 40px" }}>
+                <h1>CodeSpells: The Nexus</h1>
+                <h2>A Game By ThoughtSTEM</h2>
+              </div>
+                : ""}
+              {step >= 2 ?
+                <div style={{ textAlign: "center"}}>
+                  <Typography paragraph>Would you like to play?</Typography>
+                </div>
+                 : ""}
+            </CardContent>
+            <CardActions>
+              {step >= 3 ?
+                <ContinueButton onClick={() => setTitleScreenComplete(true)} />
+                : ""}
+            </CardActions>
+          </Card>
+        </Fade>
+      </>
+
+    );
+  }
+  
+  return (!titleScreenComplete ? <TitleScreen/> :
+  <Level setBadges={props.setBadges} number={1} subtitle={title} >
+    <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle} />
+  </Level>)
 }
 
 export default Level1
