@@ -521,7 +521,7 @@ function SockPuppetPasswordLesson(props) {
               Dear {props.username},
             </Typography>
             <Typography paragraph>
-              I promise that if you do this for me, I'll make it up to you.   
+              I promise that if you do this for me, I'll personally make it worth your while.
             </Typography>
             <Typography paragraph>
               - Sock Puppet
