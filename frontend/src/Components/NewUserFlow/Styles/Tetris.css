@@ -3,7 +3,7 @@
     justify-content: center;
   }
 .piece-view{
-  margin: 0px 20px 20px 20px;
+  margin: 0px 5px 5px 5px;
 }
 .points {
   display: flex;
@@ -18,13 +18,16 @@
   justify-content: center;
 }
 
-
+.game-board{
+  table-layout: fixed;
+}
 .game-block {
     margin: 0;
     padding: 0;
     width: 1.5em;
     height: 1.5em;
     border: 1px solid #ddd;
+    border-radius: 20px;
   }
   .piece-i {
     background-color: #ec858b;
