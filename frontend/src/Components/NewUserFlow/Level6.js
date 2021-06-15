@@ -6,9 +6,9 @@ import '../Widgets/Tetris.css'
 function Level6(props) {
   return (
     <React.Fragment>
-      <Level number={6} subtitle={"Tetris...? Why Not?"}>
+      <Level number={6} subtitle={"Tetris...!? Why Not?"}>
      <ReactTetris />
-    <ContinueButton
+    <ContinueButton style={{ marginLeft: "auto" }}
       onComplete={() => {
         props.setBadges(props.badges.concat([{ name: props.badgeName }]));
       }}

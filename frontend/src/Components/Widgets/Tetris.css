@@ -1,3 +1,23 @@
+.tetris {
+    display: flex;
+    justify-content: center;
+  }
+.piece-view{
+  margin: 0px 20px 20px 20px;
+}
+.points {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-right: 5px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.title{
+  display: flex;
+  justify-content: center;
+}
+
 
 .game-block {
     margin: 0;
