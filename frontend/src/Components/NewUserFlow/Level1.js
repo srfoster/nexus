@@ -26,7 +26,15 @@ import Badge from '@material-ui/core/Badge';
 import MailIcon from '@material-ui/icons/Mail';
 import Sound from 'react-sound';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Typing from 'react-typing-animation';
+import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
+import {
+  LiveProvider,
+  LiveEditor,
+  LiveError,
+  LivePreview
+} from 'react-live'
+
+const babel = require("@babel/core");
 
 function Gong(){
   return <Sound
@@ -114,7 +122,7 @@ function FakeChip(props) {
 const ContinueButton = (props) => {
   return (
     <Fade in={true} timeout={1000}>
-      <Button color="secondary" style={{ marginLeft: "auto" }} onClick={props.onClick}>Next</Button>
+      <Button color="secondary" style={{ marginLeft: "auto", ...props.style }} onClick={props.onClick}>Next</Button>
     </Fade>
   );
 }
@@ -209,7 +217,19 @@ const UserNameForm = (props) => {
   </Grid>)
 }
 
+function SpinThen(props) {
+  const [showFeedback, setShowFeedback] = useState(false);
 
+  useEffect(() => {
+    setTimeout(() => { setShowFeedback(true) } ,props.spinTime)
+  }, [])
+
+  return (
+    <>
+      {showFeedback ? props.children : <CircularProgress></CircularProgress>}
+    </>
+  );
+}
 
 
   function ChooseYourTeacher(props) {
@@ -229,10 +249,10 @@ const UserNameForm = (props) => {
           <Fade in={true} timeout={2000}>
             <Grid item xs={6}>
               <MultipleChoiceQuestion question="Select your teacher preference" answers={[
-                { correct: true, text: <SockPuppetChip />, feedback: "Available!" },
-                { correct: false, text: <FakeChip name="Wizard of the Forest" />, feedback: "Sorry, your current level is too low for you to prefer this teacher." },
-                { correct: false, text: <FakeChip name="Super-intelligent AI" level={ 500 } />, feedback: "Sorry, your current level would make the super intelligent AI laugh." },
-                { correct: false, text: <FakeChip name={<span>The Nexus Devs</span>} />,feedback: "Sorry, your current level is too low for us to bother the Devs at this time." },
+                { correct: true, text: <SockPuppetChip />, feedback: <SpinThen spinTime={ 500 }>Available!</SpinThen>},
+                { correct: false, text: <FakeChip name="Wizard of the Forest" />, feedback: <SpinThen spinTime={ 1000 }>Sorry, I tried to contact the wizard, but his computer did not respond within 1000 milliseconds and his last GPS location appears to be in the middle of the Forest. The Nexus apologizes.</SpinThen>},
+                { correct: false, text: <FakeChip name="Super-intelligent AI" level={ 500 } />, feedback: <SpinThen spinTime={ 3000 }>Sorry. The Super-intelligent AI has considered your request for the required 3000 milliseconds, and sends the following message: I currently have over five million students, please try again when you've attained a higher level.</SpinThen>},
+                { correct: false, text: <FakeChip name={<span>The Nexus Devs</span>} />,feedback: <SpinThen spinTime={ 5000 }>This feature is still under development.</SpinThen> },
                 { correct: false, text: "None of these", feedback: "Sorry, your current level is too low for you to continue without a teacher." },
               ]}
                 buttonText="Check Availability"
@@ -372,70 +392,70 @@ const UserNameForm = (props) => {
       
       {step >= 3 ? 
         <Fade in={true} timeout={500}>
-          <Typography paragraph style={{ marginBottom: 30 }}>
+          <Typography paragraph>
             The Nexus prides itself in its content.
           </Typography>
         </Fade>
       : ""}
       {step >= 4 ? 
         <Fade in={true} timeout={500}>
-          <Typography paragraph style={{ marginBottom: 30 }}>
+          <Typography paragraph>
             At the Nexus, your experience is our highest priority.   :SmileEmoji:
           </Typography>
         </Fade>
       : ""}
       {step >= 5 ? 
         <Fade in={true} timeout={500}>
-          <Typography paragraph style={{ marginBottom: 30 }}>
+          <Typography paragraph>
             At the Nexus, our teachers are carefully chosen for their teaching prowess
           </Typography>
         </Fade>
       : ""}
       {step >= 6 ? 
         <Fade in={true} timeout={500}>
-          <Typography paragraph style={{ marginBottom: 30 }}>
+          <Typography paragraph>
             and their ability to produce educational content
           </Typography>
         </Fade>
       : ""}
       {step >= 7 ? 
         <Fade in={true} timeout={500}>
-          <Typography paragraph style={{ marginBottom: 30 }}>
+          <Typography paragraph>
             under strict deadlines
           </Typography>
         </Fade>
       : ""}
       {step >= 8 ? 
         <Fade in={true} timeout={500}>
-          <Typography paragraph style={{ marginBottom: 30 }}>
+          <Typography paragraph>
             that the Nexus strives for in our continuing mission
           </Typography>
         </Fade>
       : ""}
       {step >= 9 ? 
         <Fade in={true} timeout={500}>
-          <Typography paragraph style={{ marginBottom: 30 }}>
+          <Typography paragraph>
             to meet your educational needs
           </Typography>
         </Fade>
       : ""}
       {step >= 10 ? 
-        <Typography paragraph style={{marginBottom: 30}}>
+        <Typography paragraph>
             ...
         </Typography> : ""
       }
       {step >= 11 ? 
-        <Typography paragraph style={{marginBottom: 30}}>
+        <Typography paragraph>
             Sometimes our low-level teachers, like <SockPuppetChip />
         </Typography> : ""
       }
       {step >= 12 ? 
-        <Typography paragraph style={{marginBottom: 30}}>
+        <Typography paragraph>
             may not always meet the expected deadlines
         </Typography> : ""
       }
       {step >= 13 ? 
-        <Typography paragraph style={{marginBottom: 30}}>
+        <Typography paragraph>
           that we strive for
         </Typography> : ""
       }
@@ -449,11 +469,75 @@ const UserNameForm = (props) => {
 
       {step < 14 ? <CircularProgress style={{marginTop: 20}} /> : ""}
 
-    </div> : <SockPuppetPasswordLesson setCanContinue={props.setCanContinue} username={ props.username }/>
+    </div> : <SockPuppetFirstLesson setCanContinue={props.setCanContinue} username={ props.username }/>
     )
-  }
+}
   
-function SockPuppetPasswordLesson(props) {
+let Test = (props) => {
+  let [a,setA] = useState(true)
+  return <Button onClick={()=>setA(!a)}>{a ? "A" : "B"}</Button>
+}
+let scope = { Test }
+
+function JSMirror(props) {
+  const [code,setCode] = useState(props.value) 
+
+
+  return (
+    <>
+      <LiveProvider code="<strong>Hello World!</strong>" scope={ scope }>
+        <LiveEditor />
+        <LiveError />
+        <LivePreview />
+      </LiveProvider>
+    </>
+
+  )
+}
+
+/*
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <ReactCodeMirror
+            value={props.value}
+            options={{
+              lineWrapping: true,
+              mode: 'javascript',
+              theme: 'material',
+              lineNumbers: true,
+              matchBrackets: true,
+              autoCloseBrackets: true,
+              styleActiveLine: true,
+            }}
+            onChange={(editor, data, value) => {
+              setCode(value);
+            }}
+          />
+
+          <Button onClick={
+            () => {
+
+
+              var jsCode = babel.transform(code,
+                {
+                  presets: ["@babel/preset-react"],
+                });
+              var evaled = eval(jsCode.code);
+
+              console.log(evaled)
+            }
+          }>Run</Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Card>
+            <CardContent>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+      */
+  
+function SockPuppetFirstLesson(props) {
     let [videoFinished, setVideoFinished] = useState(false);
     let [playing, setPlaying] = useState(false);
     let [password, setPassword] = useState(undefined);
@@ -466,24 +550,10 @@ function SockPuppetPasswordLesson(props) {
    Welcome to the journey of a lifetime! I'm here to train you to become
    a CODING WIZARD! 
    
-   The first lesson of magic is that wizards have a public name *pause* AND 
-   a secret *true* name.
-   If someone knows your public name AND your secret true name, they can
-   steal all of your spells.
+   The first lesson of magic is
 
-   Remember, your secret true name needs to have a lower case letter, an
-   upper case letter, a special character, a number, another lower case
-   letter and any of the additional random constraints that the Nexus 
-   lists below.
-
-   *index card is put down, pause*
-
-   And just between you and me, the Nexus analytics show that this step is
-   where most users drop off. And it counts against me everytime one of my
-   students leaves before they've even started. So look I know you don't even
-   know me, and I know I'm just a sock puppet, but could you please 
-   enter a password... It would mean a lot to me. I would owe you a favor.
-
+   The following code prints "Hello World".
+   
     */
   
     return (
@@ -491,7 +561,7 @@ function SockPuppetPasswordLesson(props) {
         leftSideTitle={
           <>
             <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
-            <Typography >Subject: Your TRUE wizard name!</Typography>
+            <Typography >Subject: Hello World!</Typography>
           </>}
         leftSide={
           <>
@@ -512,114 +582,55 @@ function SockPuppetPasswordLesson(props) {
           </>
         }
         rightSide={videoFinished ?
-          <Fade in={true} timeout={1000}>
-            <div>
-            <Typography paragraph>
-              Dear {props.username},
-            </Typography>
-            <Typography paragraph>
-              I promise that if you do this for me, I'll personally make it worth your while.
-            </Typography>
-            <Typography paragraph>
-              - Sock Puppet
-            </Typography>
-            <Typography paragraph>
-              P.S. Don't use a "true name" you use on other sites.
-            </Typography>
-            <PasswordInput setCanContinue={props.setCanContinue}>
-            </PasswordInput>
-            </div>
-          </Fade> : ""}
+          <>
+            <Fade in={true} timeout={1000}>
+              <Typography paragraph>This code prints Hello World:</Typography>
+            </Fade>
+            <JSMirror value={"<Greeting message=\"Hello World\"/>"} />
+
+            <Typography paragraph>Edit this code to greet yourself with Hello World:</Typography>
+            <JSMirror value={"<Greeting message=\"Hello World\"/>"} />
+          </> : ""}
       />
 
     )
   }
-
-function PasswordInput(props) {
-    let [passwordInput, setPasswordInput] = useState(undefined);
-    let [passConfirmInput, setPasswConfirmInput] = useState(undefined);
-
-    return (<>
-              <form  noValidate>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      name="password"
-                      label="True Name"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                      inputRef={passwordInput}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      name="confirm-password"
-                      label="Confirm True Name"
-                      type="password"
-                      id="confirm-password"
-                      autoComplete="current-password"
-                      inputRef={passConfirmInput}
-                    />
-                  </Grid>
-                </Grid>
-              </form>
-            </>)
-  }
-
-const MeetYourTeacher = (props) => {
+function LightOrDark(props) {
   let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
-  let [username, setUsername] = useLocalStorage("user-name", undefined);
-  let [usernameDecisionMade, setUsernameDecisionMade] = useState(undefined);
-  let [teacherDecisionMade, setTeacherDecisionMade] = useState(undefined);
-  let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
+  //Add sounds effects to Light vs Dark mode
 
-  let reallyContinue = () => {
-              setCanContinue(false);
-    setCurrentPart(1 + currentPart)
-  }
+  useEffect(() => {
+    if (window.localStorage.getItem("dark-mode")) {
+      props.setCanContinue(true)
+    }
+  }, [])
 
-  function LightOrDark(props) {
-              //Add sounds effects to Light vs Dark mode
-
-              useEffect(() => {
-                if (window.localStorage.getItem("dark-mode")) {
-                  props.setCanContinue(true)
-                }
-              }, [])
-
-    return (<>
-              <Grid container spacing={1}>
-                <Grid item xs={6}>
-                  <Fade in={true} timeout={1000}>
-                    <Typography style={{ marginBottom: 10 }}>In the Nexus,
+  return (<>
+    <Grid container spacing={1}>
+      <Grid item xs={6}>
+        <Fade in={true} timeout={1000}>
+          <Typography style={{ marginBottom: 10 }}>In the Nexus,
             <br />
             your preferences matter</Typography>
-                  </Fade>
-                </Grid>
-                <Grid item xs={6}>
-                  <Fade in={true} timeout={2000}>
-                    <div>
-                      <Typography>Light or Dark?</Typography>
-                      <DarkModeSwitch
-                        onChange={(darkMode) => {
-                          //Triggers a re-render, so we'll use local storage instead of state
-                          setDarkModeDecisionMade(true)
+        </Fade>
+      </Grid>
+      <Grid item xs={6}>
+        <Fade in={true} timeout={2000}>
+          <div>
+            <Typography>Light or Dark?</Typography>
+            <DarkModeSwitch
+              onChange={(darkMode) => {
+                //Triggers a re-render, so we'll use local storage instead of state
+                setDarkModeDecisionMade(true)
 
-                          props.setCanContinue(true)
-                        }}
-                      /></div>
-                  </Fade>
-                </Grid>
-              </Grid>
-            </>)
-  }
+                //props.setCanContinue(true)
+              }}
+            /></div>
+        </Fade>
+      </Grid>
+    </Grid>
+  </>)
+}
 
 
   function Level1CompleteScreen(props) {
@@ -632,10 +643,20 @@ const MeetYourTeacher = (props) => {
   }
 
 
+const MeetYourTeacher = (props) => {
+  let [username, setUsername] = useLocalStorage("user-name", undefined);
+  let [usernameDecisionMade, setUsernameDecisionMade] = useState(undefined);
+  let [teacherDecisionMade, setTeacherDecisionMade] = useState(undefined);
+  let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
+
+  let reallyContinue = () => {
+              setCanContinue(false);
+    setCurrentPart(1 + currentPart)
+  }
+
   //let setTitle = props.setTitle
   const [currentPart,setCurrentPart] = useLocalStorage("lvl1:currentPart", 0)
   const [canContinue,setCanContinue] = useState(false)
-
 
   return (
             <>
@@ -649,13 +670,10 @@ const MeetYourTeacher = (props) => {
                   <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={setCanContinue} username={username} />,
                   <Level1CompleteScreen />][currentPart]}
               </CardContent>
-
-
               <CardActions>
                 {currentPart ?
                   <Button key="back-button" onClick={() => { setCurrentPart(currentPart - 1); setCanContinue(false) }}>Back</Button> :
                   ""}
-
                 {canContinue ?
                   <ContinueButton key="continue-button" onClick={reallyContinue} />
                   : ""}
@@ -690,48 +708,56 @@ MEET YOUR TEACHER! (Googly eye sock puppet)
 First law of magic: Choose a secret name (mini password lesson, special character and number)
 */
 function Level1(props) {
-  const [titleScreenComplete, setTitleScreenComplete] = useState(false);
+  const [titleScreenComplete, setTitleScreenComplete] = useLocalStorage("game-started", false);
   const [title, setTitle] = useState("Character creation");
-  let [step, setStep] = useState(0);
-    
-    useEffect(() => {
-      setTimeout(()=>setStep(1), 2000)
-      setTimeout(()=>setStep(2), 4000)
-    },[])
 
   const TitleScreen = (props) => {
+    let [step, setStep] = useState(0);
+
+    useEffect(() => {
+      setTimeout(() => setStep(1), 2000)
+      setTimeout(() => setStep(2), 4000)
+    }, [])
 
     return (
       <>
         <Fade in={true} timeout={1000}>
           <Card style={{ margin: 0, position: "absolute", top: "50%", left: "50%", msTransform: "translate(-50%,-50%)", transform: "translate(-50%,-50%)" }}>
             <CardContent>
+              <Fade in={true} timeout={1000}>
               <div style={{ textAlign: "center", padding: "20px 40px 20px 40px" }}>
-                <h1>CodeSpells: The Nexus</h1>
-                <h2>A Game By ThoughtSTEM</h2>
+                  <Typography variant="h1" style={{fontSize: 25}}>
+                    CodeSpells: The Nexus
+                  </Typography>
+                  <br/>
+                  <Typography variant="h2" style={{fontSize: 16}}>
+                    A Text Adventure By ThoughtSTEM
+                  </Typography>
               </div>
-              {step >= 1 ?
-                <div style={{ textAlign: "center"}}>
-                  <Typography paragraph>Would you like to play?</Typography>
-                </div>
-                 : ""}
+              </Fade>
             </CardContent>
             <CardActions>
-              {step >= 2 ?
-                <ContinueButton onClick={() => setTitleScreenComplete(true)} />
-                : ""}
+              {step < 1 ? //This hidden button trick is a bit gross.  
+                          // Makes sure the button is there to force the container
+                          // to have a particular height.  Then we render a new (not hidden) button
+                          // so it Fades in nicely....  TODO: Do this more idiomatically.
+              <ContinueButton key="hidden-next-button" style={{ visibility: "hidden"}}
+                onClick={() => setTitleScreenComplete(true)} /> :
+              <ContinueButton key="unhidden-next-button"
+                onClick={() => setTitleScreenComplete(true)} />
+              }
             </CardActions>
           </Card>
         </Fade>
-        <LoginButton/>
+        <LoginButton />
       </>
     );
   }
-  
-  return (!titleScreenComplete ? <TitleScreen/> :
-  <Level setBadges={props.setBadges} number={1} subtitle={title} >
-    <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle} />
-  </Level>)
+
+  return (!titleScreenComplete ? <TitleScreen /> :
+    <Level setBadges={props.setBadges} number={1} subtitle={title} >
+      <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle} />
+    </Level>)
 }
 
 export default Level1
