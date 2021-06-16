@@ -9,8 +9,6 @@ import Divider from '@material-ui/core/Divider';
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 import PhotoAlbumIcon from '@material-ui/icons/PhotoAlbum';
 import TokenService from '../../Services/token-service';
-import PersonIcon from '@material-ui/icons/Person';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ListIcon from '@material-ui/icons/List';
 import ViewListIcon from '@material-ui/icons/ViewList';
@@ -19,6 +17,7 @@ import { TwitchIcon } from '../../Assets/TwitchIcon.png';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import Link from '@material-ui/core/Link';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 export function PublicListItems(props) {
   const classes = useStyles();
@@ -123,37 +122,11 @@ export function PrivateListItems() {
   return (
   <>
     <div>
-    <ListItem button onClick={() => handleClickButton('/gallery')}
-      // className={path === '/gallery' ? classes.listIcon : ''}
-      >
-      <ListItemIcon>
-      <PhotoAlbumIcon />
-      </ListItemIcon>
-      <ListItemText primary="Public Spells" />
-    </ListItem>
-    <ListItem button onClick={() => handleClickButton('/downloads')}
-      // className={path === '/downloads' ? classes.listIcon : ''}
-      >
-      <ListItemIcon>
-        <GetAppIcon />
-      </ListItemIcon>
-      <ListItemText primary="Downloads" />
-    </ListItem>
-    </div>
-
-    <Divider />
-    <div>
     <ListItem button onClick={() => history.push('/login')}>
       <ListItemIcon>
-      <PersonIcon />
+        <ExitToAppIcon />
       </ListItemIcon>
       <ListItemText primary="Login" />
-    </ListItem>
-    <ListItem button onClick={() => history.push('/signup')}>
-      <ListItemIcon>
-      <PersonAddIcon />
-      </ListItemIcon>
-      <ListItemText primary="Signup" />
     </ListItem>
     </div>
   </>

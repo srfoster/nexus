@@ -169,6 +169,7 @@ const SpellsApiService = {
 
   // change this to accept current page and need to do some backend stuff to accept current page and limit the payload
   getFollows(id , page){
+    page = page || 1
     return fetch(`${config.API_ENDPOINT}/users/${id}/follows?page=${page}`, {
       method: 'GET',
       headers: {
@@ -213,6 +214,20 @@ const SpellsApiService = {
   addBadgeToUser(name){
     return fetch(`${config.API_ENDPOINT}/users/me/badges/${name}`, {
       method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+  deleteBadgeFromUser(userId,name){
+    return fetch(`${config.API_ENDPOINT}/users/${userId}/badges/${name}`, {
+      method: 'DELETE',
       headers: {
         'content-type': 'application/json',
         'authorization': `bearer ${TokenService.getAuthToken()}`,

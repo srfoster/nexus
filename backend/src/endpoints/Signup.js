@@ -1,4 +1,6 @@
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+const config = require('../config')
 
 const handleSignup = (req, res, next) => {
   try{
@@ -16,10 +18,10 @@ const handleSignup = (req, res, next) => {
         if (password.length < 8){return res.status(400).send({error: 'Password must be longer than 7 characters'})}
         if (password.length > 72){return res.status(400).send({error: 'Password must be less than 73 characters'})}
         if (password[0] === ' ' || password[password.length-1] === ' '){return res.status(400).send({error: 'Password must not start or end with empty spaces'})}
-        if (!(/[A-Z]/g).test(password)){return res.status(400).send({error: 'Password must contain one upper case, lower case, number and special character'})}
-        if (!(/[a-z]/g).test(password)){return res.status(400).send({error: 'Password must contain one upper case, lower case, number and special character'})}
-        if (!(/[0-9]/g).test(password)){return res.status(400).send({error: 'Password must contain one upper case, lower case, number and special character'})}
-        if (!(/[!@#\$%\^\&*\)\(+=._-]/g).test(password)){return res.status(400).send({error: 'Password must contain one upper case, lower case, number and special character'})}
+        //if (!(/[A-Z]/g).test(password)){return res.status(400).send({error: 'Password must contain one upper case, lower case, number and special character'})}
+        //if (!(/[a-z]/g).test(password)){return res.status(400).send({error: 'Password must contain one upper case, lower case, number and special character'})}
+        //if (!(/[0-9]/g).test(password)){return res.status(400).send({error: 'Password must contain one upper case, lower case, number and special character'})}
+        //if (!(/[!@#\$%\^\&*\)\(+=._-]/g).test(password)){return res.status(400).send({error: 'Password must contain one upper case, lower case, number and special character'})}
 
         let hashPassword = await bcrypt.hash(req.body.password, 12)
         req.app.get('db')
@@ -27,13 +29,21 @@ const handleSignup = (req, res, next) => {
           .into('users')
           .returning('*')
           .then((users) => {
-            users[0].password = undefined;
-            res.send(users[0])
+            let user = users[0]
+            user.password = undefined;
+            res.send({
+              user: user,
+              authToken: jwt.sign({ user_id: user.id }, config.JWT_SECRET, {
+                subject: user.username,
+                expiresIn: config.JWT_EXPIRY,
+                algorithm: 'HS256',
+              })
+            })
           })
       })
   } catch (error) {
     console.log('Catch error: ', error);
-    res.send({error: 'Uh oh. Something went wrong.'})
+    res.send({ error: 'Uh oh. Something went wrong.' })
   }
 }
 

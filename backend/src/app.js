@@ -95,7 +95,7 @@ app.post(`${epSpellsFork}`, requireAuth, SpellsFork.handlePost)
 app.get(`${epDownloads}`, Downloads.handleGet)
 
 // Retrieves follow info
-app.get(`${epFollows}`, requireAuthIfMe, Follows.handleGet)
+app.get(`${epFollows}`, requireAuth, Follows.handleGet)
 
 // creates new follow in join table
 app.post(`${epFollows}`,requireAuth, Follows.handlePost)
@@ -131,6 +131,7 @@ app.get(`/check-ownership/:spell_id`, requireAuth, (req, res) => {
 // badgeDataList.badgeDataList.map(object => console.log(object.name=== 'Getting-Started' ? object : ''))
 const giveBadge = async (req, res) => {
   let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+  console.log(userId)
   let badgeLink, badgeDescription
 
   //When/if we have admin roles, we can enhance the security logic here.
@@ -181,6 +182,32 @@ const getBadges = async (req, res) => {
   })
   }
 app.get(`/users/:id/badges`, requireAuthIfMe, getBadges)
+
+
+const deleteBadge = async (req, res) => {
+  let userId = req.params.id === 'me' ? req.user.id : req.params.id;
+
+  //When/if we have admin roles, we can enhance the security logic here.
+  if(req.user.id !== userId) {
+    return res.status(403).send({error: "You can only remove your own badges."})
+  }
+  
+  let bn = req.params.badgeName
+  req.app.get('db')('badges')
+    // .where({user_id: req.user.id, id: req.params.spell_id, is_deleted: false})
+    .delete()
+    .where({ user_id: userId})
+    .andWhereRaw("name like ?", `%${bn === "*" ? "" : bn}%`)
+    .then((badges) => {
+      console.log("Deleted")
+      console.log(badges)
+      if (badges > 0)
+        res.send({ message: "deleted" })
+      else
+        res.send({ message: "nothing to delete" })
+    })
+}
+app.delete(`/users/:id/badges/:badgeName`, requireAuth, deleteBadge)
 
 
 app.post(epLogin, handleLogin)

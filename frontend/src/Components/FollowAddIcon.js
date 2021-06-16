@@ -26,7 +26,7 @@ function FollowAddIcon(props) {
   const { id } = props.match.params
   const updateFollow = () => {
     setIsLoading(true)
-    SpellsApiService.postFollows('me', +id)
+    SpellsApiService.postFollows('me', id)
     .then(() => {
       setTimeout(() => {setFollow(!follow)}, 1000)
     })
@@ -34,7 +34,7 @@ function FollowAddIcon(props) {
   }
   const deleteFollow = () => {
     setIsLoading(true)
-    SpellsApiService.deleteFollows('me', +id)
+    SpellsApiService.deleteFollows('me', id)
     .then(() => {
       setTimeout(() => {setFollow(!follow)}, 1000)
     })

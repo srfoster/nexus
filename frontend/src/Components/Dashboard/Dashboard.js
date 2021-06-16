@@ -19,6 +19,7 @@ import Link from '@material-ui/core/Link';
 import SpellsApiService from '../../Services/spells-api-service';
 // import useStyles from '../../styles.js';
 import { makeStyles} from '@material-ui/core/styles';
+import TokenService from '../../Services/token-service';
 
 function Dashboard(props) {
   const classes = useStyles();
@@ -31,6 +32,40 @@ function Dashboard(props) {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.dashPaper, classes.fixedHeight);
+  
+  // const AntSwitch = withStyles((theme) => ({
+  //   root: {
+  //     width: 28,
+  //     height: 16,
+  //     padding: 0,
+  //     display: 'flex',
+  //   },
+  //   switchBase: {
+  //     padding: 2,
+  //     color: theme.palette.grey[500],
+  //     '&$checked': {
+  //       transform: 'translateX(12px)',
+  //       color: theme.palette.common.white,
+  //       '& + $track': {
+  //         opacity: 1,
+  //         backgroundColor: purple[300],
+  //         borderColor: theme.palette.primary.main,
+  //       },
+  //     },
+  //   },
+  //   thumb: {
+  //     width: 12,
+  //     height: 12,
+  //     boxShadow: 'none',
+  //   },
+  //   track: {
+  //     border: `1px solid ${theme.palette.grey[500]}`,
+  //     borderRadius: 16 / 2,
+  //     opacity: 1,
+  //     backgroundColor: theme.palette.common.white,
+  //   },
+  //   checked: {},
+  // }))(Switch);
 
   // useEffect(() => {
   //   // Only running this to check if logged in
@@ -56,7 +91,7 @@ function Dashboard(props) {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.dashTitle}>
             {/* Admin */}
           </Typography>
-          <Link href='https://codespells.org/index.html' className={classes.link}>
+          <Link href='/' className={classes.link}>
             <img src={CodeSpells} alt="CodeSpells" width="100%"></img>
           </Link>
         </Toolbar>
@@ -75,7 +110,7 @@ function Dashboard(props) {
         </div>
         <Divider />
         <List>
-          {props.isLoggedIn ? <PublicListItems/> : <PrivateListItems/>}
+          {TokenService.hasAuthToken() ? <PublicListItems/> : <PrivateListItems/>}
         </List>
       </Drawer>
       <main className={classes.content}>
