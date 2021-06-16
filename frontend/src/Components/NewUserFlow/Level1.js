@@ -129,7 +129,6 @@ const ContinueButton = (props) => {
   );
 }
 
-
 const UserNameForm = (props) => {
   const [checking, setChecking] = useState(false);
   const [available, setAvailable] = useLocalStorage("user-name-available", undefined);
@@ -479,13 +478,12 @@ function SpinThen(props) {
 function JSMirror(props) {
   const [code,setCode] = useState(props.value) 
 
-
   return (
     <>
       <LiveProvider code={ props.code } scope={ props.scope } alignItems="center" justify="center">
         <Grid container spacing={1} >
           <Grid item xs={6}>
-            <LiveEditor />
+            <LiveEditor onChange={props.onChange}/>
           </Grid>
           <Grid item xs={6}>
             <LiveError />
@@ -494,11 +492,47 @@ function JSMirror(props) {
         </Grid>
       </LiveProvider>
     </>
-
   )
 }
 
+function Puzzle({ isComplete, code, hint }) {
+
+  return <>
+    <Fade in={true} timeout={1000}>
+      <div>
+        { isComplete ? "Complete!" : ""}
+        <Typography paragraph>Puzzle</Typography>
+        { code }
+        <Card>
+          <CardContent>
+            <Typography paragraph>Hint</Typography>
+            { hint }
+          </CardContent>
+        </Card>
+      </div>
+    </Fade>
+  </>
+}
+
+function HelloWorldPuzzle(props) {
+  const [complete, setComplete] = useState(false);
+  const Magic = (props) => <Button color="secondary">{props.children}</Button>
   
+  return (
+    <Puzzle code={
+      <JSMirror code={"<Magic>\n  Hello World!\n</Magic>"}
+        scope={{ Magic: Magic }}
+        onChange={(code) => {
+          if (code.includes("!!")) {
+            setComplete(true);
+            props.onComplete();
+          }
+        }}/>}
+      hint={<><Typography paragraph>Can you make the code below output something like this:</Typography><Magic>Hello, {props.username}</Magic></>}
+      isComplete={ complete } />
+  )
+}
+
 function SockPuppetFirstLesson(props) {
     let [videoFinished, setVideoFinished] = useState(false);
     let [playing, setPlaying] = useState(false);
@@ -511,12 +545,21 @@ function SockPuppetFirstLesson(props) {
    *someone holds up index card at edge of frame*
    Welcome to the journey of a lifetime! I'm here to train you to become
    a CODING WIZARD! 
-   
-   The first lesson of magic is
+
+   <<The first lesson of magic is >>
 
    The following code prints "Hello World".
+
+   Okay, I'm going to go off-script here.  [The Nexus's analytics show that
+   this is the step where most users drop off.  When they have to write their
+   first piece of code.]
+
+   I know you don't even know me.  And I know I'm just a sock puppet.  
+   But could you please write this program?
+   It would mean a lot to me.  I would owe you a favor.
    
     */
+  
   
     return (
       <SBS
@@ -544,14 +587,8 @@ function SockPuppetFirstLesson(props) {
           </>
         }
         rightSide={videoFinished ?
-          <>
-            <Fade in={true} timeout={1000}>
-              <Typography paragraph>There's supposed to be a comma somewhere in the code below.  Can you please add it?  And while you're at it, can you add a few more exclamation points at the end?</Typography>
-            </Fade>
-            <JSMirror code={"<Magic>\n  Hello World!\n</Magic>"}
-              scope={{ Magic: (props) => <Button>{ props.children}</Button>}}
-            />
-          </> : ""}
+          <HelloWorldPuzzle onComplete={ () => props.setCanContinue(true) }/>
+          : ""}
       />
 
     )
@@ -611,37 +648,38 @@ const MeetYourTeacher = (props) => {
   let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
 
   let reallyContinue = () => {
-              setCanContinue(false);
+    setCanContinue(false);
     setCurrentPart(1 + currentPart)
   }
 
   //let setTitle = props.setTitle
-  const [currentPart,setCurrentPart] = useLocalStorage("lvl1:currentPart", 0)
-  const [canContinue,setCanContinue] = useState(false)
+  const [currentPart, setCurrentPart] = useLocalStorage("lvl1:currentPart", 0)
+  const [canContinue, setCanContinue] = useState(false)
 
   return (
-            <>
-              {currentPart == 0 && !canContinue ? <Gong /> : "" /* First visit */}
-              <CardContent>
-                {[
-                  <UserNameForm setCanContinue={setCanContinue} setUsername={setUsername} username={username} />,
-                  <LightOrDark setCanContinue={setCanContinue} />,
-                  <ChooseYourTeacher setCanContinue={setCanContinue} />,
-                  <SockPuppetTeacherIntroduction setCanContinue={setCanContinue} username={username} />,
-                  <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={setCanContinue} username={username} />,
-                  <Level1CompleteScreen />][currentPart]}
-              </CardContent>
-              <CardActions>
-                {currentPart ?
-                  <Button key="back-button" onClick={() => { setCurrentPart(currentPart - 1); setCanContinue(false) }}>Back</Button> :
-                  ""}
-                {canContinue ?
-                  <ContinueButton key="continue-button" onClick={reallyContinue} />
-                  : ""}
-              </CardActions>
-            </>
+    <>
+      {currentPart == 0 && !canContinue ? <Gong /> : "" /* First visit */}
+      <CardContent>
+        {[
+          <UserNameForm setCanContinue={setCanContinue} setUsername={setUsername} username={username} />,
+          <LightOrDark setCanContinue={setCanContinue} />,
+          <ChooseYourTeacher setCanContinue={setCanContinue} />,
+          <SockPuppetTeacherIntroduction setCanContinue={setCanContinue} username={username} />,
+          <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={setCanContinue} username={username} />,
+          <Level1CompleteScreen />][currentPart]}
+      </CardContent>
+      <CardActions>
+        {currentPart ?
+          <Button key="back-button" onClick={() => { setCurrentPart(currentPart - 1); setCanContinue(false) }}>Back</Button> :
+          ""}
+        {canContinue ?
+          <ContinueButton key="continue-button" onClick={reallyContinue} />
+          : ""}
+      </CardActions>
+      {currentPart > 0 ? <AccountCreationReminder /> : ""}
+    </>
   );
- }
+}
 
 const SBS = (props) => {
   return (
@@ -730,7 +768,7 @@ function Level1(props) {
   return (!titleScreenComplete ? <TitleScreen /> :
     <Level setBadges={props.setBadges} number={1} subtitle={title} >
       <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle} />
-      <AccountCreationReminder />
+      
     </Level>)
 }
 
