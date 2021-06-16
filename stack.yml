@@ -43,6 +43,7 @@ services:
     volumes:
       - ./frontend:/usr/src/app
       - /usr/src/app/node_modules
+    # command: "sleep 999999999"
     container_name: frontend
     env_file:
       - ./frontend/.env
