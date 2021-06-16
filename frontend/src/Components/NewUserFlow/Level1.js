@@ -33,8 +33,11 @@ import {
   LiveProvider,
   LiveEditor,
   LiveError,
-  LivePreview
+  LivePreview,
+  LiveContext
 } from 'react-live'
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 const babel = require("@babel/core");
 
@@ -364,21 +367,25 @@ function SpinThen(props) {
     var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-password-lesson-opened",false) 
     
     useEffect(() => {
-      setTimeout(()=>setStep(1), 1000)
-      setTimeout(()=>setStep(2), 3000)
-      setTimeout(()=>setStep(3), 6000)
-      setTimeout(()=>setStep(4), 9000)
-      setTimeout(()=>setStep(5), 12000)
-      setTimeout(()=>setStep(6), 15000)
-      setTimeout(()=>setStep(7), 18000)
-      setTimeout(()=>setStep(8), 21000)
-      setTimeout(()=>setStep(9), 24000)
-      setTimeout(()=>setStep(10), 27000)
-      setTimeout(()=>setStep(11), 30000)
-      setTimeout(()=>setStep(12), 33000)
-      setTimeout(()=>setStep(13), 36000)
-      setTimeout(()=>setStep(14), 39000)
+      if (!messageOpened) {
+        setTimeout(() => setStep(1), 1000)
+        setTimeout(() => setStep(2), 3000)
+        setTimeout(() => setStep(3), 6000)
+        setTimeout(() => setStep(4), 9000)
+        setTimeout(() => setStep(5), 12000)
+        setTimeout(() => setStep(6), 15000)
+        setTimeout(() => setStep(7), 18000)
+        setTimeout(() => setStep(8), 21000)
+        setTimeout(() => setStep(9), 24000)
+        setTimeout(() => setStep(10), 27000)
+        setTimeout(() => setStep(11), 30000)
+        setTimeout(() => setStep(12), 33000)
+        setTimeout(() => setStep(13), 36000)
+        setTimeout(() => setStep(14), 39000)
+      }
     },[])
+
+
 
     return (!messageOpened ? <div>
       {step >= 1 ?
@@ -480,63 +487,83 @@ function JSMirror(props) {
 
   return (
     <>
-      <LiveProvider code={ props.code } scope={ props.scope } alignItems="center" justify="center">
-        <Grid container spacing={1} >
-          <Grid item xs={6}>
-            <LiveEditor onChange={props.onChange}/>
-          </Grid>
-          <Grid item xs={6}>
-            <LiveError />
-            <LivePreview />
-          </Grid>
-        </Grid>
+      <LiveProvider
+        code={props.code} scope={props.scope} alignItems="center" justify="center">
+        <LiveContext.Consumer>
+          {({ code, language, theme, disabled, onChange }) => {
+            return <Grid container spacing={1} >
+              <Grid item xs={6}>
+                <LiveEditor
+                  onChange={(code) => {
+                    setCode(code)
+                    props.onChange(code)
+                    onChange(code)
+                  }
+                  }
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <LiveError />
+                <LivePreview />
+              </Grid>
+            </Grid>
+          }}
+        </LiveContext.Consumer>
       </LiveProvider>
     </>
   )
 }
 
 function Puzzle({ isComplete, code, hint }) {
-
   return <>
-    <Fade in={true} timeout={1000}>
       <div>
-        { isComplete ? "Complete!" : ""}
-        <Typography paragraph>Puzzle</Typography>
-        { code }
-        <Card>
-          <CardContent>
-            <Typography paragraph>Hint</Typography>
-            { hint }
-          </CardContent>
-        </Card>
-      </div>
-    </Fade>
+      {code}
+      {hint}
+    </div>
   </>
 }
 
 function HelloWorldPuzzle(props) {
   const [complete, setComplete] = useState(false);
-  const Magic = (props) => <Button color="secondary">{props.children}</Button>
+  const [code, setCode] = useState("<Magic>\n  Next\n</Magic>");
   
-  return (
-    <Puzzle code={
-      <JSMirror code={"<Magic>\n  Hello World!\n</Magic>"}
-        scope={{ Magic: Magic }}
-        onChange={(code) => {
-          if (code.includes("!!")) {
-            setComplete(true);
-            props.onComplete();
+  const Magic = (props) => {
+    const [msg, setMsg] = useState("");
+    let unlocked = props.children && JSON.stringify(props.children).includes("Hello, World!")
+
+    return <>
+      <Typography>This {unlocked ? "works!" : "doesn't work..."}</Typography>
+      <Button
+        onClick={() => {
+          if (unlocked) {
+            setMsg("You got it!  Look below for the real Next button.")
+            setComplete(true)
+            props.onComplete()
           }
-        }}/>}
-      hint={<><Typography paragraph>Can you make the code below output something like this:</Typography><Magic>Hello, {props.username}</Magic></>}
-      isComplete={ complete } />
+        }}
+        color="secondary">{props.children}</Button>
+      <Typography paragraph>{ msg }</Typography>
+    </>
+  }
+  return (
+    <Fade in={true} timeout={1000}>
+      <Puzzle code={
+        <JSMirror code={code}
+          scope={{ Magic: (userProps) => Magic({ ...userProps, ...props }) }}
+          onChange={(code) => {
+            //Note: Could statically read code here...
+            setCode(code);
+            return true
+          }} />}
+        hint={<><Typography paragraph>Hint: The magic button will only work if it contains the same text as the title of my email</Typography></>}
+        isComplete={complete} />
+    </Fade>
   )
 }
 
 function SockPuppetFirstLesson(props) {
     let [videoFinished, setVideoFinished] = useState(false);
-    let [playing, setPlaying] = useState(false);
-    let [password, setPassword] = useState(undefined);
+
     /*
     *out of breath* I'm sorry! I was rushing to put together this content for you.
    I didn't have time to memorize the Nexus' introductory script, so I'm
@@ -559,6 +586,7 @@ function SockPuppetFirstLesson(props) {
    It would mean a lot to me.  I would owe you a favor.
    
     */
+
   
   
     return (
@@ -566,7 +594,7 @@ function SockPuppetFirstLesson(props) {
         leftSideTitle={
           <>
             <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
-            <Typography >Subject: Hello World!</Typography>
+            <Typography >Subject: Hello, World!</Typography>
           </>}
         leftSide={
           <>
@@ -578,16 +606,19 @@ function SockPuppetFirstLesson(props) {
               url="https://codespells-org.s3.amazonaws.com/NexusVideos/screen-demo-test.mp4"
               controls={true}
               style={{}}
-              playing={playing}
-              onEnded={() => setVideoFinished(true)}
-              progressInterval={100}
-              onProgress={(p) => { }}
+              playing={false}
+                onEnded={() => {
+                  setVideoFinished(true)
+                }}
             />
           </div>
           </>
         }
         rightSide={videoFinished ?
-          <HelloWorldPuzzle onComplete={ () => props.setCanContinue(true) }/>
+          <>
+            <Typography paragraph>The puzzle is to modify the code below to generate a button that lets you procede to the next part of the Nexus.</Typography>
+            <HelloWorldPuzzle onComplete={() => props.setCanContinue(true)} />
+          </>
           : ""}
       />
 
