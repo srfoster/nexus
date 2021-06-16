@@ -19,6 +19,8 @@ const LoginForm = (props) => {
   let usernameInput = React.createRef()
   let passwordInput = React.createRef()
   const [error, setError] = useState(null);
+  
+  var showSignupMessage = props.showSignupMessage === undefined ? true : props.showSignupMessage;
 
   const handleSubmitJwtAuth = (e) => {
     e.preventDefault()
@@ -106,11 +108,13 @@ const LoginForm = (props) => {
                   Forgot password?
                 </Link> */}
               </Grid>
-              <Grid item>
-                <Link to={'/signup'} variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
+                {showSignupMessage ?
+                  <Grid item>
+                    <Link to={'/signup'} variant="body2">
+                      Don't have an account? Sign up.
+                    </Link>
+                  </Grid> : ""
+                }
             </Grid>
           </form>
         </div>

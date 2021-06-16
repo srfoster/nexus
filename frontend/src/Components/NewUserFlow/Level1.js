@@ -703,7 +703,6 @@ const AccountCreationReminder = (props) => {
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
 
-
   function getModalStyle() {
     const top = 50;
     const left = 50;
@@ -734,12 +733,19 @@ const AccountCreationReminder = (props) => {
 
   const modalBody = (
     <div style={modalStyle} className={classes.paper}>
-      <Grid container spacing={1}>
-        <Grid item xs={6} >
-          <SignupForm />
+      <Grid container
+        spacing={1}
+        direction="row"
+        alignItems="center"
+        justify="center">
+        <Grid item xs={5} >
+          <SignupForm showSigninMessage={false}/>
         </Grid>
-        <Grid item xs={6} >
-          <LoginForm />
+        <Grid item xs={2} >
+          <Typography variant="h5" align="center">OR</Typography>
+        </Grid>
+        <Grid item xs={5} >
+          <LoginForm showSignupMessage={false}/>
         </Grid>
       </Grid>
 
