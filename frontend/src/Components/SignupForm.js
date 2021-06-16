@@ -70,7 +70,7 @@ const SignupForm = (props) => {
               <LockOutlinedIcon />
             </Avatar>
               <Typography component="h1" variant="h5">
-                Sign up
+                Sign Up
           </Typography></> : ""}
           <form className={classes.signupFormForm} noValidate>
             <Grid container spacing={2}>
