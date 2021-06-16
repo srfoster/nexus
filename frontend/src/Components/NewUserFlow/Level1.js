@@ -473,11 +473,6 @@ function SpinThen(props) {
     )
 }
   
-let Test = (props) => {
-  let [a,setA] = useState(true)
-  return <Button onClick={()=>setA(!a)}>{a ? "A" : "B"}</Button>
-}
-let scope = { Test }
 
 function JSMirror(props) {
   const [code,setCode] = useState(props.value) 
@@ -485,57 +480,22 @@ function JSMirror(props) {
 
   return (
     <>
-      <LiveProvider code="<strong>Hello World!</strong>" scope={ scope }>
-        <LiveEditor />
-        <LiveError />
-        <LivePreview />
+      <LiveProvider code={ props.code } scope={ props.scope } alignItems="center" justify="center">
+        <Grid container spacing={1} >
+          <Grid item xs={6}>
+            <LiveEditor />
+          </Grid>
+          <Grid item xs={6}>
+            <LiveError />
+            <LivePreview />
+          </Grid>
+        </Grid>
       </LiveProvider>
     </>
 
   )
 }
 
-/*
-      <Grid container spacing={1}>
-        <Grid item xs={6}>
-          <ReactCodeMirror
-            value={props.value}
-            options={{
-              lineWrapping: true,
-              mode: 'javascript',
-              theme: 'material',
-              lineNumbers: true,
-              matchBrackets: true,
-              autoCloseBrackets: true,
-              styleActiveLine: true,
-            }}
-            onChange={(editor, data, value) => {
-              setCode(value);
-            }}
-          />
-
-          <Button onClick={
-            () => {
-
-
-              var jsCode = babel.transform(code,
-                {
-                  presets: ["@babel/preset-react"],
-                });
-              var evaled = eval(jsCode.code);
-
-              console.log(evaled)
-            }
-          }>Run</Button>
-        </Grid>
-        <Grid item xs={6}>
-          <Card>
-            <CardContent>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-      */
   
 function SockPuppetFirstLesson(props) {
     let [videoFinished, setVideoFinished] = useState(false);
@@ -570,7 +530,7 @@ function SockPuppetFirstLesson(props) {
               playsInline
               fluid={false}
               width={"100%"}
-              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e2-sock-2.mp4"
+              url="https://codespells-org.s3.amazonaws.com/NexusVideos/screen-demo-test.mp4"
               controls={true}
               style={{}}
               playing={playing}
@@ -584,12 +544,11 @@ function SockPuppetFirstLesson(props) {
         rightSide={videoFinished ?
           <>
             <Fade in={true} timeout={1000}>
-              <Typography paragraph>This code prints Hello World:</Typography>
+              <Typography paragraph>There's supposed to be a comma somewhere in the code below.  Can you please add it?  And while you're at it, can you add a few more exclamation points at the end?</Typography>
             </Fade>
-            <JSMirror value={"<Greeting message=\"Hello World\"/>"} />
-
-            <Typography paragraph>Edit this code to greet yourself with Hello World:</Typography>
-            <JSMirror value={"<Greeting message=\"Hello World\"/>"} />
+            <JSMirror code={"<Magic>\n  Hello World!\n</Magic>"}
+              scope={{ Magic: (props) => <Button>{ props.children}</Button>}}
+            />
           </> : ""}
       />
 
