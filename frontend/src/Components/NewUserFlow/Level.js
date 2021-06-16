@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
-import Box from '@material-ui/core/Box';
 import CardHeader from '@material-ui/core/CardHeader';
 import Snackbar from '@material-ui/core/Snackbar';
 import Grow from '@material-ui/core/Grow';
@@ -20,6 +19,7 @@ export function LoginButton() {
   );
 }
 
+
 const Level = (props) => {
   return (
     <>
@@ -29,7 +29,7 @@ const Level = (props) => {
         </CardHeader>
         {props.children}
       </Card>
-
+      
       <LoginButton/>
     </>
   );

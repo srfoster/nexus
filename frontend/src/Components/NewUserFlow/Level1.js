@@ -5,6 +5,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
 import Fade from '@material-ui/core/Fade';
 import ReactPlayer from 'react-player'
 import Grid from '@material-ui/core/Grid';
@@ -660,12 +662,24 @@ const SBS = (props) => {
             </>)
 }
 
-/* Character Creation Mode
-Toggle: Choose Light or Dark Mage
-Choose a unique Wizard name (acct name) -> tell you if name is already taken
-MEET YOUR TEACHER! (Googly eye sock puppet)
-First law of magic: Choose a secret name (mini password lesson, special character and number)
-*/
+const AccountCreationReminder = (props) => {
+
+  return (
+    <>
+      <Paper square={true} style={{ background: "#f50057", opacity: 0.8 }}>
+        <Box pl={3} pr={3} pt={1} pb={1}>
+          <Typography style={{ color: "white" }}>
+            Oh no! We can't save your progress!
+          </Typography>
+          <Typography style={{ color: "white" }}>
+            <a href="/login"><strong><span style={{textDecoration: "underline", color: "white"}}>Create an account</span></strong></a> at any time and return to where you left off.
+          </Typography>
+        </Box>
+      </Paper>
+    </>
+  )
+}
+
 function Level1(props) {
   const [titleScreenComplete, setTitleScreenComplete] = useLocalStorage("game-started", false);
   const [title, setTitle] = useState("Character creation");
@@ -684,26 +698,26 @@ function Level1(props) {
           <Card style={{ margin: 0, position: "absolute", top: "50%", left: "50%", msTransform: "translate(-50%,-50%)", transform: "translate(-50%,-50%)" }}>
             <CardContent>
               <Fade in={true} timeout={1000}>
-              <div style={{ textAlign: "center", padding: "20px 40px 20px 40px" }}>
-                  <Typography variant="h1" style={{fontSize: 25}}>
+                <div style={{ textAlign: "center", padding: "20px 40px 20px 40px" }}>
+                  <Typography variant="h1" style={{ fontSize: 25 }}>
                     CodeSpells: The Nexus
                   </Typography>
-                  <br/>
-                  <Typography variant="h2" style={{fontSize: 16}}>
+                  <br />
+                  <Typography variant="h2" style={{ fontSize: 16 }}>
                     A Text Adventure By ThoughtSTEM
                   </Typography>
-              </div>
+                </div>
               </Fade>
             </CardContent>
             <CardActions>
               {step < 1 ? //This hidden button trick is a bit gross.  
-                          // Makes sure the button is there to force the container
-                          // to have a particular height.  Then we render a new (not hidden) button
-                          // so it Fades in nicely....  TODO: Do this more idiomatically.
-              <ContinueButton key="hidden-next-button" style={{ visibility: "hidden"}}
-                onClick={() => setTitleScreenComplete(true)} /> :
-              <ContinueButton key="unhidden-next-button"
-                onClick={() => setTitleScreenComplete(true)} />
+                // Makes sure the button is there to force the container
+                // to have a particular height.  Then we render a new (not hidden) button
+                // so it Fades in nicely....  TODO: Do this more idiomatically.
+                <ContinueButton key="hidden-next-button" style={{ visibility: "hidden" }}
+                  onClick={() => setTitleScreenComplete(true)} /> :
+                <ContinueButton key="unhidden-next-button"
+                  onClick={() => setTitleScreenComplete(true)} />
               }
             </CardActions>
           </Card>
@@ -716,6 +730,7 @@ function Level1(props) {
   return (!titleScreenComplete ? <TitleScreen /> :
     <Level setBadges={props.setBadges} number={1} subtitle={title} >
       <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle} />
+      <AccountCreationReminder />
     </Level>)
 }
 
