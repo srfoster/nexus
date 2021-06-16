@@ -58,6 +58,7 @@ services:
       - 8091:8090
     volumes:
       - ./lang-server:/usr/src/app
+    # command: "sleep 999999999"
     container_name: lang-server
     networks: 
       - dev-codespells-network
