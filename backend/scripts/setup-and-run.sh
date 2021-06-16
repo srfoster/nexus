@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 echo "Waiting to be sure postgres container fully starts first " #Can we get docker compose to check this for us??
 
 sleep 10

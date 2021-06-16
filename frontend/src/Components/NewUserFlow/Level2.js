@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Level, ContinueButton } from './Level';
 
+//Questions we're asking (and answering) with our...
+//What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
+//   What if ed tech were different?
 
 export function Level2(props) {
   return (

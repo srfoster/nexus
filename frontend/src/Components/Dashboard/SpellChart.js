@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect , useContext } from 'react';
 import { useHistory } from "react-router-dom";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -36,6 +36,7 @@ import { SpellChartHeader } from './SpellChartHeader.js';
 import 'codemirror/addon/edit/matchbrackets.js'
 import 'codemirror/addon/edit/closebrackets.js'
 import 'codemirror/addon/selection/active-line.js'
+import { DarkModeContext } from '../../Components/Context';
 
 export default function SpellChart(props) {
   const classes = useStyles();
@@ -47,6 +48,7 @@ export default function SpellChart(props) {
   const [selected, setSelected] = React.useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popText, setPopText] = React.useState('Click To Copy')
+  const [darkMode, setDarkMode] = useContext(DarkModeContext);
   
   const isSpellSelected = (id) => selected.indexOf(id) !== -1;
   const popoverOpen = Boolean(anchorEl);
@@ -141,9 +143,9 @@ export default function SpellChart(props) {
   return (
     props.spells ?
     <React.Fragment>
-      <div className={classes.headBar}>
+      <div className={darkMode ? classes.darkHeadBar : classes.headBar}>
         <div className={classes.headLeft}></div>
-        <div className={classes.headTitle}>My Spells</div>
+        <h4 className={classes.headTitle}>My Spells</h4>
         <div className={classes.headRight}>
           <SearchBar 
             setSearch={props.setSearch}

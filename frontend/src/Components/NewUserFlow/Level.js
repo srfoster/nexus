@@ -1,24 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
+import Box from '@material-ui/core/Box';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
 import Snackbar from '@material-ui/core/Snackbar';
 import Grow from '@material-ui/core/Grow';
 import Button from '@material-ui/core/Button';
 import MuiAlert from '@material-ui/lab/Alert';
 import AddBadgeOnRender from '../Badges/AddBadgeOnRender';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+
+export function LoginButton() {
+
+  return (
+    <a href="/login">
+      <Button style={{ position: "fixed", bottom: 0, right: 0 }}>
+        <ExitToAppIcon />
+      </Button>
+    </a>
+  );
+}
 
 const Level = (props) => {
   return (
     <>
       <Card>
-        <CardHeader title={"CodeSpells, the Story (Level " + props.number + ")"}
+        <CardHeader title={"Level " + props.number + ""}
           subheader={props.subtitle}>
         </CardHeader>
-        <CardContent>
-          {props.children}
-        </CardContent>
+        {props.children}
       </Card>
+
+      <LoginButton/>
     </>
   );
 }
@@ -88,6 +100,5 @@ const ContinueButton = (props) => {
         { levelComplete ? <AddBadgeOnRender name={props.badgeName} /> : ""}
     </>
 }
-
 
 export { Level, HintButton, ShowAfter, ContinueButton };

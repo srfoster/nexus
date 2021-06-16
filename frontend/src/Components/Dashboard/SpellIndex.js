@@ -64,6 +64,7 @@ function SpellIndex(props) {
           onChange={(changedSpell) => props.setSpells(spells.map(spell => changedSpell.id === spell.id ? changedSpell : spell))}
           onDelete={(deletedSpellID) => props.setSpells(spells.filter(spell => spell.id !== deletedSpellID))}
           setRefresh={setRefresh}
+          darkMode={props.darkMode}
         />
         <FabAddIcon
           spells={spells}
