@@ -387,7 +387,6 @@ const useStyles = makeStyles((theme) => ({
 
   // LoginForm //
   loginFormPaper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

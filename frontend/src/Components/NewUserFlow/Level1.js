@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from "../../Util";
 import { Level, LoginButton } from "./Level";
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import LoginForm from '../LoginForm';
+import SignupForm from '../SignupForm';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -568,19 +572,14 @@ function SockPuppetFirstLesson(props) {
     *out of breath* I'm sorry! I was rushing to put together this content for you.
    I didn't have time to memorize the Nexus' introductory script, so I'm
    just going to read it to you:
-
    *someone holds up index card at edge of frame*
    Welcome to the journey of a lifetime! I'm here to train you to become
    a CODING WIZARD! 
-
    <<The first lesson of magic is >>
-
    The following code prints "Hello World".
-
    Okay, I'm going to go off-script here.  [The Nexus's analytics show that
    this is the step where most users drop off.  When they have to write their
    first piece of code.]
-
    I know you don't even know me.  And I know I'm just a sock puppet.  
    But could you please write this program?
    It would mean a lot to me.  I would owe you a favor.
@@ -662,14 +661,14 @@ function LightOrDark(props) {
 }
 
 
-  function Level1CompleteScreen(props) {
-    return (
-            <>
-              <p>Congratulations! You've completed Level 1! You're on your way to being a Mage!</p>
-              <Button onClick={() => { }}>Continue</Button>
-            </>
-    );
-  }
+function Level1CompleteScreen(props) {
+  return (
+    <>
+      <p>Congratulations! You've completed Level 1! You're on your way to being a Mage!</p>
+      <Button onClick={() => { }}>Continue</Button>
+    </>
+  );
+}
 
 
 const MeetYourTeacher = (props) => {
@@ -732,6 +731,74 @@ const SBS = (props) => {
 }
 
 const AccountCreationReminder = (props) => {
+  const [modalStyle] = React.useState(getModalStyle);
+  const [open, setOpen] = React.useState(false);
+
+  function getModalStyle() {
+    const top = 50;
+    const left = 50;
+  
+    return {
+      top: `${top}%`,
+      left: `${left}%`,
+      transform: `translate(-${top}%, -${left}%)`,
+    };
+  }
+  
+  const useStyles = makeStyles((theme) => ({
+    paper: {
+      position: 'absolute',
+      backgroundColor: theme.palette.background.paper,
+      padding: theme.spacing(2, 4, 3),
+    },
+  }));
+  const classes = useStyles();
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const modalBody = (
+    <div style={modalStyle} className={classes.paper}>
+      <Grid container
+        spacing={1}
+        direction="row"
+        alignItems="center"
+        justify="center">
+        <Grid item xs={5} >
+          <SignupForm showSigninMessage={false}/>
+        </Grid>
+        <Grid item xs={2} >
+          <Typography variant="h5" align="center">OR</Typography>
+        </Grid>
+        <Grid item xs={5} >
+          <LoginForm showSignupMessage={false}/>
+        </Grid>
+      </Grid>
+
+    </div>
+  );
+
+  function AccountCreationOrLoginModal(props) {
+
+    return (
+      <>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+        >
+          {modalBody}
+        </Modal>
+      </>
+    )
+
+  }
 
   return (
     <>
@@ -741,8 +808,9 @@ const AccountCreationReminder = (props) => {
             Oh no! We can't save your progress!
           </Typography>
           <Typography style={{ color: "white" }}>
-            <a href="/login"><strong><span style={{textDecoration: "underline", color: "white"}}>Create an account</span></strong></a> at any time and return to where you left off.
+            <a onClick={handleOpen}><strong><span style={{textDecoration: "underline", color: "white"}}>Create an account or login</span></strong></a>. You will return where you left off.
           </Typography>
+          <AccountCreationOrLoginModal/>
         </Box>
       </Paper>
     </>
