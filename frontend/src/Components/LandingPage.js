@@ -18,6 +18,7 @@ import LastLevel from "./NewUserFlow/LastLevel";
 
 //Drafts...
 import Level20 from "./NewUserFlow/Level20";
+import Level47 from "./NewUserFlow/Level47"
 import Level57 from "./NewUserFlow/Level57";
 import Level101 from "./NewUserFlow/Level101";
 
@@ -44,6 +45,11 @@ function SecretLevels(props) {
       setBadges={props.setBadges}
       badges={props.badges}
       badgeName={"Finished:ch20:What-to-Call-This??"}
+    />,
+    <Level47
+      setBadges={props.setBadges}
+      badges={props.badges}
+      badgeName={"Finished:ch47:??"}
     />,
     <Level57
       setBadges={props.setBadges}
