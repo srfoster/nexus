@@ -3,40 +3,20 @@ import { Level, ContinueButton } from './Level';
 import Snake from '../Widgets/SnakeGame/SnakeGame'
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
-
-//when terminal is integrated
-// also pass it down through level 20 props 
-  // setSnakeColor: {
-  //   description: 'Changes the color of the snake',
-  //   usage: 'setSnakeColor <color>',
-  //   fn: function () {
-  //     return (
-  //       props.setSnakeColor(Array.from(arguments))
-  //     )
-  //   }
-  // },
-  // setAppleColor: {
-  //   description: 'Changes the color of the apple',
-  //   usage: 'setAppleColor <color>',
-  //   fn: function () {
-  //     return (
-  //       props.setAppleColor(Array.from(arguments))
-  //     )
-  //   }
-  // },
-
+import ReactTerminal from '../ReactTerminal';
 
 function Level47(props) {
   var keys = {};
   const [snakeColor, setSnakeColor] = useState('')
-  const [appleColor, setAppleColor] = useState('')
+  const [orbColor, setOrbColor] = useState('')
+  const [showTextBoxes, setShowTextBoxes] = useState(false)
 
   window.addEventListener("keydown",
       function(e){
           keys[e.keyCode] = true;
           switch(e.keyCode){
               case 37: case 39: case 38:  case 40: // Arrow keys
-              case 32: e.preventDefault(); break; // Space
+              e.preventDefault(); break; // Space
               default: break; // do not block other keys
           }
       },
@@ -49,34 +29,48 @@ function Level47(props) {
   false);
 
   return (
-    <Level number={47} subtitle={"Snake? color?"}>
+    <Level number={47} subtitle={"Mr. Sock Puppet needs help collecting orbs for next component!!"}>
+      <ReactTerminal 
+        setOrbColor={setOrbColor} 
+        setSnakeColor={setSnakeColor} 
+        setShowTextBoxes={setShowTextBoxes} 
+      />
       <Grid container>
-        <Grid item xs={6}>
-          <TextField
-            id="outlined-basic" 
-            label="Type a color for snake" 
-            variant="outlined" 
-            helperText="Hex codes work too! (#29f0cb)"
-            value={snakeColor}
-            onChange={e => setSnakeColor(e.target.value)} 
-          />
-          <TextField
-            id="outlined-basic" 
-            label="Type a color for apple" 
-            variant="outlined" 
-            value={appleColor}
-            onChange={e => setAppleColor(e.target.value)} 
-          />
+        <Grid item xs={5}>
+          {showTextBoxes ?
+          <>
+            <TextField
+              id="outlined-basic" 
+              label="Type a color for snake" 
+              variant="outlined" 
+              helperText="Hex codes work too! (#29f0cb)"
+              value={snakeColor}
+              onChange={e => setSnakeColor(e.target.value)} 
+            />
+            <TextField
+              id="outlined-basic" 
+              label="Type a color for Orb" 
+              variant="outlined" 
+              value={orbColor}
+              onChange={e => setOrbColor(e.target.value)} 
+            />
+          </>
+          :
+            <div>
+              <p>Try setSnakeColor (your favorite color here)</p>
+              <p>Want text boxes?</p>
+            </div>
+          }
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={7}>
           <Snake 
             key='snakeGame'
             percentageWidth={100}
             snakeColor={snakeColor}
-            appleColor={appleColor}
+            appleColor={orbColor}
           />
         </Grid>
-        {snakeColor && appleColor && 
+        {snakeColor && orbColor && 
           <ContinueButton
             onComplete={() => {
               props.setBadges(props.badges.concat([{ name: props.badgeName }]));

@@ -1,7 +1,7 @@
 const knex = require('knex')
 const { expect } = require('chai')
 const jwt = require('jsonwebtoken')
-const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epWizardDetails, epSpellsFork, epSpellTags, epSpellTagsIndex } = require('../src/app')
+const { app, epHome, epLogin, epSignup, epSpellIndex, epSpellDetails, epPublicSpells, epMageDetails, epSpellsFork, epSpellTags, epSpellTagsIndex } = require('../src/app')
 const helpers = require('./test-helpers')
 const config = require('../src/config')
 const bcrypt = require('bcryptjs')

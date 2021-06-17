@@ -415,6 +415,7 @@ class SnakeGame extends React.Component {
             left: this.state.apple.Xpos,
             top: this.state.apple.Ypos,
             background: this.state.appleColor,
+            borderRadius: '5px',
           }}
         />
         <div id='Score' style={{ fontSize: this.state.width / 20 }}>

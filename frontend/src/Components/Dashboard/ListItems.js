@@ -64,8 +64,8 @@ export function PublicListItems(props) {
     </div>
     <Divider />
     <div>
-    <ListItem button onClick={() => handleClickButton('/wizards/me')}
-      // className={path.includes('/wizards') ? classes.listIcon : ''}
+    <ListItem button onClick={() => handleClickButton('/mages/me')}
+      // className={path.includes('/mages') ? classes.listIcon : ''}
       >
       <ListItemIcon>
         <AccountCircleIcon />
@@ -90,7 +90,7 @@ export function PublicListItems(props) {
     </ListItem>
     {/* Twitch Tab */}
     {/* <ListItem button
-      onClick={() => handleClickButton('/wizards/me')}
+      onClick={() => handleClickButton('/mages/me')}
       >
       <ListItemIcon >
       <img src='https://i.imgur.com/O6pTizo.png' alt="TwitchIcon" width="24px"></img>
