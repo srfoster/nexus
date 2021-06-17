@@ -32,6 +32,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import Badge from '@material-ui/core/Badge';
 import MailIcon from '@material-ui/icons/Mail';
 import Sound from 'react-sound';
+import SpellsApiService from '../../Services/spells-api-service';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import {
@@ -734,6 +735,15 @@ const SBS = (props) => {
 const AccountCreationReminder = (props) => {
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(undefined);
+
+  useEffect(() => {
+    // Only running this to check if logged in
+    SpellsApiService.getUserById('me')
+      .then((user) => setIsLoggedIn(true))
+      .catch(() => setIsLoggedIn(false))
+    console.log("useEffect is doing its thing. isLogged in is set to: ", isLoggedIn)
+    })
 
   function getModalStyle() {
     const top = 50;
@@ -810,17 +820,20 @@ const AccountCreationReminder = (props) => {
 
   return (
     <>
-      <Paper square={true} style={{ background: "#f50057", opacity: 0.8 }}>
-        <Box pl={3} pr={3} pt={1} pb={1}>
-          <Typography style={{ color: "white" }}>
-            Oh no! We can't save your progress!
-          </Typography>
-          <Typography style={{ color: "white" }}>
-            <a onClick={handleOpen}><strong><span style={{textDecoration: "underline", color: "white"}}>Create an account or login</span></strong></a>. You will return where you left off.
-          </Typography>
-          <AccountCreationOrLoginModal/>
-        </Box>
-      </Paper>
+      {isLoggedIn ? "" :
+        <Paper square={true} style={{ background: "#f50057", opacity: 0.8 }}>
+          <Box pl={3} pr={3} pt={1} pb={1}>
+            <Typography style={{ color: "white" }}>
+              Oh no! We can't save your progress!
+            </Typography>
+            <Typography style={{ color: "white" }}>
+              <a onClick={handleOpen}><strong><span style={{ textDecoration: "underline", color: "white" }}>Create an account or login</span></strong></a>. You will return where you left off.
+            </Typography>
+            <AccountCreationOrLoginModal />
+          </Box>
+        </Paper>
+      }
+
     </>
   )
 }

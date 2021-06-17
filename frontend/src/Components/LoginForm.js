@@ -42,7 +42,7 @@ const LoginForm = (props) => {
 
     const handleLoginSuccess = () => {
       const { history } = props
-      history.push('/')
+      window.location = "/"; //History.push would be faster but doesn't trigger reload of app component
     }
 
     return (
@@ -70,7 +70,7 @@ const LoginForm = (props) => {
               margin="normal"
               required
               fullWidth
-              id="username"
+              id="username-login"
               label="Username"
               name="username"
               autoComplete="username"
@@ -85,7 +85,7 @@ const LoginForm = (props) => {
               name="password"
               label="Password"
               type="password"
-              id="password"
+              id="password-login"
               autoComplete="current-password"
               inputRef={passwordInput}
             />

@@ -600,7 +600,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none'
   },
   darkLinkColor:{
-    color: '#f48fb1',
+    color: 'white',
     textDecoration: 'none'
   },
 }));
