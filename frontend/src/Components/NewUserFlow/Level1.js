@@ -528,40 +528,41 @@ function Puzzle({ isComplete, code, hint }) {
     </div>
   </>
 }
+  
+const Magic = (props) => {
+  let unlocked = props.children && JSON.stringify(props.children).includes("Hello, World!")
+
+  return <>
+    <Typography>This {unlocked ? "works!" : "doesn't work..."}</Typography>
+    <Button
+      onClick={() => {
+        unlocked = props.children && JSON.stringify(props.children).includes("Hello, World!")
+        if (unlocked) {
+          props.setComplete(true)
+          props.onComplete()
+        }
+      }}
+      color="secondary">{props.children}</Button>
+    <Typography paragraph>{props.complete ? ["Look below for the 'Next' button!"] : ""}</Typography>
+  </>
+}
+
 
 function HelloWorldPuzzle(props) {
   const [complete, setComplete] = useState(false);
-  const [code, setCode] = useState("<Magic>\n  Next\n</Magic>");
-  
-  const Magic = (props) => {
-    const [msg, setMsg] = useState("");
-    let unlocked = props.children && JSON.stringify(props.children).includes("Hello, World!")
+  const [code, setCode] = useState("<MagicButton>\n  Next\n</MagicButton>");
 
-    return <>
-      <Typography>This {unlocked ? "works!" : "doesn't work..."}</Typography>
-      <Button
-        onClick={() => {
-          if (unlocked) {
-            setMsg("You got it!  Look below for the real Next button.")
-            setComplete(true)
-            props.onComplete()
-          }
-        }}
-        color="secondary">{props.children}</Button>
-      <Typography paragraph>{ msg }</Typography>
-    </>
-  }
   return (
     <Fade in={true} timeout={1000}>
       <Puzzle code={
         <JSMirror code={code}
-          scope={{ Magic: (userProps) => Magic({ ...userProps, ...props }) }}
+          scope={{ MagicButton: (userProps) => Magic({ ...userProps, ...props, setComplete, complete }) }}
           onChange={(code) => {
             //Note: Could statically read code here...
             setCode(code);
             return true
           }} />}
-        hint={<><Typography paragraph>Hint: The magic button will only work if it contains the same text as the title of my email</Typography></>}
+        hint={<><Typography paragraph>Hint: The magic button will only work if it contains the same text as the subject of my email.</Typography></>}
         isComplete={complete} />
     </Fade>
   )
@@ -571,24 +572,26 @@ function SockPuppetFirstLesson(props) {
     let [videoFinished, setVideoFinished] = useState(false);
 
     /*
-    *out of breath* I'm sorry! I was rushing to put together this content for you.
+    *out of breath* I'm sorry! I was rushing to put together this lesson for you.
    I didn't have time to memorize the Nexus' introductory script, so I'm
    just going to read it to you:
    *someone holds up index card at edge of frame*
-   Welcome to the journey of a lifetime! I'm here to train you to become
-   a CODING WIZARD! 
-   <<The first lesson of magic is >>
-   The following code prints "Hello World".
-   Okay, I'm going to go off-script here.  [The Nexus's analytics show that
+
+   Welcome to the journey of a lifetime! I'm here to train you write your own
+   magic spells with code!
+   But first we have to see if you have what it takes to learn magic!
+   Below this video message is a coding puzzle.  You'll have to read everything
+   on this page carefully to pass this test.  Then you can officially enter the Nexus
+   and continue your quest to learn magic!
+
+   Okay, I'm going to go off-script here.  The Nexus's analytics show that
    this is the step where most users drop off.  When they have to write their
-   first piece of code.]
+   first piece of code.
    I know you don't even know me.  And I know I'm just a sock puppet.  
    But could you please write this program?
    It would mean a lot to me.  I would owe you a favor.
    
     */
-
-  
   
     return (
       <SBS
@@ -604,7 +607,7 @@ function SockPuppetFirstLesson(props) {
               playsInline
               fluid={false}
               width={"100%"}
-              url="https://codespells-org.s3.amazonaws.com/NexusVideos/screen-demo-test.mp4"
+              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e2-sock-3.mp4"
               controls={true}
               style={{}}
               playing={false}
@@ -617,7 +620,7 @@ function SockPuppetFirstLesson(props) {
         }
         rightSide={videoFinished ?
           <>
-            <Typography paragraph>The puzzle is to modify the code below to generate a button that lets you procede to the next part of the Nexus.</Typography>
+            <Typography paragraph>The puzzle is to modify the code below to generate a button that lets you proceed to the next part of the Nexus.</Typography>
             <HelloWorldPuzzle onComplete={() => props.setCanContinue(true)} />
           </>
           : ""}
@@ -666,8 +669,11 @@ function LightOrDark(props) {
 function Level1CompleteScreen(props) {
   return (
     <>
-      <p>Congratulations! You've completed Level 1! You're on your way to being a Mage!</p>
-      <Button onClick={() => { }}>Continue</Button>
+      <Fade in={true} timeout={1000}>
+        <Typography>Congratulations!</Typography></Fade>
+      <Fade in={true} timeout={10000}>
+        <Typography>You've completed Level 1!</Typography>
+      </Fade>
     </>
   );
 }
@@ -688,23 +694,25 @@ const MeetYourTeacher = (props) => {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl1:currentPart", 0)
   const [canContinue, setCanContinue] = useState(false)
 
+  let parts =
+    [<UserNameForm setCanContinue={setCanContinue} setUsername={setUsername} username={username} />,
+     <LightOrDark setCanContinue={setCanContinue} />,
+     <ChooseYourTeacher setCanContinue={setCanContinue} />,
+     <SockPuppetTeacherIntroduction setCanContinue={setCanContinue} username={username} />,
+     <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={setCanContinue} username={username} />,
+     <Level1CompleteScreen />]
+
   return (
     <>
       {currentPart == 0 && !canContinue ? <Gong /> : "" /* First visit */}
       <CardContent>
-        {[
-          <UserNameForm setCanContinue={setCanContinue} setUsername={setUsername} username={username} />,
-          <LightOrDark setCanContinue={setCanContinue} />,
-          <ChooseYourTeacher setCanContinue={setCanContinue} />,
-          <SockPuppetTeacherIntroduction setCanContinue={setCanContinue} username={username} />,
-          <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={setCanContinue} username={username} />,
-          <Level1CompleteScreen />][currentPart]}
+        {parts[currentPart]}
       </CardContent>
       <CardActions>
         {currentPart ?
           <Button key="back-button" onClick={() => { setCurrentPart(currentPart - 1); setCanContinue(false) }}>Back</Button> :
           ""}
-        {canContinue ?
+        {canContinue || currentPart == parts.length - 1 ?
           <ContinueButton key="continue-button" onClick={reallyContinue} />
           : ""}
       </CardActions>
