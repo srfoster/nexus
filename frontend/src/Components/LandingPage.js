@@ -71,6 +71,7 @@ const LandingPage = (props) => {
   const [showSecrets, setShowSecrets] = useState(undefined);
 
   const levels = [
+    <Level1/>,
     <Level2
       setBadges={setBadges}
       badges={badges}
