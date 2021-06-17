@@ -29,11 +29,107 @@ import 'codemirror/addon/edit/closebrackets.js'
 import 'codemirror/addon/selection/active-line.js'
 import CallSplitIcon from '@material-ui/icons/CallSplit';
 import {Helmet} from "react-helmet";
+import { BlocklyWorkspace } from "react-blockly";
+import Blockly from "blockly";
+import "./customBlocks/custom_Blocks";
 
 
 let debounceTimer
 
 export default function SpellDetails(props) {
+  const [xml, setXml] = useState("");
+  const [javascriptCode, setJavascriptCode] = useState("");
+
+  const initialXml =
+    '<xml xmlns="http://www.w3.org/1999/xhtml"><block type="text" x="70" y="30"><field name="TEXT"></field></block></xml>';
+  const toolboxCategories = {
+    kind: "categoryToolbox",
+    contents: [
+      {
+        kind: "category",
+        name: "Logic",
+        colour: "#5C81A6",
+        contents: [
+          {
+            kind: "block",
+            type: "controls_if",
+          },
+          {
+            kind: "block",
+            type: "logic_compare",
+          },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Math",
+        colour: "#5CA65C",
+        contents: [
+          {
+            kind: "block",
+            type: "math_round",
+          },
+          {
+            kind: "block",
+            type: "math_number",
+          },
+        ],
+      },
+      {
+        kind: "category",
+        name: "Spells",
+        colour: "#c1ba31",
+        contents: [
+          {
+            kind: "block",
+            type: "atoms",
+          },
+          {
+            kind: "block",
+            type: "lists_create_with",
+          },
+          {
+            kind: "block",
+            type: "test_react_date_field",
+          },
+          {
+            kind: "block",
+            type: "define",
+          },
+          {
+            kind: "block",
+            type: "paren",
+          },
+          {
+            kind: "block",
+            type: "atom",
+          },
+         
+          {
+            kind: "block",
+            blockxml:
+            '    <block type="text_isEmpty">\n' +
+            '      <value name="VALUE">\n' +
+            '        <shadow type="text">\n' +
+            '          <field name="TEXT"></field>\n' +
+            "        </shadow>\n" +
+            "      </value>\n" +
+            "    </block>\n",
+          },
+        ],
+      },
+    ],
+  };
+
+  function workspaceDidChange(workspace) {
+    const code = Blockly.JavaScript.workspaceToCode(workspace);
+    //const code = Blockly.Blocks.workspaceToCode(workspace);
+    //for sample custom blocks
+    //const code = Blockly.Python.workspaceToCode(workspace);
+    setJavascriptCode(code);
+    setSpellText(code);
+  }
+
   const classes = useStyles();
   let history = useHistory();
 
@@ -391,7 +487,34 @@ export default function SpellDetails(props) {
             ))}
           </div>
         }
-        <p></p> 
+        <p></p>
+
+        <h1>Hello World!</h1> 
+        
+        <BlocklyWorkspace
+        toolboxConfiguration={toolboxCategories}
+        initialXml={initialXml}
+        className={classes.spellDetailsCodeMirror}
+        workspaceConfiguration={{
+          grid: {
+            spacing: 20,
+            length: 3,
+            colour: "#ccc",
+            snap: true,
+          },
+        }}
+        onWorkspaceChange={workspaceDidChange}
+        onXmlChange={setXml}
+      />
+      
+      {/* <pre id="generated-xml">{xml}</pre>
+      <textarea
+        id="code"
+        style={{ height: "200px", width: "400px" }}
+        value={javascriptCode}
+        readOnly
+      ></textarea> */}
+
         <div className={classes.spellDetailsCodeMirror}>
           {spell.locked || !userOwnsSpell ?
             <MagicMirror

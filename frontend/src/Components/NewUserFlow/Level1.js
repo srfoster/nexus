@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import LoginForm from '../LoginForm';
 import SignupForm from '../SignupForm';
+import Hidden from '@material-ui/core/Hidden';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
@@ -779,13 +780,20 @@ const AccountCreationReminder = (props) => {
         direction="row"
         alignItems="center"
         justify="center">
-        <Grid item xs={5} >
+        <Grid item lg={5} >
           <SignupForm showSigninMessage={false}/>
         </Grid>
-        <Grid item xs={2} >
-          <Typography variant="h5" align="center">OR</Typography>
-        </Grid>
-        <Grid item xs={5} >
+        <Hidden mdDown>
+          <Grid item lg={2} >
+            <Typography variant="h5" align="center">— OR —</Typography>
+          </Grid>
+        </Hidden>
+        <Hidden lgUp>
+          <Grid item lg={2} >
+            <Typography align="center">Or if you already have an account...</Typography>
+          </Grid>
+        </Hidden>
+        <Grid item lg={5} >
           <LoginForm showSignupMessage={false}/>
         </Grid>
       </Grid>

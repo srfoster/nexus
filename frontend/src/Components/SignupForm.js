@@ -122,7 +122,7 @@ const SignupForm = (props) => {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
+              color="secondary"
               className={classes.signupFormSubmit}
               onClick={(e) => handleSubmit(e)}
             >
