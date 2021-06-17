@@ -591,8 +591,6 @@ function SockPuppetFirstLesson(props) {
    It would mean a lot to me.  I would owe you a favor.
    
     */
-
-  
   
     return (
       <SBS
