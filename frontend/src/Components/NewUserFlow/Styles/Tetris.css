@@ -1,0 +1,55 @@
+.tetris {
+    display: flex;
+    justify-content: center;
+  }
+.piece-view{
+  margin: 0px 5px 5px 5px;
+}
+.points {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin-right: 5px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.title{
+  display: flex;
+  justify-content: center;
+}
+
+.game-board{
+  table-layout: fixed;
+}
+.game-block {
+    margin: 0;
+    padding: 0;
+    width: 1.5em;
+    height: 1.5em;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+  }
+  .piece-i {
+    background-color: #ec858b;
+  }
+  .piece-j {
+    background-color: #f1b598;
+  }
+  .piece-l {
+    background-color: #f8efae;
+  }
+  .piece-o {
+    background-color: #b5a677;
+  }
+  .piece-s {
+    background-color: #816e56;
+  }
+  .piece-t {
+    background-color: #b77c72;
+  }
+  .piece-z {
+    background-color: #e3be58;
+  }
+  .piece-preview {
+    background-color: #eee;
+  }

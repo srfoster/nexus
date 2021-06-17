@@ -27,6 +27,7 @@
     "react-scripts": "4.0.2",
     "react-sound": "^1.2.0",
     "react-tag-input": "^6.5.2",
+    "react-tetris": "^0.1.2",
     "react-typing-animation": "^1.6.2",
     "recharts": "^2.0.6",
     "soundfont-player": "^0.12.0",
