@@ -19,6 +19,8 @@ const LoginForm = (props) => {
   let usernameInput = React.createRef()
   let passwordInput = React.createRef()
   const [error, setError] = useState(null);
+  
+  var showSignupMessage = props.showSignupMessage === undefined ? true : props.showSignupMessage;
 
   const handleSubmitJwtAuth = (e) => {
     e.preventDefault()
@@ -40,7 +42,7 @@ const LoginForm = (props) => {
 
     const handleLoginSuccess = () => {
       const { history } = props
-      history.push('/')
+      window.location = "/"; //History.push would be faster but doesn't trigger reload of app component
     }
 
     return (
@@ -60,7 +62,7 @@ const LoginForm = (props) => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Sign In
           </Typography>
           <form className={classes.loginFormForm} noValidate>
             <TextField
@@ -68,7 +70,7 @@ const LoginForm = (props) => {
               margin="normal"
               required
               fullWidth
-              id="username"
+              id="username-login"
               label="Username"
               name="username"
               autoComplete="username"
@@ -83,7 +85,7 @@ const LoginForm = (props) => {
               name="password"
               label="Password"
               type="password"
-              id="password"
+              id="password-login"
               autoComplete="current-password"
               inputRef={passwordInput}
             />
@@ -94,7 +96,7 @@ const LoginForm = (props) => {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
+              color="secondary"
               className={classes.loginFormSubmit}
               onClick={(e) => handleSubmitJwtAuth(e)}
             >
@@ -106,11 +108,13 @@ const LoginForm = (props) => {
                   Forgot password?
                 </Link> */}
               </Grid>
-              <Grid item>
-                <Link to={'/signup'} variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
+                {showSignupMessage ?
+                  <Grid item>
+                    <Link to={'/signup'} variant="body2">
+                      Don't have an account? Sign up.
+                    </Link>
+                  </Grid> : ""
+                }
             </Grid>
           </form>
         </div>

@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import useStyles from '../../styles.js';
 import SpellsApiService from '../../Services/spells-api-service';
 import FollowCard from '../FollowCard'
 import Pagination from '@material-ui/lab/Pagination';
+import {SearchBar} from '../../Util.js'
+import { DarkModeContext } from '../Context';
 
-function Follows() {
+function Follows(props) {
   const classes = useStyles();
   const [follows, setFollows] = useState()
   const [error, setError] = useState(null);
@@ -12,6 +14,8 @@ function Follows() {
   const [totalFollows, setTotalFollows] = useState(null)
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [darkMode, setDarkMode] = useContext(DarkModeContext);
+  
   useEffect(() => {
     let isMounted = true
 
@@ -40,6 +44,11 @@ function Follows() {
   }
   return(
     <>
+      <div className={darkMode ? classes.darkHeadBar : classes.headBar}>
+        <div className={classes.headLeft}></div>
+        <h4 className={classes.headTitle}>Mages you follow</h4>
+        <div className={classes.headRight}></div>
+      </div>
       {follows && follows.map(follow => (
         <FollowCard follow={follow} deleteFollow={deleteFollow} key={'Key ', follow.id}/>
       ))}

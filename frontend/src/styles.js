@@ -191,7 +191,18 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '400',
     lineHeight: '1.334',
     letterSpacing: '0em',
-    color: '#3f51b5',
+    color: '#fff',
+  },
+  darkHeadBar: {
+    justifyContent: 'space-between',
+    fontSize: '1.5rem',
+    display: 'inline-flex',
+    width: 'auto',
+    fontFamily: "Roboto",
+    fontWeight: '400',
+    lineHeight: '1.334',
+    letterSpacing: '0em',
+    color: 'white',
   },
   headLeft: {
     flexGrow: '5',
@@ -376,7 +387,6 @@ const useStyles = makeStyles((theme) => ({
 
   // LoginForm //
   loginFormPaper: {
-    marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -411,6 +421,17 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '1.334',
     letterSpacing: '0em',
     color: '#3f51b5',
+  },
+  darkHeadBar: {
+    justifyContent: 'space-between',
+    fontSize: '1.5rem',
+    display: 'inline-flex',
+    width: 'auto',
+    fontFamily: "Roboto",
+    fontWeight: '400',
+    lineHeight: '1.334',
+    letterSpacing: '0em',
+    color: 'white',
   },
   headLeft: {
     flexGrow: '5',
@@ -515,6 +536,17 @@ const useStyles = makeStyles((theme) => ({
     letterSpacing: '0em',
     color: '#3f51b5',
   },
+  darkUserProfileHeadBar: {
+    justifyContent: 'space-between',
+    fontSize: '1.5rem',
+    display: 'inline-flex',
+    width: 'auto',
+    fontFamily: "Roboto",
+    fontWeight: '400',
+    lineHeight: '1.334',
+    letterSpacing: '0em',
+    color: 'white',
+  },
   userProfileHeadLeft: {
     flexGrow: '5',
     display: 'inline-flex',
@@ -538,9 +570,8 @@ const useStyles = makeStyles((theme) => ({
   //follow Cards
   followCard: {
     height: '200px',
-    backgroundColor: 'white',
+    width: '100%',
     margin: "5px",
-    color: 'black',
   },
   followCardBody: {
     display: 'flex',
@@ -563,8 +594,15 @@ const useStyles = makeStyles((theme) => ({
   },
   followName:{
     maxWidth: '300px'
-  }
-
+  },
+  linkColor:{
+    color: 'blue',
+    textDecoration: 'none'
+  },
+  darkLinkColor:{
+    color: 'white',
+    textDecoration: 'none'
+  },
 }));
 
 

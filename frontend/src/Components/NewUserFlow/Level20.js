@@ -95,14 +95,11 @@ function Level20(props) {
             )}
           </div>
         </Grid>
-        <Grid item md={6}>
-          <div style={{zIndex:1, position:"relative"}}>
+        <Grid item md={6} style={{zIndex:1, position:"relative"}}>
           <ReactTerminal setShowButton={setShowButton} setShowStars={setShowStars} setNumPoints={setNumPoints}
             setStarColor={setStarColor}/>
-          </div>
         </Grid>
       </Grid>
-      {/* <ReactTerminal setShowButton={setShowButton} /> */}
       <ContinueButton
         onComplete={() => {
           props.setBadges(props.badges.concat([{ name: props.badgeName }]));

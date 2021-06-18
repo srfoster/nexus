@@ -3,15 +3,26 @@ import { useHistory } from "react-router-dom";
 import SpellsApiService from '../Services/spells-api-service';
 import { Helmet } from "react-helmet";
 import TokenService from '../Services/token-service';
+import Container from '@material-ui/core/Container';
+
 import Level1 from "./NewUserFlow/Level1";
 import Level2 from "./NewUserFlow/Level2";
 import Level3 from "./NewUserFlow/Level3";
+import Level4 from "./NewUserFlow/Level4";
+import Level5 from "./NewUserFlow/Level5";
+import Level6 from "./NewUserFlow/Level6";
+import Level7 from "./NewUserFlow/Level7";
+import Level8 from "./NewUserFlow/Level8";
 import LastLevel from "./NewUserFlow/LastLevel";
+
 
 //Drafts...
 import Level20 from "./NewUserFlow/Level20";
-import Level33 from "./NewUserFlow/Level33";
 import Level57 from "./NewUserFlow/Level57";
+import Level101 from "./NewUserFlow/Level101";
+
+import { makeStyles } from '@material-ui/core/styles';
+
 
 // Badge -> Boolean
 function finished(badge) {
@@ -27,22 +38,24 @@ function currentLevelNum(badges) {
 
 function SecretLevels(props) {
   //const [selection, setSelection] = useState(0)
-
+  console.log('landingpage:', props)
   let Secrets = [
     <Level20
       setBadges={props.setBadges}
       badges={props.badges}
       badgeName={"Finished:ch20:Terminal Button anyone?"}
     />,
-    <Level33
-    setBadges={props.setBadges}
-    badges={props.badges}
-    badgeName={"Finished:ch33:STARS FOR EVERYONE"}
-  />,
     <Level57
       setBadges={props.setBadges}
       badges={props.badges}
       badgeName={"Finished:ch57:??"}
+      darkMode={props.darkMode}
+      setDarkMode={props.setDarkMode}
+    />,
+    <Level101
+      setBadges={props.setBadges}
+      badges={props.badges}
+      badgeName={"Finished:ch101:??"}
     />,
   ]
 
@@ -52,13 +65,13 @@ function SecretLevels(props) {
   </>
 }
 
-
 const LandingPage = (props) => {
   const [hasFetchedBadges, setHasFetchedBadges] = useState(false);
   const [badges, setBadges] = useState(undefined);
   const [showSecrets, setShowSecrets] = useState(undefined);
 
   const levels = [
+    <Level1/>,
     <Level2
       setBadges={setBadges}
       badges={badges}
@@ -68,6 +81,31 @@ const LandingPage = (props) => {
       setBadges={setBadges}
       badges={badges}
       badgeName={"Finished:ch3:Light-Mage-or-Dark-Mage"}
+    />,
+    <Level4
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch4:TBD"}
+    />,
+    <Level5
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch5:TBD"}
+    />,
+    <Level6
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch6:TBD"}
+    />,
+    <Level7
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch7:TBD"}
+    />,
+    <Level8
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch8:TBD"}
     />,
     <LastLevel setBadges={ setBadges } badges={ badges }/>
   ];
@@ -91,18 +129,22 @@ const LandingPage = (props) => {
         <title>CodeSpells Nexus</title>
         <meta name="description" content="Welcome to the Nexus! If you want to write and save spells that run on CodeSpells video games, you're in the right place." />
       </Helmet>
-      <div onClick={(e) => {
-        if (e.ctrlKey) {
-          setShowSecrets(!showSecrets)
-          console.log("SHOW SECRETS")
-        }
-      }}>
-      {TokenService.hasAuthToken() ?
-          (showSecrets ? <SecretLevels badges={badges} setBadges={ setBadges } /> : currentLevel) :
-          < Level1 setBadges={setBadges} />
-           
-        }
-      </div>
+      <Container
+        maxWidth="sm">
+        <div style={{padding: 10}}>
+          <div onClick={(e) => {
+            if (e.ctrlKey || e.metaKey) {
+              setShowSecrets(!showSecrets)
+            }
+          }}>
+            {TokenService.hasAuthToken() ?
+              (showSecrets ? <SecretLevels badges={badges} setBadges={setBadges} /> : currentLevel) :
+              < Level1 setBadges={setBadges} />
+
+            }
+          </div>
+        </div>
+      </Container>
     </>
   );
 }

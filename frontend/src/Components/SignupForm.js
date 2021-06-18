@@ -18,6 +18,8 @@ const SignupForm = (props) => {
   let usernameInput = React.createRef()
   let passwordInput = React.createRef()
   let passConfirmInput = React.createRef()
+  
+  var showSigninMessage = props.showSigninMessage === undefined ? true : props.showSigninMessage;
   const [error, setError] = useState(null);
   
   let showTopContent = true;
@@ -70,7 +72,7 @@ const SignupForm = (props) => {
               <LockOutlinedIcon />
             </Avatar>
               <Typography component="h1" variant="h5">
-                Sign up
+                Create an Account
           </Typography></> : ""}
           <form className={classes.signupFormForm} noValidate>
             <Grid container spacing={2}>
@@ -120,18 +122,19 @@ const SignupForm = (props) => {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
+              color="secondary"
               className={classes.signupFormSubmit}
               onClick={(e) => handleSubmit(e)}
             >
                 { signupButtonContent}
             </Button>
             <Grid container justify="flex-end">
-              <Grid item>
-                <Link to={'/login'} variant="body2">
-                  Already have an account? Sign in
-                </Link>
-              </Grid>
+                {showSigninMessage ?
+                  <Grid item>
+                    <Link to={'/login'} variant="body2">
+                      Already have an account? Sign in.
+                    </Link>
+                  </Grid> : ""}
             </Grid>
           </form>
         </div>
