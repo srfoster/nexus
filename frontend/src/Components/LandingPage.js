@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import TokenService from '../Services/token-service';
 import Container from '@material-ui/core/Container';
 
-import Level1 from "./NewUserFlow/Level1";
+import Level1 from "./NewUserFlow/Level1/"
 import Level2 from "./NewUserFlow/Level2";
 import Level3 from "./NewUserFlow/Level3";
 import Level4 from "./NewUserFlow/Level4";
