@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from "../../Util";
-import { Level, LoginButton } from "./Level";
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import LoginForm from '../LoginForm';
@@ -16,127 +15,19 @@ import Fade from '@material-ui/core/Fade';
 import ReactPlayer from 'react-player'
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
 import DarkModeSwitch from '../Widgets/DarkModeSwitch';
 import TextField from '@material-ui/core/TextField';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormLabel from '@material-ui/core/FormLabel';
 import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Badge from '@material-ui/core/Badge';
-import MailIcon from '@material-ui/icons/Mail';
-import Sound from 'react-sound';
 import SpellsApiService from '../../Services/spells-api-service';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
-import {
-  LiveProvider,
-  LiveEditor,
-  LiveError,
-  LivePreview,
-  LiveContext
-} from 'react-live'
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
-const babel = require("@babel/core");
+import { MultipleChoiceQuestion, JSMirror } from '../Widgets/Educational';
+import { NewMessageNotification, SockPuppetChip, SpinThen, FakeChip, Gong }  from '../Widgets/NexusVoice';
+import { Level, LoginButton, ContinueButton } from "./Level";
 
-function Gong(){
-  return <Sound
-    url="/gong.mp3"
-    playStatus={Sound.status.PLAYING}
-    playFromPosition={0 /* in milliseconds */}
-  />
-}
-
-function MultipleChoiceQuestion(props) {
-  const [value, setValue] = React.useState('');
-  const [error, setError] = React.useState(false);
-  const [helperText, setHelperText] = React.useState(' ');
-
-  const handleRadioChange = (event) => {
-    setValue(event.target.value);
-    setHelperText(' ');
-    setError(false);
-  };
-
-  const handleSubmit = () => {
-    let selection = props.answers[Number(value)]
-    if (selection) {
-      setHelperText(selection.feedback);
-      setError(!selection.correct);
-      if (selection.correct) {
-        props.onCorrect();
-      } else {
-        props.onIncorrect();
-      }
-    }
-  }
-
-  return (
-    <>
-      <Fade in={true} timeout={1000}>
-        <>
-          <FormControl component="fieldset" error={error}
-            style={{ display: "flex", ...props.style }}>
-            <FormLabel component="legend">{props.question}</FormLabel>
-            <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
-              {props.answers.map((e, i) => { return <FormControlLabel value={"" + i} control={<Radio />} label={e.text} /> })}
-            </RadioGroup>
-            <FormHelperText>{helperText}</FormHelperText>
-          </FormControl>
-          <Button size="small" onClick={handleSubmit} type="submit" variant="solid" color="primary">{props.buttonText}</Button>
-        </>
-      </Fade>
-    </>
-  );
-}
-
-
-function NewMessageNotification(props) {
-  return(<Grid container spacing={1}>
-    <Fade in={true} timeout={1000}>
-      <Grid item xs={6}>
-        <Typography>
-          {props.nexusSays}
-        </Typography>
-      </Grid>
-    </Fade>
-    <Fade in={true} timeout={2000}>
-      <Grid item xs={6}>
-        <Gong />
-        <Badge badgeContent={1} color="secondary">
-          <MailIcon />
-        </Badge>
-        <Typography>from</Typography>
-        {props.from}
-        <Button size="small" onClick={ ()=>props.onOpenClicked() }>Open?</Button>
-      </Grid>
-    </Fade>
-  </Grid>)
-}
-
-function SockPuppetChip() {
-  return <Chip avatar={<Avatar alt="Sock Puppet" src="/static/images/avatar/1.jpg" />} label="Sock Puppet (Lvl 1)"></Chip>
-}
-
-function FakeChip(props) {
-  return <Chip avatar={<Avatar alt={props.name} src="/static/images/avatar/1.jpg" />} label={<span>{props.name} {" (Lvl " + (props.level !== undefined ? props.level : 10 * props.name.length) + ")"}</span>}></Chip>
-}
-
-const ContinueButton = (props) => {
-  return (
-    <Fade in={true} timeout={1000}>
-      <Button color="secondary" style={{ marginLeft: "auto", ...props.style }} onClick={props.onClick}>Next</Button>
-    </Fade>
-  );
-}
 
 const UserNameForm = (props) => {
   const [checking, setChecking] = useState(false);
@@ -225,20 +116,6 @@ const UserNameForm = (props) => {
       </Grid>
     </Fade>
   </Grid>)
-}
-
-function SpinThen(props) {
-  const [showFeedback, setShowFeedback] = useState(false);
-
-  useEffect(() => {
-    setTimeout(() => { setShowFeedback(true) } ,props.spinTime)
-  }, [])
-
-  return (
-    <>
-      {showFeedback ? props.children : <CircularProgress></CircularProgress>}
-    </>
-  );
 }
 
 
@@ -341,7 +218,7 @@ function SpinThen(props) {
               <ReactPlayer
                 fluid={false}
                 width={"100%"}
-                url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-3.mp4"
+                url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-4.mp4"
                 controls={true}
                 style={{}}
                 playing={playing}
@@ -488,37 +365,6 @@ function SpinThen(props) {
 }
   
 
-function JSMirror(props) {
-  const [code,setCode] = useState(props.value) 
-
-  return (
-    <>
-      <LiveProvider
-        code={props.code} scope={props.scope} alignItems="center" justify="center">
-        <LiveContext.Consumer>
-          {({ code, language, theme, disabled, onChange }) => {
-            return <Grid container spacing={1} >
-              <Grid item xs={6}>
-                <LiveEditor
-                  onChange={(code) => {
-                    setCode(code)
-                    props.onChange(code)
-                    onChange(code)
-                  }
-                  }
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <LiveError />
-                <LivePreview />
-              </Grid>
-            </Grid>
-          }}
-        </LiveContext.Consumer>
-      </LiveProvider>
-    </>
-  )
-}
 
 function Puzzle({ isComplete, code, hint }) {
   return <>
@@ -607,7 +453,7 @@ function SockPuppetFirstLesson(props) {
               playsInline
               fluid={false}
               width={"100%"}
-              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e2-sock-3.mp4"
+              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e2-sock-4.mp4"
               controls={true}
               style={{}}
               playing={false}
@@ -667,6 +513,13 @@ function LightOrDark(props) {
 
 
 function Level1CompleteScreen(props) {
+  
+  useEffect(() => {
+    if (props.badges) {
+      props.setBadges(props.badges.concat([{ name: props.badgeName }]))
+    }
+  })
+  
   return (
     <>
       <Fade in={true} timeout={1000}>
@@ -686,8 +539,12 @@ const MeetYourTeacher = (props) => {
   let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
 
   let reallyContinue = () => {
-    setCanContinue(false);
-    setCurrentPart(1 + currentPart)
+    if (currentPart + 1 != parts.length) {
+      setCanContinue(false);
+      setCurrentPart(1 + currentPart)
+    } else {
+      props.gotoNextLevel()
+    }
   }
 
   //let setTitle = props.setTitle
@@ -700,7 +557,7 @@ const MeetYourTeacher = (props) => {
      <ChooseYourTeacher setCanContinue={setCanContinue} />,
      <SockPuppetTeacherIntroduction setCanContinue={setCanContinue} username={username} />,
      <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={setCanContinue} username={username} />,
-     <Level1CompleteScreen />]
+      <Level1CompleteScreen {...props}/>]
 
   return (
     <>
@@ -750,7 +607,6 @@ const AccountCreationReminder = (props) => {
     SpellsApiService.getUserById('me')
       .then((user) => setIsLoggedIn(true))
       .catch(() => setIsLoggedIn(false))
-    console.log("useEffect is doing its thing. isLogged in is set to: ", isLoggedIn)
     })
 
   function getModalStyle() {
@@ -848,7 +704,9 @@ const AccountCreationReminder = (props) => {
 
 function Level1(props) {
   const [titleScreenComplete, setTitleScreenComplete] = useLocalStorage("game-started", false);
-  const [title, setTitle] = useState("Character creation");
+  const [title, setTitle] = useState("Introduction");
+
+  console.log(props)
 
   const TitleScreen = (props) => {
     let [step, setStep] = useState(0);
@@ -895,8 +753,7 @@ function Level1(props) {
 
   return (!titleScreenComplete ? <TitleScreen /> :
     <Level setBadges={props.setBadges} number={1} subtitle={title} >
-      <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle} />
-      
+      <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle} {...props} />
     </Level>)
 }
 

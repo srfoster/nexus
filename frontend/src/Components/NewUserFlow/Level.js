@@ -7,6 +7,17 @@ import Button from '@material-ui/core/Button';
 import MuiAlert from '@material-ui/lab/Alert';
 import AddBadgeOnRender from '../Badges/AddBadgeOnRender';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Fade from '@material-ui/core/Fade';
+
+
+const ContinueButton = (props) => {
+  return (
+    <Fade in={true} timeout={1000}>
+      <Button color="secondary" style={{ marginLeft: "auto", ...props.style }} onClick={props.onClick}>Next</Button>
+    </Fade>
+  );
+}
+
 
 export function LoginButton() {
 
@@ -21,8 +32,6 @@ export function LoginButton() {
 
 
 const Level = (props) => {
-  
-
   return (
     <>
       <Card>
@@ -89,18 +98,6 @@ const HintButton = (props) => {
         {showHint ? props.hint : ""}</p>
     </>
   );
-}
-
-const ContinueButton = (props) => {
-    const [levelComplete, setLevelComplete] = useState(false)
-
-    return <>
-        <Button onClick={() => {
-            setLevelComplete(true);
-            props.onComplete()
-        }}>Continue</Button>
-        { levelComplete ? <AddBadgeOnRender name={props.badgeName} /> : ""}
-    </>
 }
 
 export { Level, HintButton, ShowAfter, ContinueButton };

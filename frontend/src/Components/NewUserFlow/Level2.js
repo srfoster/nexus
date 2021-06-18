@@ -1,29 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { Level, ContinueButton } from './Level';
+import { useLocalStorage } from "../../Util";
+import { Level } from './Level';
+import Fade from '@material-ui/core/Fade';
+import Button from '@material-ui/core/Button';
+import CardActions from '@material-ui/core/CardActions';
 
 //Questions we're asking (and answering) with our...
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
 //   What if ed tech were different?
 
+const ContinueButton = (props) => {
+  return (
+    <Fade in={true} timeout={1000}>
+      <Button
+        color="secondary"
+        style={{ marginLeft: "auto", ...props.style }}
+        onClick={props.onClick}>Next</Button>
+    </Fade>
+  );
+}
+
 export function Level2(props) {
+  const [currentPart, setCurrentPart] = useLocalStorage("lvl2:currentPart", 0)
+  const [canContinue, setCanContinue] = useState(false)
+
   return (
     <>
       <Level number={2} subtitle={"Beyond the Gate"}>
-        <ContinueButton
-          onComplete={() => {
-            props.setBadges(props.badges.concat([{ name: props.badgeName }]));
-          }
-          }></ContinueButton>
       <ul>
-        <li>Need to remind people that CodeSpells isn't just 1 story or 1 game. But here's 1 story...</li>
-        <li>Thought Experiment: What if there was magic somewhere? How would society evolve?</li>
-        <li>Fictional Story: Mind Painters (front-end dev that's actually magic)</li>
-        <li>Setting up the world: humanoid people can visualize 2D interfaces, can paint and show their ideas on these</li>
-          <li>Puzzle: Something about interacting with interfaces.
-             Or a mock-reading-comprension question.</li>
+        <li>Mention favor...</li>
+        <li>Nexus wants me to show you this video...</li>
+        <li>Mention 3D game download, "Orb World"</li>
 
-        <li></li>
+        <li>Design this first??? Gives you second puzzle...</li>
       </ul>
+
+        <CardActions>
+          <Button key="back-button"
+            onClick={() => {
+              if (currentPart == 0) {
+                props.gotoPrevLevel()
+              } else {
+                setCurrentPart(currentPart - 1);
+                setCanContinue(false);
+              }
+            }}>Back</Button>
+          <ContinueButton onClick={ ()=>setCurrentPart(currentPart+1)}/>
+        </CardActions>
       </Level>
     </>
   )
