@@ -57,8 +57,10 @@ function Level47(props) {
           </>
           :
             <div>
-              <p>Try setSnakeColor (your favorite color here)</p>
-              <p>Want text boxes?</p>
+              <h4>Give it a try:</h4>
+              <p>$ setSnakeColor &lt;color&gt;</p>
+              <p>$ setOrbColor &lt;color&gt;</p>
+              <p>$ renderTextBoxes</p>
             </div>
           }
         </Grid>
