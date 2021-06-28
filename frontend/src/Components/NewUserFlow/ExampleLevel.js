@@ -24,9 +24,8 @@ const ContinueButton = (props) => {
 function Page1(props) {
   
   return (<>
-    <h2>Puzzle 1</h2>
     <ul>
-      <li>Terminal</li>
+      <li>Page 1</li>
       <li></li>
       <li></li>
       <li></li>
