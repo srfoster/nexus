@@ -42,7 +42,7 @@ function SecretLevels(props) {
     <Level20
       setBadges={props.setBadges}
       badges={props.badges}
-      badgeName={"Finished:ch20:What-to-Call-This??"}
+      badgeName={"Finished:ch20:Terminal Button anyone?"}
     />,
     <Level57
       setBadges={props.setBadges}
