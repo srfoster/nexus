@@ -332,7 +332,8 @@ function SockPuppetVideoIntro(props) {
 
             </> : ""}
       />
-      : <NewMessageNotification
+      :
+      <NewMessageNotification
         nexusSays={"Wow!  New messages(s)..."}
         from={<SockPuppetChip></SockPuppetChip>}
         onOpenClicked={

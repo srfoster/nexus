@@ -9,7 +9,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player'
 import { SBS, Level, withConfetti } from './Level';
-import { SockPuppetChip, FakeChip } from '../Widgets/NexusVoice';
+import { SockPuppetChip, FakeChip, NewMessageNotification } from '../Widgets/NexusVoice';
 
 //Questions we're asking (and answering) with our...
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
@@ -51,21 +51,20 @@ function Favor(props) {
   </>
 }
 
-function Page1(props) {
-  
-  //Abstract this OpenedMessage...
+
+function OpenedMessage(props) {
   return (<>
     <SBS
       leftSideTitle={<>
-          <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
-          <Typography>Subject: The Favor I Owe</Typography>
+        <Typography paragraph>From {props.from} to { props.to} </Typography>
+        <Typography>Subject: { props.subject}</Typography>
         </>}
       leftSide={
           <div style={{ backgroundColor: "black" }}>
             <ReactPlayer
               fluid={false}
               width={"100%"}
-              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-4.mp4"
+            url={ props.videoUrl}
               controls={true}
               style={{}}
               progressInterval={100}
@@ -73,16 +72,39 @@ function Page1(props) {
             />
           </div>
       }
-      rightSide={
+      rightSide={ props.text
+      }
+    />
+    </>)
+}
+
+
+function Page1(props) {
+  const [messageOpened,setMessageOpened] = useState(false)
+  
+  return (
+   !messageOpened ? <NewMessageNotification
+        nexusSays={"Wow!  New messages(s)..."}
+        from={<SockPuppetChip></SockPuppetChip>}
+        onOpenClicked={
+          () => setMessageOpened(true)
+        }
+      /> :
+    <OpenedMessage
+      from={<SockPuppetChip />}
+      to={<FakeChip name={props.username} level={1} />}
+      subject={"The Favor I Owe"}
+      videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-4.mp4"
+      text={
         <>
           <Typography paragraph>
-            As I said in the video, just type <tt>help</tt> in the terminal below.
+            As I said in the video, just type <tt>help</tt> in the terminal below...
           </Typography>
           <Typography paragraph>
-            I've put my favor in your inventory.  Go find it!  
+            I've put my favor in your inventory.  Go find it!
           </Typography>
           <Typography paragraph>
-            ~Your Friend, Socky 
+            ~Your Friend, Socky
           </Typography>
           <Terminal
             commands={{
@@ -90,12 +112,12 @@ function Page1(props) {
                 description: 'Display your inventory.',
                 usage: '',
                 fn: function () {
-                  return <div style={{marginTop: 20}}>
+                  return <div style={{ marginTop: 20 }}>
                     You have 1 item(s)
                     <ul>
                       <li>
                         Item 1:
-                        <Favor onOpen={ ()=>props.setCanContinue(true) }
+                        <Favor onOpen={() => props.setCanContinue(true)}
                           contents={
                             <>
                               <p>
@@ -105,7 +127,7 @@ function Page1(props) {
                                 ~Your Friend, Socky
                           </p>
                             </>
-                        } />
+                          } />
                       </li>
                     </ul>
                   </div>
@@ -118,8 +140,9 @@ function Page1(props) {
           />
         </>
       }
-    />
-  </>)
+
+      />
+  )
 }
 
 function Page2(props) {
