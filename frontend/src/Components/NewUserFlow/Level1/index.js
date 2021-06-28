@@ -26,7 +26,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { MultipleChoiceQuestion, JSMirror } from '../../Widgets/Educational';
 import { NewMessageNotification, SockPuppetChip, SpinThen, FakeChip, Gong } from '../../Widgets/NexusVoice';
-import { Level, LoginButton, ContinueButton, withConfetti } from "../Level";
+import { Level, LoginButton, ContinueButton, withConfetti, SBS } from "../Level";
 
 /*
 This is the current focus of the CodeSpells project:
@@ -699,25 +699,6 @@ const MeetYourTeacher = (props) => {
       {currentPart > 0 ? <AccountCreationReminder /> : ""}
     </>
   );
-}
-
-const SBS = (props) => {
-  return (
-    <>
-      <Card>
-        <CardHeader title={
-          <span style={{ fontSize: 16 }}>
-            {props.leftSideTitle}
-          </span>
-        }></CardHeader>
-        {props.leftSide}
-      </Card>
-      <Card style={{ height: "100%" }}>
-        <CardContent>
-          {props.rightSide}
-        </CardContent>
-      </Card>
-    </>)
 }
 
 const AccountCreationReminder = (props) => {

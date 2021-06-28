@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 import Snackbar from '@material-ui/core/Snackbar';
 import Grow from '@material-ui/core/Grow';
 import Button from '@material-ui/core/Button';
@@ -114,4 +115,24 @@ const HintButton = (props) => {
   );
 }
 
-export { Level, HintButton, ShowAfter, ContinueButton };
+const SBS = (props) => {
+  return (
+    <>
+      <Card>
+        <CardHeader title={
+          <span style={{ fontSize: 16 }}>
+            {props.leftSideTitle}
+          </span>
+        }></CardHeader>
+        {props.leftSide}
+      </Card>
+      <Card style={{ height: "100%" }}>
+        <CardContent>
+          {props.rightSide}
+        </CardContent>
+      </Card>
+    </>)
+}
+
+
+export { Level, HintButton, ShowAfter, ContinueButton, SBS };

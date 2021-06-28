@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Terminal from 'react-console-emulator'
+import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { useLocalStorage } from "../../Util";
-import { Level, withConfetti } from './Level';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
+import Typography from '@material-ui/core/Typography';
+import ReactPlayer from 'react-player'
+import { SBS, Level, withConfetti } from './Level';
+import { SockPuppetChip, FakeChip } from '../Widgets/NexusVoice';
 
 //Questions we're asking (and answering) with our...
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
@@ -22,43 +26,104 @@ const ContinueButton = (props) => {
   );
 }
 
+function Inventory(props) {
+  return (<>
+    <Card>
+      <CardContent>
+
+          <h2>Inventory</h2>
+
+         </CardContent>
+      </Card>
+    </>)
+    }
+
+
+function Favor(props) {
+  const [shown,setShown] = useState(false)
+  return <>
+    <Button variant="outlined" color="secondary"
+      onClick={() => { props.onOpen(); setShown(true) }}
+    >
+      A Favor (Click When in Need)
+    </Button>
+    {shown ? props.contents : ""}
+  </>
+}
+
 function Page1(props) {
   
+  //Abstract this OpenedMessage...
   return (<>
-    <h2>Puzzle 1</h2>
-    <ul>
-      <li>Terminal</li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
-    <Terminal
-      commands={{
-        echo: {
-          description: 'Echoes what you write',
-          usage: 'bs',
-          fn: function () {
-            return `${Array.from(arguments).join(' ')}`
-          }
-        },
-        continue: {
-          description: 'Continues',
-          usage: 'bs',
-          fn: function () {
-            props.setCanContinue(true);
-            return 'Continuing...' 
-          }
-        }
-      }}
-      welcomeMessage={'Welcome to the React terminal!'}
-      promptLabel={'mage@Nexus:~$'}
-      autoFocus="true"
+    <SBS
+      leftSideTitle={<>
+          <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
+          <Typography>Subject: The Favor I Owe</Typography>
+        </>}
+      leftSide={
+          <div style={{ backgroundColor: "black" }}>
+            <ReactPlayer
+              fluid={false}
+              width={"100%"}
+              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-4.mp4"
+              controls={true}
+              style={{}}
+              progressInterval={100}
+              onProgress={(p) => { }}
+            />
+          </div>
+      }
+      rightSide={
+        <>
+          <Typography paragraph>
+            As I said in the video, just type <tt>help</tt> in the terminal below.
+          </Typography>
+          <Typography paragraph>
+            I've put my favor in your inventory.  Go find it!  
+          </Typography>
+          <Typography paragraph>
+            ~Your Friend, Socky 
+          </Typography>
+          <Terminal
+            commands={{
+              inventory: {
+                description: 'Display your inventory.',
+                usage: '',
+                fn: function () {
+                  return <div style={{marginTop: 20}}>
+                    You have 1 item(s)
+                    <ul>
+                      <li>
+                        Item 1:
+                        <Favor onOpen={ ()=>props.setCanContinue(true) }
+                          contents={
+                            <>
+                              <p>
+                                You found it!  I'll change this message if we ever get separated.  The favor will stay in your inventory.  Now go click the "Next" button.
+                          </p>
+                              <p>
+                                ~Your Friend, Socky
+                          </p>
+                            </>
+                        } />
+                      </li>
+                    </ul>
+                  </div>
+                }
+              },
+            }}
+            welcomeMessage={'You found a Nexus terminal!  You know what to do :)'}
+            promptLabel={'mage@Nexus:~$'}
+            autoFocus="true"
+          />
+        </>
+      }
     />
   </>)
 }
 
 function Page2(props) {
-  
+
   return (<>
     <ul>
       <li>Page 2</li>
@@ -124,10 +189,10 @@ export function Level2(props) {
   
   let parts =
     [<Page1 setCanContinue={withConfetti(setCanContinue)} />,
-    <Page2/>,
-    <Page3/>,
-    <Page4/>,
-    <Page5/>]
+    <Page2 setCanContinue={withConfetti(setCanContinue)} />,
+    <Page3 setCanContinue={withConfetti(setCanContinue)} />,
+    <Page4 setCanContinue={withConfetti(setCanContinue)} />,
+    <Page5 setCanContinue={withConfetti(setCanContinue)} />]
 
   return (
     <>
