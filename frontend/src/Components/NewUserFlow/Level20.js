@@ -110,7 +110,7 @@ function Level20(props) {
           Button
         </Button>
       ) : (
-        ""
+        " "
       )}
     </Level>
   );

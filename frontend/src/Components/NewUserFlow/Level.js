@@ -8,7 +8,21 @@ import MuiAlert from '@material-ui/lab/Alert';
 import AddBadgeOnRender from '../Badges/AddBadgeOnRender';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Fade from '@material-ui/core/Fade';
+import Confetti from 'canvas-confetti';
 
+export const withConfetti = (f) => {
+  return (bool) => {
+    if (bool) {
+      Confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      })
+
+    }
+    f(bool)
+  }
+}
 
 const ContinueButton = (props) => {
   return (

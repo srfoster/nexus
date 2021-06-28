@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import Terminal from 'react-console-emulator'
 import CardContent from '@material-ui/core/CardContent';
 import { useLocalStorage } from "../../Util";
-import { Level } from './Level';
+import { Level, withConfetti } from './Level';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
@@ -31,7 +32,28 @@ function Page1(props) {
       <li></li>
       <li></li>
     </ul>
-    
+    <Terminal
+      commands={{
+        echo: {
+          description: 'Echoes what you write',
+          usage: 'bs',
+          fn: function () {
+            return `${Array.from(arguments).join(' ')}`
+          }
+        },
+        continue: {
+          description: 'Continues',
+          usage: 'bs',
+          fn: function () {
+            props.setCanContinue(true);
+            return 'Continuing...' 
+          }
+        }
+      }}
+      welcomeMessage={'Welcome to the React terminal!'}
+      promptLabel={'mage@Nexus:~$'}
+      autoFocus="true"
+    />
   </>)
 }
 
@@ -91,8 +113,17 @@ export function Level2(props) {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl2:currentPart", 0)
   const [canContinue, setCanContinue] = useState(false)
   
+  let reallyContinue = () => {
+    if (currentPart + 1 != parts.length) {
+      setCanContinue(false);
+      setCurrentPart(1 + currentPart)
+    } else {
+      props.gotoNextLevel()
+    }
+  }
+  
   let parts =
-    [<Page1/>,
+    [<Page1 setCanContinue={withConfetti(setCanContinue)} />,
     <Page2/>,
     <Page3/>,
     <Page4/>,
@@ -114,7 +145,9 @@ export function Level2(props) {
                 setCanContinue(false);
               }
             }}>Back</Button>
-          <ContinueButton onClick={() => setCurrentPart(currentPart + 1)} />
+          {canContinue || currentPart == parts.length - 1 ?
+            <ContinueButton key="continue-button" onClick={reallyContinue} />
+            : ""}
         </CardActions>
       </Level>
     </>

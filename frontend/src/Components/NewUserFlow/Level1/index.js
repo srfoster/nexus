@@ -26,7 +26,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { MultipleChoiceQuestion, JSMirror } from '../../Widgets/Educational';
 import { NewMessageNotification, SockPuppetChip, SpinThen, FakeChip, Gong } from '../../Widgets/NexusVoice';
-import { Level, LoginButton, ContinueButton } from "../Level";
+import { Level, LoginButton, ContinueButton, withConfetti } from "../Level";
 
 /*
 This is the current focus of the CodeSpells project:
@@ -675,11 +675,11 @@ const MeetYourTeacher = (props) => {
   const [canContinue, setCanContinue] = useState(false)
 
   let parts =
-    [<UserNameForm setCanContinue={setCanContinue} setUsername={setUsername} username={username} />,
-    <LightOrDark setCanContinue={setCanContinue} />,
-    <ChooseYourTeacher setCanContinue={setCanContinue} />,
-    <SockPuppetVideoIntro setCanContinue={setCanContinue} username={username} />,
-    <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={setCanContinue} username={username} />,
+    [<UserNameForm setCanContinue={withConfetti(setCanContinue)} setUsername={setUsername} username={username} />,
+    <LightOrDark setCanContinue={withConfetti(setCanContinue)} />,
+    <ChooseYourTeacher setCanContinue={withConfetti(setCanContinue)} />,
+    <SockPuppetVideoIntro setCanContinue={withConfetti(setCanContinue)} username={username} />,
+    <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={withConfetti(setCanContinue)} username={username} />,
     <Level1CompleteScreen {...props} />]
 
   return (
