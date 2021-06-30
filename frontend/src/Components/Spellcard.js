@@ -68,7 +68,7 @@ const Spellcard = (props) => {
       <CardHeader
         avatar={
           <Tooltip title={`${props.spell.author}`} placement='top'>
-            <Button onClick={() => history.push(`/wizards/${props.spell.author}`)}>
+            <Button onClick={() => history.push(`/mages/${props.spell.user_id}`)}>
               <Avatar aria-label="recipe" className={classes.spellcardAvatar}>
                 {props.spell.author.slice(0,1).toUpperCase()}
               </Avatar>

@@ -13,7 +13,7 @@ const SpellIndex = require('./endpoints/SpellIndex')
 const PublicSpells = require('./endpoints/PublicSpells')
 const SpellDetails = require('./endpoints/SpellDetails')
 const PublicSpellDetails = require('./endpoints/PublicSpellDetails')
-const WizardDetails = require('./endpoints/WizardDetails')
+const MageDetails = require('./endpoints/MageDetails')
 const SpellTagsIndex = require('./endpoints/SpellTagsIndex')
 const SpellTags = require('./endpoints/SpellTags')
 const SpellsFork = require('./endpoints/SpellFork')
@@ -40,7 +40,7 @@ let epSpellDetails = '/spells/:id'
 // TODO: update this endpoint
 let epPublicSpellDetails = '/secret/:id'
 let epPublicSpells = '/gallery'
-let epWizardDetails = '/wizards/:id'
+let epMageDetails = '/mages/:id'
 let epSpellsFork = '/spells/:id/fork'
 let epSpellTags = '/spells/:id/tags/:tag'
 let epSpellTagsIndex = '/spells/:id/tags'
@@ -68,7 +68,7 @@ app.get(`${epSpellDetails}`, requireAuth, SpellDetails.handleGet)
 app.get(`${epPublicSpellDetails}`, PublicSpellDetails.handleGet)
 
 // Retrieve specific user information
-app.get(`${epWizardDetails}`, requireAuthIfMe, WizardDetails.handleGet)
+app.get(`${epMageDetails}`, requireAuthIfMe, MageDetails.handleGet)
 
 // Get all tags on specific spell
 app.get(`${epSpellTagsIndex}`, requireAuth, SpellTagsIndex.handleGet)
@@ -234,7 +234,7 @@ module.exports = {
   epSpellDetails,
   epPublicSpellDetails,
   epPublicSpells,
-  epWizardDetails,
+  epMageDetails,
   epSpellsFork,
   epSpellTags,
   epSpellTagsIndex,

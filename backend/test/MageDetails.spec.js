@@ -1,13 +1,13 @@
 const knex = require('knex')
 const { expect } = require('chai')
 const jwt = require('jsonwebtoken')
-const { app, epWizardDetails } = require('../src/app')
+const { app, epMageDetails } = require('../src/app')
 const helpers = require('./test-helpers')
 const config = require('../src/config')
 const bcrypt = require('bcryptjs')
 const supertest = require('supertest')
 
-describe('Wizard Details', () => {
+describe('Mage Details', () => {
   let db
 
   let {
@@ -33,7 +33,7 @@ describe('Wizard Details', () => {
 
   afterEach('cleanup', () => helpers.cleanTables(db))
 
-  describe(`GET ${epWizardDetails}`, () => {
+  describe(`GET ${epMageDetails}`, () => {
     beforeEach('insert users', () =>
       helpers.seedUsers(
         db,
@@ -53,16 +53,16 @@ describe('Wizard Details', () => {
       )
     )
 
-    // TODO: Wizard profile should be publicly accessible
-    it(`GET ${epWizardDetails} responds with 401 if not logged in`, () => {
+    // TODO: Mage profile should be publicly accessible
+    it(`GET ${epMageDetails} responds with 401 if not logged in`, () => {
       return supertest(app)
-        .get(epWizardDetails)
+        .get(epMageDetails)
         .expect(401)
     })
 
-    it(`GET ${epWizardDetails} responds with 200 if logged in`, () => {
+    it(`GET ${epMageDetails} responds with 200 if logged in`, () => {
       return supertest(app)
-        .get(`/wizards/${testUsers[0].id}`)
+        .get(`/mages/${testUsers[0].id}`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then((res) => {
@@ -72,7 +72,7 @@ describe('Wizard Details', () => {
 
     it(`does not show the password portion of the user data`, () => {
       return supertest(app)
-      .get(`/wizards/${testUsers[0].id}`)
+      .get(`/mages/${testUsers[0].id}`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then((res) => {
@@ -82,7 +82,7 @@ describe('Wizard Details', () => {
 
     it(`responds with total number of spells that the user owns`, () => {
       return supertest(app)
-        .get(`/wizards/${testUsers[0].id}`)
+        .get(`/mages/${testUsers[0].id}`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
         .expect(200)
         .then(async (res) => {
@@ -98,7 +98,7 @@ describe('Wizard Details', () => {
 
     it(`only shows spells tagged as public`, async () => {
       await supertest(app)
-      .get(`/wizards/${testUsers[0].id}`)
+      .get(`/mages/${testUsers[0].id}`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then((res) => {
@@ -108,7 +108,7 @@ describe('Wizard Details', () => {
 
     it(`GET returns a list of tags that match the ID of each spell`, () => {
       return supertest(app)
-        .get(`/wizards/${testUsers[0].id}`)
+        .get(`/mages/${testUsers[0].id}`)
         .set('Authorization', helpers.makeAuthHeader(testUsers[0]))        
         .expect(200)
         .then((res) => {
@@ -124,7 +124,7 @@ describe('Wizard Details', () => {
 
     it(`responds with the total number of matching spells`, () => {
       return supertest(app)
-      .get(`/wizards/${testUsers[0].id}`)
+      .get(`/mages/${testUsers[0].id}`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))      
       .expect(200)
       .then(async (res) => {
@@ -140,7 +140,7 @@ describe('Wizard Details', () => {
     let page_size = 6;
     it(`responds with the page ${page} and ${page_size} results when given ?page=${page}&page_size=${page_size}`, () => {
       return supertest(app)
-      .get(`/wizards/${testUsers[0].id}?page=2&page_size=6`)
+      .get(`/mages/${testUsers[0].id}?page=2&page_size=6`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))      
       .expect(200)
       .then(async (res) => {
@@ -159,7 +159,7 @@ describe('Wizard Details', () => {
 
     it(`only returns the first page with a size of 9 when no page or page size is specified`, () => {
       return supertest(app)
-      .get(`/wizards/${testUsers[0].id}`)
+      .get(`/mages/${testUsers[0].id}`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then(async (res) => {
@@ -178,7 +178,7 @@ describe('Wizard Details', () => {
 
     it(`responds with the spell "Cozy Cabin" when given the query ?search=cozy`, () => {
       return supertest(app)
-      .get(`/wizards/${testUsers[0].id}?search=cozy`)
+      .get(`/mages/${testUsers[0].id}?search=cozy`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then(async (res) => {
@@ -199,7 +199,7 @@ describe('Wizard Details', () => {
     let sortQuery = 'description'
     it(`responds with the spells sorted by ${sortQuery} when given ?sort=${sortQuery}`, () => {
       return supertest(app)
-      .get(`/wizards/${testUsers[0].id}?sort=${sortQuery}`)
+      .get(`/mages/${testUsers[0].id}?sort=${sortQuery}`)
       .set('Authorization', helpers.makeAuthHeader(testUsers[0]))
       .expect(200)
       .then(async (res) => {

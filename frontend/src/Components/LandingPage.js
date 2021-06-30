@@ -5,7 +5,7 @@ import { Helmet } from "react-helmet";
 import TokenService from '../Services/token-service';
 import Container from '@material-ui/core/Container';
 
-import Level1 from "./NewUserFlow/Level1";
+import Level1 from "./NewUserFlow/Level1/"
 import Level2 from "./NewUserFlow/Level2";
 import Level3 from "./NewUserFlow/Level3";
 import Level4 from "./NewUserFlow/Level4";
@@ -21,8 +21,7 @@ import Level20 from "./NewUserFlow/Level20";
 import Level57 from "./NewUserFlow/Level57";
 import Level101 from "./NewUserFlow/Level101";
 
-import { makeStyles } from '@material-ui/core/styles';
-
+import { useLocalStorage } from "../Util";
 
 // Badge -> Boolean
 function finished(badge) {
@@ -43,7 +42,7 @@ function SecretLevels(props) {
     <Level20
       setBadges={props.setBadges}
       badges={props.badges}
-      badgeName={"Finished:ch20:What-to-Call-This??"}
+      badgeName={"Finished:ch20:Terminal Button anyone?"}
     />,
     <Level57
       setBadges={props.setBadges}
@@ -65,22 +64,42 @@ function SecretLevels(props) {
   </>
 }
 
+
 const LandingPage = (props) => {
   const [hasFetchedBadges, setHasFetchedBadges] = useState(false);
   const [badges, setBadges] = useState(undefined);
   const [showSecrets, setShowSecrets] = useState(undefined);
+  const [currentLevelNum, setCurrentLevelNum] = useLocalStorage("current-level-num", 1);
+
+  const gotoNextLevel = () => {
+    setCurrentLevelNum(currentLevelNum + 1)
+  }
+
+  const gotoPrevLevel = () => {
+    setCurrentLevelNum(currentLevelNum - 1)
+  }
 
   const levels = [
-    <Level1/>,
+    <Level1
+      dummy="dummy"
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch1:Introduction"}
+      gotoNextLevel={ gotoNextLevel }
+      gotoPrevLevel={ gotoPrevLevel }
+    />,
     <Level2
       setBadges={setBadges}
       badges={badges}
       badgeName={"Finished:ch2:Beyond-the-Gate"}
+      gotoNextLevel={ gotoNextLevel }
+      gotoPrevLevel={ gotoPrevLevel }
     />,
     <Level3
       setBadges={setBadges}
       badges={badges}
       badgeName={"Finished:ch3:Light-Mage-or-Dark-Mage"}
+      gotoNextLevel={ gotoNextLevel }
     />,
     <Level4
       setBadges={setBadges}
@@ -118,10 +137,14 @@ const LandingPage = (props) => {
       })
   }, [])
 
+  /*
   let currentLevel = undefined;
   if (hasFetchedBadges && badges !== undefined && badges.length !== undefined) {
     currentLevel = levels[currentLevelNum(badges) - 2];
   }
+  */
+
+  let currentLevel = levels[currentLevelNum - 1] 
   
   return (
     <>
@@ -137,11 +160,9 @@ const LandingPage = (props) => {
               setShowSecrets(!showSecrets)
             }
           }}>
-            {TokenService.hasAuthToken() ?
-              (showSecrets ? <SecretLevels badges={badges} setBadges={setBadges} /> : currentLevel) :
-              < Level1 setBadges={setBadges} />
-
-            }
+            { (showSecrets ?
+                <SecretLevels badges={badges} setBadges={setBadges} /> :
+                currentLevel) }
           </div>
         </div>
       </Container>

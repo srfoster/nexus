@@ -1,12 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 import Snackbar from '@material-ui/core/Snackbar';
 import Grow from '@material-ui/core/Grow';
 import Button from '@material-ui/core/Button';
 import MuiAlert from '@material-ui/lab/Alert';
 import AddBadgeOnRender from '../Badges/AddBadgeOnRender';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Fade from '@material-ui/core/Fade';
+import Confetti from 'canvas-confetti';
+
+export const withConfetti = (f) => {
+  return (bool) => {
+    if (bool) {
+      Confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      })
+
+    }
+    f(bool)
+  }
+}
+
+const ContinueButton = (props) => {
+  return (
+    <Fade in={true} timeout={1000}>
+      <Button color="secondary" style={{ marginLeft: "auto", ...props.style }} onClick={props.onClick}>Next</Button>
+    </Fade>
+  );
+}
+
 
 export function LoginButton() {
 
@@ -21,8 +47,6 @@ export function LoginButton() {
 
 
 const Level = (props) => {
-  
-
   return (
     <>
       <Card>
@@ -91,16 +115,24 @@ const HintButton = (props) => {
   );
 }
 
-const ContinueButton = (props) => {
-    const [levelComplete, setLevelComplete] = useState(false)
-
-    return <>
-        <Button onClick={() => {
-            setLevelComplete(true);
-            props.onComplete()
-        }}>Continue</Button>
-        { levelComplete ? <AddBadgeOnRender name={props.badgeName} /> : ""}
-    </>
+const SBS = (props) => {
+  return (
+    <>
+      <Card>
+        <CardHeader title={
+          <span style={{ fontSize: 16 }}>
+            {props.leftSideTitle}
+          </span>
+        }></CardHeader>
+        {props.leftSide}
+      </Card>
+      <Card style={{ height: "100%" }}>
+        <CardContent>
+          {props.rightSide}
+        </CardContent>
+      </Card>
+    </>)
 }
 
-export { Level, HintButton, ShowAfter, ContinueButton };
+
+export { Level, HintButton, ShowAfter, ContinueButton, SBS };
