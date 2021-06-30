@@ -158,7 +158,7 @@ const UserNameForm = (props) => {
       setAvailable(true)
 
       //Causing annoying re-render...
-      props.setUsername(username);
+      props.setUsername(username)
       props.setCanContinue(true)
     }, 1000)
   }
