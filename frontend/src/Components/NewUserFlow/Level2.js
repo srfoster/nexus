@@ -11,7 +11,7 @@ import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { SBS, Level, withConfetti } from './Level';
 import { SockPuppetChip, FakeChip, NewMessageNotification } from '../Widgets/NexusVoice';
-import { MidiTest } from './Level101';
+import { JSMirror } from '../Widgets/Educational';
 import Game from '../Widgets/react-gameoflife/Game.js';
 import Countdown from 'react-countdown';
 
@@ -411,10 +411,36 @@ const SockPuppetsMessage2 = (props) => {
           <>
             <Typography paragraph>
               Toys! [Let's define toys!] [Gamification???]
+              [Can we define game, puzzle, and toy?]
+            </Typography>
+            <Typography paragraph>
+              [Favor.] [Getting disciplined.] 
+            </Typography>
+            <Typography paragraph>
+              [Puzzle:
+                Change both game's colors,
+                Change both game's texts
+                (Change all props)
+                And random+run both games...
+              ]
+
+              [Idea: MySpace like reward at end of level 2. Unlock components for your homepage...]
             </Typography>
             <Typography paragraph>
               ~Your Friend, Socky
           </Typography>
+            <JSMirror code={"<Toy\n color=\"red\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> "}
+              scope={{ Toy: Game }}
+              onChange={(code) => {
+                //setCode(code);
+                return true
+              }} />
+            <JSMirror code={"<Toy\n color=\"lime\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> "}
+              scope={{ Toy: Game }}
+              onChange={(code) => {
+                //setCode(code);
+                return true
+              }} />
           </>
         }
       />

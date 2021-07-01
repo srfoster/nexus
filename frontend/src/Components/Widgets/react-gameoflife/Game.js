@@ -15,19 +15,17 @@ const WIDTH = 200;
 const HEIGHT = 200;
 
 
-class Cell extends React.Component {
-
-    render() {
-        const { x, y } = this.props;
-        return (
-            <div className="Cell" style={{
-                left: `${CELL_SIZE * x + 1}px`,
-                top: `${CELL_SIZE * y + 1}px`,
-                width: `${CELL_SIZE - 1}px`,
-                height: `${CELL_SIZE - 1}px`,
-            }} />
-        );
-    }
+function Cell(props) {
+    const { x, y } = props;
+    return (
+        <div className="Cell" style={{
+            left: `${CELL_SIZE * x + 1}px`,
+            top: `${CELL_SIZE * y + 1}px`,
+            width: `${CELL_SIZE - 1}px`,
+            height: `${CELL_SIZE - 1}px`,
+            backgroundColor: props.color || "red"
+        }} />
+    );
 }
 
 
@@ -193,9 +191,9 @@ class Game extends React.Component {
                         <Grid item>
                             <Typography
                                 color="textSecondary" gutterBottom
-                            >Edit my squares...</Typography>
+                            >{ this.props.boardLabel || "Edit my squares..." }</Typography>
                             <div className="Board"
-                                style={{ width: WIDTH, height: HEIGHT, backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px`, marginLeft: 0 }}
+                                style={{ width: WIDTH, height: HEIGHT, backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px`, marginLeft: 0, }}
                                 onClick={this.handleClick}
                                 ref={(n) => { this.boardRef = n; }}>
 
@@ -203,6 +201,7 @@ class Game extends React.Component {
                                     <Cell x={cell.x}
                                         y={cell.y}
                                         key={`${cell.x},${cell.y}`}
+                                        color={ this.props.color}
                                     />
                                 ))}
                             </div>
@@ -210,7 +209,7 @@ class Game extends React.Component {
                         <Grid item>
                             <Typography
                                 color="textSecondary" gutterBottom
-                            >and/or try the buttons below...</Typography>
+                            >{ this.props.buttonsLabel || "and/or click my buttons..." }</Typography>
                             {isRunning ?
                                 <Button
                                     variant="outlined"
