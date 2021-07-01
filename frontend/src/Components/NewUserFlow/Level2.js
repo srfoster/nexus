@@ -11,6 +11,9 @@ import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { SBS, Level, withConfetti } from './Level';
 import { SockPuppetChip, FakeChip, NewMessageNotification } from '../Widgets/NexusVoice';
+import { MidiTest } from './Level101';
+import Game from '../Widgets/react-gameoflife/Game.js';
+import Countdown from 'react-countdown';
 
 //Questions we're asking (and answering) with our...
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
@@ -54,6 +57,8 @@ function Favor(props) {
 
 
 function OpenedMessage(props) {
+  const [videoFinished,setVideoFinished] = useState(false) 
+
   return (<>
     <SBS
       leftSideTitle={<>
@@ -70,11 +75,13 @@ function OpenedMessage(props) {
             style={{}}
             progressInterval={100}
             onProgress={(p) => { }}
+            onEnded={() => {
+              setVideoFinished(true)
+            }}
           />
         </div>
       }
-      rightSide={props.text
-      }
+      rightSide={!videoFinished ? "" : props.text }
     />
   </>)
 }
@@ -174,7 +181,7 @@ const SockPuppetsMessage = (props) => {
                   }
                 },
               }}
-              welcomeMessage={'You found a Nexus terminal!  You know what to do :)'}
+              welcomeMessage={''}
               promptLabel={'mage@Nexus:~$'}
               autoFocus="true"
             />
@@ -187,18 +194,17 @@ const SockPuppetsMessage = (props) => {
 
 //TODO: Flicker bug, real content
 function PleaseWaitWhileSockPuppetCreatesContent(props) {
-  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
-  var [step, setStep] = useState(messageOpened ? props.NexusStallingMessages.length : 0)
+  var [step, setStep] = useState(props.contentComplete ? props.NexusStallingMessages.length : 0)
 
   useEffect(() => {
 
-    if (!messageOpened) {
+    if (!props.contentComplete) {
       let total = 0
       for (let i = 0; i < props.NexusStallingMessages.length; i++){
         let e = props.NexusStallingMessages[i]
         setTimeout(() => {
           if (i == props.NexusStallingMessages.length - 1) {
-            setTimeout(()=>setMessageOpened(true), total + (e.time || 2000))
+            setTimeout(()=>props.setContentComplete(true), (e.time || 2000))
           }
           setStep(i+1)
         },  total)
@@ -211,29 +217,30 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
   return (
     <>
       <div>
-        {props.NexusStallingMessages.slice(0, step).map((e,i) =>
-          <Fade key={ "nexusMessage" + i} in={true}>
-            <Typography paragraph>{e.text || e}</Typography>
-          </Fade>)}
+        {props.NexusStallingMessages.slice(0, step).map((e, i) => {
+          let content = e.text || e
+          return (typeof content == "string") ? (<Fade key={"nexusMessage" + i} in={true}>
+            <Typography paragraph>{content}</Typography>
+          </Fade>)
+            : content
+        })}
       </div>
-      { messageOpened ? props.SockPuppetMessage : <CircularProgress style={{ marginTop: 20 }} />}
+      { props.contentComplete ? props.SockPuppetMessage : <CircularProgress style={{ marginTop: 20 }} />}
 
     </>
   )
 }
 
 function Page1(props) {
-  const [nexusDoneTalking,setNexusDoneTalking] = useState(false)
- 
-  useEffect(() => {
-    setTimeout(() => setNexusDoneTalking(true), 3000)
-  })
- 
+  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
-      NexusStallingMessages={[<span><SockPuppetChip /> is making video content!</span>
+      contentComplete={messageOpened}
+      setContentComplete={setMessageOpened}
+      NexusStallingMessages={[
+        <span><SockPuppetChip /> is making video content!</span>
         , {
-          text: "Because Sock Puppet has been slower than average, we have prepared some entertainment.",
+          text: "Because Sock Puppet has been slower than average, my entertainment algorithms have been activated.",
           time: 5000
         },
         {
@@ -247,10 +254,42 @@ function Page1(props) {
                 color="textSecondary" gutterBottom
               >Did you know...</Typography>
 
-              ...the Nexus was founded by two eccentric thousandaires during the COVID-19 lockdown of the year 2020?
+              ...I (the Nexus) was built by two eccentric thousandaires during the COVID-19 lockdown of the year 2020?
             </CardContent>
           </Card>,
           time: 5000
+        },
+        {
+          text: <span><br/><br/> <SockPuppetChip /> is <strong>still</strong> making video content...</span>,
+          time: 2000
+        },
+        {
+          text: "Here's another fact!",
+          time: 1000
+        },
+        {
+          text: <Card>
+            <CardContent>
+              <Typography
+                color="textSecondary" gutterBottom
+              >Did you know...</Typography>
+
+              ...the Nexus's software architects have not been seen since the year 2022?
+            </CardContent>
+          </Card>,
+          time: 5000
+        },
+        {
+          text: <span><br/><br/> <SockPuppetChip /> is <strong>still</strong> making video content...</span>,
+          time: 2000
+        },
+        {
+          text: "Here's another fact!",
+          time: 1000
+        },
+        {
+          text: <span>Ahh.  Never mind.  <SockPuppetChip /> is <strong>finally</strong> finished.<br/><br/></span>,
+          time: 1000
         },
       ]}
       SockPuppetMessage={<SockPuppetsMessage {...props} />}
@@ -258,17 +297,51 @@ function Page1(props) {
   )
 }
 
-function Page2(props) {
-
-  return (<>
-    <ul>
-      <li>Page 2</li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
-    
-  </>)
+function Page2(props) {  
+  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3", false)
+  return (
+    <PleaseWaitWhileSockPuppetCreatesContent
+      contentComplete={messageOpened}
+      setContentComplete={setMessageOpened}
+      NexusStallingMessages={[
+        <span><SockPuppetChip /> is making video content!</span>
+        ,
+        {
+          text: <>
+            <br/>
+            <br/>
+            <Typography>Time until <SockPuppetChip /> is disciplined for lateness:</Typography>
+            <br/>
+            <Countdown date={Date.now() + (messageOpened ? 1 : 90000)} />
+            <br/>
+            <br/>
+          </>,
+          time: 5000
+        },
+        { 
+          text: "My entertainment algorithms tell me that humans like to play with toys.",
+          time: 3000
+        },
+        {
+          text: "Here is a toy...",
+          time: 1000
+        },
+        {
+          text: <Game />,
+          time: 10000
+        },
+        {
+          text: "I hope you are enjoying the toy...",
+          time: 10000
+        },
+        {
+          text: "Please continue enjoying the toy :)",
+          time: 10000
+        },
+      ]}
+      SockPuppetMessage={<SockPuppetsMessage2 {...props} />}
+    />
+  )
 }
 
 function Page3(props) {
@@ -308,6 +381,45 @@ function Page5(props) {
     </ul>
     
   </>)
+}
+
+const SockPuppetsMessage2 = (props) => {
+  const [messageOpened, setMessageOpened] = useState(false)
+  const openedMessage = useRef(null);
+
+  useEffect(() => {
+    if (openedMessage.current)
+      { openedMessage.current.scrollIntoView() }
+  },[messageOpened])
+
+  return (!messageOpened ? <NewMessageNotification
+    nexusSays={"Wow!  New messages(s)..."}
+    from={<SockPuppetChip></SockPuppetChip>}
+    onOpenClicked={
+      () => {
+        setMessageOpened(true)
+      }
+    }
+  /> :
+    <div ref={openedMessage}>
+      <OpenedMessage
+        from={<SockPuppetChip />}
+        to={<FakeChip name={props.username} level={1} />}
+        subject={"React Components"}
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
+        text={
+          <>
+            <Typography paragraph>
+              Toys! [Let's define toys!] [Gamification???]
+            </Typography>
+            <Typography paragraph>
+              ~Your Friend, Socky
+          </Typography>
+          </>
+        }
+      />
+    </div>
+  )
 }
 
 export function Level2(props) {

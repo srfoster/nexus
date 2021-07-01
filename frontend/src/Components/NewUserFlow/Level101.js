@@ -152,7 +152,7 @@ class SoundfontProvider extends React.Component {
 
 
 
-function MidiTest() {
+export function MidiTest() {
   const firstNote = MidiNumbers.fromNote('c3');
   const lastNote = MidiNumbers.fromNote('f5');
   const keyboardShortcuts = KeyboardShortcuts.create({
@@ -210,4 +210,4 @@ function Level101(props) {
   </Level>)
 }
 
-export default Level101;
+//export default Level101;
