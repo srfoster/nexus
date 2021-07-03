@@ -14,6 +14,8 @@ import { SockPuppetChip, FakeChip, NewMessageNotification } from '../Widgets/Nex
 import { JSMirror } from '../Widgets/Educational';
 import Game from '../Widgets/react-gameoflife/Game.js';
 import Countdown from 'react-countdown';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import CasinoIcon from '@material-ui/icons/Casino';
 
 //Questions we're asking (and answering) with our...
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
@@ -238,7 +240,7 @@ function Page1(props) {
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <span><SockPuppetChip /> is making video content!</span>
+        <span><SockPuppetChip /> is making video content!<br/><br/></span>
         , {
           text: "Because Sock Puppet has been slower than average, my entertainment algorithms have been activated.",
           time: 5000
@@ -260,7 +262,7 @@ function Page1(props) {
           time: 5000
         },
         {
-          text: <span><br/><br/> <SockPuppetChip /> is <strong>still</strong> making video content...</span>,
+          text: <span><br/><br/> <SockPuppetChip /> is <strong>still</strong> making video content...<br/><br/></span>,
           time: 2000
         },
         {
@@ -280,7 +282,7 @@ function Page1(props) {
           time: 5000
         },
         {
-          text: <span><br/><br/> <SockPuppetChip /> is <strong>still</strong> making video content...</span>,
+          text: <span><br/><br/> <SockPuppetChip /> is <strong>still</strong> making video content...<br/><br/></span>,
           time: 2000
         },
         {
@@ -304,8 +306,7 @@ function Page2(props) {
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <span><SockPuppetChip /> is making video content!</span>
-        ,
+        <span><SockPuppetChip /> is making video content!</span>,
         {
           text: <>
             <br/>
@@ -331,11 +332,15 @@ function Page2(props) {
           time: 10000
         },
         {
-          text: "I hope you are enjoying the toy...",
+          text: <Typography paragraph style={{marginTop: 10}}>I hope you are enjoying the toy...</Typography>,
           time: 10000
         },
         {
-          text: "Please continue enjoying the toy :)",
+          text: "Please continue enjoying the toy.",
+          time: 10000
+        },
+        {
+          text: "Toys are enjoyable, no?",
           time: 10000
         },
       ]}
@@ -387,10 +392,30 @@ const SockPuppetsMessage2 = (props) => {
   const [messageOpened, setMessageOpened] = useState(false)
   const openedMessage = useRef(null);
 
+  //For the puzzle...
+  const [firstGameState, setFirstGameState] = useState([])
+  const [secondGameState, setSecondGameState] = useState([])
+
+  const [firstColor, setFirstColor] = useState("red")
+  const [secondColor, setSecondColor] = useState("lime")
+  const [firstRandomClicked, setFirstRandomClicked] = useState(false)
+  const [secondRandomClicked, setSecondRandomClicked] = useState(false)
+
+  const [firstCode, setFirstCode] = useState("<Toy\n color=\""+firstColor+"\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
+
+  const [secondCode, setSecondCode] = useState("<Toy\n color=\""+secondColor+"\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
+
+
   useEffect(() => {
-    if (openedMessage.current)
-      { openedMessage.current.scrollIntoView() }
+    if (openedMessage.current){ openedMessage.current.scrollIntoView() }
   },[messageOpened])
+
+
+  function checkPuzzleComplete() {
+    if (firstColor == "#FF1493" && secondColor == "#00BFFF" && firstRandomClicked && secondRandomClicked) {
+      props.setCanContinue(true)
+    }
+  }
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
@@ -402,43 +427,102 @@ const SockPuppetsMessage2 = (props) => {
     }
   /> :
     <div ref={openedMessage}>
+      { /*
+          These deadlines are ridiculous.   
+          [Code == Spells] 
+          [Difference between writing and spells. "Definition of spells"] [Kinds of spells]
+          [More story about nexus...]
+
+          I'm supposed to give a lecture about some boring vocabulary words,
+          but I'll just paste the content below.  You can always come back
+          here if you need help on the test later.
+
+          [What does the Nexus say the learning objectives are??]
+          The puzzle below shouldn't be too hard, these are still the introductory
+          ones after all.  Early levels in many games are just there to teach you
+          the basic mechanics for the harder parts.
+
+          Oh, and... I've been
+          [More story] [Forshadow Favor???]
+      */}
       <OpenedMessage
         from={<SockPuppetChip />}
         to={<FakeChip name={props.username} level={1} />}
-        subject={"React Components"}
+        subject={"Fundamentals of Magic, Part 1"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
             <Typography paragraph>
-              Toys! [Let's define toys!] [Gamification???]
-              [Can we define game, puzzle, and toy?]
+              Here are the vocabulary words for this lesson:
             </Typography>
+            <ul>
+              <li>Spell</li>
+              <li>Toy</li>
+              <li>Puzzle</li>
+              <li>Game</li>
+              <li>Story</li>
+              <li>Gamification</li>
+            </ul>
             <Typography paragraph>
-              [Favor.] [Getting disciplined.] 
+              The Puzzle is to interpret the cryptic message below.
             </Typography>
-            <Typography paragraph>
-              [Puzzle:
-                Change both game's colors,
-                Change both game's texts
-                (Change all props)
-                And random+run both games...
-              ]
+            <Card>
+              <CardContent>
+                <Typography paragraph
+                  color="textSecondary" gutterBottom >
+                  Cryptic message... </Typography>
+                <Typography paragraph>
+                  Alter the Spell for each Toy so that the color properties are <tt style={{ color: "#FF1493" }}>#FF1493</tt> and <tt style={{ color: "#00BFFF" }}>#00BFFF</tt>.</Typography>
 
-              [Idea: MySpace like reward at end of level 2. Unlock components for your homepage...]
+                <Typography paragraph>
+                  Then, click <Button variant="outlined"><CasinoIcon /> Random</Button> and <Button variant="outlined"><PlayArrowIcon /> Run</Button> on each Toy at least once.
             </Typography>
+              </CardContent>
+            </Card>
             <Typography paragraph>
+              <br/>
               ~Your Friend, Socky
+
           </Typography>
-            <JSMirror code={"<Toy\n color=\"red\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> "}
-              scope={{ Toy: Game }}
+            <JSMirror code={firstCode}
+              scope={{
+                Toy: (props) => {
+                  console.log(props)
+                  setFirstColor(props.color)
+
+                  setTimeout(() => {
+                    checkPuzzleComplete()
+                  }, 100)
+
+                  return <Game {...props}
+                    cells={ firstGameState }
+                    onCellsChanged={ setFirstGameState }
+                    onRandomClicked={() => { setFirstRandomClicked(true)} }
+                  />
+                }
+              }}
               onChange={(code) => {
-                //setCode(code);
+                setFirstCode(code)
                 return true
               }} />
-            <JSMirror code={"<Toy\n color=\"lime\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> "}
-              scope={{ Toy: Game }}
+            <JSMirror code={secondCode}
+              scope={{
+                Toy: (props) => {
+                  setSecondColor(props.color)
+
+                  setTimeout(() => {
+                    checkPuzzleComplete()
+                  }, 100)
+
+                  return <Game {...props}
+                    cells={ secondGameState }
+                    onCellsChanged={ setSecondGameState }
+                    onRandomClicked={() => { setSecondRandomClicked(true)} }
+                  />
+                }
+              }}
               onChange={(code) => {
-                //setCode(code);
+                setSecondCode(code)
                 return true
               }} />
           </>

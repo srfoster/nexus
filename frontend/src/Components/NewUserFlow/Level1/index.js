@@ -59,7 +59,7 @@ const TitleCard = ({ setTitleScreenComplete }) => {
                   </Typography>
           <br />
           <Typography variant="h2" style={{ fontSize: 16 }}>
-            A Text Adventure By ThoughtSTEM
+            A Text Adventure about the Magic of Coding
                   </Typography>
         </div>
       </Fade>
@@ -155,7 +155,7 @@ const UserNameForm = (props) => {
   return (<Grid container spacing={1}>
     <Fade in={true} timeout={1000}>
       <Grid item xs={6} >
-        <Typography>At the Nexus, what shall we call you?</Typography>
+        <Typography>At the Nexus, you are a user of magic. What shall we call you?</Typography>
       </Grid>
     </Fade>
     <Fade in={true} timeout={5000}>
@@ -271,10 +271,10 @@ function ChooseYourTeacher(props) {
         </Fade>
         <Fade in={true} timeout={2000}>
           <Grid item xs={6}>
-            <MultipleChoiceQuestion question="Select your teacher preference" answers={[
+            <MultipleChoiceQuestion question="Who would you like to teach you magic?" answers={[
               { correct: true, text: <SockPuppetChip />, feedback: <SpinThen spinTime={500}>Available!</SpinThen> },
-              { correct: false, text: <FakeChip name="Wizard of the Forest" />, feedback: <SpinThen spinTime={1000}>Sorry, I tried to contact the wizard, but his computer did not respond within 1000 milliseconds and his last GPS location appears to be in the middle of the Forest. The Nexus apologizes.</SpinThen> },
-              { correct: false, text: <FakeChip name="Super-intelligent AI" level={500} />, feedback: <SpinThen spinTime={3000}>Sorry. The Super-intelligent AI has considered your request for the required 3000 milliseconds, and sends the following message: I currently have over five million students, please try again when you've attained a higher level.</SpinThen> },
+              { correct: false, text: <FakeChip name="Wizard of the Forest" />, feedback: <SpinThen spinTime={1000}>Sorry, I tried to contact the wizard, but his computer did not respond within 1000 milliseconds and his last GPS location appears to be in the middle of the Forest. The Nexus apologizes for putting him on this list.</SpinThen> },
+              { correct: false, text: <FakeChip name="Super-intelligent AI" level={500} />, feedback: <SpinThen spinTime={3000}>Sorry. The Super-intelligent AI has considered your request for the required 3000 milliseconds, and sends the following message: "I currently have over five million students, please try again when you've attained a higher level."</SpinThen>},
               { correct: false, text: <FakeChip name={<span>The Nexus Devs</span>} />, feedback: <SpinThen spinTime={5000}>This feature is still under development.</SpinThen> },
               { correct: false, text: "None of these", feedback: "Sorry, your current level is too low for you to continue without a teacher." },
             ]}
@@ -366,15 +366,13 @@ function SockPuppetVideoIntroText(props) {
   return (
     <>
       <Typography paragraph>Hi {props.username}!</Typography>
-      <Typography paragraph>I'm one of the Nexus's staff members.  I've written this personalized message to accompany the personalized introduction video above.</Typography>
-      <Typography paragraph>At the Nexus, we pride ourselves on how personal everything is.  If I sound funny, please know that the Nexus's algorithms will count how many times I say "personal," so when I write these personalized introductions, I try to make them very personal.</Typography>
-      <Typography paragraph>The Nexus is always listening.</Typography>
-      <Typography paragraph>Anyway, because I'm a Level 1 teacher, I'm allowed to attach a silly personality quiz at the end of this personalized message.</Typography>
+      <Typography paragraph>The Nexus just assigned me to be your Magic Teacher. I'm going to start making personalized videos and puzzles to help you learn magic!</Typography>
+      <Typography paragraph>In the meantime, I'm attaching a silly personality quiz below.</Typography>
       <Typography paragraph>I wrote the questions and all the funny responses personally.  Please read all of them because the whole thing is supposed to buy me time to make your next video.</Typography>
       <Typography paragraph>Sincerely,</Typography>
       <Typography paragraph>Sock Puppet</Typography>
       <MultipleChoiceQuestion style={{ marginTop: 50 }}
-        question="Your personal feelings matter.  Do you think a sock can teach?"
+        question="Do you think a sock can teach?"
         answers={[
           {
             correct: true, text: "Yes, if a sock can't teach something, it cannot be taught!",
@@ -394,7 +392,7 @@ function SockPuppetVideoIntroText(props) {
           },
           {
             correct: false, text: "These answers are too restrictive",
-            feedback: `Personality assessment result: User with name "${props.username}" is a narcisist who thinks their snowflake-like personality is too complex to be assessed by multiple-choice questions. User may not continue.`
+            feedback: `Personality assessment result: User with name "${props.username}" is a narcisist who thinks their personality is too complex to be assessed by multiple-choice questions. User may not continue.`
           },
         ]}
         buttonText="Submit Answer"
@@ -444,14 +442,14 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
     {step >= 3 ?
       <Fade in={true} timeout={500}>
         <Typography paragraph>
-          The Nexus prides itself in its content.
+          The Nexus prides itself in its educational content for magic users.
           </Typography>
       </Fade>
       : ""}
     {step >= 4 ?
       <Fade in={true} timeout={500}>
         <Typography paragraph>
-          At the Nexus, your experience is our highest priority.   :SmileEmoji:
+          At the Nexus, your educational experience is our highest priority.
           </Typography>
       </Fade>
       : ""}
