@@ -29,18 +29,10 @@ import { NewMessageNotification, SockPuppetChip, SpinThen, FakeChip, Gong } from
 import { Level, LoginButton, ContinueButton, withConfetti, SBS } from "../Level";
 
 /*
-This is the current focus of the CodeSpells project:
 An educational text adventure that leads you on epic quest
 to learn coding through a variety of media: text, video, and 2D/3D environments
 */
 
-
-/*
-Once upon a time...
-
-A user encountered a title card and was greeted with an invitation 
-to play a text adventure.  They knew not what awaited them...
-*/ 
 
 const TitleCard = ({ setTitleScreenComplete }) => {
   let [step, setStep] = useState(0);
@@ -79,19 +71,6 @@ const TitleCard = ({ setTitleScreenComplete }) => {
   </Card>
 }
 
-
-/*
-And so the User Story begins...
-
-The user enters the Nexus, a 2D user interface that seems
-polished and calm, but also a bit clinical and corporate.  
-
-The Nexus gives a polite welcome and presents a field where
-the user can type their username, check if it is available,
-and undo their selection if they wish.
-
-A next button appears when they enter their name.
-*/ 
 
 const UserNameForm = (props) => {
   const [checking, setChecking] = useState(false);
@@ -183,19 +162,6 @@ const UserNameForm = (props) => {
 }
 
 
-/*
-
-The user is given another choice: between light mode
-and dark mode.
-
-The Nexus would like you to know that your preferences
-matter.
-
-The user decides to pick Dark Mode and presses the 
-Next button.
-
-*/
-
 
 function LightOrDark(props) {
   let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
@@ -236,25 +202,6 @@ function LightOrDark(props) {
 
 
 
-
-
-/*
-The user is given a choice between several teachers.
-The user does not know what a teacher is, or why it matters,
-
-The user would prefer the high level ones: 
-Wizard of the Forest, the Super Intelligent AI, or the Devs 
-of the Nexus.
-
-But, each is sadly, unavailable...
-
-...except one low level teacher named Sock Puppet, which the
-user is forced to choose.  
-
-Grumbling a bit about the "illusion of choice" the user
-proceeds to press the Next button
-*/
-
 function ChooseYourTeacher(props) {
   const [teacherAvailable, setTeacherAvailable] = React.useState(false);
 
@@ -274,9 +221,9 @@ function ChooseYourTeacher(props) {
             <MultipleChoiceQuestion question="Who would you like to teach you magic?" answers={[
               { correct: true, text: <SockPuppetChip />, feedback: <SpinThen spinTime={500}>Available!</SpinThen> },
               { correct: false, text: <FakeChip name="Wizard of the Forest" />, feedback: <SpinThen spinTime={1000}>Sorry, I tried to contact the wizard, but his computer did not respond within 1000 milliseconds and his last GPS location appears to be in the middle of the Forest. The Nexus apologizes for putting him on this list.</SpinThen> },
-              { correct: false, text: <FakeChip name="Super-intelligent AI" level={500} />, feedback: <SpinThen spinTime={3000}>Sorry. The Super-intelligent AI has considered your request for the required 3000 milliseconds, and sends the following message: "I currently have over five million students, please try again when you've attained a higher level."</SpinThen>},
+              { correct: false, text: <FakeChip name="Super-intelligent AI" level={500} />, feedback: <SpinThen spinTime={3000}>Sorry. The Super-intelligent AI has considered your request for the required 3000 milliseconds, and sends the following message: "I'm currently maxed out at five million students, please try again when you've attained a higher level."</SpinThen>},
               { correct: false, text: <FakeChip name={<span>The Nexus Devs</span>} />, feedback: <SpinThen spinTime={5000}>This feature is still under development.</SpinThen> },
-              { correct: false, text: "None of these", feedback: "Sorry, your current level is too low for you to continue without a teacher." },
+              { correct: false, text: "None of these", feedback: <FakeChip name={<span>The Nexus Devs</span>} />, feedback: <SpinThen spinTime={5000}>Sorry, your current level is too low for you to continue without a teacher, and I can't find any other available teachers for your level.</SpinThen> },
             ]}
               buttonText="Check Availability"
               onCorrect={() => props.setCanContinue(true)}
@@ -289,14 +236,6 @@ function ChooseYourTeacher(props) {
   );
 }
 
-/*
-Miraculously, there is a new message from Sock Puppet!
-
-They open it and discover a video inside, where a shy-sounding
- puppet introduces themself as their teacher,
-
- Immediately after it finishes, it displays some text.
-*/
 
 function SockPuppetVideoIntro(props) {
   let [videoFinished, setVideoFinished] = useState(false);
@@ -343,24 +282,6 @@ function SockPuppetVideoIntro(props) {
   );
 }
 
-/*
-  Sock Puppet is clearly more loquacious in text,
-  because they've left a message for the user below
-  the video.
-
-  It explains that the Nexus is always listening
-  and that this is supposed to be a personal
-  message.  And the Nexus will verify this by
-  checking the number of times Sock Puppet says
-  "personal."
-
-  Sock Puppet also says he's busy making the next
-  video RIGHT NOW!  So please take your time.
-
-  As the user []
-
-  
-*/
 
 function SockPuppetVideoIntroText(props) {
   return (
@@ -368,7 +289,7 @@ function SockPuppetVideoIntroText(props) {
       <Typography paragraph>Hi {props.username}!</Typography>
       <Typography paragraph>The Nexus just assigned me to be your Magic Teacher. I'm going to start making personalized videos and puzzles to help you learn magic!</Typography>
       <Typography paragraph>In the meantime, I'm attaching a silly personality quiz below.</Typography>
-      <Typography paragraph>I wrote the questions and all the funny responses personally.  Please read all of them because the whole thing is supposed to buy me time to make your next video.</Typography>
+      <Typography paragraph>I wrote the questions and all the funny responses personally.  Please read all of them because the whole thing is supposed to buy me time to make your personalized video content.</Typography>
       <Typography paragraph>Sincerely,</Typography>
       <Typography paragraph>Sock Puppet</Typography>
       <MultipleChoiceQuestion style={{ marginTop: 50 }}
@@ -475,40 +396,26 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
       </Fade>
       : ""}
     {step >= 8 ?
-      <Fade in={true} timeout={500}>
-        <Typography paragraph>
-          that the Nexus strives for in our continuing mission
-          </Typography>
-      </Fade>
-      : ""}
-    {step >= 9 ?
-      <Fade in={true} timeout={500}>
-        <Typography paragraph>
-          to meet your educational needs
-          </Typography>
-      </Fade>
-      : ""}
-    {step >= 10 ?
       <Typography paragraph>
         ...
         </Typography> : ""
     }
-    {step >= 11 ?
+    {step >= 9 ?
       <Typography paragraph>
         Sometimes our low-level teachers, like <SockPuppetChip />
       </Typography> : ""
     }
-    {step >= 12 ?
+    {step >= 10 ?
       <Typography paragraph>
         may not always meet the expected deadlines
         </Typography> : ""
     }
-    {step >= 13 ?
+    {step >= 11 ?
       <Typography paragraph>
         that we strive for
         </Typography> : ""
     }
-    {step >= 14 ?
+    {step >= 12 ?
       <NewMessageNotification
         nexusSays={"Ah, here we go!"}
         from={<SockPuppetChip />}
@@ -516,7 +423,7 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
       /> : ""
     }
 
-    {step < 14 ? <CircularProgress style={{ marginTop: 20 }} /> : ""}
+    {step < 13 ? <CircularProgress style={{ marginTop: 20 }} /> : ""}
 
   </div> : <SockPuppetFirstLesson setCanContinue={props.setCanContinue} username={props.username} />
   )

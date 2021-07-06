@@ -42,7 +42,7 @@ function Inventory(props) {
          </CardContent>
       </Card>
     </>)
-    }
+}
 
 
 function Favor(props) {
@@ -301,6 +301,11 @@ function Page1(props) {
 
 function Page2(props) {  
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3", false)
+
+  var [count, setCount] = useState(0)
+
+  var [x, setX] = useState([])
+
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
@@ -328,7 +333,11 @@ function Page2(props) {
           time: 1000
         },
         {
-          text: <Game />,
+          text: <Button onClick={()=>setCount(count+1)}>Test</Button>,
+          time: 100 
+        },
+        {
+          text: <><p>{JSON.stringify(x)}</p><Game boardLabel={count} onIteration={setX} /></>,
           time: 10000
         },
         {
@@ -582,3 +591,5 @@ Laurond: I have a character for you.. an individual who starts out in the lower 
 */
 
 export default Level2;
+
+
