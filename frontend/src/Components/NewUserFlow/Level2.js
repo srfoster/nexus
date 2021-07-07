@@ -304,8 +304,6 @@ function Page2(props) {
 
   var [count, setCount] = useState(0)
 
-  var [x, setX] = useState([])
-
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
@@ -337,7 +335,7 @@ function Page2(props) {
           time: 100 
         },
         {
-          text: <><p>{JSON.stringify(x)}</p><Game boardLabel={count} onIteration={setX} /></>,
+          text: <><Game boardLabel={count} /></>,
           time: 10000
         },
         {
@@ -401,7 +399,9 @@ const SockPuppetsMessage2 = (props) => {
   const [messageOpened, setMessageOpened] = useState(false)
   const openedMessage = useRef(null);
 
-  //For the puzzle...
+  const [firstGameRunning, setFirstGameRunning] = useState(false)
+  const [secondGameRunning, setSecondGameRunning] = useState(false)
+
   const [firstGameState, setFirstGameState] = useState([])
   const [secondGameState, setSecondGameState] = useState([])
 
@@ -421,7 +421,7 @@ const SockPuppetsMessage2 = (props) => {
 
 
   function checkPuzzleComplete() {
-    if (firstColor == "#FF1493" && secondColor == "#00BFFF" && firstRandomClicked && secondRandomClicked) {
+    if (firstColor == "#FF1493" && secondColor == "#00BFFF" && firstRandomClicked && secondRandomClicked && firstGameState.length > 0 && secondGameState.length > 0) {
       props.setCanContinue(true)
     }
   }
@@ -496,17 +496,20 @@ const SockPuppetsMessage2 = (props) => {
             <JSMirror code={firstCode}
               scope={{
                 Toy: (props) => {
-                  console.log(props)
                   setFirstColor(props.color)
 
+                  /*
                   setTimeout(() => {
                     checkPuzzleComplete()
                   }, 100)
+                  */
 
                   return <Game {...props}
+                    isRunning={firstGameRunning}
+                    onRunningChanged={(running) => {  setFirstGameRunning(running) }}
+                    onRandomClicked={() => setFirstRandomClicked(true) }
+                    onIteration={ (cells) => setFirstGameState(cells) }
                     cells={ firstGameState }
-                    onCellsChanged={ setFirstGameState }
-                    onRandomClicked={() => { setFirstRandomClicked(true)} }
                   />
                 }
               }}
@@ -519,14 +522,18 @@ const SockPuppetsMessage2 = (props) => {
                 Toy: (props) => {
                   setSecondColor(props.color)
 
+                  /*
                   setTimeout(() => {
                     checkPuzzleComplete()
                   }, 100)
+                  */
 
                   return <Game {...props}
+                    isRunning={ secondGameRunning}
+                    onRunningChanged={ (running) => setSecondGameRunning(running) }
+                    onIteration={ (cells) => setSecondGameState(cells) }
+                    onRandomClicked={() => setSecondRandomClicked(true) }
                     cells={ secondGameState }
-                    onCellsChanged={ setSecondGameState }
-                    onRandomClicked={() => { setSecondRandomClicked(true)} }
                   />
                 }
               }}
