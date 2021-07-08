@@ -15,21 +15,6 @@ const CELL_SIZE = 20;
 const WIDTH = 200;
 const HEIGHT = 200;
 
-function Cell(props) {
-    const { x, y } = props;
-    return (
-        <div className="Cell"
-            key={ `${x},${y}`}
-            style={{
-            left: `${CELL_SIZE * x + 1}px`,
-            top: `${CELL_SIZE * y + 1}px`,
-            width: `${CELL_SIZE - 1}px`,
-            height: `${CELL_SIZE - 1}px`,
-            backgroundColor: props.color || "red"
-        }} />
-    );
-}
-
 
 function makeEmptyBoard() {
     let board = [];
@@ -58,7 +43,7 @@ function boardToCells(board){
     return cells
 }
 
-function runIteration(cells) {
+export function runIteration(cells) {
     let board = makeEmptyBoard();
     let newBoard = makeEmptyBoard();
 
@@ -102,72 +87,117 @@ function calculateNeighbors(board, x, y) {
     return neighbors;
 }
 
-function Game(props) {
+function changeColor(cells, color) {
+    return cells.map((c) => { c.color = color; return c})
+}
 
+
+function Cell(props) {
+    const { x, y } = props;
+    return (
+        <div className="Cell"
+            key={`${x},${y}`}
+            style={{
+                left: `${CELL_SIZE * x + 1}px`,
+                top: `${CELL_SIZE * y + 1}px`,
+                width: `${CELL_SIZE - 1}px`,
+                height: `${CELL_SIZE - 1}px`,
+                backgroundColor: props.color || "red" }}
+
+            onClick={(e) => { e.stopPropagation(); props.onClick(x,y) }}
+/>
+    );
+}
+
+
+function Board(props) {
+
+    return (
+        <div className="Board"
+            style={{ width: WIDTH, height: HEIGHT, backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px`, marginLeft: 0, }}
+            onClick={(event) => {
+                const elemOffset = event.target.getBoundingClientRect()
+
+                const offsetX = event.clientX - elemOffset.left;
+                const offsetY = event.clientY - elemOffset.top;
+
+                const x = Math.floor(offsetX / CELL_SIZE);
+                const y = Math.floor(offsetY / CELL_SIZE);
+
+                props.boardClicked(x, y)
+            }} >
+
+            {props.cells.map(cell => (
+                <Cell x={cell.x}
+                    y={cell.y}
+                    key={`${cell.x},${cell.y}`}
+                    color={cell.color}
+                    onClick={props.cellClicked}
+                />
+            ))}
+
+        </div>)
+}
+
+
+export function Game(props) {
+    const [cells, _setCells] = useState(props.cells || [])
     const [isRunning, setIsRunning] = useState(props.isRunning || false)
-    const [cells, setCells] = useState(props.cells || [])
 
-    const handleClick = (event) => {
-        const elemOffset = event.target.getBoundingClientRect()
-        const offsetX = event.clientX - elemOffset.left;
-        const offsetY = event.clientY - elemOffset.top;
-
-        const x = Math.floor(offsetX / CELL_SIZE);
-        const y = Math.floor(offsetY / CELL_SIZE);
-
-        setCells([...cells, { x, y, color: props.color }])
+    let setCells = (cells) => {
+        props.setCells && props.setCells(cells)
+        _setCells(cells)
     }
 
-    const handleRandom = () => {
+    function boardClicked(x,y) {
+        setCells([...cells,{x,y,color: props.color}])
+    }
+
+    function cellClicked(x, y) {
+        let newCells = []
+
+        for (let cell of cells) {
+          if (cell.x != x || cell.y != y) {
+            newCells.push(cell)
+          }
+        }
+
+        setCells(changeColor(newCells, props.color))
+    }
+
+    function stopGame() {
+      setIsRunning(false)
+    }
+
+    function runGame() {
+      setIsRunning(true)
+    }
+
+    useEffect(() => {
+        if (isRunning)
+            setTimeout(handleNext,100)
+    }, [isRunning,cells])
+
+    function handleRandom() {
         let board = makeEmptyBoard()
 
-        for (let y = 0; y < WIDTH/CELL_SIZE; y++) {
-            for (let x = 0; x < HEIGHT/CELL_SIZE; x++) {
+        for (let y = 0; y < WIDTH / CELL_SIZE; y++) {
+            for (let x = 0; x < HEIGHT / CELL_SIZE; x++) {
                 board[y][x] = (Math.random() >= 0.5);
             }
         }
 
         let cells = boardToCells(board)
-        setCells(cells) 
-        props.onIteration && props.onIteration(cells)
+        setCells(changeColor(cells, props.color))
     }
 
-    const handleNext = useCallback(() => { 
+    function handleNext() {
         setCells((cells) => 
         {
-            let newCells = runIteration(cells);
-            props.onIteration && props.onIteration(cells)
+            let newCells = changeColor(runIteration(cells), props.color);
             return newCells
-		})
-    }, [isRunning, cells])
-
-    const stopGame = useCallback(() => {
-        setIsRunning(false)
-
-        props.onRunningChanged && props.onRunningChanged(false)
-    }, [isRunning, cells])
-
-    const runGame = useCallback(() => {
-        setIsRunning(true)
-        props.onRunningChanged && props.onRunningChanged(true)
-    }, [isRunning, cells])
-
-
-    let nextButtonRef = useRef(null)
-    useEffect(() => {
-        const interval = setInterval(() => {
-            var clickEvent = new MouseEvent("click", {
-                "view": window,
-                "bubbles": true,
-                "cancelable": false
-            });
-
-            if (nextButtonRef.current && isRunning)
-                nextButtonRef.current.dispatchEvent(clickEvent)
-
-        }, 100);
-        return () => clearInterval(interval);
-    }, []);
+        })
+    }
 
     return (
         <Card>
@@ -181,19 +211,10 @@ function Game(props) {
                         <Typography
                             color="textSecondary" gutterBottom
                         >{props.boardLabel || "Edit my squares..."}</Typography>
-                        <div className="Board"
-                            style={{ width: WIDTH, height: HEIGHT, backgroundSize: `${CELL_SIZE}px ${CELL_SIZE}px`, marginLeft: 0, }}
-                            onClick={handleClick} >
-
-                            {cells.map(cell => (
-                                <Cell x={cell.x}
-                                    y={cell.y}
-                                    key={`${cell.x},${cell.y}`}
-                                    color={cell.color}
-                                />
-                            ))}
-
-                        </div>
+                        <Board cells={cells}
+                            boardClicked={boardClicked}
+                            cellClicked={cellClicked}
+                        />
                     </Grid>
                     <Grid item>
                         <Typography
@@ -205,12 +226,13 @@ function Game(props) {
                             color="primary"
                             aria-label="vertical outlined primary button group"
                         >
-                            {isRunning ?
-                                <Button
-                                    variant="outlined"
-                                    onClick={stopGame}><StopIcon /> Stop</Button> :
-                                <Button variant="outlined" onClick={runGame}><PlayArrowIcon /> Run</Button>}
-                            <Button ref={ nextButtonRef } variant="outlined" onClick={handleNext}>
+                            {props.noRun ? "" :
+                                isRunning ?
+                                    <Button
+                                        variant="outlined"
+                                        onClick={stopGame}><StopIcon /> Stop</Button> :
+                                    <Button variant="outlined" onClick={runGame}><PlayArrowIcon /> Run</Button>}
+                            <Button variant="outlined" onClick={handleNext}>
                                 Next</Button>
                             <Button variant="outlined" onClick={handleRandom}>
                                 <CasinoIcon /> Random</Button>
@@ -223,5 +245,3 @@ function Game(props) {
 }
 
 
-
-export default Game;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Terminal from 'react-console-emulator'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,7 +12,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { SBS, Level, withConfetti } from './Level';
 import { SockPuppetChip, FakeChip, NewMessageNotification } from '../Widgets/NexusVoice';
 import { JSMirror } from '../Widgets/Educational';
-import Game from '../Widgets/react-gameoflife/Game.js';
+import { Game } from '../Widgets/react-gameoflife/Game.js';
 import Countdown from 'react-countdown';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CasinoIcon from '@material-ui/icons/Casino';
@@ -310,18 +310,6 @@ function Page2(props) {
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
         <span><SockPuppetChip /> is making video content!</span>,
-        {
-          text: <>
-            <br/>
-            <br/>
-            <Typography>Time until <SockPuppetChip /> is disciplined for lateness:</Typography>
-            <br/>
-            <Countdown date={Date.now() + (messageOpened ? 1 : 90000)} />
-            <br/>
-            <br/>
-          </>,
-          time: 5000
-        },
         { 
           text: "My entertainment algorithms tell me that humans like to play with toys.",
           time: 3000
@@ -347,7 +335,7 @@ function Page2(props) {
           time: 10000
         },
         {
-          text: "Toys are enjoyable, no?",
+          text: "Sock Puppet will be disciplined for lateness in 10 seconds. Please continue enjoying your toy!",
           time: 10000
         },
       ]}
@@ -395,36 +383,50 @@ function Page5(props) {
   </>)
 }
 
+let Toy = (props) => {
+  props.setColor(props.color)
+
+  /*
+  setTimeout(() => {
+    checkPuzzleComplete()
+  }, 100)
+  */
+
+  return <Game {...props}
+    setCells={(cells) => {
+      props.setCells(cells)
+    }}
+  />
+}
+
 const SockPuppetsMessage2 = (props) => {
   const [messageOpened, setMessageOpened] = useState(false)
   const openedMessage = useRef(null);
 
-  const [firstGameRunning, setFirstGameRunning] = useState(false)
-  const [secondGameRunning, setSecondGameRunning] = useState(false)
+  useEffect(() => {
+    if (openedMessage.current) { openedMessage.current.scrollIntoView() }
+  }, [messageOpened])
+
+  const [firstColor, setFirstColor] = useState("red")
+  const [secondColor, setSecondColor] = useState("lime")
 
   const [firstGameState, setFirstGameState] = useState([])
   const [secondGameState, setSecondGameState] = useState([])
 
-  const [firstColor, setFirstColor] = useState("red")
-  const [secondColor, setSecondColor] = useState("lime")
-  const [firstRandomClicked, setFirstRandomClicked] = useState(false)
-  const [secondRandomClicked, setSecondRandomClicked] = useState(false)
+  const [firstCode, setFirstCode] = useState("<Toy\n color=\"" + firstColor + "\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
 
-  const [firstCode, setFirstCode] = useState("<Toy\n color=\""+firstColor+"\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
+  const [secondCode, setSecondCode] = useState("<Toy\n color=\"" + secondColor + "\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
 
-  const [secondCode, setSecondCode] = useState("<Toy\n color=\""+secondColor+"\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
-
-
-  useEffect(() => {
-    if (openedMessage.current){ openedMessage.current.scrollIntoView() }
-  },[messageOpened])
-
+  const [puzzleDone, setPuzzleDone] = useState(false)
 
   function checkPuzzleComplete() {
-    if (firstColor == "#FF1493" && secondColor == "#00BFFF" && firstRandomClicked && secondRandomClicked && firstGameState.length > 0 && secondGameState.length > 0) {
+    if (!puzzleDone && firstColor == "#FF1493" && secondColor == "#00BFFF" && firstGameState.length > 0 && secondGameState.length > 0) {
+      setPuzzleDone(true)
       props.setCanContinue(true)
     }
   }
+
+  useEffect(checkPuzzleComplete, [firstColor,secondColor,firstGameState,secondGameState])
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
@@ -436,24 +438,6 @@ const SockPuppetsMessage2 = (props) => {
     }
   /> :
     <div ref={openedMessage}>
-      { /*
-          These deadlines are ridiculous.   
-          [Code == Spells] 
-          [Difference between writing and spells. "Definition of spells"] [Kinds of spells]
-          [More story about nexus...]
-
-          I'm supposed to give a lecture about some boring vocabulary words,
-          but I'll just paste the content below.  You can always come back
-          here if you need help on the test later.
-
-          [What does the Nexus say the learning objectives are??]
-          The puzzle below shouldn't be too hard, these are still the introductory
-          ones after all.  Early levels in many games are just there to teach you
-          the basic mechanics for the harder parts.
-
-          Oh, and... I've been
-          [More story] [Forshadow Favor???]
-      */}
       <OpenedMessage
         from={<SockPuppetChip />}
         to={<FakeChip name={props.username} level={1} />}
@@ -461,17 +445,6 @@ const SockPuppetsMessage2 = (props) => {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <Typography paragraph>
-              Here are the vocabulary words for this lesson:
-            </Typography>
-            <ul>
-              <li>Spell</li>
-              <li>Toy</li>
-              <li>Puzzle</li>
-              <li>Game</li>
-              <li>Story</li>
-              <li>Gamification</li>
-            </ul>
             <Typography paragraph>
               The Puzzle is to interpret the cryptic message below.
             </Typography>
@@ -481,61 +454,44 @@ const SockPuppetsMessage2 = (props) => {
                   color="textSecondary" gutterBottom >
                   Cryptic message... </Typography>
                 <Typography paragraph>
-                  Alter the Spell for each Toy so that the color properties are <tt style={{ color: "#FF1493" }}>#FF1493</tt> and <tt style={{ color: "#00BFFF" }}>#00BFFF</tt>.</Typography>
+                  Alter the Spell for each Toy so that the color properties are <tt style={{ color: "#FF1493" }}><span> #FF1493 </span></tt> and <tt style={{ color: "#00BFFF" }}>#00BFFF</tt>.</Typography>
 
                 <Typography paragraph>
-                  Then, click <Button variant="outlined"><CasinoIcon /> Random</Button> and <Button variant="outlined"><PlayArrowIcon /> Run</Button> on each Toy at least once.
+                  Then, click <Button variant="outlined"><CasinoIcon /> Random</Button> and on each Toy at least once.
+
+                  (If you can't figure out what the <Button variant="outlined">Next</Button> button does, don't worry.  That's for later puzzles!)
             </Typography>
               </CardContent>
             </Card>
             <Typography paragraph>
-              <br/>
-              ~Your Friend, Socky
+              <br />
+              ~Your Friend, Socky 
 
           </Typography>
             <JSMirror code={firstCode}
               scope={{
-                Toy: (props) => {
-                  setFirstColor(props.color)
-
-                  /*
-                  setTimeout(() => {
-                    checkPuzzleComplete()
-                  }, 100)
-                  */
-
-                  return <Game {...props}
-                    isRunning={firstGameRunning}
-                    onRunningChanged={(running) => {  setFirstGameRunning(running) }}
-                    onRandomClicked={() => setFirstRandomClicked(true) }
-                    onIteration={ (cells) => setFirstGameState(cells) }
-                    cells={ firstGameState }
-                  />
-                }
+                Toy: (props) => <Toy {...props} setColor={setFirstColor}
+                  noRun={true}
+                  cells={ firstGameState}
+                  setCells={(cells) => {
+                    setFirstGameState(cells)
+                  }}
+                />
               }}
+
               onChange={(code) => {
                 setFirstCode(code)
                 return true
               }} />
             <JSMirror code={secondCode}
               scope={{
-                Toy: (props) => {
-                  setSecondColor(props.color)
-
-                  /*
-                  setTimeout(() => {
-                    checkPuzzleComplete()
-                  }, 100)
-                  */
-
-                  return <Game {...props}
-                    isRunning={ secondGameRunning}
-                    onRunningChanged={ (running) => setSecondGameRunning(running) }
-                    onIteration={ (cells) => setSecondGameState(cells) }
-                    onRandomClicked={() => setSecondRandomClicked(true) }
-                    cells={ secondGameState }
-                  />
-                }
+                Toy: (props) => <Toy {...props} setColor={setSecondColor}
+                  noRun={true}
+                  cells={ secondGameState}
+                  setCells={(cells) => {
+                    setSecondGameState(cells)
+                  }}
+                />
               }}
               onChange={(code) => {
                 setSecondCode(code)
