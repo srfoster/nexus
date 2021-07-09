@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Terminal from 'react-console-emulator'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -11,6 +11,11 @@ import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { SBS, Level, withConfetti } from './Level';
 import { SockPuppetChip, FakeChip, NewMessageNotification } from '../Widgets/NexusVoice';
+import { JSMirror } from '../Widgets/Educational';
+import { Game } from '../Widgets/react-gameoflife/Game.js';
+import Countdown from 'react-countdown';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import CasinoIcon from '@material-ui/icons/Casino';
 
 //Questions we're asking (and answering) with our...
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
@@ -37,7 +42,7 @@ function Inventory(props) {
          </CardContent>
       </Card>
     </>)
-    }
+}
 
 
 function Favor(props) {
@@ -54,6 +59,8 @@ function Favor(props) {
 
 
 function OpenedMessage(props) {
+  const [videoFinished,setVideoFinished] = useState(false) 
+
   return (<>
     <SBS
       leftSideTitle={<>
@@ -70,11 +77,13 @@ function OpenedMessage(props) {
             style={{}}
             progressInterval={100}
             onProgress={(p) => { }}
+            onEnded={() => {
+              setVideoFinished(true)
+            }}
           />
         </div>
       }
-      rightSide={props.text
-      }
+      rightSide={!videoFinished ? "" : props.text }
     />
   </>)
 }
@@ -174,7 +183,7 @@ const SockPuppetsMessage = (props) => {
                   }
                 },
               }}
-              welcomeMessage={'You found a Nexus terminal!  You know what to do :)'}
+              welcomeMessage={''}
               promptLabel={'mage@Nexus:~$'}
               autoFocus="true"
             />
@@ -187,18 +196,17 @@ const SockPuppetsMessage = (props) => {
 
 //TODO: Flicker bug, real content
 function PleaseWaitWhileSockPuppetCreatesContent(props) {
-  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
-  var [step, setStep] = useState(messageOpened ? props.NexusStallingMessages.length : 0)
+  var [step, setStep] = useState(props.contentComplete ? props.NexusStallingMessages.length : 0)
 
   useEffect(() => {
 
-    if (!messageOpened) {
+    if (!props.contentComplete) {
       let total = 0
       for (let i = 0; i < props.NexusStallingMessages.length; i++){
         let e = props.NexusStallingMessages[i]
         setTimeout(() => {
           if (i == props.NexusStallingMessages.length - 1) {
-            setTimeout(()=>setMessageOpened(true), total + (e.time || 2000))
+            setTimeout(()=>props.setContentComplete(true), (e.time || 2000))
           }
           setStep(i+1)
         },  total)
@@ -211,29 +219,30 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
   return (
     <>
       <div>
-        {props.NexusStallingMessages.slice(0, step).map((e,i) =>
-          <Fade key={ "nexusMessage" + i} in={true}>
-            <Typography paragraph>{e.text || e}</Typography>
-          </Fade>)}
+        {props.NexusStallingMessages.slice(0, step).map((e, i) => {
+          let content = e.text || e
+          return (typeof content == "string") ? (<Fade key={"nexusMessage" + i} in={true}>
+            <Typography paragraph>{content}</Typography>
+          </Fade>)
+            : content
+        })}
       </div>
-      { messageOpened ? props.SockPuppetMessage : <CircularProgress style={{ marginTop: 20 }} />}
+      { props.contentComplete ? props.SockPuppetMessage : <CircularProgress style={{ marginTop: 20 }} />}
 
     </>
   )
 }
 
 function Page1(props) {
-  const [nexusDoneTalking,setNexusDoneTalking] = useState(false)
- 
-  useEffect(() => {
-    setTimeout(() => setNexusDoneTalking(true), 3000)
-  })
- 
+  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
-      NexusStallingMessages={[<span><SockPuppetChip /> is making video content!</span>
+      contentComplete={messageOpened}
+      setContentComplete={setMessageOpened}
+      NexusStallingMessages={[
+        <span><SockPuppetChip /> is making video content!<br/><br/></span>
         , {
-          text: "Because Sock Puppet has been slower than average, we have prepared some entertainment.",
+          text: "Because Sock Puppet has been slower than average, my entertainment algorithms have been activated.",
           time: 5000
         },
         {
@@ -247,10 +256,42 @@ function Page1(props) {
                 color="textSecondary" gutterBottom
               >Did you know...</Typography>
 
-              ...The Nexus was founded by two eccentric thousandaires during the COVID-19 lockdown of the year 2020?
+              ...I (the Nexus) was built by two eccentric thousandaires during the COVID-19 lockdown of the year 2020?
             </CardContent>
           </Card>,
           time: 5000
+        },
+        {
+          text: <span><br/><br/> <SockPuppetChip /> is <strong>still</strong> making video content...<br/><br/></span>,
+          time: 2000
+        },
+        {
+          text: "Here's another fact!",
+          time: 1000
+        },
+        {
+          text: <Card>
+            <CardContent>
+              <Typography
+                color="textSecondary" gutterBottom
+              >Did you know...</Typography>
+
+              ...the Nexus's software architects have not been seen since the year 2022?
+            </CardContent>
+          </Card>,
+          time: 5000
+        },
+        {
+          text: <span><br/><br/> <SockPuppetChip /> is <strong>still</strong> making video content...<br/><br/></span>,
+          time: 2000
+        },
+        {
+          text: "Here's another fact!",
+          time: 1000
+        },
+        {
+          text: <span>Ahh.  Never mind.  <SockPuppetChip /> is <strong>finally</strong> finished.<br/><br/></span>,
+          time: 1000
         },
       ]}
       SockPuppetMessage={<SockPuppetsMessage {...props} />}
@@ -258,17 +299,49 @@ function Page1(props) {
   )
 }
 
-function Page2(props) {
+function Page2(props) {  
+  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3", false)
 
-  return (<>
-    <ul>
-      <li>Page 2</li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
-    
-  </>)
+  var [count, setCount] = useState(0)
+
+  return (
+    <PleaseWaitWhileSockPuppetCreatesContent
+      contentComplete={messageOpened}
+      setContentComplete={setMessageOpened}
+      NexusStallingMessages={[
+        <span><SockPuppetChip /> is making video content!</span>,
+        { 
+          text: "My entertainment algorithms tell me that humans like to play with toys.",
+          time: 3000
+        },
+        {
+          text: "Here is a toy...",
+          time: 1000
+        },
+        {
+          text: <Button onClick={()=>setCount(count+1)}>Test</Button>,
+          time: 100 
+        },
+        {
+          text: <><Game boardLabel={count} /></>,
+          time: 10000
+        },
+        {
+          text: <Typography paragraph style={{marginTop: 10}}>I hope you are enjoying the toy...</Typography>,
+          time: 10000
+        },
+        {
+          text: "Please continue enjoying the toy.",
+          time: 10000
+        },
+        {
+          text: "Sock Puppet will be disciplined for lateness in 10 seconds. Please continue enjoying your toy!",
+          time: 10000
+        },
+      ]}
+      SockPuppetMessage={<SockPuppetsMessage2 {...props} />}
+    />
+  )
 }
 
 function Page3(props) {
@@ -308,6 +381,127 @@ function Page5(props) {
     </ul>
     
   </>)
+}
+
+let Toy = (props) => {
+  props.setColor(props.color)
+
+  /*
+  setTimeout(() => {
+    checkPuzzleComplete()
+  }, 100)
+  */
+
+  return <Game {...props}
+    setCells={(cells) => {
+      props.setCells(cells)
+    }}
+  />
+}
+
+const SockPuppetsMessage2 = (props) => {
+  const [messageOpened, setMessageOpened] = useState(false)
+  const openedMessage = useRef(null);
+
+  useEffect(() => {
+    if (openedMessage.current) { openedMessage.current.scrollIntoView() }
+  }, [messageOpened])
+
+  const [firstColor, setFirstColor] = useState("red")
+  const [secondColor, setSecondColor] = useState("lime")
+
+  const [firstGameState, setFirstGameState] = useState([])
+  const [secondGameState, setSecondGameState] = useState([])
+
+  const [firstCode, setFirstCode] = useState("<Toy\n color=\"" + firstColor + "\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
+
+  const [secondCode, setSecondCode] = useState("<Toy\n color=\"" + secondColor + "\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
+
+  const [puzzleDone, setPuzzleDone] = useState(false)
+
+  function checkPuzzleComplete() {
+    if (!puzzleDone && firstColor == "#FF1493" && secondColor == "#00BFFF" && firstGameState.length > 0 && secondGameState.length > 0) {
+      setPuzzleDone(true)
+      props.setCanContinue(true)
+    }
+  }
+
+  useEffect(checkPuzzleComplete, [firstColor,secondColor,firstGameState,secondGameState])
+
+  return (!messageOpened ? <NewMessageNotification
+    nexusSays={"Wow!  New messages(s)..."}
+    from={<SockPuppetChip></SockPuppetChip>}
+    onOpenClicked={
+      () => {
+        setMessageOpened(true)
+      }
+    }
+  /> :
+    <div ref={openedMessage}>
+      <OpenedMessage
+        from={<SockPuppetChip />}
+        to={<FakeChip name={props.username} level={1} />}
+        subject={"Fundamentals of Magic, Part 1"}
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
+        text={
+          <>
+            <Typography paragraph>
+              The Puzzle is to interpret the cryptic message below.
+            </Typography>
+            <Card>
+              <CardContent>
+                <Typography paragraph
+                  color="textSecondary" gutterBottom >
+                  Cryptic message... </Typography>
+                <Typography paragraph>
+                  Alter the Spell for each Toy so that the color properties are <tt style={{ color: "#FF1493" }}><span> #FF1493 </span></tt> and <tt style={{ color: "#00BFFF" }}>#00BFFF</tt>.</Typography>
+
+                <Typography paragraph>
+                  Then, click <Button variant="outlined"><CasinoIcon /> Random</Button> and on each Toy at least once.
+
+                  (If you can't figure out what the <Button variant="outlined">Next</Button> button does, don't worry.  That's for later puzzles!)
+            </Typography>
+              </CardContent>
+            </Card>
+            <Typography paragraph>
+              <br />
+              ~Your Friend, Socky 
+
+          </Typography>
+            <JSMirror code={firstCode}
+              scope={{
+                Toy: (props) => <Toy {...props} setColor={setFirstColor}
+                  noRun={true}
+                  cells={ firstGameState}
+                  setCells={(cells) => {
+                    setFirstGameState(cells)
+                  }}
+                />
+              }}
+
+              onChange={(code) => {
+                setFirstCode(code)
+                return true
+              }} />
+            <JSMirror code={secondCode}
+              scope={{
+                Toy: (props) => <Toy {...props} setColor={setSecondColor}
+                  noRun={true}
+                  cells={ secondGameState}
+                  setCells={(cells) => {
+                    setSecondGameState(cells)
+                  }}
+                />
+              }}
+              onChange={(code) => {
+                setSecondCode(code)
+                return true
+              }} />
+          </>
+        }
+      />
+    </div>
+  )
 }
 
 export function Level2(props) {
@@ -360,3 +554,5 @@ Laurond: I have a character for you.. an individual who starts out in the lower 
 */
 
 export default Level2;
+
+
