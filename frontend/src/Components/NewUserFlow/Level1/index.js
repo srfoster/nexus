@@ -9,6 +9,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
+import Alert from '@material-ui/lab/Alert';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Fade from '@material-ui/core/Fade';
@@ -69,10 +70,8 @@ const TitleCard = ({ setTitleScreenComplete }) => {
     </CardContent>
       <CardActions>
         {os_name == "Windows OS" ?
-          <Button key="hidden-os-warning-button" style={{ visibility: "hidden" }} onClick>Hidden</Button> :
-          <Button variant="contained"
-            color="secondary"
-            key="unhidden-os-warning-button" onClick>Warning: This Game Currently Requires<br/> Windows OS. Proceed with Caution.</Button>
+          <Alert severity="error" style={{ visibility: "hidden" }}>Warning: This game is currently only compatible with <br/>Windows OS. On other operating systems, you won't be <br/>able to proceed beyond Level 2. Proceed with caution.</Alert>:
+          <Alert severity="error">Warning: This game is currently only compatible with <br/>Windows OS. On other operating systems, you won't be <br/>able to proceed beyond Level 2. Proceed with caution.</Alert>
         }
         {step < 1 ? //This hidden button trick is a bit gross.  
           // Makes sure the button is there to force the container
