@@ -247,7 +247,7 @@ function Page1(props) {
                 color="textSecondary" gutterBottom
               >Did you know...</Typography>
 
-              ...the Nexus was founded by two eccentric thousandaires during the COVID-19 lockdown of the year 2020?
+              ...The Nexus was founded by two eccentric thousandaires during the COVID-19 lockdown of the year 2020?
             </CardContent>
           </Card>,
           time: 5000
