@@ -37,12 +37,23 @@ to learn coding through a variety of media: text, video, and 2D/3D environments
 const TitleCard = ({ setTitleScreenComplete }) => {
   let [step, setStep] = useState(0);
 
+  let os_name = "Not known";
+  if (navigator.appVersion.indexOf("Win") != -1) 
+    os_name = "Windows OS";
+  if (navigator.appVersion.indexOf("Mac") != -1) 
+    os_name = "MacOS";
+  if (navigator.appVersion.indexOf("X11") != -1) 
+    os_name = "UNIX OS";
+  if (navigator.appVersion.indexOf("Linux") != -1) 
+    os_name = "Linux OS";
+
   useEffect(() => {
     setTimeout(() => setStep(1), 2000)
     setTimeout(() => setStep(2), 4000)
   }, [])
 
-  return <Card style={{ margin: 0, position: "absolute", top: "50%", left: "50%", msTransform: "translate(-50%,-50%)", transform: "translate(-50%,-50%)" }}>
+  return( 
+  <Card style={{ margin: 0, position: "absolute", top: "50%", left: "50%", msTransform: "translate(-50%,-50%)", transform: "translate(-50%,-50%)" }}>
     <CardContent>
       <Fade in={true} timeout={1000}>
         <div style={{ textAlign: "center", padding: "20px 40px 20px 40px" }}>
@@ -56,20 +67,26 @@ const TitleCard = ({ setTitleScreenComplete }) => {
         </div>
       </Fade>
     </CardContent>
-    <CardActions>
-      {step < 1 ? //This hidden button trick is a bit gross.  
-        // Makes sure the button is there to force the container
-        // to have a particular height.  Then we render a new (not hidden) button
-        // so it Fades in nicely....  TODO: Do this more idiomatically.
-        // Wish someone would come along and fix this.  -The Devs of the Nexus...
-        <ContinueButton key="hidden-next-button" style={{ visibility: "hidden" }}
-          onClick={() => setTitleScreenComplete(true)} /> :
-        <ContinueButton key="unhidden-next-button"
-          onClick={() => setTitleScreenComplete(true)} />
-      }
-    </CardActions>
+      <CardActions>
+        {os_name == "Windows OS" ?
+          <Button key="hidden-os-warning-button" style={{ visibility: "hidden" }} onClick>Hidden</Button> :
+          <Button variant="contained"
+            color="secondary"
+            key="unhidden-os-warning-button" onClick>Warning: This Game Currently Requires<br/> Windows OS. Proceed with Caution.</Button>
+        }
+        {step < 1 ? //This hidden button trick is a bit gross.  
+          // Makes sure the button is there to force the container
+          // to have a particular height.  Then we render a new (not hidden) button
+          // so it Fades in nicely....  TODO: Do this more idiomatically.
+          // Wish someone would come along and fix this.  -The Devs of the Nexus...
+          <ContinueButton key="hidden-next-button" style={{ visibility: "hidden" }}
+            onClick={() => setTitleScreenComplete(true)} /> :
+          <ContinueButton key="unhidden-next-button"
+            onClick={() => setTitleScreenComplete(true)} />
+        }
+      </CardActions>
   </Card>
-}
+  )}
 
 
 const UserNameForm = (props) => {
