@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { SBS, Level, withConfetti } from './Level';
-import { SockPuppetChip, FakeChip, NewMessageNotification } from '../Widgets/NexusVoice';
+import { SockPuppetChip, FakeChip, StudentChip, NewMessageNotification } from '../Widgets/NexusVoice';
 import { JSMirror } from '../Widgets/Educational';
 import { Game } from '../Widgets/react-gameoflife/Game.js';
 import Countdown from 'react-countdown';
@@ -141,7 +141,7 @@ const SockPuppetsMessage = (props) => {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip />}
-        to={<FakeChip name={props.username} level={1} />}
+        to={<StudentChip name={props.username} level={1} />}
         subject={"The Favor I Owe"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
@@ -440,7 +440,7 @@ const SockPuppetsMessage2 = (props) => {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip />}
-        to={<FakeChip name={props.username} level={1} />}
+        to={<StudentChip name={props.username} level={1} />}
         subject={"Fundamentals of Magic, Part 1"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={

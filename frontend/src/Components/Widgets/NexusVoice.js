@@ -45,8 +45,12 @@ export function Gong(){
 
 
 export function SockPuppetChip() {
-  return <Chip avatar={<Avatar alt="Sock Puppet"><SchoolIcon/></Avatar>} label="Sock Puppet (Lvl 1)"></Chip>
+  return <Chip avatar={<Avatar alt="Sock Puppet"><SchoolIcon/></Avatar>} label="Sock Puppet (Teacher Lvl 1)"></Chip>
 
+}
+
+export function StudentChip(props) {
+  return <Chip avatar={<Avatar alt={props.name}/>} label={<span>{props.name} {" (Student Lvl " + (props.level !== undefined ? props.level : 10 * props.name.length) + ")"}</span>}></Chip>
 }
 
 export function FakeChip(props) {

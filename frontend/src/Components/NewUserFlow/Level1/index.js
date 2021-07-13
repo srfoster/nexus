@@ -26,7 +26,7 @@ import SpellsApiService from '../../../Services/spells-api-service';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { MultipleChoiceQuestion, JSMirror } from '../../Widgets/Educational';
-import { NewMessageNotification, SockPuppetChip, SpinThen, FakeChip, Gong } from '../../Widgets/NexusVoice';
+import { NewMessageNotification, SockPuppetChip, StudentChip, SpinThen, FakeChip, Gong } from '../../Widgets/NexusVoice';
 import { Level, LoginButton, ContinueButton, withConfetti, SBS } from "../Level";
 
 /*
@@ -262,7 +262,7 @@ function SockPuppetVideoIntro(props) {
     messageOpened ?
       <SBS
         leftSideTitle={<>
-          <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
+          <Typography paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography>Subject: Video Introduction!!</Typography>
         </>}
         leftSide={
@@ -525,7 +525,7 @@ function SockPuppetFirstLesson(props) {
     <SBS
       leftSideTitle={
         <>
-          <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
+          <Typography paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography >Subject: Hello, World!</Typography>
         </>}
       leftSide={
