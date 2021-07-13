@@ -99,6 +99,7 @@ const UserNameForm = (props) => {
     }
   }, [])
 
+
   function checkAvailability() {
     setChecking(true)
 
@@ -120,6 +121,13 @@ const UserNameForm = (props) => {
   }
 
   function UsernameInput() {
+    function handleKeyUp(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("availabilityButton").click();
+      }
+    }
+
     return (
       available ?
         <>
@@ -130,7 +138,9 @@ const UserNameForm = (props) => {
         : (
           <>
             <TextField
+              id="inputField"
               autoFocus
+              onKeyUp={handleKeyUp}
               onChange={(e) =>
                 setUsernameLocal(e.target.value)
               }
@@ -161,7 +171,7 @@ const UserNameForm = (props) => {
 
         {username === undefined || checking ? "" :
           <Fade key="check-available" in={true} timeout={1000}>
-            <Button size="small" onClick={() => {
+            <Button size="small" id="availabilityButton" onClick={() => {
               if (!available) {
                 checkAvailability()
               } else {
