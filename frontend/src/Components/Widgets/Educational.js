@@ -65,7 +65,7 @@ export function MultipleChoiceQuestion(props) {
 }
 
 export function JSMirror(props) {
-  const [code,setCode] = useState(props.value) 
+  const [code, setCode] = useState(props.value)
 
   return (
     <>
@@ -76,11 +76,11 @@ export function JSMirror(props) {
             return <Grid container spacing={1} >
               <Grid item xs={6}>
                 <LiveEditor
+                  style={{ backgroundColor: "rgb(33,33,33)", borderRadius: "5px" }}
                   onChange={(code) => {
                     setCode(code)
                     props.onChange(code)
-                    onChange(code)
-                  }
+                    onChange(code)}
                   }
                 />
               </Grid>

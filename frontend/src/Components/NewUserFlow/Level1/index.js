@@ -121,6 +121,7 @@ const UserNameForm = (props) => {
   }
 
   function UsernameInput() {
+
     function handleKeyUp(event) {
       if (event.keyCode === 13) {
         event.preventDefault();
