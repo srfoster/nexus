@@ -73,8 +73,8 @@ export function JSMirror(props) {
         code={props.code} scope={props.scope} alignItems="center" justify="center">
         <LiveContext.Consumer>
           {({ code, language, theme, disabled, onChange }) => {
-            return <Grid container spacing={1} >
-              <Grid item xs={6}>
+            return <Grid container spacing={1} direction={"column"} >
+              <Grid item xs>
                 <LiveEditor
                   onChange={(code) => {
                     setCode(code)
@@ -84,7 +84,7 @@ export function JSMirror(props) {
                   }
                 />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs>
                 <LiveError />
                 <LivePreview />
               </Grid>

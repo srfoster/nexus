@@ -5,25 +5,18 @@ import CardContent from '@material-ui/core/CardContent';
 import { useLocalStorage } from "../../Util";
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Slider from '@material-ui/core/Slider';
-import Grid from '@material-ui/core/Grid';
 import { SBS, Level, withConfetti } from './Level';
 import { SockPuppetChip, FakeChip, StudentChip, NewMessageNotification } from '../Widgets/NexusVoice';
 import { JSMirror } from '../Widgets/Educational';
 import { Game } from '../Widgets/react-gameoflife/Game.js';
-import Countdown from 'react-countdown';
-import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import { Stars } from './Level20.js'; //Move this please
+import PianoSimulator from '../Widgets/PianoSimulator.js';
+import NetworkDiseaseSimulator from '../Widgets/NetworkDiseaseSimulator.js';
 import CasinoIcon from '@material-ui/icons/Casino';
-import CytoscapeComponent from 'react-cytoscapejs';
-import fcose from 'cytoscape-fcose';
-import Cytoscape from 'cytoscape';
-
-Cytoscape.use(fcose);
 
 //Questions we're asking (and answering) with our...
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
@@ -40,24 +33,12 @@ const ContinueButton = (props) => {
   );
 }
 
-function Inventory(props) {
-  return (<>
-    <Card>
-      <CardContent>
-
-          <h2>Inventory</h2>
-
-         </CardContent>
-      </Card>
-    </>)
-}
-
 
 function Favor(props) {
   const [shown,setShown] = useState(false)
   return <>
     <Button variant="outlined" color="secondary"
-      onClick={() => { props.onOpen(); setShown(true) }}
+      onClick={() => { props.onOpen && props.onOpen(); setShown(true) }}
     >
       A Favor (Click When in Need)
     </Button>
@@ -65,6 +46,27 @@ function Favor(props) {
   </>
 }
 
+function SockPuppetFavorInInventory(props) {
+  return <div style={{ marginTop: 20 }}>
+    You have 1 item(s)
+                    <ul>
+      <li>
+        Item 1:
+          <Favor onOpen={() => props.onOpen && props.onOpen()}
+          contents={props.content ||
+            <>
+              <p>
+                You found it!  I'll change this message if we ever get separated.  The favor will stay in your inventory.  Now go click the "Next" button.
+              </p>
+              <p>
+                ~Your Friend, Socky
+              </p>
+            </>
+          } />
+      </li>
+    </ul>
+  </div>
+}
 
 function OpenedMessage(props) {
   const [videoFinished,setVideoFinished] = useState(false) 
@@ -169,25 +171,8 @@ const SockPuppetsMessage = (props) => {
                   description: 'Display your inventory.',
                   usage: '',
                   fn: function () {
-                    return <div style={{ marginTop: 20 }}>
-                      You have 1 item(s)
-                    <ul>
-                        <li>
-                          Item 1:
-                        <Favor onOpen={() => props.setCanContinue(true)}
-                            contents={
-                              <>
-                                <p>
-                                  You found it!  I'll change this message if we ever get separated.  The favor will stay in your inventory.  Now go click the "Next" button.
-                          </p>
-                                <p>
-                                  ~Your Friend, Socky
-                          </p>
-                              </>
-                            } />
-                        </li>
-                      </ul>
-                    </div>
+                    return <SockPuppetFavorInInventory
+                      onOpen={ () => props.setCanContinue(true) }/>
                   }
                 },
               }}
@@ -346,134 +331,6 @@ function Page2(props) {
   )
 }
 
-function SampleNetwork1(props) {
-
-}
-
-function GraphTheoryToy1(props) {
-
-  let [iteration, setIteration] = useState(0)
-
-  let [explored, setExplored] = useState(new Set());
-  let [prob, setProb] = useState(100);
-
-  //TODO: Force directed layout on the large clique
-  const [elements,setElements] = useState([
-    { data: { id: 'woogachaka', label: 'woogachaka' }, position: { x: 100, y: 100 } },
-    { data: { id: 'fastsnake', label: 'fastsnake' }, position: { x: 200, y: 100 } },
-    { data: { id: 'laurond', label: 'laurond' }, position: { x: 300, y: 100 } },
-    { data: { id: 'kenzo', label: 'kenzo' }, position: { x: 200, y: 200 } },
-    { data: { id: 'that_onion', label: 'that_onion' }, position: { x: 300, y: 200 } },
-    { data: { id: 'cringelord713', label: 'cringelord713' }, position: { x: 300, y: 300 } },
-    { data: { id: 'Sock Puppet', label: 'Sock Puppet' }, position: { x: 400, y: 400 } },
-    { data: { id: 'you', label: 'you' }, position: { x: 400, y: 500 } },
-
-    { data: { source: "Sock Puppet", target: "you", label: '' } },
-    { data: { source: "laurond", target: "kenzo", label: '' } },
-    { data: { source: "kenzo", target: "cringelord713", label: '' } },
-    { data: { source: "kenzo", target: "fastsnake", label: '' } },
-    { data: { source: "cringelord713", target: "that_onion", label: '' } },
-    { data: { source: "that_onion", target: "woogachaka", label: '' } },
-    { data: { source: "that_onion", target: "Sock Puppet", label: '' } },
-  ]);
-
-  let cy;
-  return (
-    <Card>
-      <CardContent>
-
-      <Typography
-        color="textSecondary" gutterBottom>Play with the slider and "Next" button...</Typography>
-
-        <Grid container
-          spacing={1}
-        >
-          <Grid item xs>
-            <Slider value={prob} onChange={(e, v) => setProb(v)} aria-labelledby="continuous-slider" />
-          </Grid>
-          <Grid item xs>
-            <Typography paragraph>Contagion factor: {prob}%</Typography>
-          </Grid>
-        </Grid>
-
-        <ButtonGroup
-          color="primary"
-          aria-label="vertical outlined primary button group"
-        >
-          <Button onClick={() => {
-            if (explored.size == 0)
-              setExplored(new Set(["laurond"]))
-            else {
-              let exploredNodes = cy.filter(
-                Array.from(explored).map((e) => `node[label = "${e}"]`).join(","))
-
-              let nextNodes = exploredNodes.neighborhood().map((n) => {
-                console.log(n)
-                return n.data().label
-              })
-
-              let nextExplored = new Set(explored)
-
-              for (let n of nextNodes) {
-                if (Math.random() < prob / 100) {
-                  nextExplored.add(n)
-                }
-              }
-
-              setExplored(nextExplored)
-            }
-            setIteration(iteration => 1 + iteration)
-          }}>Infect</Button>
-
-          <Button onClick={() => { setExplored(new Set()) }}>Cure</Button>
-        </ButtonGroup>
-      <CytoscapeComponent
-          cy={(_cy) => {
-            cy = _cy
-
-            cy.filter("node").map((n) => {
-              n.removeClass("highlight")
-            })
-
-            for (let e of explored) {
-              let n = cy.filter(`node[label = "${e}"]`)
-              n.addClass("highlight")
-            }
-          }}
-          wheelSensitivity={0.1}
-        elements={elements}
-        stylesheet={[
-          {
-            selector: 'node',
-            style: {
-              content: "data(label)",
-              width: 20,
-              height: 20,
-              shape: 'circle'
-            }
-          },
-          {
-            selector: 'edge',
-            style: {
-              width: 1
-            }
-          },
-          {
-            selector: 'node.highlight',
-            style: {
-              color: "rgb(245, 0, 87)",
-              backgroundColor: "rgb(245, 0, 87)",
-            }
-          }
-        ]}
-        style={{ width: '100%', height: '300px' }}
-        layout={{ name: "fcose", idealEdgeLength: 100 }} />
-       <Typography paragraph>Day: {iteration}</Typography>
-       <Typography paragraph>Sick: {explored.size}</Typography>
-      </CardContent>
-    </Card>
-  )
-}
 
 function Page3(props) {
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-4", false)
@@ -489,7 +346,11 @@ function Page3(props) {
           time: 3000
         },
         {
-          text: <GraphTheoryToy1/>,
+          text: <NetworkDiseaseSimulator
+            nodes={["woogachaka", "fastsnake", "laurond", "kenzo", "that_onion", "cringelord713", "Sock Puppet", "You!"]}
+            edges={[["Sock Puppet", "You!"], ["laurond", "kenzo"], ["kenzo", "fastsnake"], ["kenzo", "cringelord713"], ["cringelord713", "that_onion"], ["that_onion", "woogachaka"], ["that_onion", "Sock Puppet"]]}
+            patientZero={ "laurond" }
+          />,
           time: 3000
         },
         {
@@ -503,15 +364,18 @@ function Page3(props) {
   </>)
 }
 
+// <Toy 
+//   nodes={["John", "Laurond", "Lindsey"]} 
+//   edges={[["John", "Laurond"],["John", "Lindsey"],["Lindsey", "Laurond"]]}
+//   patientZero={"Laurond"}
+// />
+
 function SockPuppetsMessage3(props) {
   const [messageOpened, setMessageOpened] = useState(false);
   const openedMessage = useRef(null);
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState("<Toy\n  nodes={['You!','Sock Puppet']}\n  edges={[['You!','Sock Puppet']]}\n  patientZero={'Sock Puppet'}/>");
 
-  function NetworkToy(props) {
-    return (<><GraphTheoryToy1/></>);
-
-   }
+  const setCanContinue = props.setCanContinue
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
@@ -531,7 +395,7 @@ function SockPuppetsMessage3(props) {
         text={
           <>
             <Typography paragraph>
-              The Puzzle is to make someone named John sick on the 5th day.
+              The Puzzle is to make someone named John sick on the 5th day.  There are many solutions.
             </Typography>
             <Typography paragraph>
               <br />
@@ -539,7 +403,75 @@ function SockPuppetsMessage3(props) {
           </Typography>
             <JSMirror code={code}
               scope={{
-                Toy: (props) => <NetworkToy {...props} />
+                Toy: (props) => {
+                  let [showSimulator, setShowSimulator] = useState(false);
+                 
+                  setTimeout(() => { setShowSimulator(true) }, 1000);
+
+                  return (<>
+                    { showSimulator ?
+                      <NetworkDiseaseSimulator {...props}
+                        onChange={(data) => {
+                          if (data.explored.indexOf("easteregg") >= 0 || (data.explored.indexOf("John") >= 0 && data.iteration == 5)) setCanContinue(true)
+
+                        }}
+                      /> :
+                      <Card style={{height: "525px"}}><CardContent><CircularProgress/></CardContent></Card>
+                    }
+                  </>)
+                }
+              }}
+
+              onChange={(code) => {
+                setCode(code)
+                return true
+              }} />
+            </>
+        } />
+    </div>
+  )
+}
+
+
+function SockPuppetsMessage4(props) {
+  const [messageOpened, setMessageOpened] = useState(false);
+  const openedMessage = useRef(null);
+  const [code, setCode] = useState("<Toy\n  notes={['A','B','C','D']} />");
+  const setCanContinue = props.setCanContinue
+
+  return (!messageOpened ? <NewMessageNotification
+    nexusSays={"Wow!  New messages(s)..."}
+    from={<SockPuppetChip></SockPuppetChip>}
+    onOpenClicked={
+      () => {
+        setMessageOpened(true)
+      }
+    }
+  /> :
+    <div ref={openedMessage}>
+      <OpenedMessage
+        from={<SockPuppetChip />}
+        to={<FakeChip name={props.username} level={1} />}
+        subject={"Fundamentals of Magic, Part 3"}
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
+        text={
+          <>
+            <Typography paragraph>
+              The Puzzle is to play a song with three chords.
+            </Typography>
+            <Typography paragraph>
+              <br />
+              ~Your Friend, Socky
+          </Typography>
+            <JSMirror code={code}
+              scope={{
+                Toy: (props) => {
+                  return <PianoSimulator {...props}
+                    onNoteStarted={(midinumber) => {
+                      setCanContinue(true)
+                    }}
+                  />
+                }
               }}
 
               onChange={(code) => {
@@ -553,27 +485,122 @@ function SockPuppetsMessage3(props) {
 }
 
 function Page4(props) {
+  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-5", false)
 
   return (<>
-    <ul>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
+    <PleaseWaitWhileSockPuppetCreatesContent
+      contentComplete={messageOpened}
+      setContentComplete={setMessageOpened}
+      NexusStallingMessages={[
+        <span><SockPuppetChip /> is making video content!</span>,
+        {
+          text: <Typography paragraph><br/>My edutainment algorithms are still active.  I will now give you another educational mystery toy.</Typography>,
+          time: 3000
+        },
+        {
+          text: <PianoSimulator
+          />,
+          time: 3000
+        },
+        {
+          text: "Please keep enjoying the toy...",
+          time: 3000
+        },
+      ]}
+      SockPuppetMessage={<SockPuppetsMessage4 {...props} />}
+    />
 
   </>)
 }
 
+
+function SockPuppetsMessage5(props) {
+  const [messageOpened, setMessageOpened] = useState(false);
+  const openedMessage = useRef(null);
+  const [code, setCode] = useState("<Toy\n  />");
+  const setCanContinue = props.setCanContinue
+
+  return (!messageOpened ? <NewMessageNotification
+    nexusSays={"Wow!  New messages(s)..."}
+    from={<SockPuppetChip></SockPuppetChip>}
+    onOpenClicked={
+      () => {
+        setMessageOpened(true)
+      }
+    }
+  /> :
+    <div ref={openedMessage}>
+      <OpenedMessage
+        from={<SockPuppetChip />}
+        to={<FakeChip name={props.username} level={1} />}
+        subject={"Fundamentals of Magic, Part 4"}
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
+        text={
+          <>
+            <Typography paragraph>
+              sup bro.  try the puzzel below.  it's so hard it's siiiiick
+            </Typography>
+            <JSMirror code={code}
+              scope={{
+                Toy: (props) => {
+                  return <Terminal
+                    commands={{
+                      inventory: {
+                        description: 'Display your inventory.',
+                        usage: '',
+                        fn: function () {
+                          return <SockPuppetFavorInInventory
+                            content={
+                              <>
+                                <p>That Sock Puppet isn't me!  It's an imposter!</p>
+                                <p>He's also given you a puzzle that's impossible to solve without looking at the source code!  The Nexus is trying to trap you here.</p>
+                                <p>Look, I'm taking a big risk by doing this, but if you download the world below, I can finally talk freely with you about the Nexus.</p>
+                                <p>~Your Friend, Socky</p>
+                                <Button color="secondary" variant="outlined">Download</Button>
+                              </>
+                            }
+                          />
+                        }
+                      },
+                    }}
+                  />
+                }
+              }}
+
+              onChange={(code) => {
+                setCode(code)
+                return true
+              }} />
+          </>
+        } />
+    </div>
+  )
+}
+
 function Page5(props) {
+  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-5", false)
 
   return (<>
-    <ul>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
+    <PleaseWaitWhileSockPuppetCreatesContent
+      contentComplete={messageOpened}
+      setContentComplete={setMessageOpened}
+      NexusStallingMessages={[
+        <span><SockPuppetChip /> is making video content!</span>,
+        {
+          text: <Typography paragraph><br />My edutainment algorithms are still active.  I will now give you another educational mystery toy.</Typography>,
+          time: 3000
+        },
+        {
+          text: <Stars starColor={"red"} numPoints={5} />,
+          time: 3000
+        },
+        {
+          text: "Please keep enjoying the toy...",
+          time: 3000
+        },
+      ]}
+      SockPuppetMessage={<SockPuppetsMessage5 {...props} />}
+    />
 
   </>)
 }
