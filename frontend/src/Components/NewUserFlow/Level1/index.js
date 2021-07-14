@@ -9,6 +9,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
+import Alert from '@material-ui/lab/Alert';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Fade from '@material-ui/core/Fade';
@@ -25,7 +26,7 @@ import SpellsApiService from '../../../Services/spells-api-service';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { MultipleChoiceQuestion, JSMirror } from '../../Widgets/Educational';
-import { NewMessageNotification, SockPuppetChip, SpinThen, FakeChip, Gong } from '../../Widgets/NexusVoice';
+import { NewMessageNotification, SockPuppetChip, StudentChip, SpinThen, FakeChip, Gong } from '../../Widgets/NexusVoice';
 import { Level, LoginButton, ContinueButton, withConfetti, SBS } from "../Level";
 
 /*
@@ -37,12 +38,23 @@ to learn coding through a variety of media: text, video, and 2D/3D environments
 const TitleCard = ({ setTitleScreenComplete }) => {
   let [step, setStep] = useState(0);
 
+  let os_name = "Not known";
+  if (navigator.appVersion.indexOf("Win") != -1) 
+    os_name = "Windows OS";
+  if (navigator.appVersion.indexOf("Mac") != -1) 
+    os_name = "MacOS";
+  if (navigator.appVersion.indexOf("X11") != -1) 
+    os_name = "UNIX OS";
+  if (navigator.appVersion.indexOf("Linux") != -1) 
+    os_name = "Linux OS";
+
   useEffect(() => {
     setTimeout(() => setStep(1), 2000)
     setTimeout(() => setStep(2), 4000)
   }, [])
 
-  return <Card style={{ margin: 0, position: "absolute", top: "50%", left: "50%", msTransform: "translate(-50%,-50%)", transform: "translate(-50%,-50%)" }}>
+  return( 
+  <Card style={{ margin: 0, position: "absolute", top: "50%", left: "50%", msTransform: "translate(-50%,-50%)", transform: "translate(-50%,-50%)" }}>
     <CardContent>
       <Fade in={true} timeout={1000}>
         <div style={{ textAlign: "center", padding: "20px 40px 20px 40px" }}>
@@ -56,20 +68,24 @@ const TitleCard = ({ setTitleScreenComplete }) => {
         </div>
       </Fade>
     </CardContent>
-    <CardActions>
-      {step < 1 ? //This hidden button trick is a bit gross.  
-        // Makes sure the button is there to force the container
-        // to have a particular height.  Then we render a new (not hidden) button
-        // so it Fades in nicely....  TODO: Do this more idiomatically.
-        // Wish someone would come along and fix this.  -The Devs of the Nexus...
-        <ContinueButton key="hidden-next-button" style={{ visibility: "hidden" }}
-          onClick={() => setTitleScreenComplete(true)} /> :
-        <ContinueButton key="unhidden-next-button"
-          onClick={() => setTitleScreenComplete(true)} />
-      }
-    </CardActions>
+      <CardActions>
+        {os_name == "Windows OS" ?
+          <Alert severity="error" style={{ visibility: "hidden" }}>Warning: This game is currently only compatible with <br/>Windows OS. On other operating systems, you won't be <br/>able to proceed beyond Level 2. Proceed with caution.</Alert>:
+          <Alert severity="error">Warning: This game is currently only compatible with <br/>Windows OS. On other operating systems, you won't be <br/>able to proceed beyond Level 2. Proceed with caution.</Alert>
+        }
+        {step < 1 ? //This hidden button trick is a bit gross.  
+          // Makes sure the button is there to force the container
+          // to have a particular height.  Then we render a new (not hidden) button
+          // so it Fades in nicely....  TODO: Do this more idiomatically.
+          // Wish someone would come along and fix this.  -The Devs of the Nexus...
+          <ContinueButton key="hidden-next-button" style={{ visibility: "hidden" }}
+            onClick={() => setTitleScreenComplete(true)} /> :
+          <ContinueButton key="unhidden-next-button"
+            onClick={() => setTitleScreenComplete(true)} />
+        }
+      </CardActions>
   </Card>
-}
+  )}
 
 
 const UserNameForm = (props) => {
@@ -82,6 +98,7 @@ const UserNameForm = (props) => {
       props.setCanContinue(true)
     }
   }, [])
+
 
   function checkAvailability() {
     setChecking(true)
@@ -104,6 +121,13 @@ const UserNameForm = (props) => {
   }
 
   function UsernameInput() {
+    function handleKeyUp(event) {
+      if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("availabilityButton").click();
+      }
+    }
+
     return (
       available ?
         <>
@@ -114,7 +138,9 @@ const UserNameForm = (props) => {
         : (
           <>
             <TextField
+              id="inputField"
               autoFocus
+              onKeyUp={handleKeyUp}
               onChange={(e) =>
                 setUsernameLocal(e.target.value)
               }
@@ -145,7 +171,7 @@ const UserNameForm = (props) => {
 
         {username === undefined || checking ? "" :
           <Fade key="check-available" in={true} timeout={1000}>
-            <Button size="small" onClick={() => {
+            <Button size="small" id="availabilityButton" onClick={() => {
               if (!available) {
                 checkAvailability()
               } else {
@@ -246,7 +272,7 @@ function SockPuppetVideoIntro(props) {
     messageOpened ?
       <SBS
         leftSideTitle={<>
-          <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
+          <Typography paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography>Subject: Video Introduction!!</Typography>
         </>}
         leftSide={
@@ -509,7 +535,7 @@ function SockPuppetFirstLesson(props) {
     <SBS
       leftSideTitle={
         <>
-          <Typography paragraph>From <SockPuppetChip /> to <FakeChip name={props.username} level={1} /></Typography>
+          <Typography paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography >Subject: Hello, World!</Typography>
         </>}
       leftSide={

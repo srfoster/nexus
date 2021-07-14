@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Badge from '@material-ui/core/Badge';
 import MailIcon from '@material-ui/icons/Mail';
+import SchoolIcon from '@material-ui/icons/School';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
@@ -44,11 +45,16 @@ export function Gong(){
 
 
 export function SockPuppetChip() {
-  return <Chip avatar={<Avatar alt="Sock Puppet" src="/static/images/avatar/1.jpg" />} label="Sock Puppet (Lvl 1)"></Chip>
+  return <Chip avatar={<Avatar alt="Sock Puppet"><SchoolIcon/></Avatar>} label="Sock Puppet (Teacher Lvl 1)"></Chip>
+
+}
+
+export function StudentChip(props) {
+  return <Chip avatar={<Avatar alt={props.name}/>} label={<span>{props.name} {" (Student Lvl " + (props.level !== undefined ? props.level : 10 * props.name.length) + ")"}</span>}></Chip>
 }
 
 export function FakeChip(props) {
-  return <Chip avatar={<Avatar alt={props.name} src="/static/images/avatar/1.jpg" />} label={<span>{props.name} {" (Lvl " + (props.level !== undefined ? props.level : 10 * props.name.length) + ")"}</span>}></Chip>
+  return <Chip avatar={<Avatar alt={props.name}/>} label={<span>{props.name} {" (Lvl " + (props.level !== undefined ? props.level : 10 * props.name.length) + ")"}</span>}></Chip>
 }
  
 export function SpinThen(props) {
