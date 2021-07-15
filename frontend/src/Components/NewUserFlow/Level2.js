@@ -16,6 +16,7 @@ import { Game } from '../Widgets/react-gameoflife/Game.js';
 import { Stars } from './Level20.js'; //Move this please
 import PianoSimulator from '../Widgets/PianoSimulator.js';
 import NetworkDiseaseSimulator from '../Widgets/NetworkDiseaseSimulator.js';
+import BlueBalls from '../Widgets/BlueBalls.js';
 import CasinoIcon from '@material-ui/icons/Casino';
 
 //Questions we're asking (and answering) with our...
@@ -591,7 +592,7 @@ function Page5(props) {
           time: 3000
         },
         {
-          text: <Stars starColor={"red"} numPoints={5} />,
+          text: <BlueBalls/>,
           time: 3000
         },
         {
