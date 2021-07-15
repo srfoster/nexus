@@ -1,14 +1,9 @@
 import React from "react";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -23,23 +18,9 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { rawData } from "./rawData";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    //maxWidth: `calc(100% - 240px)`,
-    flexGrow: 1
-  },
   card: {
     flexGrow: 1,
     marginLeft: "240px"
-  },
-  expand: {
-    transform: "rotate(0deg)",
-    marginLeft: "auto",
-    transition: theme.transitions.create("transform", {
-      duration: theme.transitions.duration.shortest
-    })
-  },
-  expandOpen: {
-    transform: "rotate(180deg)"
   },
   toolbar: theme.mixins.toolbar
 }));
@@ -56,8 +37,6 @@ const StyledTableCell = withStyles((theme) => ({
 
 export default function RecipeReviewCard() {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
-
   const rawCards = rawData;
 
   return (
@@ -119,7 +98,7 @@ export default function RecipeReviewCard() {
 
               <Typography>Examples:</Typography>
               {x.example.map((codeExample) => (
-                <pre style={{ background: "#f2f3f5", minWidth: "100%" }}>
+                <pre style={{ background: "#f4f3f5", minWidth: "100%" }}>
                   {codeExample}
                 </pre>
               ))}
