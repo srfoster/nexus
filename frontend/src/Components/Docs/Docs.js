@@ -9,6 +9,8 @@ import {linkTo, topDocLink} from './util.js';
 import { kabobCaseToTitleCase } from '../../Util.js';
 import config from '../../config'
 
+import LangDocs from '../CodespellsDocs/Index'
+
 //TODO: Move to its own service file...
 const ApiService = {
   getDocumentedFunctions(){
@@ -73,7 +75,7 @@ const docPageContent = {
   "langs": <>
     {topDocLink}
     <p>You can run all of these functions in Orb World and Orb Lab:</p>
-    <APIDocs />
+    <LangDocs />
   </>,
   "getting-started": <>
     <GettingStarted/> 
@@ -124,7 +126,7 @@ function Docs(props) {
     <>
       <Helmet>
         <title>{page=="docs"?"Docs":kabobCaseToTitleCase(page) + " | Docs"} | CodeSpells Nexus</title>
-        <meta name="description" content="Learn more about how the Nexus interfaces with CodeSpells games, how to write spells, and more!" />
+		<meta name="description" content="Learn more about how the Nexus interfaces with CodeSpells games, how to write spells, and more!" />
       </Helmet>
       <div style={{textAlign: "left"}}>
         <h1>{kabobCaseToTitleCase(page)}</h1>
