@@ -520,7 +520,7 @@ function SockPuppetsMessage5(props) {
   const openedMessage = useRef(null);
   const [code, setCode] = useState("<Toy\n  />");
   const [cells, setCells] = useState([]);
-
+  const [showSimulator, setShowSimulator] = useState(false);
   const setCanContinue = props.setCanContinue
 
   function puzzleComplete() {
@@ -529,6 +529,22 @@ function SockPuppetsMessage5(props) {
   }
 
   useEffect(puzzleComplete, [cells])
+  
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSimulator(true)
+    }, 1000)
+  }, [cells])
+
+  const nodes = cells.map((c) => c.x + "," + c.y);
+  const adjPairs = [];
+  for (let n of cells) {
+    for (let m of cells) {
+      if((Math.abs(n.x-m.x) === 1 && (n.y === m.y)) || (Math.abs(n.y-m.y) == 1 && (m.x === n.x)))
+        adjPairs.push([n, m]);
+    }
+  }
+  const edges = adjPairs.map(p => [p[0].x + "," + p[0].y, p[1].x + "," + p[1].y])
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
@@ -550,12 +566,18 @@ function SockPuppetsMessage5(props) {
             <Typography paragraph>
               sup bro.  try the puzzel below.  it's so hard it's siiiiick
             </Typography>
-            <Game setCells={(cells) => { setCells(cells); }}/>
-            <NetworkDiseaseSimulator
-              nodes={cells.map((c) => c.x + "," + c.y)}
-              edges={[]}
-              patientZero={"4,5"}
-            />
+            <Game setCells={(cells) => {
+              setCells(cells);
+              setShowSimulator(false);
+            }} />
+            {showSimulator ?
+              <NetworkDiseaseSimulator
+                nodes={nodes}
+                edges={edges}
+                patientZero={"4,5"}
+              /> :
+              <Card style={{ height: "525px" }}><CardContent><CircularProgress /></CardContent></Card>
+            }
             <JSMirror code={code}
               scope={{
                 Toy: (props) => {

@@ -21,13 +21,21 @@ export default function NetworkDiseaseSimulator(props) {
   let [prob, setProb] = useState(100);
   let isNonEmptyString = e => (typeof(e) == "string" && e.length > 0)
 
-  let [elements, setElements] = useState(props.nodes.filter(isNonEmptyString).map(n => {
+  // let [elements, setElements] = useState(props.nodes.filter(isNonEmptyString).map(n => {
+  //   return {
+  //     data: { id: n, label: n }
+  //   }
+  // }).concat(props.edges.filter(e=> e && (isNonEmptyString(e[0]) && isNonEmptyString(e[1]) && props.nodes.indexOf(e[0]) >= 0 && props.nodes.indexOf(e[1]) >= 0)).map(e => {
+  //   return { data: { source: e[0], target: e[1] } }
+  // })))
+
+  let elements = props.nodes.filter(isNonEmptyString).map(n => {
     return {
       data: { id: n, label: n }
     }
   }).concat(props.edges.filter(e=> e && (isNonEmptyString(e[0]) && isNonEmptyString(e[1]) && props.nodes.indexOf(e[0]) >= 0 && props.nodes.indexOf(e[1]) >= 0)).map(e => {
     return { data: { source: e[0], target: e[1] } }
-  })))
+  }))
   
   let cy;
   return (

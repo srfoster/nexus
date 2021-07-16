@@ -22,8 +22,6 @@ import Follows from './Components/Dashboard/Follows';
 import Docs from './Components/Docs/Docs';
 import FabAddIcon from './Components/Dashboard/FabAddIcon';
 
-import LangDocs from './Components/CodespellsDocs/Index'
-
 require('codemirror/mode/scheme/scheme');
 
 
@@ -103,10 +101,6 @@ function App() {
               <Route
                 path={'/docs/:page'}
                 component={(props) => <Docs match={props.match} />}
-              />
-              <Route
-                exact path={'/docs/langs'}
-                component={LangDocs}
               />
               <Route
                 exact path={'/downloads'}
