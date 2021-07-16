@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import {rawData} from './rawData'
 
-const drawerWidth = 240;
+const drawerWidth = 240;//240
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -22,17 +22,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ResponsiveDrawer(props) {
+function ApiDrawer(props) {
   const classes = useStyles();
 
   const raw = rawData
 
   const drawer = (
-    <div>
+    <div style={{marginTop:"20px"}}>
       <div className={classes.toolbar} />
-      <Divider />
+	  
         {raw.map((x) => (
-            <div><a href={"#"+x.name} style={{color:"#000000","text-decoration":"none"}}><Typography style={{marginLeft:'20px'}}>{x.name}</Typography></a><br/></div>
+            <div><a href={"#"+x.name} style={{color:"#000000","text-decoration":"none"}}><Typography align="left" style={{marginLeft:'20px'}}>{x.name}</Typography></a><br/></div>
         ))}
     </div>
   );
@@ -44,6 +44,7 @@ function ResponsiveDrawer(props) {
               paper: classes.drawerPaper,
             }}
             variant="permanent"
+			anchor="right"
           >
             {drawer}
           </Drawer>
@@ -51,4 +52,4 @@ function ResponsiveDrawer(props) {
   );
 }
 
-export default ResponsiveDrawer;
+export default ApiDrawer;

@@ -4,23 +4,20 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
-
 import { rawData } from "./rawData";
 
 const useStyles = makeStyles((theme) => ({
   card: {
     flexGrow: 1,
-    marginLeft: "240px"
+    marginRight: "0px"//240
   },
   toolbar: theme.mixins.toolbar
 }));
@@ -35,24 +32,23 @@ const StyledTableCell = withStyles((theme) => ({
   }
 }))(TableCell);
 
-export default function RecipeReviewCard() {
+export default function DocCard() {
   const classes = useStyles();
   const rawCards = rawData;
 
   return (
     <main>
-      <div className={classes.toolbar} />
       {rawCards.map((x) => (
         <div key={x.name}>
-          <Card className={classes.card} id={x.name}>
-            <CardHeader title={x.name} subheader={x.use} />
+          <Card className={classes.card} id={x.name} style={{borderRadius:"5px"}}>
+            <CardHeader align="left" title={x.name} subheader={x.use} />
             <CardContent>
               <Typography
                 variant="body2"
                 color="textSecondary"
                 component="p"
               ></Typography>
-              <TableContainer>
+              <TableContainer style={{borderRadius:"5px"}}>
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -91,14 +87,14 @@ export default function RecipeReviewCard() {
                 </Table>
               </TableContainer>
               <br />
-              <Typography>
+              <Typography align="left">
                 Returns: {x.returns ? x.returns : "void?"}
               </Typography>
               <br />
-
-              <Typography>Examples:</Typography>
+			  
+              <Typography align="left">Examples:</Typography>
               {x.example.map((codeExample) => (
-                <pre style={{ background: "#f4f3f5", minWidth: "100%" }}>
+                <pre align="left" style={{background: "#E0E0E0", minWidth: "100%" }}>
                   {codeExample}
                 </pre>
               ))}
