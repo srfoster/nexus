@@ -519,7 +519,16 @@ function SockPuppetsMessage5(props) {
   const [messageOpened, setMessageOpened] = useState(false);
   const openedMessage = useRef(null);
   const [code, setCode] = useState("<Toy\n  />");
+  const [cells, setCells] = useState([]);
+
   const setCanContinue = props.setCanContinue
+
+  function puzzleComplete() {
+    if (cells.length == 5)
+      setCanContinue(true)
+  }
+
+  useEffect(puzzleComplete, [cells])
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
@@ -541,6 +550,12 @@ function SockPuppetsMessage5(props) {
             <Typography paragraph>
               sup bro.  try the puzzel below.  it's so hard it's siiiiick
             </Typography>
+            <Game setCells={(cells) => { setCells(cells); }}/>
+            <NetworkDiseaseSimulator
+              nodes={cells.map((c) => c.x + "," + c.y)}
+              edges={[]}
+              patientZero={"4,5"}
+            />
             <JSMirror code={code}
               scope={{
                 Toy: (props) => {
@@ -608,12 +623,6 @@ function Page5(props) {
 
 let Toy = (props) => {
   props.setColor(props.color)
-
-  /*
-  setTimeout(() => {
-    checkPuzzleComplete()
-  }, 100)
-  */
 
   return <Game {...props}
     setCells={(cells) => {
