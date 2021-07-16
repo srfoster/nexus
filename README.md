@@ -1,6 +1,8 @@
 # nexus
 The Nexus of the CodeSpells community. Deployed at [nexus.codespells.org](http://nexus.codespells.org). 
 
+Interested in contributing to this open source project? The first step is to install Docker on your machine. You can find a download for Docker [here](https://www.docker.com/get-started). Then, follow these instructions:
+
 ## Installation:
 
 Pre-Installation:

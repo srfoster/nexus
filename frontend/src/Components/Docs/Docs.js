@@ -1,43 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {Helmet} from "react-helmet";
-import Markdown from 'markdown-to-jsx';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
 import GettingStarted from './GettingStarted.js';
 import People from './People.js';
 import {linkTo, topDocLink} from './util.js';
 import { kabobCaseToTitleCase } from '../../Util.js';
-import config from '../../config'
-
-//TODO: Move to its own service file...
-const ApiService = {
-  getDocumentedFunctions(){
-    return fetch(`${config.LANG_SERVER}/api`, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
-          : res.json()
-      )
-  }
-}
-
-function APIDocs(props) {
-  const [functions, setFunctions] = useState()
-
-  useEffect(() => {
-    ApiService.getDocumentedFunctions()
-      .then((fs) => {
-        setFunctions(fs)
-      })
-  },[])
-
-  return !functions ? <p>Loading...</p> : functions.map(e => <FunctionDoc {...e} />)
-}
+import LangDocs from './OrbWorldDocs/Index'
 
 const docPageContent = {
   docs: <>
@@ -73,7 +40,7 @@ const docPageContent = {
   "langs": <>
     {topDocLink}
     <p>You can run all of these functions in Orb World and Orb Lab:</p>
-    <APIDocs />
+    <LangDocs />
   </>,
   "getting-started": <>
     <GettingStarted/> 
@@ -86,20 +53,6 @@ const docPageContent = {
     <p>Want to know how to build your own CodeSpells games?</p>
 </>,
 }
-
-function FunctionDoc(props) {
-  return (
-    <><Card style={{margin: 10}}>
-      <CardContent>
-        <p><code>(<strong>{props.name + " "}</strong> {props.parameters.map(e => e.name).join(" ")}) → {props.returnType} </code></p>
-        <div style={{paddingLeft: 10, paddingBottom: 10}}>{props.parameters.map(e => (<div><code>{e.name} : {e.type}</code></div>))}</div>
-        <Markdown>{props.content}</Markdown>
-      </CardContent>
-    </Card>
-    </>
- ) 
-}
-
 function Param(props) {
   return (
     <p>
@@ -120,7 +73,7 @@ function Docs(props) {
     <>
       <Helmet>
         <title>{page=="docs"?"Docs":kabobCaseToTitleCase(page) + " | Docs"} | CodeSpells Nexus</title>
-        <meta name="description" content="Learn more about how the Nexus interfaces with CodeSpells games, how to write spells, and more!" />
+		<meta name="description" content="Learn more about how the Nexus interfaces with CodeSpells games, how to write spells, and more!" />
       </Helmet>
       <div style={{textAlign: "left"}}>
         <h1>{kabobCaseToTitleCase(page)}</h1>
