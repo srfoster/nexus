@@ -83,12 +83,14 @@ class SoundfontProvider extends React.Component {
 
   playNote = (midiNumber) => {
     this.resumeAudio().then(() => {
-      const audioNode = this.state.instrument.play(midiNumber);
-      this.setState({
-        activeAudioNodes: Object.assign({}, this.state.activeAudioNodes, {
-          [midiNumber]: audioNode,
-        }),
-      });
+      if (this.state.instrument) {
+        const audioNode = this.state.instrument.play(midiNumber);
+        this.setState({
+          activeAudioNodes: Object.assign({}, this.state.activeAudioNodes, {
+            [midiNumber]: audioNode,
+          }),
+        });
+      }
     });
   };
 
@@ -140,7 +142,7 @@ class SoundfontProvider extends React.Component {
   }
 }
 
-export default function PianoSimulator({ onNoteStarted }) {
+export default function PianoSimulator({ onNoteStarted, activeNotes, instrument}) {
   const firstNote = MidiNumbers.fromNote('c3');
   const lastNote = MidiNumbers.fromNote('c4');
   const keyboardShortcuts = KeyboardShortcuts.create({
@@ -151,14 +153,15 @@ export default function PianoSimulator({ onNoteStarted }) {
 
   return (
     <SoundfontProvider
-      instrumentName="acoustic_grand_piano"
+      instrumentName={instrument|| "acoustic_grand_piano"}
       audioContext={audioContext}
       hostname={soundfontHostname}
       render={({ isLoading, playNote, stopNote }) => (
         <Piano
+          activeNotes={activeNotes}
           noteRange={{ first: firstNote, last: lastNote }}
           playNote={(midinumber) => {
-            onNoteStarted(midinumber)
+            onNoteStarted && onNoteStarted(midinumber)
             return playNote(midinumber)
           }}
           stopNote={ stopNote }
