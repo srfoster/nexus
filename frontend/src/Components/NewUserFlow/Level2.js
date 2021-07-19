@@ -514,7 +514,6 @@ function Page4(props) {
   </>)
 }
 
-
 function SockPuppetsMessage5(props) {
   const [messageOpened, setMessageOpened] = useState(false);
   const openedMessage = useRef(null);
