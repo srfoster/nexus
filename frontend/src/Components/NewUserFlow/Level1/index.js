@@ -249,8 +249,8 @@ function ChooseYourTeacher(props) {
               { correct: true, text: <SockPuppetChip />, feedback: <SpinThen spinTime={500}>Available!</SpinThen> },
               { correct: false, text: <FakeChip name="Wizard of the Forest" />, feedback: <SpinThen spinTime={1000}>Sorry, I tried to contact the wizard, but his computer did not respond within 1000 milliseconds and his last GPS location appears to be in the middle of the Forest. The Nexus apologizes for putting him on this list.</SpinThen> },
               { correct: false, text: <FakeChip name="Super-intelligent AI" level={500} />, feedback: <SpinThen spinTime={3000}>Sorry. The Super-intelligent AI has considered your request for the required 3000 milliseconds, and sends the following message: "I'm currently maxed out at five million students, please try again when you've attained a higher level."</SpinThen>},
-              { correct: false, text: <FakeChip name={<span>The Nexus Devs</span>} />, feedback: <SpinThen spinTime={5000}>This feature is still under development.</SpinThen> },
-              { correct: false, text: "None of these", feedback: <FakeChip name={<span>The Nexus Devs</span>} />, feedback: <SpinThen spinTime={5000}>Sorry, your current level is too low for you to continue without a teacher, and I can't find any other available teachers for your level.</SpinThen> },
+              { correct: false, text: <FakeChip name="The Nexus Devs" />, feedback: <SpinThen spinTime={5000}>This feature is still under development.</SpinThen> },
+              { correct: false, text: "None of these", feedback: <FakeChip name="The Nexus Devs" />, feedback: <SpinThen spinTime={5000}>Sorry, your current level is too low for you to continue without a teacher, and I can't find any other available teachers for your level.</SpinThen> },
             ]}
               buttonText="Check Availability"
               onCorrect={() => props.setCanContinue(true)}
@@ -273,13 +273,12 @@ function SockPuppetVideoIntro(props) {
     messageOpened ?
       <SBS
         leftSideTitle={<>
-          <Typography paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
+          <Typography component='span' paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography>Subject: Video Introduction!!</Typography>
         </>}
         leftSide={
           <div style={{ backgroundColor: "black" }}>
             <ReactPlayer
-              fluid={false}
               width={"100%"}
               url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-4.mp4"
               controls={true}
@@ -378,7 +377,7 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
 
   return (!messageOpened ? <div>
     {step >= 1 ?
-      <Typography paragraph>
+      <Typography component='span' paragraph>
         <SockPuppetChip /> is making video content!
           </Typography>
       : ""}
@@ -428,7 +427,7 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
         </Typography> : ""
     }
     {step >= 9 ?
-      <Typography paragraph>
+      <Typography component='span' paragraph>
         Sometimes our low-level teachers, like <SockPuppetChip />
       </Typography> : ""
     }
@@ -536,7 +535,7 @@ function SockPuppetFirstLesson(props) {
     <SBS
       leftSideTitle={
         <>
-          <Typography paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
+          <Typography component='span' paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography >Subject: Hello, World!</Typography>
         </>}
       leftSide={
@@ -544,7 +543,6 @@ function SockPuppetFirstLesson(props) {
           <div style={{ backgroundColor: "black" }}>
             <ReactPlayer
               playsInline
-              fluid={false}
               width={"100%"}
               url="https://codespells-org.s3.amazonaws.com/NexusVideos/e2-sock-4.mp4"
               controls={true}

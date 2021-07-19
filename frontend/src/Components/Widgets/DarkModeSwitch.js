@@ -54,7 +54,6 @@ function DarkModeSwitch(props) {
                       setDarkMode(!darkMode);
                       window.localStorage.setItem("dark-mode", ""+ !darkMode)
                       //  props.onChange(!darkMode)
-                       console.log("HERE")
                    }} />
                 </Grid>
           <Grid item>

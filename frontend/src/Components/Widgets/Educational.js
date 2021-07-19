@@ -55,9 +55,9 @@ export function MultipleChoiceQuestion(props) {
             <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
               {props.answers.map((e, i) => { return <FormControlLabel value={"" + i} key={"answer" + i} control={<Radio />} label={e.text} /> })}
             </RadioGroup>
-            <FormHelperText>{helperText}</FormHelperText>
+            <FormHelperText component='span'>{helperText}</FormHelperText>
           </FormControl>
-          <Button size="small" onClick={handleSubmit} type="submit" variant="solid" color="primary">{props.buttonText}</Button>
+          <Button size="small" onClick={handleSubmit} type="submit" variant="contained" color="secondary">{props.buttonText}</Button>
         </>
       </Fade>
     </>
