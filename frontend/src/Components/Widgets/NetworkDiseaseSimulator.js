@@ -111,7 +111,7 @@ export default function NetworkDiseaseSimulator(props) {
               content: "data(label)",
               width: 20,
               height: 20,
-              shape: 'circle'
+              //shape: 'circle'
             }
           },
           {
