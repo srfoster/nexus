@@ -47,11 +47,13 @@ function App() {
   useEffect(() => {
     let isMounted = true
     // Only running this to check if logged in
-    SpellsApiService.getUserById('me')
-    .catch(() => console.log('something'))
-      .then((user) => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false))
-
+    let promise_or_false = SpellsApiService.getUserById('me')
+    if (promise_or_false) {
+      promise_or_false
+        .catch(() => console.log('something'))
+        .then((user) => setIsLoggedIn(true))
+        .catch(() => setIsLoggedIn(false))
+    }
     return () => {
       isMounted = false
     }

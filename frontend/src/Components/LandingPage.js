@@ -125,11 +125,14 @@ const LandingPage = (props) => {
   ];
 
   useEffect(() => {
-    SpellsApiService.getBadgesByUser("me")
-      .then(badges => {
-        setHasFetchedBadges(true);
-        setBadges(badges);
-      })
+    let promise_or_false = SpellsApiService.getBadgesByUser("me")
+    if (promise_or_false) {
+      promise_or_false
+        .then(badges => {
+          setHasFetchedBadges(true);
+          setBadges(badges);
+        })
+    }
   }, [])
 
   /*

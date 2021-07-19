@@ -513,6 +513,44 @@ function Page4(props) {
 
   </>)
 }
+  
+function bfs(first, rest) {
+
+  let island = [first];
+  let added = true;
+  let unprocessed = [...rest]
+
+  while (added) {
+    added = false;
+
+    let toAddToIsland = []
+    let toRemoveFromUnprocessed = []
+
+    for (let cell1 of unprocessed) {
+      for (let cell2 of island) {
+        if (cellsAdjacent(cell1, cell2)) {
+
+          toAddToIsland.push(cell1);
+          toRemoveFromUnprocessed.push(cell1);
+          added = true;
+        }
+      }
+    }
+
+    for (let c of toAddToIsland) {
+      if(island.indexOf(c) == -1)
+        island.push(c)
+    }
+
+    for (let c of toRemoveFromUnprocessed) {
+      let i = unprocessed.indexOf(c)
+      if(i>-1)
+        unprocessed.splice(i, 1);
+    }
+  }
+
+  return island;
+}
 
 //AKA find disconnected components in the graph
 //  Cytoscape can obviously do this, but for educational purposes, let's do the algorithm ourselves 
@@ -521,64 +559,40 @@ function Page4(props) {
 //  TODO: Put link to Orb World here in the source code so people can get to it easier 
 //  TODO: Put in some kind of message here that makes it clear to the player to that the
 //        correct next step in the game is actually to do the Orb World download (not this diabolical puzzle) 
-function findIslands(cells) { 
-  //Let's say that and island is a list of cells.  
-  //Start by assuming each cell is a separate island
-  let islands = []
-  let visited = []
+function findIslands(cells) {
+  // Cells -> List of Islands (List of Cells)
+  // Input: Cells are a list of objects
+  // e.g. [{x:0, y:0},{x:1,y:0}]
 
-  for (let c of cells) {
-    console.log("Island for c?", c)
 
-    /*
-    if (visited.indexOf(c) == -1) 
-      visited.push(c)
-      */
+  // While there are unprocessed cells...
+  // Grab 1 cell. Instantiate a new island with that cell in it.
+  // Do an exhaustive BFS for cells that are connected to that one. Push each of these onto the island list. Remove them from unprocessed cells list.
+  let unprocessed = [...cells];
+  let islands = [];
 
-    let island = [c]
 
-    for (let c2 of cells) {
-      if (visited.indexOf(c2) == -1) { //Not visited, so check
-        console.log("  Check:", c2)
+  while (unprocessed.length > 0) {
+    let current = unprocessed.pop();
 
-        if (cellsAdjacent(c, c2)) {
-          island.push(c2)
-          visited.push(c2)
-        }
-      }
+    let island = []
+    let list_of_cells = bfs(current, unprocessed); 
+    console.log("list_of_cells", JSON.stringify(list_of_cells))
+    for (let cell of list_of_cells) {
+      island.push(cell);
+      let i = unprocessed.indexOf(cell)
+      if(i>-1)
+        unprocessed.splice(i, 1);
     }
-
-    console.log("Island!",island)
-
     islands.push(island)
   }
 
   return islands
 }
 
-function isConnected(i1, i2) {
-  let hasAdjacentCell = false 
-
-  for (let c1 of i1) {
-    for (let c2 of i2) {
-      if (cellsAdjacent(c1, c2)) {
-        hasAdjacentCell = true
-        break
-      }
-    }
-  }
-
-  return hasAdjacentCell
-}
-
 function cellsAdjacent(n, m) {
   return (Math.abs(n.x-m.x) === 1 && (n.y === m.y)) || (Math.abs(n.y-m.y) == 1 && (m.x === n.x))
 }
-
-function mergeIslands(i1, i2) {
-  for(let i of i2) i1.push(i)
-}
-
 
 function SockPuppetsMessage5(props) {
   const [messageOpened, setMessageOpened] = useState(false);
@@ -586,8 +600,24 @@ function SockPuppetsMessage5(props) {
   const [code, setCode] = useState("<Toy\n  />");
   const [cells, setCells] = useState([]);
   const [showSimulator, setShowSimulator] = useState(false);
+  const [numberSick, setNumberSick] = useState(0);
   const setCanContinue = props.setCanContinue
 
+  useEffect(() => {
+    let islands = findIslands(cells)
+    let sortedIslandLengths = islands.map((i) => i.length).sort()
+
+    console.log(JSON.stringify(sortedIslandLengths),numberSick)
+    if(JSON.stringify(sortedIslandLengths) == "[2,3,4,5,6]" && numberSick == 6) setCanContinue(true)
+  }, [cells, numberSick])
+  
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSimulator(true)
+    }, 1000)
+  }, [cells])
+
+  //Prepare the output of conway's game of life as input for cytoscape
   const nodes = cells.map((c) => c.x + "," + c.y);
   const adjPairs = [];
   for (let n of cells) {
@@ -597,27 +627,6 @@ function SockPuppetsMessage5(props) {
     }
   }
   const edges = adjPairs.map(p => [p[0].x + "," + p[0].y, p[1].x + "," + p[1].y])
-
-  function puzzleComplete() {
-    let islands = findIslands(cells)
-    let sortedIslandLengths = islands.map((i) => i.length).sort()
-
-    if(islands.length == 3) setCanContinue(true)
-
-    /*
-    if (JSON.stringify([1,2,3,4,5]) === JSON.stringify(sortedIslandLengths))
-      setCanContinue(true)
-      */
-  }
-
-  useEffect(puzzleComplete, [cells])
-  
-  useEffect(() => {
-    setTimeout(() => {
-      setShowSimulator(true)
-    }, 1000)
-  }, [cells])
-
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
@@ -639,7 +648,8 @@ function SockPuppetsMessage5(props) {
             <Typography paragraph>
               sup bro.  try the puzzel below.  it's so hard it's siiiiick
             </Typography>
-            <p>{ findIslands(cells).length }</p>
+            <p>{ JSON.stringify(findIslands(cells)) }</p>
+            <p>{ numberSick }</p>
             <Game setCells={(cells) => {
               setCells(cells);
               setShowSimulator(false);
@@ -649,6 +659,10 @@ function SockPuppetsMessage5(props) {
                 nodes={nodes}
                 edges={edges}
                 patientZero={"4,5"}
+                onChange={(data) => {
+                  setNumberSick(data.explored.length)
+
+                }}
               /> :
               <Card style={{ height: "525px" }}><CardContent><CircularProgress /></CardContent></Card>
             }

@@ -642,9 +642,12 @@ const AccountCreationReminder = (props) => {
 
   useEffect(() => {
     // Only running this to check if logged in
-    SpellsApiService.getUserById('me')
-      .then((user) => setIsLoggedIn(true))
-      .catch(() => setIsLoggedIn(false))
+    let promise_or_false = SpellsApiService.getUserById('me')
+    if (promise_or_false) {
+      promise_or_false
+        .then((user) => setIsLoggedIn(true))
+        .catch(() => setIsLoggedIn(false))
+    }
   })
 
   function getModalStyle() {
@@ -743,8 +746,6 @@ const AccountCreationReminder = (props) => {
 function Level1(props) {
   const [titleScreenComplete, setTitleScreenComplete] = useLocalStorage("game-started", false);
   const [title, setTitle] = useState("Introduction");
-
-  console.log(props)
 
   const TitleScreen = (props) => {
 

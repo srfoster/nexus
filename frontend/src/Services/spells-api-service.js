@@ -63,7 +63,10 @@ const SpellsApiService = {
         : res.json()
     )
   },
-  getUserById(id, page, search){
+  getUserById(id, page, search) {
+    if (!TokenService.getAuthToken()) {
+      return false
+    }
     page = page || 1
     let searchPath = search ? `&search=${search}` : ""
     return fetch(`${config.API_ENDPOINT}/mages/${id}?page=${page}${searchPath}`, {
@@ -74,11 +77,12 @@ const SpellsApiService = {
       },
 
     })
-      .then(res =>
-        (!res.ok)
-          ? res.json().then(e => Promise.reject(e))
+      .then(res => {
+        console.log(res)
+        return (!res.ok)
+          ? res.json().then(e => console.log("Not logged in"))
           : res.json()
-      )
+      }).catch(err => console.log(err))
   },
   postNewSpell(title){
     return fetch(`${config.API_ENDPOINT}/spells?title=${title}`, {
@@ -239,7 +243,10 @@ const SpellsApiService = {
           : res.json()
       )
   },
-  getBadgesByUser(id){
+  getBadgesByUser(id) {
+    if (!TokenService.getAuthToken()) {
+      return false
+    }
     return fetch(`${config.API_ENDPOINT}/users/${id}/badges`, {
       method: 'GET',
       headers: {
