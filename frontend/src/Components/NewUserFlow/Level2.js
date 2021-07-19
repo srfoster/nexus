@@ -514,6 +514,71 @@ function Page4(props) {
   </>)
 }
 
+//AKA find disconnected components in the graph
+//  Cytoscape can obviously do this, but for educational purposes, let's do the algorithm ourselves 
+//  (for the few brave souls who actually attempt this puzzle instead of just 
+//   listening to Sock Puppet and downloading Orb World!)
+//  TODO: Put link to Orb World here in the source code so people can get to it easier 
+//  TODO: Put in some kind of message here that makes it clear to the player to that the
+//        correct next step in the game is actually to do the Orb World download (not this diabolical puzzle) 
+function findIslands(cells) { 
+  //Let's say that and island is a list of cells.  
+  //Start by assuming each cell is a separate island
+  let islands = []
+  let visited = []
+
+  for (let c of cells) {
+    console.log("Island for c?", c)
+
+    /*
+    if (visited.indexOf(c) == -1) 
+      visited.push(c)
+      */
+
+    let island = [c]
+
+    for (let c2 of cells) {
+      if (visited.indexOf(c2) == -1) { //Not visited, so check
+        console.log("  Check:", c2)
+
+        if (cellsAdjacent(c, c2)) {
+          island.push(c2)
+          visited.push(c2)
+        }
+      }
+    }
+
+    console.log("Island!",island)
+
+    islands.push(island)
+  }
+
+  return islands
+}
+
+function isConnected(i1, i2) {
+  let hasAdjacentCell = false 
+
+  for (let c1 of i1) {
+    for (let c2 of i2) {
+      if (cellsAdjacent(c1, c2)) {
+        hasAdjacentCell = true
+        break
+      }
+    }
+  }
+
+  return hasAdjacentCell
+}
+
+function cellsAdjacent(n, m) {
+  return (Math.abs(n.x-m.x) === 1 && (n.y === m.y)) || (Math.abs(n.y-m.y) == 1 && (m.x === n.x))
+}
+
+function mergeIslands(i1, i2) {
+  for(let i of i2) i1.push(i)
+}
+
 
 function SockPuppetsMessage5(props) {
   const [messageOpened, setMessageOpened] = useState(false);
@@ -522,19 +587,6 @@ function SockPuppetsMessage5(props) {
   const [cells, setCells] = useState([]);
   const [showSimulator, setShowSimulator] = useState(false);
   const setCanContinue = props.setCanContinue
-
-  function puzzleComplete() {
-    if (cells.length == 5)
-      setCanContinue(true)
-  }
-
-  useEffect(puzzleComplete, [cells])
-  
-  useEffect(() => {
-    setTimeout(() => {
-      setShowSimulator(true)
-    }, 1000)
-  }, [cells])
 
   const nodes = cells.map((c) => c.x + "," + c.y);
   const adjPairs = [];
@@ -545,6 +597,27 @@ function SockPuppetsMessage5(props) {
     }
   }
   const edges = adjPairs.map(p => [p[0].x + "," + p[0].y, p[1].x + "," + p[1].y])
+
+  function puzzleComplete() {
+    let islands = findIslands(cells)
+    let sortedIslandLengths = islands.map((i) => i.length).sort()
+
+    if(islands.length == 3) setCanContinue(true)
+
+    /*
+    if (JSON.stringify([1,2,3,4,5]) === JSON.stringify(sortedIslandLengths))
+      setCanContinue(true)
+      */
+  }
+
+  useEffect(puzzleComplete, [cells])
+  
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSimulator(true)
+    }, 1000)
+  }, [cells])
+
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
@@ -566,6 +639,7 @@ function SockPuppetsMessage5(props) {
             <Typography paragraph>
               sup bro.  try the puzzel below.  it's so hard it's siiiiick
             </Typography>
+            <p>{ findIslands(cells).length }</p>
             <Game setCells={(cells) => {
               setCells(cells);
               setShowSimulator(false);
