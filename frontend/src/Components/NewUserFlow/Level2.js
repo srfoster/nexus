@@ -75,13 +75,12 @@ function OpenedMessage(props) {
   return (<>
     <SBS
       leftSideTitle={<>
-        <Typography paragraph>From {props.from} to {props.to} </Typography>
+        <Typography component='span' paragraph>From {props.from} to {props.to} </Typography>
         <Typography>Subject: {props.subject}</Typography>
       </>}
       leftSide={
         <div style={{ backgroundColor: "black" }}>
           <ReactPlayer
-            fluid={false}
             width={"100%"}
             url={props.videoUrl}
             controls={true}
@@ -179,7 +178,7 @@ const SockPuppetsMessage = (props) => {
               }}
               welcomeMessage={''}
               promptLabel={'mage@Nexus:~$'}
-              autoFocus="true"
+              autoFocus={true}
             />
           </>
         }
@@ -215,10 +214,10 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
       <div>
         {props.NexusStallingMessages.slice(0, step).map((e, i) => {
           let content = e.text || e
-          return (typeof content == "string") ? (<Fade key={"nexusMessage" + i} in={true}>
+          return <div key={"content"+i}>{(typeof content == "string") ? (<Fade in={true}>
             <Typography paragraph>{content}</Typography>
           </Fade>)
-            : content
+            : content}</div>
         })}
       </div>
       { props.contentComplete ? props.SockPuppetMessage : <CircularProgress style={{ marginTop: 20 }} />}

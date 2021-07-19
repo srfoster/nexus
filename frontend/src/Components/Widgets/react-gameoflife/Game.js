@@ -205,7 +205,7 @@ export function Game(props) {
                 <Grid container
                     spacing={1}
                     direction="row"
-                    alignItems="start"
+                    alignItems="flex-start"
                 >
                     <Grid item>
                         <Typography
