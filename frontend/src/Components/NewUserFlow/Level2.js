@@ -436,7 +436,7 @@ function SockPuppetsMessage3(props) {
 function SockPuppetsMessage4(props) {
   const [messageOpened, setMessageOpened] = useState(false);
   const openedMessage = useRef(null);
-  const [code, setCode] = useState("<Toy\n  notes={['A','B','C','D']} />");
+  const [code, setCode] = useState("<Toy\n  instrument=\"alto_sax\"\n  buttons={\n    {\"C-Chord\": [\"A\",\"D\",\"G\"],\n     \"F-Chord\": [\"A\",\"F\",\"H\"]}\n  } />");
   const setCanContinue = props.setCanContinue
 
   return (!messageOpened ? <NewMessageNotification
@@ -457,7 +457,7 @@ function SockPuppetsMessage4(props) {
         text={
           <>
             <Typography paragraph>
-              The Puzzle is to play a song with three chords.
+              The Puzzle is to add a button that plays a G-Chord
             </Typography>
             <Typography paragraph>
               <br />
@@ -466,11 +466,45 @@ function SockPuppetsMessage4(props) {
             <JSMirror code={code}
               scope={{
                 Toy: (props) => {
-                  return <PianoSimulator {...props}
-                    onNoteStarted={(midinumber) => {
-                      setCanContinue(true)
-                    }}
-                  />
+                  const [showPiano,setShowPiano] = useState(false)
+                  const [notes,setNotes] = useState([])
+
+                  let buttons = props.buttons
+
+                  const toMidi = function (letter) {
+                    return 48 + ["A","W","S","E","D","F","T","G","Y","H","U","J","K"].indexOf(letter)
+                  }
+
+                  useEffect(()=>setTimeout(()=>setShowPiano(true),1000), [])
+
+                  return !showPiano ? <CircularProgress /> :
+                   <>
+                    {Object.keys(buttons).map((k) =>
+                      <Button key={k}
+                        onMouseDown={() => {
+                          setTimeout(() => {
+                            if (buttons[k].indexOf("S") >= 0 &&
+                              buttons[k].indexOf("G") >= 0 &&
+                              buttons[k].indexOf("J") >= 0) {
+                              setCanContinue(true)
+                            }
+                          }, 1000)
+                          setNotes(buttons[k].map(toMidi));
+                        }}
+                        onMouseUp={() => {
+                          setNotes([])
+                        }}
+                        onMouseLeave={() => {
+                          setNotes([])
+                        }}
+                      >{k}</Button>
+                    )}
+                    <PianoSimulator {...props}
+                      activeNotes={ notes }
+                      onNoteStarted={(midinumber) => {
+                      }}
+                    />
+                  </>
                 }
               }}
 
@@ -576,7 +610,6 @@ function findIslands(cells) {
 
     let island = []
     let list_of_cells = bfs(current, unprocessed); 
-    console.log("list_of_cells", JSON.stringify(list_of_cells))
     for (let cell of list_of_cells) {
       island.push(cell);
       let i = unprocessed.indexOf(cell)
@@ -606,7 +639,6 @@ function SockPuppetsMessage5(props) {
     let islands = findIslands(cells)
     let sortedIslandLengths = islands.map((i) => i.length).sort()
 
-    console.log(JSON.stringify(sortedIslandLengths),numberSick)
     if(JSON.stringify(sortedIslandLengths) == "[2,3,4,5,6]" && numberSick == 6) setCanContinue(true)
   }, [cells, numberSick])
   
@@ -647,8 +679,6 @@ function SockPuppetsMessage5(props) {
             <Typography paragraph>
               sup bro.  try the puzzel below.  it's so hard it's siiiiick
             </Typography>
-            <p>{ JSON.stringify(findIslands(cells)) }</p>
-            <p>{ numberSick }</p>
             <Game setCells={(cells) => {
               setCells(cells);
               setShowSimulator(false);
