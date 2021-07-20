@@ -364,12 +364,6 @@ function Page3(props) {
   </>)
 }
 
-// <Toy 
-//   nodes={["John", "Laurond", "Lindsey"]} 
-//   edges={[["John", "Laurond"],["John", "Lindsey"],["Lindsey", "Laurond"]]}
-//   patientZero={"Laurond"}
-// />
-
 function SockPuppetsMessage3(props) {
   const [messageOpened, setMessageOpened] = useState(false);
   const openedMessage = useRef(null);
@@ -405,8 +399,15 @@ function SockPuppetsMessage3(props) {
               scope={{
                 Toy: (props) => {
                   let [showSimulator, setShowSimulator] = useState(false);
-                 
-                  setTimeout(() => { setShowSimulator(true) }, 1000);
+                
+                  useEffect(() => {
+                    let isMounted = true
+                    setTimeout(() => {
+                      if(isMounted) setShowSimulator(true)
+                    }, 1000);
+                    return () => { isMounted = false }
+                  },[])
+
 
                   return (<>
                     { showSimulator ?
@@ -475,7 +476,14 @@ function SockPuppetsMessage4(props) {
                     return 48 + ["A","W","S","E","D","F","T","G","Y","H","U","J","K"].indexOf(letter)
                   }
 
-                  useEffect(()=>setTimeout(()=>setShowPiano(true),1000), [])
+                  useEffect(
+                    () => {
+                      let isMounted = true;
+                      setTimeout(() => {
+                        if(isMounted) setShowPiano(true)
+                      }, 1000)
+                      return () => { isMounted = false }
+                    }, [])
 
                   return !showPiano ? <CircularProgress /> :
                    <>
@@ -632,6 +640,7 @@ function SockPuppetsMessage5(props) {
   const [code, setCode] = useState("<Toy\n  />");
   const [cells, setCells] = useState([]);
   const [showSimulator, setShowSimulator] = useState(false);
+  const [puzzleStarted, setPuzzleStarted] = useState(false);
   const [numberSick, setNumberSick] = useState(0);
   const setCanContinue = props.setCanContinue
 
@@ -679,53 +688,52 @@ function SockPuppetsMessage5(props) {
             <Typography paragraph>
               sup bro.  try the puzzel below.  it's so hard it's siiiiick
             </Typography>
-            <Game setCells={(cells) => {
-              setCells(cells);
-              setShowSimulator(false);
-            }} />
-            {showSimulator ?
-              <NetworkDiseaseSimulator
-                nodes={nodes}
-                edges={edges}
-                patientZero={"4,5"}
-                onChange={(data) => {
-                  setNumberSick(data.explored.length)
-
-                }}
-              /> :
-              <Card style={{ height: "525px" }}><CardContent><CircularProgress /></CardContent></Card>
-            }
-            <JSMirror code={code}
-              scope={{
-                Toy: (props) => {
-                  return <Terminal
-                    commands={{
-                      inventory: {
-                        description: 'Display your inventory.',
-                        usage: '',
-                        fn: function () {
-                          return <SockPuppetFavorInInventory
-                            content={
-                              <>
-                                <p>That Sock Puppet isn't me!  It's an imposter!</p>
-                                <p>He's also given you a puzzle that's impossible to solve without looking at the source code!  The Nexus is trying to trap you here.</p>
-                                <p>Look, I'm taking a big risk by doing this, but if you download the world below, I can finally talk freely with you about the Nexus.</p>
-                                <p>~Your Friend, Socky</p>
-                                <Button color="secondary" variant="outlined">Download</Button>
-                              </>
-                            }
-                          />
-                        }
-                      },
-                    }}
-                  />
-                }
+            <Terminal
+              commands={{
+                startPuzzle: {
+                  description: 'start the sick puzzle dudeeeee',
+                  usage: '',
+                  fn: function () {
+                    setPuzzleStarted(true);
+                  }
+                },
+                inventory: {
+                  description: 'Display your inventory.',
+                  usage: '',
+                  fn: function () {
+                    return <SockPuppetFavorInInventory
+                      content={
+                        <>
+                          <p>That Sock Puppet isn't me!  It's an imposter!</p>
+                          <p>He's also given you a puzzle that's impossible to solve without looking at the source code!  The Nexus is trying to trap you here.</p>
+                          <p>Look, I'm taking a big risk by doing this, but if you download the world below, I can finally talk freely with you about the Nexus.</p>
+                          <p>~Your Friend, Socky</p>
+                          <Button color="secondary" variant="outlined">Download</Button>
+                        </>
+                      }
+                    />
+                  }
+                },
               }}
+            />{
+              puzzleStarted ?
+                <><Game setCells={(cells) => {
+                  setCells(cells);
+                  setShowSimulator(false);
+                }} />
+                  {showSimulator ?
+                    <NetworkDiseaseSimulator
+                      nodes={nodes}
+                      edges={edges}
+                      patientZero={"4,5"}
+                      onChange={(data) => {
+                        setNumberSick(data.explored.length)
 
-              onChange={(code) => {
-                setCode(code)
-                return true
-              }} />
+                      }}
+                    /> :
+                    <Card style={{ height: "525px" }}><CardContent><CircularProgress /></CardContent></Card>
+                  }
+                </> : <></>}
           </>
         } />
     </div>
@@ -760,19 +768,19 @@ function Page5(props) {
   </>)
 }
 
-let Toy = (props) => {
-  props.setColor(props.color)
-
-  return <Game {...props}
-    setCells={(cells) => {
-      props.setCells(cells)
-    }}
-  />
-}
 
 const SockPuppetsMessage2 = (props) => {
   const [messageOpened, setMessageOpened] = useState(false)
   const openedMessage = useRef(null);
+
+  let Toy = (props) => {
+
+    return <Game {...props}
+      setCells={(cells) => {
+        props.setCells(cells)
+      }}
+    />
+  }
 
   useEffect(() => {
     if (openedMessage.current) { openedMessage.current.scrollIntoView() }
@@ -841,13 +849,18 @@ const SockPuppetsMessage2 = (props) => {
           </Typography>
             <JSMirror code={firstCode}
               scope={{
-                Toy: (props) => <Toy {...props} setColor={setFirstColor}
-                  noRun={true}
-                  cells={firstGameState}
-                  setCells={(cells) => {
-                    setFirstGameState(cells)
-                  }}
-                />
+                Toy: (props) => { 
+                  return <Toy {...props} 
+                    noRun={true}
+                    cells={firstGameState}
+                    setCells={(cells) => {
+                      if (cells.length !== 0) {
+                        setFirstColor(cells[0].color)
+                      }
+                      setFirstGameState(cells)
+                    }}
+                  />
+                }
               }}
 
               onChange={(code) => {
@@ -856,10 +869,13 @@ const SockPuppetsMessage2 = (props) => {
               }} />
             <JSMirror code={secondCode}
               scope={{
-                Toy: (props) => <Toy {...props} setColor={setSecondColor}
+                Toy: (props) => <Toy {...props} 
                   noRun={true}
                   cells={secondGameState}
                   setCells={(cells) => {
+                      if (cells.length !== 0) {
+                        setSecondColor(cells[0].color)
+                      }
                     setSecondGameState(cells)
                   }}
                 />
