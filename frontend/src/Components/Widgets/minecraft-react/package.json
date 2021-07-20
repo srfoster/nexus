@@ -1,0 +1,41 @@
+{
+  "name": "minecraft-react",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "5.11.4",
+    "@testing-library/react": "11.0.2",
+    "@testing-library/user-event": "12.1.4",
+    "drei": "1.5.3",
+    "nanoid": "3.1.12",
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-merge-refs": "1.1.0",
+    "react-scripts": "3.4.3",
+    "react-three-fiber": "4.2.21",
+    "recoil": "0.0.10",
+    "three": "0.125.0",
+    "use-cannon": "0.5.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

@@ -11,6 +11,7 @@ import 'react-piano/dist/styles.css';
 import PropTypes from 'prop-types';
 import Soundfont from 'soundfont-player';
 
+import App from "../Widgets/minecraft-react/src/App" 
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -150,9 +151,9 @@ class SoundfontProvider extends React.Component {
   }
 }
 
+ 
 
-
-export function MidiTest() {
+function MidiTest() {
   const firstNote = MidiNumbers.fromNote('c3');
   const lastNote = MidiNumbers.fromNote('f5');
   const keyboardShortcuts = KeyboardShortcuts.create({
@@ -179,7 +180,7 @@ export function MidiTest() {
   );
 }
 
-function Level101(props) {
+export default function Level101(props) {
   const [comboCorrect, setComboCorrect] = useState(false)
   const [guessed, setGuessed] = useState("")
   let correct = "123"
@@ -191,7 +192,7 @@ function Level101(props) {
   return (<Level number={101} subtitle={"Room 101, by Stephen R. Foster"}>
     <p>Welcome to Room 101</p>
 
-    <MidiTest />
+    <App></App>
 
     <p>Guess the combo...</p>
     <ButtonGroup size="small" aria-label="small outlined button group">

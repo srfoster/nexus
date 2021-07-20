@@ -15,6 +15,7 @@ import Level7 from "./NewUserFlow/Level7";
 import Level8 from "./NewUserFlow/Level8";
 import LastLevel from "./NewUserFlow/LastLevel";
 
+import Level101 from "./NewUserFlow/Level101";
 
 //Drafts...
 import Level20 from "./NewUserFlow/Level20";
@@ -51,6 +52,7 @@ function SecretLevels(props) {
       darkMode={props.darkMode}
       setDarkMode={props.setDarkMode}
     />,
+    <Level101 />,
   ]
 
   return <>
