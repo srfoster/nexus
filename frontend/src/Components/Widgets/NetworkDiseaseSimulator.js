@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Slider from '@material-ui/core/Slider';
@@ -9,25 +8,15 @@ import CardContent from '@material-ui/core/CardContent';
 import Cytoscape from 'cytoscape';
 import Typography from '@material-ui/core/Typography';
 import CytoscapeComponent from 'react-cytoscapejs';
-
 import fcose from 'cytoscape-fcose';
 
 Cytoscape.use(fcose);
-
 
 export default function NetworkDiseaseSimulator(props) {
   let [iteration, setIteration] = useState(0)
   let [explored, setExplored] = useState(new Set());
   let [prob, setProb] = useState(100);
   let isNonEmptyString = e => (typeof(e) == "string" && e.length > 0)
-
-  // let [elements, setElements] = useState(props.nodes.filter(isNonEmptyString).map(n => {
-  //   return {
-  //     data: { id: n, label: n }
-  //   }
-  // }).concat(props.edges.filter(e=> e && (isNonEmptyString(e[0]) && isNonEmptyString(e[1]) && props.nodes.indexOf(e[0]) >= 0 && props.nodes.indexOf(e[1]) >= 0)).map(e => {
-  //   return { data: { source: e[0], target: e[1] } }
-  // })))
 
   let elements = props.nodes.filter(isNonEmptyString).map(n => {
     return {

@@ -2,21 +2,21 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Terminal from 'react-console-emulator'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { useLocalStorage } from "../../Util";
+import { useLocalStorage } from "../../../Util";
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { SBS, Level, withConfetti } from './Level';
-import { SockPuppetChip, FakeChip, StudentChip, NewMessageNotification } from '../Widgets/NexusVoice';
-import { JSMirror } from '../Widgets/Educational';
-import { Game } from '../Widgets/react-gameoflife/Game.js';
-import { Stars } from './Level20.js'; //Move this please
-import PianoSimulator from '../Widgets/PianoSimulator.js';
-import NetworkDiseaseSimulator from '../Widgets/NetworkDiseaseSimulator.js';
-import BlueBalls from '../Widgets/BlueBalls.js';
+import { SBS, Level, withConfetti } from '../Level';
+import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification } from '../../Widgets/NexusVoice';
+import { JSMirror } from '../../Widgets/Educational';
+import { Game } from '../../Widgets/react-gameoflife/Game.js';
+import { Stars } from '../Level20.js'; //Move this please
+import PianoSimulator from '../../Widgets/PianoSimulator.js';
+import NetworkDiseaseSimulator from '../../Widgets/NetworkDiseaseSimulator.js';
+import BlueBalls from '../../Widgets/BlueBalls.js';
 import CasinoIcon from '@material-ui/icons/Casino';
 
 //Questions we're asking (and answering) with our...
@@ -379,7 +379,7 @@ function SockPuppetsMessage3(props) {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip />}
-        to={<FakeChip name={props.username} level={1} />}
+        to={<FakeTeacherChip name={props.username} level={1} />}
         subject={"Fundamentals of Magic, Part 2"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
@@ -448,7 +448,7 @@ function SockPuppetsMessage4(props) {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip />}
-        to={<FakeChip name={props.username} level={1} />}
+        to={<FakeTeacherChip name={props.username} level={1} />}
         subject={"Fundamentals of Magic, Part 3"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
@@ -707,7 +707,7 @@ function SockPuppetsMessage5(props) {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip />}
-        to={<FakeChip name={props.username} level={1} />}
+        to={<FakeTeacherChip name={props.username} level={1} />}
         subject={"Fundamentals of Magic, Part 4"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
