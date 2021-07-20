@@ -27,6 +27,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { MultipleChoiceQuestion, JSMirror } from '../../Widgets/Educational';
 import { NewMessageNotification, SockPuppetChip, StudentChip, SpinThen, FakeTeacherChip, Gong } from '../../Widgets/NexusVoice';
 import { Level, LoginButton, ContinueButton, withConfetti, SBS } from "../Level";
+import ChatLayout from '../../Widgets/NexusChatBubble';
+
 
 /*
 An educational text adventure that leads you on epic quest
@@ -534,6 +536,7 @@ function SockPuppetFirstLesson(props) {
     <SBS
       leftSideTitle={
         <>
+          <ChatLayout/>
           <Typography component='span' paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography >Subject: Hello, World!</Typography>
         </>}
