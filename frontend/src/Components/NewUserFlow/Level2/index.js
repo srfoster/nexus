@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { SBS, Level, withConfetti } from '../Level';
-import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification } from '../../Widgets/NexusVoice';
+import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage } from '../../Widgets/NexusVoice';
 import { JSMirror } from '../../Widgets/Educational';
 import { Game } from '../../Widgets/react-gameoflife/Game.js';
 import { Stars } from '../Level20.js'; //Move this please
@@ -69,34 +69,6 @@ function SockPuppetFavorInInventory(props) {
   </div>
 }
 
-function OpenedMessage(props) {
-  const [videoFinished,setVideoFinished] = useState(false) 
-
-  return (<>
-    <SBS
-      leftSideTitle={<>
-        <Typography component='span' paragraph>From {props.from} to {props.to} </Typography>
-        <Typography>Subject: {props.subject}</Typography>
-      </>}
-      leftSide={
-        <div style={{ backgroundColor: "black" }}>
-          <ReactPlayer
-            width={"100%"}
-            url={props.videoUrl}
-            controls={true}
-            style={{}}
-            progressInterval={100}
-            onProgress={(p) => { }}
-            onEnded={() => {
-              setVideoFinished(true)
-            }}
-          />
-        </div>
-      }
-      rightSide={!videoFinished ? "" : props.text }
-    />
-  </>)
-}
 
 //VIDEO SCRIPT
 // Thanking
@@ -187,44 +159,6 @@ const SockPuppetsMessage = (props) => {
   )
 }
 
-//TODO: Flicker bug, real content
-function PleaseWaitWhileSockPuppetCreatesContent(props) {
-  var [step, setStep] = useState(props.contentComplete ? props.NexusStallingMessages.length : 0)
-
-  useEffect(() => {
-
-    if (!props.contentComplete) {
-      let total = 0
-      for (let i = 0; i < props.NexusStallingMessages.length; i++){
-        let e = props.NexusStallingMessages[i]
-        setTimeout(() => {
-          if (i == props.NexusStallingMessages.length - 1) {
-            setTimeout(()=>props.setContentComplete(true), (e.time || 2000))
-          }
-          setStep(i+1)
-        },  total)
-
-        total += (e.time || 2000)
-      }
-    }
-  }, [])
-
-  return (
-    <>
-      <div>
-        {props.NexusStallingMessages.slice(0, step).map((e, i) => {
-          let content = e.text || e
-          return <div key={"content"+i}>{(typeof content == "string") ? (<Fade in={true}>
-            <Typography paragraph>{content}</Typography>
-          </Fade>)
-            : content}</div>
-        })}
-      </div>
-      { props.contentComplete ? props.SockPuppetMessage : <CircularProgress style={{ marginTop: 20 }} />}
-
-    </>
-  )
-}
 
 function Page1(props) {
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
