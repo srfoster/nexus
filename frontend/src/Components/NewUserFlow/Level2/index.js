@@ -9,7 +9,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { SBS, Level, withConfetti } from '../Level';
+import { SBS, Level, withConfetti, AccountCreationReminder } from '../Level';
 import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage } from '../../Widgets/NexusVoice';
 import { JSMirror } from '../../Widgets/Educational';
 import { Game } from '../../Widgets/react-gameoflife/Game.js';
@@ -866,6 +866,7 @@ export function Level2(props) {
             <ContinueButton key="continue-button" onClick={reallyContinue} />
             : ""}
         </CardActions>
+        <AccountCreationReminder />
       </Level>
     </>
   )
