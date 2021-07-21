@@ -223,7 +223,7 @@ export function Game(props) {
 
                         <ButtonGroup
                             orientation="vertical"
-                            color="primary"
+                            color="secondary"
                             aria-label="vertical outlined primary button group"
                         >
                             {props.noRun ? "" :
