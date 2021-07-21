@@ -3,7 +3,6 @@ import { useLocalStorage } from "../../../Util";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import CardHeader from '@material-ui/core/CardHeader';
 import Alert from '@material-ui/lab/Alert';
 import Fade from '@material-ui/core/Fade';
 import ReactPlayer from 'react-player'
@@ -26,8 +25,7 @@ An educational text adventure that leads you on epic quest
 to learn coding through a variety of media: text, video, and 2D/3D environments
 */
 
-
-const TitleCard = ({ setTitleScreenComplete }) => {
+const TitleCardPage = ({ setTitleScreenComplete }) => {
   let [step, setStep] = useState(0);
 
   let os_name = "Not known";
@@ -80,7 +78,7 @@ const TitleCard = ({ setTitleScreenComplete }) => {
   )}
 
 
-const UserNameForm = (props) => {
+function UserNameFormPage(props) {
   const [checking, setChecking] = useState(false);
   const [available, setAvailable] = useLocalStorage("user-name-available", undefined);
   const [username, setUsernameLocal] = useState(props.username);
@@ -90,7 +88,6 @@ const UserNameForm = (props) => {
       props.setCanContinue(true)
     }
   }, [])
-
 
   function checkAvailability() {
     setChecking(true)
@@ -158,9 +155,7 @@ const UserNameForm = (props) => {
     </Fade>
     <Fade in={true} timeout={5000}>
       <Grid item xs={6}>
-        {checking ? OneMoment() : UsernameInput()
-
-        }
+        {checking ? OneMoment() : UsernameInput()}
 
         {username === undefined || checking ? "" :
           <Fade key="check-available" in={true} timeout={1000}>
@@ -174,15 +169,13 @@ const UserNameForm = (props) => {
             }
             }>{!available ? "Check Availability" : "Undo?"}</Button>
           </Fade>}
-
       </Grid>
     </Fade>
   </Grid>)
 }
 
 
-
-function LightOrDark(props) {
+function LightOrDarkPage(props) {
   let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
   //Add sounds effects to Light vs Dark mode
 
@@ -209,8 +202,6 @@ function LightOrDark(props) {
               onChange={(darkMode) => {
                 //Triggers a re-render, so we'll use local storage instead of state
                 setDarkModeDecisionMade(true)
-
-                //props.setCanContinue(true)
               }}
             /></div>
         </Fade>
@@ -220,8 +211,7 @@ function LightOrDark(props) {
 }
 
 
-
-function ChooseYourTeacher(props) {
+function ChooseYourTeacherPage(props) {
   const [teacherAvailable, setTeacherAvailable] = React.useState(false);
 
   return (
@@ -256,7 +246,7 @@ function ChooseYourTeacher(props) {
 }
 
 
-function SockPuppetVideoIntro(props) {
+function SockPuppetVideoIntroPage(props) {
   let [videoFinished, setVideoFinished] = useState(false);
   let [playing, setPlaying] = useState(false);
   let [messageOpened, setMessageOpened] = useState(false);
@@ -342,7 +332,7 @@ function SockPuppetVideoIntroText(props) {
   )
 }
 
-function PleaseWaitWhileSockPuppetCreatesContent(props) {
+function PleaseWaitWhileSockPuppetCreatesContentPage(props) {
   var [step, setStep] = useState(0)
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-password-lesson-opened", false)
 
@@ -365,17 +355,14 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
     }
   }, [])
 
-
-
   return (!messageOpened ? <div>
     {step >= 1 ?
       <Typography paragraph><SockPuppetChip /><span>is making video content!</span></Typography>
       : ""}
     {step >= 2 ?
       <Fade in={true}>
-        <ChatBubble message={"While you wait, please know:"}>
-        </ChatBubble></Fade> : ""}
-
+        <ChatBubble message={"While you wait, please know:"}></ChatBubble></Fade> 
+        : ""}
     {step >= 3 ?
       <Fade in={true} timeout={500}>
         <ChatBubble message={"The Nexus prides itself in its educational content for magic users."}></ChatBubble>
@@ -388,53 +375,44 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
       : ""}
     {step >= 5 ?
       <Fade in={true} timeout={500}>
-        <ChatBubble message={"At the Nexus, our teachers are carefully chosen for their teaching prowess"}>
-          </ChatBubble>
+        <ChatBubble message={"At the Nexus, our teachers are carefully chosen for their teaching prowess"}></ChatBubble>
       </Fade>
       : ""}
     {step >= 6 ?
       <Fade in={true} timeout={500}>
-        <ChatBubble message={"and their ability to produce educational content"}>
-          </ChatBubble>
+        <ChatBubble message={"and their ability to produce educational content"}></ChatBubble>
       </Fade>
       : ""}
     {step >= 7 ?
       <Fade in={true} timeout={500}>
-        <ChatBubble message={"under strict deadlines"}>
-          </ChatBubble>
+        <ChatBubble message={"under strict deadlines"}></ChatBubble>
       </Fade>
       : ""}
     {step >= 8 ?
-      <ChatBubble message={"..."}>
-        </ChatBubble> : ""
-    }
+      <ChatBubble message={"..."}></ChatBubble> 
+      : ""}
     {step >= 9 ?
-      <ChatBubble message={<><span>Sometimes our low-level teachers, like</span> <SockPuppetChip /></>}>
-      </ChatBubble> : ""
-    }
+      <ChatBubble message={<><span>Sometimes our low-level teachers, like</span> <SockPuppetChip /></>}></ChatBubble> 
+      : ""}
     {step >= 10 ?
-      <ChatBubble message={"may not always meet the expected deadlines"}>
-        </ChatBubble> : ""
-    }
+      <ChatBubble message={"may not always meet the expected deadlines"}></ChatBubble> 
+      : ""}
     {step >= 11 ?
-      <ChatBubble message={"that we strive for"}>
-        
-        </ChatBubble> : ""
-    }
+      <ChatBubble message={"that we strive for"}></ChatBubble> 
+      : ""}
     {step >= 12 ?
       <NewMessageNotification
         nexusSays={"Ah, here we go!"}
         from={<SockPuppetChip />}
-        onOpenClicked={() => { setMessageOpened(true) }}
-      /> : ""
-    }
-
-      {step < 13 ? <ChatBubble message={<CircularProgress style={{width:20, height:20}}></CircularProgress>}></ChatBubble> : ""}
-
-  </div> : <SockPuppetFirstLesson setCanContinue={props.setCanContinue} username={props.username} />
+        onOpenClicked={() => { setMessageOpened(true) }}/> 
+      : ""}
+    {step < 13 ? 
+      <ChatBubble message={<CircularProgress style={{width:20, height:20}}></CircularProgress>}></ChatBubble> 
+      : ""}
+  </div> 
+  : <SockPuppetFirstLessonPage setCanContinue={props.setCanContinue} username={props.username} />
   )
 }
-
 
 
 function Puzzle({ isComplete, code, hint }) {
@@ -486,7 +464,8 @@ function HelloWorldPuzzle(props) {
   )
 }
 
-function SockPuppetFirstLesson(props) {
+
+function SockPuppetFirstLessonPage(props) {
   let [videoFinished, setVideoFinished] = useState(false);
 
   /*
@@ -547,7 +526,7 @@ function SockPuppetFirstLesson(props) {
 }
 
 
-function Level1CompleteScreen(props) {
+function Level1CompletePage(props) {
 
   useEffect(() => {
     if (props.badges) {
@@ -567,7 +546,7 @@ function Level1CompleteScreen(props) {
 }
 
 
-const MeetYourTeacher = (props) => {
+function MeetYourTeacher (props) {
   let [username, setUsername] = useLocalStorage("user-name", undefined);
   let [usernameDecisionMade, setUsernameDecisionMade] = useState(undefined);
   let [teacherDecisionMade, setTeacherDecisionMade] = useState(undefined);
@@ -587,12 +566,12 @@ const MeetYourTeacher = (props) => {
   const [canContinue, setCanContinue] = useState(false)
 
   let parts =
-    [<UserNameForm setCanContinue={withConfetti(setCanContinue)} setUsername={setUsername} username={username} />,
-    <LightOrDark setCanContinue={withConfetti(setCanContinue)} />,
-    <ChooseYourTeacher setCanContinue={withConfetti(setCanContinue)} />,
-    <SockPuppetVideoIntro setCanContinue={withConfetti(setCanContinue)} username={username} />,
-    <PleaseWaitWhileSockPuppetCreatesContent setCanContinue={withConfetti(setCanContinue)} username={username} />,
-    <Level1CompleteScreen {...props} />]
+    [<UserNameFormPage setCanContinue={withConfetti(setCanContinue)} setUsername={setUsername} username={username} />,
+    <LightOrDarkPage setCanContinue={withConfetti(setCanContinue)} />,
+    <ChooseYourTeacherPage setCanContinue={withConfetti(setCanContinue)} />,
+    <SockPuppetVideoIntroPage  setCanContinue={withConfetti(setCanContinue)} username={username} />,
+    <PleaseWaitWhileSockPuppetCreatesContentPage setCanContinue={withConfetti(setCanContinue)} username={username} />,
+    <Level1CompletePage {...props} />]
 
   return (
     <>
@@ -623,7 +602,7 @@ function Level1(props) {
     return (
       <>
         <Fade in={true} timeout={1000}>
-          <TitleCard setTitleScreenComplete={ setTitleScreenComplete }/>
+          <TitleCardPage setTitleScreenComplete={ setTitleScreenComplete }/>
         </Fade>
         <LoginButton />
       </>
@@ -636,4 +615,4 @@ function Level1(props) {
     </Level>)
 }
 
-export default Level1
+export default Level1;

@@ -7,13 +7,11 @@ import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { SBS, Level, withConfetti, AccountCreationReminder } from '../Level';
 import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage } from '../../Widgets/NexusVoice';
 import { JSMirror } from '../../Widgets/Educational';
 import { Game } from '../../Widgets/react-gameoflife/Game.js';
-import { Stars } from '../Level20.js'; //Move this please
 import PianoSimulator from '../../Widgets/PianoSimulator.js';
 import NetworkDiseaseSimulator from '../../Widgets/NetworkDiseaseSimulator.js';
 import BlueBalls from '../../Widgets/BlueBalls.js';
@@ -491,21 +489,18 @@ function Page4(props) {
 }
   
 function bfs(first, rest) {
-
   let island = [first];
   let added = true;
   let unprocessed = [...rest]
 
   while (added) {
     added = false;
-
     let toAddToIsland = []
     let toRemoveFromUnprocessed = []
 
     for (let cell1 of unprocessed) {
       for (let cell2 of island) {
         if (cellsAdjacent(cell1, cell2)) {
-
           toAddToIsland.push(cell1);
           toRemoveFromUnprocessed.push(cell1);
           added = true;

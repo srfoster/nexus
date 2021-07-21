@@ -11,7 +11,6 @@ import Grow from '@material-ui/core/Grow';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MuiAlert from '@material-ui/lab/Alert';
-import AddBadgeOnRender from '../Badges/AddBadgeOnRender';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Fade from '@material-ui/core/Fade';
 import Confetti from 'canvas-confetti';
@@ -29,7 +28,6 @@ export const withConfetti = (f) => {
         spread: 70,
         origin: { y: 0.6 }
       })
-
     }
     f(bool)
   }
