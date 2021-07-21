@@ -16,10 +16,11 @@ import Level8 from "./NewUserFlow/Level8";
 import LastLevel from "./NewUserFlow/LastLevel";
 
 
+
 //Drafts...
 import Level20 from "./NewUserFlow/Level20";
 import Level57 from "./NewUserFlow/Level57";
-//import Level101 from "./NewUserFlow/Level101";
+import Level101 from "./NewUserFlow/Level101";
 
 import { useLocalStorage } from "../Util";
 
@@ -51,6 +52,7 @@ function SecretLevels(props) {
       darkMode={props.darkMode}
       setDarkMode={props.setDarkMode}
     />,
+    <Level101 />
   ]
 
   return <>
