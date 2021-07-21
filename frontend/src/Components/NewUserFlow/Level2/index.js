@@ -20,7 +20,7 @@ import BlueBalls from '../../Widgets/BlueBalls.js';
 import CasinoIcon from '@material-ui/icons/Casino';
 import ChatBubble from '../../Widgets/ChatBubble';
 
-//Questions we're asking (and answering) with our...
+//Questions we're asking (and answering) with our..
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
 //   What if ed tech were different?
 
@@ -160,48 +160,6 @@ const SockPuppetsMessage = (props) => {
   )
 }
 
-<<<<<<< HEAD
-//TODO: Flicker bug, real content
-function PleaseWaitWhileSockPuppetCreatesContent(props) {
-  var [step, setStep] = useState(props.contentComplete ? props.NexusStallingMessages.length : 0)
-
-  useEffect(() => {
-
-    if (!props.contentComplete) {
-      let total = 0
-      for (let i = 0; i < props.NexusStallingMessages.length; i++){
-        let e = props.NexusStallingMessages[i]
-        setTimeout(() => {
-          if (i == props.NexusStallingMessages.length - 1) {
-            setTimeout(()=>props.setContentComplete(true), (e.time || 2000))
-          }
-          setStep(i+1)
-        },  total)
-
-        total += (e.time || 2000)
-      }
-    }
-  }, [])
-
-  return (
-    <>
-      <div>
-        {props.NexusStallingMessages.slice(0, step).map((e, i) => {
-          let content = e.text || e
-          console.log("CONTENT", content)
-          return <div key={"content"+i}>{(typeof content == "string") ? (<Fade in={true}>
-            <ChatBubble message={content}></ChatBubble>
-          </Fade>)
-            : content}</div>
-        })}
-      </div>
-      { props.contentComplete ? props.SockPuppetMessage : <CircularProgress style={{ marginTop: 20 }} />}
-
-    </>
-  )
-}
-=======
->>>>>>> 43b49d6045ab07bd97f771f21d1f99bc1a9b01c4
 
 function Page1(props) {
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
@@ -918,5 +876,3 @@ Laurond: I have a character for you.. an individual who starts out in the lower 
 */
 
 export default Level2;
-
-

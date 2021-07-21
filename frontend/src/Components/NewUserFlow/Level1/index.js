@@ -386,58 +386,48 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
 
     {step >= 3 ?
       <Fade in={true} timeout={500}>
-        <Typography paragraph>
-          The Nexus prides itself in its educational content for magic users.
-          </Typography>
+        <ChatBubble message={"The Nexus prides itself in its educational content for magic users."}></ChatBubble>
       </Fade>
       : ""}
     {step >= 4 ?
       <Fade in={true} timeout={500}>
-        <Typography paragraph>
-          At the Nexus, your educational experience is our highest priority.
-          </Typography>
+        <ChatBubble message={"At the Nexus, your educational experience is our highest priority."}></ChatBubble>
       </Fade>
       : ""}
     {step >= 5 ?
       <Fade in={true} timeout={500}>
-        <Typography paragraph>
-          At the Nexus, our teachers are carefully chosen for their teaching prowess
-          </Typography>
+        <ChatBubble message={"At the Nexus, our teachers are carefully chosen for their teaching prowess"}>
+          </ChatBubble>
       </Fade>
       : ""}
     {step >= 6 ?
       <Fade in={true} timeout={500}>
-        <Typography paragraph>
-          and their ability to produce educational content
-          </Typography>
+        <ChatBubble message={"and their ability to produce educational content"}>
+          </ChatBubble>
       </Fade>
       : ""}
     {step >= 7 ?
       <Fade in={true} timeout={500}>
-        <Typography paragraph>
-          under strict deadlines
-          </Typography>
+        <ChatBubble message={"under strict deadlines"}>
+          </ChatBubble>
       </Fade>
       : ""}
     {step >= 8 ?
-      <Typography paragraph>
-        ...
-        </Typography> : ""
+      <ChatBubble message={"..."}>
+        </ChatBubble> : ""
     }
     {step >= 9 ?
-      <Typography component='span' paragraph>
-        Sometimes our low-level teachers, like <SockPuppetChip />
-      </Typography> : ""
+      <ChatBubble message={<><span>Sometimes our low-level teachers, like</span> <SockPuppetChip /></>}>
+      </ChatBubble> : ""
     }
     {step >= 10 ?
-      <Typography paragraph>
-        may not always meet the expected deadlines
-        </Typography> : ""
+      <ChatBubble message={"may not always meet the expected deadlines"}>
+        </ChatBubble> : ""
     }
     {step >= 11 ?
-      <Typography paragraph>
-        that we strive for
-        </Typography> : ""
+      <ChatBubble message={"that we strive for"}>
+        
+        </ChatBubble> : ""
     }
     {step >= 12 ?
       <NewMessageNotification
@@ -447,8 +437,7 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
       /> : ""
     }
 
-
-    {step < 13 ? <CircularProgress style={{ marginTop: 20 }} /> : ""}
+      {step < 13 ? <ChatBubble message={<CircularProgress style={{width:20, height:20}}></CircularProgress>}></ChatBubble> : ""}
 
   </div> : <SockPuppetFirstLesson setCanContinue={props.setCanContinue} username={props.username} />
   )
