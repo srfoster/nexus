@@ -18,6 +18,7 @@ import PianoSimulator from '../../Widgets/PianoSimulator.js';
 import NetworkDiseaseSimulator from '../../Widgets/NetworkDiseaseSimulator.js';
 import BlueBalls from '../../Widgets/BlueBalls.js';
 import CasinoIcon from '@material-ui/icons/Casino';
+import ChatBubble from '../../Widgets/ChatBubble';
 
 //Questions we're asking (and answering) with our...
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
@@ -214,8 +215,9 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
       <div>
         {props.NexusStallingMessages.slice(0, step).map((e, i) => {
           let content = e.text || e
+          console.log("CONTENT", content)
           return <div key={"content"+i}>{(typeof content == "string") ? (<Fade in={true}>
-            <Typography paragraph>{content}</Typography>
+            <ChatBubble message={content}></ChatBubble>
           </Fade>)
             : content}</div>
         })}

@@ -27,8 +27,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { MultipleChoiceQuestion, JSMirror } from '../../Widgets/Educational';
 import { NewMessageNotification, SockPuppetChip, StudentChip, SpinThen, FakeTeacherChip, Gong } from '../../Widgets/NexusVoice';
 import { Level, LoginButton, ContinueButton, withConfetti, SBS } from "../Level";
-import ChatLayout from '../../Widgets/NexusChatBubble';
-
+import ChatBubble from '../../Widgets/ChatBubble/';
 
 /*
 An educational text adventure that leads you on epic quest
@@ -378,14 +377,12 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
 
   return (!messageOpened ? <div>
     {step >= 1 ?
-      <Typography component='span' paragraph>
-        <SockPuppetChip /> is making video content!
-          </Typography>
+      <Typography paragraph><SockPuppetChip /><span>is making video content!</span></Typography>
       : ""}
     {step >= 2 ?
       <Fade in={true}>
-        <Typography paragraph>While you wait, please know:
-        </Typography></Fade> : ""}
+        <ChatBubble message={"While you wait, please know:"}>
+        </ChatBubble></Fade> : ""}
 
     {step >= 3 ?
       <Fade in={true} timeout={500}>
@@ -449,6 +446,7 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
         onOpenClicked={() => { setMessageOpened(true) }}
       /> : ""
     }
+
 
     {step < 13 ? <CircularProgress style={{ marginTop: 20 }} /> : ""}
 
@@ -536,7 +534,6 @@ function SockPuppetFirstLesson(props) {
     <SBS
       leftSideTitle={
         <>
-          <ChatLayout/>
           <Typography component='span' paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography >Subject: Hello, World!</Typography>
         </>}
@@ -660,6 +657,7 @@ const AccountCreationReminder = (props) => {
       transform: `translate(-${top}%, -${left}%)`,
     };
   }
+
 
   const useStyles = makeStyles((theme) => ({
     paper: {
