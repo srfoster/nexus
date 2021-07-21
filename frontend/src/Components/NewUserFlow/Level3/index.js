@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
 import CardContent from '@material-ui/core/CardContent';
-import { useLocalStorage } from "../../Util";
+import { useLocalStorage } from "../../../Util";
 import ReactPlayer from 'react-player'
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
-import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage } from '../Widgets/NexusVoice';
+import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage } from '../../Widgets/NexusVoice';
 import Typography from '@material-ui/core/Typography';
-import { SBS, Level, withConfetti } from './Level';
+import { SBS, Level, withConfetti } from '../Level';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 //Questions we're asking (and answering) with our...

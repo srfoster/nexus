@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Level, ContinueButton } from './Level';
+import { Level, ContinueButton } from '../Level';
 
 function Level7(props) {
   return (<Level number={7} subtitle={"...TBD..."}>
