@@ -11,6 +11,8 @@ import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Sound from 'react-sound';
+import { SBS, Level, withConfetti } from '../NewUserFlow/Level';
+import ReactPlayer from 'react-player'
 
 export function NewMessageNotification(props) {
   return(<Grid container spacing={1}>
@@ -67,4 +69,71 @@ export function SpinThen(props) {
       {showFeedback ? props.children : <CircularProgress></CircularProgress>}
     </>
   );
+}
+
+export function PleaseWaitWhileSockPuppetCreatesContent(props) {
+  var [step, setStep] = useState(props.contentComplete ? props.NexusStallingMessages.length : 0)
+
+  useEffect(() => {
+
+    if (!props.contentComplete) {
+      let total = 0
+      for (let i = 0; i < props.NexusStallingMessages.length; i++){
+        let e = props.NexusStallingMessages[i]
+        setTimeout(() => {
+          if (i == props.NexusStallingMessages.length - 1) {
+            setTimeout(()=>props.setContentComplete(true), (e.time || 2000))
+          }
+          setStep(i+1)
+        },  total)
+
+        total += (e.time || 2000)
+      }
+    }
+  }, [])
+
+  return (
+    <>
+      <div>
+        {props.NexusStallingMessages.slice(0, step).map((e, i) => {
+          let content = e.text || e
+          return <div key={"content"+i}>{(typeof content == "string") ? (<Fade in={true}>
+            <Typography paragraph>{content}</Typography>
+          </Fade>)
+            : content}</div>
+        })}
+      </div>
+      { props.contentComplete ? props.SockPuppetMessage : <CircularProgress style={{ marginTop: 20 }} />}
+
+    </>
+  )
+}
+
+export function OpenedMessage(props) {
+  const [videoFinished,setVideoFinished] = useState(false) 
+
+  return (<>
+    <SBS
+      leftSideTitle={<>
+        <Typography component='span' paragraph>From {props.from} to {props.to} </Typography>
+        <Typography>Subject: {props.subject}</Typography>
+      </>}
+      leftSide={
+        <div style={{ backgroundColor: "black" }}>
+          <ReactPlayer
+            width={"100%"}
+            url={props.videoUrl}
+            controls={true}
+            style={{}}
+            progressInterval={100}
+            onProgress={(p) => { }}
+            onEnded={() => {
+              setVideoFinished(true)
+            }}
+          />
+        </div>
+      }
+      rightSide={!videoFinished ? "" : props.text }
+    />
+  </>)
 }

@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { SBS, Level, withConfetti } from '../Level';
-import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification } from '../../Widgets/NexusVoice';
+import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage } from '../../Widgets/NexusVoice';
 import { JSMirror } from '../../Widgets/Educational';
 import { Game } from '../../Widgets/react-gameoflife/Game.js';
 import { Stars } from '../Level20.js'; //Move this please
@@ -70,34 +70,6 @@ function SockPuppetFavorInInventory(props) {
   </div>
 }
 
-function OpenedMessage(props) {
-  const [videoFinished,setVideoFinished] = useState(false) 
-
-  return (<>
-    <SBS
-      leftSideTitle={<>
-        <Typography component='span' paragraph>From {props.from} to {props.to} </Typography>
-        <Typography>Subject: {props.subject}</Typography>
-      </>}
-      leftSide={
-        <div style={{ backgroundColor: "black" }}>
-          <ReactPlayer
-            width={"100%"}
-            url={props.videoUrl}
-            controls={true}
-            style={{}}
-            progressInterval={100}
-            onProgress={(p) => { }}
-            onEnded={() => {
-              setVideoFinished(true)
-            }}
-          />
-        </div>
-      }
-      rightSide={!videoFinished ? "" : props.text }
-    />
-  </>)
-}
 
 //VIDEO SCRIPT
 // Thanking
@@ -188,6 +160,7 @@ const SockPuppetsMessage = (props) => {
   )
 }
 
+<<<<<<< HEAD
 //TODO: Flicker bug, real content
 function PleaseWaitWhileSockPuppetCreatesContent(props) {
   var [step, setStep] = useState(props.contentComplete ? props.NexusStallingMessages.length : 0)
@@ -227,6 +200,8 @@ function PleaseWaitWhileSockPuppetCreatesContent(props) {
     </>
   )
 }
+=======
+>>>>>>> 43b49d6045ab07bd97f771f21d1f99bc1a9b01c4
 
 function Page1(props) {
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
