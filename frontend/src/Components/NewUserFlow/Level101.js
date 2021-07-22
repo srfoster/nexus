@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Level, ContinueButton } from './Level';
 
 import Button from '@material-ui/core/Button';
@@ -11,7 +11,7 @@ import 'react-piano/dist/styles.css';
 import PropTypes from 'prop-types';
 import Soundfont from 'soundfont-player';
 
-import App from "../Widgets/minecraft-react/src/App" 
+import { Canvas, useFrame } from '@react-three/fiber'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const soundfontHostname = 'https://d1pzp51pvbm36p.cloudfront.net';
@@ -180,7 +179,7 @@ function MidiTest() {
   );
 }
 
-export default function Level101(props) {
+function Level101(props) {
   const [comboCorrect, setComboCorrect] = useState(false)
   const [guessed, setGuessed] = useState("")
   let correct = "123"
@@ -190,25 +189,45 @@ export default function Level101(props) {
   }
 
   return (<Level number={101} subtitle={"Room 101, by Stephen R. Foster"}>
-    <p>Welcome to Room 101</p>
-
-    <App></App>
-
-    <p>Guess the combo...</p>
-    <ButtonGroup size="small" aria-label="small outlined button group">
-      <Button onClick={() => setGuessed("")}>Reset</Button>
-      <Button onClick={() => add(1)}>1</Button>
-      <Button onClick={() => add(2)}>2</Button>
-      <Button onClick={() => add(3)}>3</Button>
-    </ButtonGroup>
-    {guessed !== correct ? "" :
-      <ContinueButton
-        onComplete={() => {
-          props.setBadges(props.badges.concat([{ name: props.badgeName }]));
-        }}
-      ></ContinueButton>}
-    <p>Current guess: { guessed }</p>
+     <BoxDemo />
   </Level>)
 }
 
-//export default Level101;
+
+function Box(props) {
+  // This reference will give us direct access to the THREE.Mesh object
+  const mesh = useRef()
+  // Set up state for the hovered and active state
+  const [hovered, setHover] = useState(false)
+  const [active, setActive] = useState(false)
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame((state, delta) => (mesh.current.rotation.x += 0.01))
+  // Return the view, these are regular Threejs elements expressed in JSX
+  return (
+    <mesh
+      {...props}
+      ref={mesh}
+      scale={active ? 1.5 : 1}
+      onClick={(event) => setActive(!active)}
+      onPointerOver={(event) => setHover(true)}
+      onPointerOut={(event) => setHover(false)}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+    </mesh>
+  )
+}
+
+function BoxDemo(props) {
+  return <Canvas>
+    <ambientLight />
+    <pointLight position={[10, 10, 10]} />
+    <Box position={[-1.2, 0, 0]} />
+    <Box position={[1.2, 0, 0]} />
+  </Canvas>
+}
+
+
+export default Level101;
+
+
+

@@ -15,7 +15,6 @@ const CELL_SIZE = 20;
 const WIDTH = 200;
 const HEIGHT = 200;
 
-
 function makeEmptyBoard() {
     let board = [];
     for (let y = 0; y < HEIGHT/CELL_SIZE; y++) {
@@ -223,7 +222,7 @@ export function Game(props) {
 
                         <ButtonGroup
                             orientation="vertical"
-                            color="primary"
+                            color="secondary"
                             aria-label="vertical outlined primary button group"
                         >
                             {props.noRun ? "" :

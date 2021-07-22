@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Level, ContinueButton } from './Level';
-import './Styles/Tetris.css'
+import { Level, ContinueButton } from '../Level';
+import '../Styles/Tetris.css'
 import {points , linesCleared} from 'react-tetris';
 const Tetris = require('react-tetris');
 

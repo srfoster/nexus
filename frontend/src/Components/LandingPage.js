@@ -7,20 +7,19 @@ import Container from '@material-ui/core/Container';
 
 import Level1 from "./NewUserFlow/Level1/"
 import Level2 from "./NewUserFlow/Level2/";
-import Level3 from "./NewUserFlow/Level3";
-import Level4 from "./NewUserFlow/Level4";
-import Level5 from "./NewUserFlow/Level5";
-import Level6 from "./NewUserFlow/Level6";
-import Level7 from "./NewUserFlow/Level7";
-import Level8 from "./NewUserFlow/Level8";
+import Level3 from "./NewUserFlow/Level3/";
+import Level4 from "./NewUserFlow/Level4/";
+import Level5 from "./NewUserFlow/Level5/";
+import Level6 from "./NewUserFlow/Level6/";
+import Level7 from "./NewUserFlow/Level7/";
+import Level8 from "./NewUserFlow/Level8/";
+import Level9 from "./NewUserFlow/Level9/";
+import Level10 from "./NewUserFlow/Level10/";
 import LastLevel from "./NewUserFlow/LastLevel";
-
-import Level101 from "./NewUserFlow/Level101";
-
 //Drafts...
 import Level20 from "./NewUserFlow/Level20";
 import Level57 from "./NewUserFlow/Level57";
-//import Level101 from "./NewUserFlow/Level101";
+import Level101 from "./NewUserFlow/Level101";
 
 import { useLocalStorage } from "../Util";
 
@@ -52,7 +51,7 @@ function SecretLevels(props) {
       darkMode={props.darkMode}
       setDarkMode={props.setDarkMode}
     />,
-    <Level101 />,
+    <Level101 />
   ]
 
   return <>
@@ -122,6 +121,16 @@ const LandingPage = (props) => {
       setBadges={setBadges}
       badges={badges}
       badgeName={"Finished:ch8:TBD"}
+    />,
+    <Level9
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch9:TBD"}
+    />,
+    <Level10
+      setBadges={setBadges}
+      badges={badges}
+      badgeName={"Finished:ch10:TBD"}
     />,
     <LastLevel setBadges={ setBadges } badges={ badges }/>
   ];

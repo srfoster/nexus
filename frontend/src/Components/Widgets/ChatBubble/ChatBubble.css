@@ -1,0 +1,55 @@
+.bubble-container{
+	margin: 15px 15px 35px 15px;
+	display:flex;
+	font-family: sans-serif;
+	font-size: 14px;
+	align-items: center;
+}
+
+.talk-bubble {
+  	display: inline-block;
+  	position: relative;
+	left: 20px;
+	top: 15px;
+	width: auto;
+	height: auto;
+	background-color: #616161;
+
+}
+
+.talk-text{
+	color:white;
+	padding: 1em;
+	text-align: left;
+	line-height: 1.5em;
+}
+
+.round{
+	border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;     
+}
+
+.tri-right.left-in:after{
+	content: ' ';
+	position: absolute;
+	width: 0;
+	height: 0;
+  	left: -20px;
+	right: auto;
+  	top: 10px;
+	bottom: auto;
+	border: 12px solid;
+	border-color: #616161 #616161 transparent transparent;
+}
+
+.img-circle {
+	position: relative;
+	border-radius: 50%;
+	background-color:#ffebf2;
+	height:42px;
+	width:42px;
+        max-width: 100%;
+        max-height: 100%;
+	content: url("http://localhost:3000/CodeFavicon.ico");
+}
