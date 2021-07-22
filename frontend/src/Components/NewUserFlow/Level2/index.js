@@ -7,19 +7,18 @@ import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import ReactPlayer from 'react-player'
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { SBS, Level, withConfetti } from '../Level';
+import { SBS, Level, withConfetti, AccountCreationReminder } from '../Level';
 import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage } from '../../Widgets/NexusVoice';
 import { JSMirror } from '../../Widgets/Educational';
 import { Game } from '../../Widgets/react-gameoflife/Game.js';
-import { Stars } from '../Level20.js'; //Move this please
 import PianoSimulator from '../../Widgets/PianoSimulator.js';
 import NetworkDiseaseSimulator from '../../Widgets/NetworkDiseaseSimulator.js';
 import BlueBalls from '../../Widgets/BlueBalls.js';
 import CasinoIcon from '@material-ui/icons/Casino';
+import ChatBubble from '../../Widgets/ChatBubble';
 
-//Questions we're asking (and answering) with our...
+//Questions we're asking (and answering) with our..
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
 //   What if ed tech were different?
 
@@ -490,21 +489,18 @@ function Page4(props) {
 }
   
 function bfs(first, rest) {
-
   let island = [first];
   let added = true;
   let unprocessed = [...rest]
 
   while (added) {
     added = false;
-
     let toAddToIsland = []
     let toRemoveFromUnprocessed = []
 
     for (let cell1 of unprocessed) {
       for (let cell2 of island) {
         if (cellsAdjacent(cell1, cell2)) {
-
           toAddToIsland.push(cell1);
           toRemoveFromUnprocessed.push(cell1);
           added = true;
@@ -865,6 +861,7 @@ export function Level2(props) {
             <ContinueButton key="continue-button" onClick={reallyContinue} />
             : ""}
         </CardActions>
+        <AccountCreationReminder />
       </Level>
     </>
   )
@@ -875,5 +872,3 @@ Laurond: I have a character for you.. an individual who starts out in the lower 
 */
 
 export default Level2;
-
-

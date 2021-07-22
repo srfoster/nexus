@@ -64,6 +64,7 @@ const SpellsApiService = {
     )
   },
   getUserById(id, page, search) {
+    console.log("TOKEN", TokenService.getAuthToken() )
     if (!TokenService.getAuthToken()) {
       return false
     }
