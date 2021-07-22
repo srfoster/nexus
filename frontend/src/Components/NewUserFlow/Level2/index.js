@@ -254,11 +254,7 @@ function Page2(props) {
         {
           text: <ChatBubble>Please continue enjoying the toy.</ChatBubble>,
           time: 10000
-        },
-        {
-          text: <ChatBubble>Sock Puppet will be disciplined for lateness in 10 seconds. Please continue enjoying your toy!</ChatBubble>,
-          time: 10000
-        },
+        }
       ]}
       SockPuppetMessage={<SockPuppetsMessage2 {...props} />}
     />
@@ -276,7 +272,7 @@ function Page3(props) {
       NexusStallingMessages={[
         <span><SockPuppetChip /> is making video content!</span>,
         {
-          text: <ChatBubble>My edutainment algorithms are still active.  I will now give you another educational mystery toy.</ChatBubble>,
+          text: <ChatBubble><br/>My edutainment algorithms are still active.  I will now give you another educational mystery toy to make your teacher's tardiness more enjoyable.</ChatBubble>,
           time: 3000
         },
         {
@@ -285,11 +281,11 @@ function Page3(props) {
             edges={[["Sock Puppet", "You!"], ["laurond", "kenzo"], ["kenzo", "fastsnake"], ["kenzo", "cringelord713"], ["cringelord713", "that_onion"], ["that_onion", "woogachaka"], ["that_onion", "Sock Puppet"]]}
             patientZero={ "laurond" }
           />,
-          time: 3000
+          time: 10000
         },
         {
-          text: <ChatBubble>Please keep enjoying the toy...</ChatBubble>,
-          time: 3000
+          text: <><ChatBubble>Please keep enjoying the toy...</ChatBubble></>,
+          time: 10000
         },
       ]}
       SockPuppetMessage={<SockPuppetsMessage3 {...props} />}
@@ -469,17 +465,48 @@ function Page4(props) {
       NexusStallingMessages={[
         <span><SockPuppetChip /> is making video content!</span>,
         {
-          text: <ChatBubble paragraph><br/>My edutainment algorithms are still active.  I will now give you another educational mystery toy.</ChatBubble>,
+          text: <ChatBubble><br/>My edutainment algorithms are still active.  I will now give you another educational mystery toy while we wait (again).</ChatBubble>,
           time: 3000
         },
         {
-          text: <PianoSimulator
-          />,
+          text: <PianoSimulator />,
+          time: 10000
+        },
+        {
+          text: <><br/><Typography>Please keep enjoying the toy...</Typography></>,
           time: 3000
         },
         {
-          text: "Please keep enjoying the toy...",
+          text: <><br/><Typography>If you grow tired of the toy, here is a fun fact...</Typography></>,
           time: 3000
+        },
+        {
+          text: <Card>
+            <CardContent>
+              <Typography
+                color="textSecondary" gutterBottom
+              >Did you know...</Typography>
+
+              In the current year, 2075, the Nexus provides 93.27% of all computer science education on the planet?
+            </CardContent>
+          </Card>,
+          time: 5000
+        },
+        {
+          text: <><br/><Typography>If you grow tired of the previous fun fact, here is another one...</Typography></>,
+          time: 3000
+        },
+        {
+          text: <><Card>
+            <CardContent>
+              <Typography
+                color="textSecondary" gutterBottom
+              >Did you know...</Typography>
+
+              A small group of cyber-criminals known as "the Wizards" attempted to infiltrate the Nexus in the year 2063.  They were caught (and disciplined) by the Nexus's state of the art security algorithms. 
+            </CardContent>
+          </Card><br/></>,
+          time: 10000
         },
       ]}
       SockPuppetMessage={<SockPuppetsMessage4 {...props} />}
@@ -615,13 +642,13 @@ function SockPuppetsMessage5(props) {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <ChatBubble paragraph>
-              sup bro.  try the puzzel below.  it's so hard it's siiiiick
+            <ChatBubble>
+              hello friend.  i am definite same sock puppet.  not replacement.  very disciplined.  try puzzel below.  it is solvable.  i do not lie.
             </ChatBubble>
             <Terminal
               commands={{
                 startPuzzle: {
-                  description: 'start the sick puzzle dudeeeee',
+                  description: 'start the very solvable puzzle',
                   usage: '',
                   fn: function () {
                     setPuzzleStarted(true);
@@ -671,25 +698,45 @@ function SockPuppetsMessage5(props) {
 }
 
 function Page5(props) {
-  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-5", false)
+  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-6", false)
 
   return (<>
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <span><SockPuppetChip /> is making video content!</span>,
+        <span><SockPuppetChip /> is being disciplined!</span>,
         {
-          text: <ChatBubble paragraph><br />My edutainment algorithms are still active.  I will now give you another educational mystery toy.</ChatBubble>,
+          text: <ChatBubble><br />My edutainment algorithms are still active.  I will now give you another educational mystery toy while Sock Puppet gets disciplined.</ChatBubble>,
           time: 3000
         },
         {
           text: <BlueBalls/>,
+          time: 10000
+        },
+        {
+          text: <><ChatBubble>Please keep enjoying the toy...</ChatBubble></>,
           time: 3000
         },
         {
-          text: "Please keep enjoying the toy...",
+          text: "If you grow tired of the toy, here is a fun announcement...",
           time: 3000
+        },
+        {
+          text: <Card>
+            <CardContent>
+              <Typography
+                color="textSecondary" gutterBottom
+              >It's official!</Typography>
+
+              <SockPuppetChip/> has been almost fully disciplined!
+            </CardContent>
+          </Card>,
+          time: 5000
+        },
+        {
+          text: <><br/><Typography paragraph>I predict you will find your newly disciplined teacher to be much faster!</Typography></>,
+          time: 5000
         },
       ]}
       SockPuppetMessage={<SockPuppetsMessage5 {...props} />}
