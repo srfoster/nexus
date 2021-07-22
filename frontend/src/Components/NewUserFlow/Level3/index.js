@@ -33,6 +33,7 @@ Stephen's widget wishlist:
 * Coding: Blockly, Runes, Dataflow... 
 * Pixel editor
 * Chat
+* Impress js
 */
 
 
