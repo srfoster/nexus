@@ -13,7 +13,6 @@ import Soundfont from 'soundfont-player';
 
 import { Canvas, useFrame } from '@react-three/fiber'
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -24,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-
 
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 const soundfontHostname = 'https://d1pzp51pvbm36p.cloudfront.net';
@@ -230,8 +228,6 @@ function BoxDemo(props) {
 
 
 export default Level101;
-
-
 
 
 

@@ -9,10 +9,26 @@ import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, P
 import Typography from '@material-ui/core/Typography';
 import { SBS, Level, withConfetti } from './Level';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import useStyles from '../../styles.js';
 
-//Questions we're asking (and answering) with our...
-//What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
-//   What if ed tech were different?
+//3d Stuff...
+import { Canvas, useFrame } from '@react-three/fiber'
+
+//Blockly...
+import { BlocklyWorkspace } from "react-blockly";
+import Blockly from "blockly";
+
+/*
+
+Stephen's widget wishlist:
+* Calendar?  Trello?  (Meta: time management of learning)
+* Flashcards?  (SRS)
+* Spreadsheet
+* Simulation / sugarscape / net logo
+* Coding: Blockly, Runes, Dataflow... 
+
+*/
+
 
 const ContinueButton = (props) => {
   return (
@@ -59,14 +75,62 @@ const SockPuppetsMessage = (props) => {
   )
 }
 
+function Box(props) {
+  // This reference will give us direct access to the THREE.Mesh object
+  const mesh = useRef()
+  // Set up state for the hovered and active state
+  const [hovered, setHover] = useState(false)
+  const [active, setActive] = useState(false)
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame((state, delta) => (mesh.current.rotation.x += 0.01))
+  // Return the view, these are regular Threejs elements expressed in JSX
+  return (
+    <mesh
+      {...props}
+      ref={mesh}
+      scale={active ? 1.5 : 1}
+      onClick={(event) => setActive(!active)}
+      onPointerOver={(event) => setHover(true)}
+      onPointerOut={(event) => setHover(false)}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+    </mesh>
+  )
+}
+
+function BoxDemo(props) {
+  return <Canvas>
+    <ambientLight />
+    <pointLight position={[10, 10, 10]} />
+    <Box position={[-1.2, 0, 0]} />
+    <Box position={[1.2, 0, 0]} />
+  </Canvas>
+}
+
 function Page1(props) {
+  const classes = useStyles();
+
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <span><SockPuppetChip level={2} /> welcomes you to his fork of the Nexus!<br/><br/></span>
+        <span><SockPuppetChip level={2} /> welcomes you to his fork of the Nexus!<br/><br/></span>,
+        <BoxDemo />,
+        <BlocklyWorkspace
+        toolboxConfiguration={{ kind: "categoryToolbox", contents: [ { kind: "category", name: "Logic", colour: "#5C81A6", contents: [ { kind: "block", type: "controls_if", } ], }, ] } }
+        className={classes.spellDetailsCodeMirror}
+        workspaceConfiguration={{
+          grid: {
+            spacing: 20,
+            length: 3,
+            colour: "#ccc",
+            snap: true,
+          },
+        }}
+        onWorkspaceChange={()=>{}}
+      />
       ]}
       SockPuppetMessage={<SockPuppetsMessage {...props} />}
     />
