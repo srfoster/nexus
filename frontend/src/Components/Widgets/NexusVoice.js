@@ -13,6 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Sound from 'react-sound';
 import { SBS, Level, withConfetti } from '../NewUserFlow/Level';
 import ReactPlayer from 'react-player'
+import ChatBubble from './ChatBubble';
 
 export function NewMessageNotification(props) {
   return(<Grid container spacing={1}>
@@ -98,12 +99,12 @@ export function PleaseWaitWhileSockPuppetCreatesContent(props) {
         {props.NexusStallingMessages.slice(0, step).map((e, i) => {
           let content = e.text || e
           return <div key={"content"+i}>{(typeof content == "string") ? (<Fade in={true}>
-            <Typography paragraph>{content}</Typography>
+            {content}
           </Fade>)
             : content}</div>
         })}
       </div>
-      { props.contentComplete ? props.SockPuppetMessage : <CircularProgress style={{ marginTop: 20 }} />}
+      { props.contentComplete ? props.SockPuppetMessage : <ChatBubble><CircularProgress style={{ width: 20, height: 20 }} /></ChatBubble>}
 
     </>
   )

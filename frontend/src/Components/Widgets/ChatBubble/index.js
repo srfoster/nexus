@@ -6,7 +6,7 @@ const ChatBubble = (props) => {
         <div className="bubble-container">
             <div className="img-circle"></div>
             <div className="talk-bubble round tri-right left-in">
-                <div className="talk-text">{props.message}</div>
+                <div className="talk-text">{props.message || props.children}</div>
             </div>
         </div>
     )

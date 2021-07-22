@@ -59,8 +59,6 @@ function Level6(props) {
     </React.Fragment>
   )
 };  
- 
-
 
 export default Level6;
 

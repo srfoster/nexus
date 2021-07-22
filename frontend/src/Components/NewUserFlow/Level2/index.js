@@ -1,12 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Terminal from 'react-console-emulator'
+import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { useLocalStorage } from "../../../Util";
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { SBS, Level, withConfetti, AccountCreationReminder } from '../Level';
 import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage } from '../../Widgets/NexusVoice';
@@ -15,8 +15,9 @@ import { Game } from '../../Widgets/react-gameoflife/Game.js';
 import PianoSimulator from '../../Widgets/PianoSimulator.js';
 import NetworkDiseaseSimulator from '../../Widgets/NetworkDiseaseSimulator.js';
 import BlueBalls from '../../Widgets/BlueBalls.js';
+import ChatBubble from '../../Widgets/ChatBubble/';
 import CasinoIcon from '@material-ui/icons/Casino';
-import ChatBubble from '../../Widgets/ChatBubble';
+
 
 //Questions we're asking (and answering) with our..
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
@@ -127,15 +128,15 @@ const SockPuppetsMessage = (props) => {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <Typography paragraph>
+            <ChatBubble paragraph>
               As I said in the video, just type <tt>help</tt> in the terminal below...
-          </Typography>
-            <Typography paragraph>
+          </ChatBubble>
+            <ChatBubble paragraph>
               I've put my favor in your inventory.  Go find it!
-          </Typography>
-            <Typography paragraph>
+          </ChatBubble>
+            <ChatBubble paragraph>
               ~Your Friend, Socky
-          </Typography>
+          </ChatBubble>
             <Terminal
               commands={{
                 inventory: {
@@ -158,7 +159,6 @@ const SockPuppetsMessage = (props) => {
   )
 }
 
-
 function Page1(props) {
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
   return (
@@ -166,17 +166,17 @@ function Page1(props) {
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <span><SockPuppetChip /> is making video content!<br/><br/></span>
-        , {
-          text: "Because Sock Puppet has been slower than average, my entertainment algorithms have been activated.",
-          time: 5000
-        },
+        <span><SockPuppetChip /> is making video content!</span>,
         {
-          text: "Here's a fun fact!",
+          text: <ChatBubble>Because Sock Puppet has been slower than average, my entertainment algorithms have been activated.</ChatBubble>,
           time: 2000
         },
+        { text: <ChatBubble>Here's a fun fact!</ChatBubble>,
+          time: 2000
+        },
+        
         {
-          text: <Card>
+          text: <Card style={{marginTop: 20, marginBottom:20}}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom
@@ -188,15 +188,15 @@ function Page1(props) {
           time: 5000
         },
         {
-          text: <span><br/><br/> <SockPuppetChip /> is <strong>still</strong> making video content...<br/><br/></span>,
+          text: <span><SockPuppetChip /> is <strong>still</strong> making video content...<br/><br/></span>,
           time: 2000
         },
         {
-          text: "Here's another fact!",
+          text: <ChatBubble>Here's another fact!</ChatBubble>,
           time: 1000
         },
         {
-          text: <Card>
+          text: <Card style={{marginTop: 20, marginBottom:20}}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom
@@ -208,15 +208,15 @@ function Page1(props) {
           time: 5000
         },
         {
-          text: <span><br/><br/> <SockPuppetChip /> is <strong>still</strong> making video content...<br/><br/></span>,
+          text: <span><SockPuppetChip /> is <strong>still</strong> making video content...<br/><br/></span>,
           time: 2000
         },
         {
-          text: "Here's another fact!",
+          text: <ChatBubble>Here's another fact!</ChatBubble>,
           time: 1000
         },
         {
-          text: <span>Ahh.  Never mind.  <SockPuppetChip /> is <strong>finally</strong> finished.<br/><br/></span>,
+          text: <ChatBubble>Ahh.  Never mind.  <SockPuppetChip /> is <strong>finally</strong> finished.</ChatBubble>,
           time: 1000
         },
       ]}
@@ -224,6 +224,7 @@ function Page1(props) {
     />
   )
 }
+
 
 function Page2(props) {  
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3", false)
@@ -235,11 +236,11 @@ function Page2(props) {
       NexusStallingMessages={[
         <span><SockPuppetChip /> is making video content!</span>,
         { 
-          text: "My entertainment algorithms tell me that humans like to play with toys.",
+          text: <ChatBubble>My entertainment algorithms tell me that humans like to play with toys.</ChatBubble>,
           time: 3000
         },
         {
-          text: "Here is a toy...",
+          text: <ChatBubble>Here is a toy...</ChatBubble>,
           time: 1000
         },
         {
@@ -247,15 +248,15 @@ function Page2(props) {
           time: 10000
         },
         {
-          text: <Typography paragraph style={{marginTop: 10}}>I hope you are enjoying the toy...</Typography>,
+          text: <ChatBubble>I hope you are enjoying the toy...</ChatBubble>,
           time: 10000
         },
         {
-          text: "Please continue enjoying the toy.",
+          text: <ChatBubble>Please continue enjoying the toy.</ChatBubble>,
           time: 10000
         },
         {
-          text: "Sock Puppet will be disciplined for lateness in 10 seconds. Please continue enjoying your toy!",
+          text: <ChatBubble>Sock Puppet will be disciplined for lateness in 10 seconds. Please continue enjoying your toy!</ChatBubble>,
           time: 10000
         },
       ]}
@@ -275,7 +276,7 @@ function Page3(props) {
       NexusStallingMessages={[
         <span><SockPuppetChip /> is making video content!</span>,
         {
-          text: <Typography paragraph><br/>My edutainment algorithms are still active.  I will now give you another educational mystery toy.</Typography>,
+          text: <ChatBubble>My edutainment algorithms are still active.  I will now give you another educational mystery toy.</ChatBubble>,
           time: 3000
         },
         {
@@ -287,7 +288,7 @@ function Page3(props) {
           time: 3000
         },
         {
-          text: "Please keep enjoying the toy...",
+          text: <ChatBubble>Please keep enjoying the toy...</ChatBubble>,
           time: 3000
         },
       ]}
@@ -321,13 +322,13 @@ function SockPuppetsMessage3(props) {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <Typography paragraph>
+            <ChatBubble paragraph>
               The Puzzle is to make someone named John sick on the 5th day.  There are many solutions.
-            </Typography>
-            <Typography paragraph>
+            </ChatBubble>
+            <ChatBubble paragraph>
               <br />
               ~Your Friend, Socky
-          </Typography>
+          </ChatBubble>
             <JSMirror code={code}
               scope={{
                 Toy: (props) => {
@@ -390,13 +391,13 @@ function SockPuppetsMessage4(props) {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <Typography paragraph>
+            <ChatBubble paragraph>
               The Puzzle is to add a button that plays a G-Chord
-            </Typography>
-            <Typography paragraph>
+            </ChatBubble>
+            <ChatBubble paragraph>
               <br />
               ~Your Friend, Socky
-          </Typography>
+          </ChatBubble>
             <JSMirror code={code}
               scope={{
                 Toy: (props) => {
@@ -469,7 +470,7 @@ function Page4(props) {
       NexusStallingMessages={[
         <span><SockPuppetChip /> is making video content!</span>,
         {
-          text: <Typography paragraph><br/>My edutainment algorithms are still active.  I will now give you another educational mystery toy.</Typography>,
+          text: <ChatBubble paragraph><br/>My edutainment algorithms are still active.  I will now give you another educational mystery toy.</ChatBubble>,
           time: 3000
         },
         {
@@ -615,9 +616,9 @@ function SockPuppetsMessage5(props) {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <Typography paragraph>
+            <ChatBubble paragraph>
               sup bro.  try the puzzel below.  it's so hard it's siiiiick
-            </Typography>
+            </ChatBubble>
             <Terminal
               commands={{
                 startPuzzle: {
@@ -680,7 +681,7 @@ function Page5(props) {
       NexusStallingMessages={[
         <span><SockPuppetChip /> is making video content!</span>,
         {
-          text: <Typography paragraph><br />My edutainment algorithms are still active.  I will now give you another educational mystery toy.</Typography>,
+          text: <ChatBubble paragraph><br />My edutainment algorithms are still active.  I will now give you another educational mystery toy.</ChatBubble>,
           time: 3000
         },
         {
@@ -754,29 +755,29 @@ const SockPuppetsMessage2 = (props) => {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <Typography paragraph>
+            <ChatBubble paragraph>
               The Puzzle is to interpret the cryptic message below.
-            </Typography>
+            </ChatBubble>
             <Card>
               <CardContent>
-                <Typography paragraph
+                <ChatBubble paragraph
                   color="textSecondary" gutterBottom >
-                  Cryptic message... </Typography>
-                <Typography paragraph>
-                  Alter the Spell for each Toy so that the color properties are <tt style={{ color: "#FF1493" }}><span> #FF1493 </span></tt> and <tt style={{ color: "#00BFFF" }}>#00BFFF</tt>.</Typography>
+                  Cryptic message... </ChatBubble>
+                <ChatBubble paragraph>
+                  Alter the Spell for each Toy so that the color properties are <tt style={{ color: "#FF1493" }}><span> #FF1493 </span></tt> and <tt style={{ color: "#00BFFF" }}>#00BFFF</tt>.</ChatBubble>
 
-                <Typography paragraph>
+                <ChatBubble paragraph>
                   Then, click <Button variant="outlined"><CasinoIcon /> Random</Button> and on each Toy at least once.
 
                   (If you can't figure out what the <Button variant="outlined">Next</Button> button does, don't worry.  That's for later puzzles!)
-            </Typography>
+            </ChatBubble>
               </CardContent>
             </Card>
-            <Typography paragraph>
+            <ChatBubble paragraph>
               <br />
               ~Your Friend, Socky
 
-          </Typography>
+          </ChatBubble>
             <JSMirror code={firstCode}
               scope={{
                 Toy: (props) => { 

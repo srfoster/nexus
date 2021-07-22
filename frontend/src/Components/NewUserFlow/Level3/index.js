@@ -9,7 +9,7 @@ import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, P
 import Typography from '@material-ui/core/Typography';
 import { SBS, Level, withConfetti } from '../Level';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import useStyles from '../../styles.js';
+import useStyles from '../../../styles.js';
 
 //3d Stuff...
 import { Canvas, useFrame } from '@react-three/fiber'
