@@ -128,15 +128,15 @@ const SockPuppetsMessage = (props) => {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <ChatBubble paragraph>
+            <Typography paragraph>
               As I said in the video, just type <tt>help</tt> in the terminal below...
-          </ChatBubble>
-            <ChatBubble paragraph>
+          </Typography>
+            <Typography paragraph>
               I've put my favor in your inventory.  Go find it!
-          </ChatBubble>
-            <ChatBubble paragraph>
+          </Typography>
+            <Typography paragraph>
               ~Your Friend, Socky
-          </ChatBubble>
+          </Typography>
             <Terminal
               commands={{
                 inventory: {
@@ -322,13 +322,12 @@ function SockPuppetsMessage3(props) {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <ChatBubble paragraph>
+            <Typography paragraph>
               The Puzzle is to make someone named John sick on the 5th day.  There are many solutions.
-            </ChatBubble>
-            <ChatBubble paragraph>
-              <br />
+            </Typography>
+            <Typography paragraph>
               ~Your Friend, Socky
-          </ChatBubble>
+          </Typography>
             <JSMirror code={code}
               scope={{
                 Toy: (props) => {
@@ -391,13 +390,13 @@ function SockPuppetsMessage4(props) {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <ChatBubble paragraph>
+            <Typography paragraph>
               The Puzzle is to add a button that plays a G-Chord
-            </ChatBubble>
-            <ChatBubble paragraph>
+            </Typography>
+            <Typography paragraph>
               <br />
               ~Your Friend, Socky
-          </ChatBubble>
+          </Typography>
             <JSMirror code={code}
               scope={{
                 Toy: (props) => {
@@ -755,29 +754,28 @@ const SockPuppetsMessage2 = (props) => {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <ChatBubble paragraph>
+            <Typography paragraph>
               The Puzzle is to interpret the cryptic message below.
-            </ChatBubble>
+            </Typography>
             <Card>
               <CardContent>
-                <ChatBubble paragraph
+                <Typography paragraph
                   color="textSecondary" gutterBottom >
-                  Cryptic message... </ChatBubble>
-                <ChatBubble paragraph>
-                  Alter the Spell for each Toy so that the color properties are <tt style={{ color: "#FF1493" }}><span> #FF1493 </span></tt> and <tt style={{ color: "#00BFFF" }}>#00BFFF</tt>.</ChatBubble>
-
-                <ChatBubble paragraph>
+                  Cryptic message... </Typography>
+                <Typography paragraph>
+                  Alter the Spell for each Toy so that the color properties are <tt style={{ color: "#FF1493" }}><span> #FF1493 </span></tt> and <tt style={{ color: "#00BFFF" }}>#00BFFF</tt>.
+                </Typography>
+                <Typography paragraph>
                   Then, click <Button variant="outlined"><CasinoIcon /> Random</Button> and on each Toy at least once.
 
                   (If you can't figure out what the <Button variant="outlined">Next</Button> button does, don't worry.  That's for later puzzles!)
-            </ChatBubble>
+            </Typography>
               </CardContent>
             </Card>
-            <ChatBubble paragraph>
+            <Typography paragraph>
               <br />
               ~Your Friend, Socky
-
-          </ChatBubble>
+          </Typography>
             <JSMirror code={firstCode}
               scope={{
                 Toy: (props) => { 
