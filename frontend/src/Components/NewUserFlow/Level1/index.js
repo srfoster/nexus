@@ -40,12 +40,8 @@ function Level1CompletePage(props) {
   );
 }
 
-
 function MeetYourTeacher (props) {
   let [username, setUsername] = useLocalStorage("user-name", undefined);
-  let [usernameDecisionMade, setUsernameDecisionMade] = useState(undefined);
-  let [teacherDecisionMade, setTeacherDecisionMade] = useState(undefined);
-  let [teacherReflectionDone, setTeacherReflectionDone] = useState(undefined);
 
   let reallyContinue = () => {
     if (currentPart + 1 != parts.length) {
