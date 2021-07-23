@@ -3,13 +3,10 @@ import CardContent from '@material-ui/core/CardContent';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import { useLocalStorage } from "../../../Util";
-import ReactPlayer from 'react-player'
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage } from '../../Widgets/NexusVoice';
-import Typography from '@material-ui/core/Typography';
 import { SBS, Level, withConfetti } from '../Level';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import useStyles from '../../../styles.js';
 import Slider from '@material-ui/core/Slider';
 
@@ -34,6 +31,7 @@ Stephen's widget wishlist:
 * Pixel editor
 * Chat
 * Impress js
+* Tensor Flow
 */
 
 

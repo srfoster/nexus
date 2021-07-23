@@ -9,12 +9,12 @@ import Fade from '@material-ui/core/Fade';
 import Typography from '@material-ui/core/Typography';
 
 //Pages & Puzzles
-import TitleCardPage from './TitleCardPage';
-import UsernameFormPage from './UsernameFormPage';
-import LightOrDarkPage from './LightOrDarkPage';
-import ChooseYourTeacherPuzzle from './ChooseYourTeacherPuzzle';
-import SockPuppetIntroPuzzle from './SockPuppetIntroPuzzle';
-import WaitingOnSockPuppetPage from './WaitingOnSockPuppetPage';
+import Step1TitleCard from './Step1TitleCard';
+import Step2UsernameForm from './Step2UsernameForm';
+import Step3LightOrDark from './Step3LightOrDark';
+import Step4ChooseYourTeacher from './Step4ChooseYourTeacher';
+import Step5SockPuppetIntro from './Step5SockPuppetIntro';
+import Step6WaitingOnSockPuppet from './Step6WaitingOnSockPuppet';
 
 /*
 An educational text adventure that leads you on epic quest
@@ -61,11 +61,11 @@ function MeetYourTeacher (props) {
   const [canContinue, setCanContinue] = useState(false)
 
   let parts =
-    [<UsernameFormPage setCanContinue={withConfetti(setCanContinue)} setUsername={setUsername} username={username} />,
-    <LightOrDarkPage setCanContinue={withConfetti(setCanContinue)} />,
-    <ChooseYourTeacherPuzzle setCanContinue={withConfetti(setCanContinue)} />,
-    <SockPuppetIntroPuzzle  setCanContinue={withConfetti(setCanContinue)} username={username} />,
-    <WaitingOnSockPuppetPage setCanContinue={withConfetti(setCanContinue)} username={username} />,
+    [<Step2UsernameForm setCanContinue={withConfetti(setCanContinue)} setUsername={setUsername} username={username} />,
+    <Step3LightOrDark setCanContinue={withConfetti(setCanContinue)} />,
+    <Step4ChooseYourTeacher setCanContinue={withConfetti(setCanContinue)} />,
+    <Step5SockPuppetIntro setCanContinue={withConfetti(setCanContinue)} username={username} />,
+    <Step6WaitingOnSockPuppet setCanContinue={withConfetti(setCanContinue)} username={username} />,
     <Level1CompletePage {...props} />]
 
   return (
@@ -97,7 +97,7 @@ function Level1(props) {
     return (
       <>
         <Fade in={true} timeout={1000}>
-          <TitleCardPage setTitleScreenComplete={ setTitleScreenComplete }/>
+          <Step1TitleCard setTitleScreenComplete={ setTitleScreenComplete }/>
         </Fade>
         <LoginButton />
       </>

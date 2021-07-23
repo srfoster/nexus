@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import { MultipleChoiceQuestion } from '../../Widgets/Educational';
 import Typography from '@material-ui/core/Typography';
 
-function ChooseYourTeacherPuzzle(props) {
+function Step4ChooseYourTeacher(props) {
   const [teacherAvailable, setTeacherAvailable] = React.useState(false);
 
   return (
@@ -39,4 +39,4 @@ function ChooseYourTeacherPuzzle(props) {
   );
 }
 
-export default ChooseYourTeacherPuzzle;
+export default Step4ChooseYourTeacher;

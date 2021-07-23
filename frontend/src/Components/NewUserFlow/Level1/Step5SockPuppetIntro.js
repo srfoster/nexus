@@ -5,7 +5,7 @@ import ReactPlayer from 'react-player'
 import { SBS } from "../Level";
 import Typography from '@material-ui/core/Typography';
 
-function SockPuppetIntroPuzzle(props) {
+function Step5SockPuppetIntro(props) {
   let [videoFinished, setVideoFinished] = useState(false);
   let [playing, setPlaying] = useState(false);
   let [messageOpened, setMessageOpened] = useState(false);
@@ -91,4 +91,4 @@ function SockPuppetVideoIntroText(props) {
   )
 }
 
-export default SockPuppetIntroPuzzle;
+export default Step5SockPuppetIntro;

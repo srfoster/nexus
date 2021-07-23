@@ -9,7 +9,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
-function UsernameFormPage(props) {
+function Step2UsernameForm(props) {
   const [checking, setChecking] = useState(false);
   const [available, setAvailable] = useLocalStorage("user-name-available", undefined);
   const [username, setUsernameLocal] = useState(props.username);
@@ -105,4 +105,4 @@ function UsernameFormPage(props) {
   </Grid>)
 }
 
-export default UsernameFormPage;
+export default Step2UsernameForm;

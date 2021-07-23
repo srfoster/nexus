@@ -4,7 +4,7 @@ import Fade from '@material-ui/core/Fade';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-function LightOrDarkPage(props) {
+function Step3LightOrDark(props) {
   let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
   //Add sounds effects to Light vs Dark mode
 
@@ -39,4 +39,4 @@ function LightOrDarkPage(props) {
   </>)
 }
 
-export default LightOrDarkPage;
+export default Step3LightOrDark;

@@ -57,7 +57,7 @@ function ThePuzzle(props) {
 }
 
 
-function HelloWorldPuzzle(props) {
+function Step7HelloWorldPuzzle(props) {
   let [videoFinished, setVideoFinished] = useState(false);
 
   /*
@@ -117,4 +117,4 @@ function HelloWorldPuzzle(props) {
   )
 }
 
-export default HelloWorldPuzzle;
+export default Step7HelloWorldPuzzle;

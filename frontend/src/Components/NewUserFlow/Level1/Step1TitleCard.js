@@ -7,7 +7,7 @@ import { ContinueButton } from "../Level";
 import Fade from '@material-ui/core/Fade';
 import Typography from '@material-ui/core/Typography';
 
-function TitleCardPage({ setTitleScreenComplete }) {
+function Step1TitleCard({ setTitleScreenComplete }) {
 	let [step, setStep] = useState(0);
 
 	let os_name = "Not known";
@@ -60,4 +60,4 @@ function TitleCardPage({ setTitleScreenComplete }) {
 	)
 }
 
-export default TitleCardPage;
+export default Step1TitleCard;
