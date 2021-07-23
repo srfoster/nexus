@@ -1,18 +1,39 @@
 import { useState, useEffect } from 'react';
-import Badge from '@material-ui/core/Badge';
-import MailIcon from '@material-ui/icons/Mail';
-import SchoolIcon from '@material-ui/icons/School';
 import Avatar from '@material-ui/core/Avatar';
-import Grid from '@material-ui/core/Grid';
-import Fade from '@material-ui/core/Fade';
-import Typography from '@material-ui/core/Typography';
+import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import ChatBubble from './ChatBubble';
 import Chip from '@material-ui/core/Chip';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Sound from 'react-sound';
-import { VideoAndPuzzleLayout } from '../NewUserFlow/Level';
+import Grid from '@material-ui/core/Grid';
+import Fade from '@material-ui/core/Fade';
+import MailIcon from '@material-ui/icons/Mail';
 import ReactPlayer from 'react-player'
-import ChatBubble from './ChatBubble';
+import SchoolIcon from '@material-ui/icons/School';
+import Sound from 'react-sound';
+import Typography from '@material-ui/core/Typography';
+
+export const VideoAndPuzzleLayout = (props) => {
+  return (
+    <>
+      <Card>
+        <CardHeader title={
+          <span style={{ fontSize: 16 }}>
+            {props.leftSideTitle}
+          </span>
+        }></CardHeader>
+        {props.leftSide}
+      </Card>
+      <Card style={{ height: "100%" }}>
+        <CardContent>
+          {props.rightSide}
+        </CardContent>
+      </Card>
+    </>)
+}
 
 export function NewMessageNotification(props) {
   return(<Grid container spacing={1}>

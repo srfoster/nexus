@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
 import Paper from '@material-ui/core/Paper';
@@ -125,25 +124,6 @@ export const HintButton = (props) => {
         {showHint ? props.hint : ""}</p>
     </>
   );
-}
-
-export const VideoAndPuzzleLayout = (props) => {
-  return (
-    <>
-      <Card>
-        <CardHeader title={
-          <span style={{ fontSize: 16 }}>
-            {props.leftSideTitle}
-          </span>
-        }></CardHeader>
-        {props.leftSide}
-      </Card>
-      <Card style={{ height: "100%" }}>
-        <CardContent>
-          {props.rightSide}
-        </CardContent>
-      </Card>
-    </>)
 }
 
 export const AccountCreationReminder = (props) => {

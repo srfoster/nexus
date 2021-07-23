@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MultipleChoiceQuestion } from '../../Widgets/Educational';
-import { NewMessageNotification, SockPuppetChip, StudentChip } from '../../Widgets/NexusVoice';
+import { NewMessageNotification, SockPuppetChip, StudentChip, VideoAndPuzzleLayout } from '../../Widgets/NexusVoice';
 import ReactPlayer from 'react-player'
-import { VideoAndPuzzleLayout } from "../Level";
 import Typography from '@material-ui/core/Typography';
 
 

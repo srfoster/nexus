@@ -3,8 +3,7 @@ import Button from '@material-ui/core/Button';
 import Fade from '@material-ui/core/Fade';
 import { JSMirror } from '../../Widgets/Educational';
 import ReactPlayer from 'react-player'
-import { VideoAndPuzzleLayout } from "../Level";
-import { SockPuppetChip, StudentChip } from '../../Widgets/NexusVoice';
+import { SockPuppetChip, StudentChip, VideoAndPuzzleLayout } from '../../Widgets/NexusVoice';
 import Typography from '@material-ui/core/Typography';
 
 function Puzzle({ isComplete, code, hint }) {
