@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import Fade from '@material-ui/core/Fade';
 import { JSMirror } from '../../Widgets/Educational';
 import ReactPlayer from 'react-player'
-import { SBS } from "../Level";
+import { VideoAndPuzzleLayout } from "../Level";
 import { SockPuppetChip, StudentChip } from '../../Widgets/NexusVoice';
 import Typography from '@material-ui/core/Typography';
 
@@ -83,7 +83,7 @@ function Step7HelloWorldPuzzle(props) {
   */
 
   return (
-    <SBS
+    <VideoAndPuzzleLayout
       leftSideTitle={
         <>
           <Typography component='span' paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>

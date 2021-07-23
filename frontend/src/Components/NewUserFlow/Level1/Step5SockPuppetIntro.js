@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { MultipleChoiceQuestion } from '../../Widgets/Educational';
 import { NewMessageNotification, SockPuppetChip, StudentChip } from '../../Widgets/NexusVoice';
 import ReactPlayer from 'react-player'
-import { SBS } from "../Level";
+import { VideoAndPuzzleLayout } from "../Level";
 import Typography from '@material-ui/core/Typography';
+
 
 function Step5SockPuppetIntro(props) {
   let [videoFinished, setVideoFinished] = useState(false);
@@ -12,7 +13,7 @@ function Step5SockPuppetIntro(props) {
 
   return (
     messageOpened ?
-      <SBS
+      <VideoAndPuzzleLayout
         leftSideTitle={<>
           <Typography component='span' paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography>Subject: Video Introduction!!</Typography>

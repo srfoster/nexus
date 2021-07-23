@@ -46,7 +46,7 @@ export const ContinueButton = (props) => {
   );
 }
 
-export function LoginButton() {
+export const LoginButton = () => {
 
   return (
     <a href="/login">
@@ -127,7 +127,7 @@ export const HintButton = (props) => {
   );
 }
 
-export const SBS = (props) => {
+export const VideoAndPuzzleLayout = (props) => {
   return (
     <>
       <Card>
