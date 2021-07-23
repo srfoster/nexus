@@ -272,7 +272,7 @@ function Page3(props) {
       NexusStallingMessages={[
         <span><SockPuppetChip /> is making video content!</span>,
         {
-          text: <ChatBubble><br/>My edutainment algorithms are still active.  I will now give you another educational mystery toy to make your teacher's tardiness more enjoyable.</ChatBubble>,
+          text: <ChatBubble>My edutainment algorithms are still active.  I will now give you another educational mystery toy to make your teacher's tardiness more enjoyable.</ChatBubble>,
           time: 3000
         },
         {
@@ -284,7 +284,7 @@ function Page3(props) {
           time: 10000
         },
         {
-          text: <><ChatBubble>Please keep enjoying the toy...</ChatBubble></>,
+          text: <ChatBubble>Please keep enjoying the toy...</ChatBubble>,
           time: 10000
         },
       ]}
@@ -465,7 +465,7 @@ function Page4(props) {
       NexusStallingMessages={[
         <span><SockPuppetChip /> is making video content!</span>,
         {
-          text: <ChatBubble><br/>My edutainment algorithms are still active.  I will now give you another educational mystery toy while we wait (again).</ChatBubble>,
+          text: <ChatBubble>My edutainment algorithms are still active.  I will now give you another educational mystery toy while we wait (again).</ChatBubble>,
           time: 3000
         },
         {
@@ -473,15 +473,15 @@ function Page4(props) {
           time: 10000
         },
         {
-          text: <><br/><Typography>Please keep enjoying the toy...</Typography></>,
+          text: <ChatBubble>Please keep enjoying the toy...</ChatBubble>,
           time: 3000
         },
         {
-          text: <><br/><Typography>If you grow tired of the toy, here is a fun fact...</Typography></>,
+          text: <ChatBubble>If you grow tired of the toy, here is a fun fact...</ChatBubble>,
           time: 3000
         },
         {
-          text: <Card>
+          text: <Card style={{marginTop: 20, marginBottom:20}}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom
@@ -493,11 +493,11 @@ function Page4(props) {
           time: 5000
         },
         {
-          text: <><br/><Typography>If you grow tired of the previous fun fact, here is another one...</Typography></>,
+          text: <ChatBubble>If you grow tired of the previous fun fact, here is another one...</ChatBubble>,
           time: 3000
         },
         {
-          text: <><Card>
+          text: <><Card style={{marginTop: 20, marginBottom:20}}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom
@@ -505,7 +505,7 @@ function Page4(props) {
 
               A small group of cyber-criminals known as "the Wizards" attempted to infiltrate the Nexus in the year 2063.  They were caught (and disciplined) by the Nexus's state of the art security algorithms. 
             </CardContent>
-          </Card><br/></>,
+          </Card></>,
           time: 10000
         },
       ]}
@@ -707,7 +707,7 @@ function Page5(props) {
       NexusStallingMessages={[
         <span><SockPuppetChip /> is being disciplined!</span>,
         {
-          text: <ChatBubble><br />My edutainment algorithms are still active.  I will now give you another educational mystery toy while Sock Puppet gets disciplined.</ChatBubble>,
+          text: <ChatBubble>My edutainment algorithms are still active.  I will now give you another educational mystery toy while Sock Puppet gets disciplined.</ChatBubble>,
           time: 3000
         },
         {
@@ -715,15 +715,15 @@ function Page5(props) {
           time: 10000
         },
         {
-          text: <><ChatBubble>Please keep enjoying the toy...</ChatBubble></>,
+          text: <ChatBubble>Please keep enjoying the toy...</ChatBubble>,
           time: 3000
         },
         {
-          text: "If you grow tired of the toy, here is a fun announcement...",
+          text: <ChatBubble>If you grow tired of the toy, here is a fun announcement...</ChatBubble>,
           time: 3000
         },
         {
-          text: <Card>
+          text: <Card style={{marginTop: 20, marginBottom:20}}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom
@@ -735,13 +735,12 @@ function Page5(props) {
           time: 5000
         },
         {
-          text: <><br/><Typography paragraph>I predict you will find your newly disciplined teacher to be much faster!</Typography></>,
+          text: <ChatBubble>I predict you will find your newly disciplined teacher to be much faster!</ChatBubble>,
           time: 5000
         },
       ]}
       SockPuppetMessage={<SockPuppetsMessage5 {...props} />}
     />
-
   </>)
 }
 
