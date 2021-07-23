@@ -20,6 +20,8 @@ import Hidden from '@material-ui/core/Hidden';
 import Modal from '@material-ui/core/Modal';
 import LoginForm from '../LoginForm';
 
+// Every component from this file is exported!
+
 export const withConfetti = (f) => {
   return (bool) => {
     if (bool) {
@@ -33,14 +35,16 @@ export const withConfetti = (f) => {
   }
 }
 
-const ContinueButton = (props) => {
+export const ContinueButton = (props) => {
   return (
     <Fade in={true} timeout={1000}>
-      <Button color="secondary" style={{ marginLeft: "auto", ...props.style }} onClick={props.onClick}>Next</Button>
+      <Button
+        color="secondary"
+        style={{ marginLeft: "auto", ...props.style }}
+        onClick={props.onClick}>Next</Button>
     </Fade>
   );
 }
-
 
 export function LoginButton() {
 
@@ -54,7 +58,7 @@ export function LoginButton() {
 }
 
 
-const Level = (props) => {
+export const Level = (props) => {
   return (
     <>
       <Card>
@@ -69,7 +73,7 @@ const Level = (props) => {
   );
 }
 
-const ShowAfter = (props) => {
+export const ShowAfter = (props) => {
   const [shown, setShown] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -110,7 +114,7 @@ const ShowAfter = (props) => {
   );
 }
 
-const HintButton = (props) => {
+export const HintButton = (props) => {
   const [showHint, setShowHint] = useState(false);
 
   return (
@@ -123,7 +127,7 @@ const HintButton = (props) => {
   );
 }
 
-const SBS = (props) => {
+export const SBS = (props) => {
   return (
     <>
       <Card>
@@ -142,7 +146,7 @@ const SBS = (props) => {
     </>)
 }
 
-const AccountCreationReminder = (props) => {
+export const AccountCreationReminder = (props) => {
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
@@ -247,5 +251,3 @@ const AccountCreationReminder = (props) => {
     </>
   )
 }
-
-export { Level, HintButton, ShowAfter, ContinueButton, SBS, AccountCreationReminder };

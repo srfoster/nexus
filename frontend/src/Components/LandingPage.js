@@ -96,6 +96,7 @@ const LandingPage = (props) => {
       badges={badges}
       badgeName={"Finished:ch3:Light-Mage-or-Dark-Mage"}
       gotoNextLevel={ gotoNextLevel }
+      gotoPrevLevel={ gotoPrevLevel }
     />,
     <Level4
       setBadges={setBadges}
