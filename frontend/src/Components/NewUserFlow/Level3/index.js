@@ -20,6 +20,7 @@ import Blockly from "blockly";
 //Runes...
 import Draggable from 'react-draggable';
 
+
 /*
 
 Stephen's widget wishlist:
@@ -30,9 +31,11 @@ Stephen's widget wishlist:
 * Coding: Blockly, Runes, Dataflow... 
 * Pixel editor
 * Chat
-* Impress js
-* Tensor Flow
+* Impress js - Hard to confine to one div...
+* Tensor Flow - What is an interesting model to use?  How to get it to work with react-tensorflow?
+* Konva
 */
+
 
 
 const ContinueButton = (props) => {
@@ -197,11 +200,11 @@ function Page1(props) {
         }}
         onWorkspaceChange={()=>{}}
         />,
-        <RuneDemo />
+        <RuneDemo />,
       ]}
       SockPuppetMessage={<SockPuppetsMessage {...props} />}
     />
-  )
+  ) 
 }
 
 function Page2(props) {

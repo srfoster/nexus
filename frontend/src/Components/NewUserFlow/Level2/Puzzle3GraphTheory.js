@@ -31,7 +31,7 @@ function SockPuppetsMessage3(props) {
         from={<SockPuppetChip />}
         to={<FakeTeacherChip name={props.username} level={1} />}
         subject={"Fundamentals of Magic, Part 2"}
-        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/2.3.mp4"
         text={
           <>
             <Typography paragraph>
