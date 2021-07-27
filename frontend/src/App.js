@@ -61,7 +61,7 @@ function App() {
 
   let path = window.location.pathname
 
-  return <p>Do I ork???</p>//<LandingPage isLoggedIn={isLoggedIn}></LandingPage >
+  return <LandingPage isLoggedIn={isLoggedIn}></LandingPage>
 
   /*
   return ( 

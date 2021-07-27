@@ -10,6 +10,7 @@ import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import StopIcon from '@material-ui/icons/Stop';
 import CasinoIcon from '@material-ui/icons/Casino';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import { spread } from "../../../Util";
 
 const CELL_SIZE = 20;
 const WIDTH = 200;
@@ -149,7 +150,7 @@ export function Game(props) {
     }
 
     function boardClicked(x,y) {
-        setCells([...cells,{x,y,color: props.color}])
+        setCells([spread(cells),{x,y,color: props.color}])
     }
 
     function cellClicked(x, y) {

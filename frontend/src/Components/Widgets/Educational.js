@@ -11,6 +11,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import { spread } from '../../Util';
+
 import {
     LiveProvider,
     LiveEditor,
@@ -45,12 +47,15 @@ export function MultipleChoiceQuestion(props) {
     }
   }
 
+
+
   return (
     <>
       <Fade in={true} timeout={1000}>
         <>
           <FormControl component="fieldset" error={error}
-            style={{ display: "flex", ...props.style }}>
+            style={{ display: "flex" }} //.assign(spread(props.style)) 
+          >
             <FormLabel component="legend">{props.question}</FormLabel>
             <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
               {props.answers.map((e, i) => { return <FormControlLabel value={"" + i} key={"answer" + i} control={<Radio />} label={e.text} /> })}
