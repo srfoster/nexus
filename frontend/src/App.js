@@ -6,28 +6,26 @@ import {Helmet} from "react-helmet";
 import AuthApiService from './Services/auth-api-service';
 // import IdleService from './Services/idle-service';
 import TokenService from './Services/token-service';
-import LoginForm from './Components/LoginForm';
-import SignupForm from './Components/SignupForm';
+//import LoginForm from './Components/LoginForm';
+//import SignupForm from './Components/SignupForm';
 import LandingPage from './Components/LandingPage';
-import SpellIndex from './Components/Dashboard/SpellIndex';
+//import SpellIndex from './Components/Dashboard/SpellIndex';
 import { ThemeProvider, createMuiTheme, CssBaseline } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import SpellDetails from './Components/Dashboard/SpellDetails';
-import Dashboard from './Components/Dashboard/Dashboard';
-import PublicSpells from './Components/PublicSpells';
-import UserProfile from './Components/UserProfile';
-import NotFound from './Components/NotFound';
+//import SpellDetails from './Components/Dashboard/SpellDetails';
+// import Dashboard from './Components/Dashboard/Dashboard';
+// import PublicSpells from './Components/PublicSpells';
+// import UserProfile from './Components/UserProfile';
+// import NotFound from './Components/NotFound';
 import SpellsApiService from './Services/spells-api-service';
-import Downloads from './Components/Dashboard/Downloads';
-import Follows from './Components/Dashboard/Follows';
-import Docs from './Components/Docs/Docs';
-import FabAddIcon from './Components/Dashboard/FabAddIcon';
-import { DarkModeContext } from './Components/Context';
+// import Downloads from './Components/Dashboard/Downloads';
+// import Follows from './Components/Dashboard/Follows';
+// import Docs from './Components/Docs/Docs';
+// import FabAddIcon from './Components/Dashboard/FabAddIcon';
+// import { DarkModeContext } from './Components/Context';
 import { useLocalStorage } from './Util';
 
 require('codemirror/mode/scheme/scheme');
-
-
 
 function App() {
   const paper = outerPaper();
@@ -61,7 +59,9 @@ function App() {
 
   let path = window.location.pathname
 
+  return <p>Do I ork???</p>//<LandingPage isLoggedIn={isLoggedIn}></LandingPage >
 
+  /*
   return ( 
     <DarkModeContext.Provider value={[darkMode,  setDarkMode]}>
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
@@ -149,6 +149,7 @@ function App() {
       </ThemeProvider>
     </DarkModeContext.Provider>
   );
+  */
 }
 
 const outerPaper = makeStyles((theme) => ({
