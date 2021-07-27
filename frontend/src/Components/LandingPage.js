@@ -166,7 +166,7 @@ const LandingPage = (props) => {
         maxWidth="sm">
         <div style={{padding: 10}}>
           <div onClick={(e) => {
-            if (e.ctrlKey || e.metaKey) {
+            if (e.altKey) {
               setShowSecrets(!showSecrets)
             }
           }}>
