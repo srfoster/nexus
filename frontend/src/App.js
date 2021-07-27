@@ -12,6 +12,7 @@ import LandingPage from './Components/LandingPage';
 import SpellIndex from './Components/Dashboard/SpellIndex';
 import { ThemeProvider, createMuiTheme, CssBaseline } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
 import SpellDetails from './Components/Dashboard/SpellDetails';
 import Dashboard from './Components/Dashboard/Dashboard';
 import PublicSpells from './Components/PublicSpells';
@@ -24,6 +25,8 @@ import Docs from './Components/Docs/Docs';
 import FabAddIcon from './Components/Dashboard/FabAddIcon';
 import { DarkModeContext } from './Components/Context';
 import { useLocalStorage } from './Util';
+
+import Level3 from './Components/NewUserFlow/Level3/index';
 
 require('codemirror/mode/scheme/scheme');
 
@@ -81,6 +84,10 @@ function App() {
               <Route
                 exact path={'/'}
                 component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage >}
+              />
+              <Route
+                exact path={'/level3'}
+                component={(props) => <Container maxWidth="sm"><Level3 /></Container>}
               />
               <Route
                 exact path={'*'}

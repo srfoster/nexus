@@ -9,6 +9,7 @@ import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, P
 import { SBS, Level, withConfetti } from '../Level';
 import useStyles from '../../../styles.js';
 import Slider from '@material-ui/core/Slider';
+import Typography from '@material-ui/core/Typography';
 
 //3d Stuff...
 import { Canvas, useFrame } from '@react-three/fiber'
@@ -19,6 +20,7 @@ import Blockly from "blockly";
 
 //Runes...
 import Draggable from 'react-draggable';
+import ChatBubble from '../../Widgets/ChatBubble/';
 
 
 /*
@@ -179,12 +181,15 @@ function RuneDemo(props){
 function Page1(props) {
   const classes = useStyles();
 
-  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
+  var [messageOpened, setMessageOpened] = useState(false) //useLocalStorage("sock-puppet-lesson-opened-2", false)
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
-      NexusStallingMessages={[
+      NexusStallingMessages={
+        [<Typography>Hello</Typography>, <Typography>How's the 3d world, buddy?</Typography>].map((e)=><ChatBubble message={e} />)
+        /*
+        [
         <span><SockPuppetChip level={2} /> welcomes you to his fork of the Nexus!<br/><br/></span>,
         <BoxDemo />,
         <BlocklyWorkspace
@@ -201,7 +206,8 @@ function Page1(props) {
         onWorkspaceChange={()=>{}}
         />,
         <RuneDemo />,
-      ]}
+      ]
+    */}
       SockPuppetMessage={<SockPuppetsMessage {...props} />}
     />
   ) 
