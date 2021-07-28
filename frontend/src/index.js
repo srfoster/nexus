@@ -2,19 +2,32 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, HashRouter } from 'react-router-dom'
 import './index.css';
-import App from './App';
+// import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {SpellContextProvider} from './Components/Context';
-// import { ThemeProvider, createMuiTheme, CssBaseline } from "@material-ui/core";
+import ReactPlayer from 'react-player'
+import { Container } from '@material-ui/core';
+// import Level3 from './Components/NewUserFlow/Level3';
 
+function App(props) {
+  return (
+    <Container maxWidth="sm">
+      <p>helloooooo</p>
+      <ReactPlayer
+        width={"100%"}
+        url={"https://codespells-org.s3.amazonaws.com/NexusVideos/2.3.ogv"}
+        controls={true}
+        style={{}}
+        progressInterval={100}
+        onProgress={(p) => { }}
+        onEnded={() => {
+        }}
+      />
 
-// const darkTheme = createMuiTheme({
-//   palette: {
-//     type: 'dark'
-//   }
-// }); 
+    </Container>
 
-// const lightTheme = createMuiTheme({})
+  )
+}
 
 ReactDOM.render(
   // <SpellContextProvider>
