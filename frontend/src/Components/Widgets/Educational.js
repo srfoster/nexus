@@ -46,16 +46,13 @@ export function MultipleChoiceQuestion(props) {
       }
     }
   }
-
-
-
+  
   return (
     <>
       <Fade in={true} timeout={1000}>
         <>
           <FormControl component="fieldset" error={error}
-            style={{ display: "flex" }} //.assign(spread(props.style)) 
-          >
+            style={Object.assign({ display: "flex" }, spread(props.style))}>
             <FormLabel component="legend">{props.question}</FormLabel>
             <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
               {props.answers.map((e, i) => { return <FormControlLabel value={"" + i} key={"answer" + i} control={<Radio />} label={e.text} /> })}
@@ -68,6 +65,7 @@ export function MultipleChoiceQuestion(props) {
     </>
   );
 }
+
 
 export function JSMirror(props) {
   const [code, setCode] = useState(props.value)

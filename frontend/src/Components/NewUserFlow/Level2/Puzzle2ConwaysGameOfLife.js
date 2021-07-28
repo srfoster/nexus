@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocalStorage } from "../../../Util";
+import { useLocalStorage, spread } from "../../../Util";
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -16,11 +16,13 @@ const SockPuppetsMessage2 = (props) => {
 
   let Toy = (props) => {
 
-    return <Game {...props}
-      setCells={(cells) => {
-        props.setCells(cells)
-      }}
-    />
+    return spread(
+      <Game
+        setCells={(cells) => {
+          props.setCells(cells)
+        }}
+      />,
+      props)
   }
 
   useEffect(() => {

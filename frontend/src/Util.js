@@ -8,8 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import useStyles from './styles.js';
 
 //Thanks Kenzo!! :)
-export function spread(obj){
-  var returnObj = {}
+export function spread(returnObj,obj){
   for (let key of Object.keys(obj)){
     returnObj[key] = obj[key]
   }

@@ -22,7 +22,7 @@ import SpellsApiService from './Services/spells-api-service';
 // import Follows from './Components/Dashboard/Follows';
 // import Docs from './Components/Docs/Docs';
 // import FabAddIcon from './Components/Dashboard/FabAddIcon';
-// import { DarkModeContext } from './Components/Context';
+import { DarkModeContext } from './Components/Context';
 import { useLocalStorage } from './Util';
 
 import Level3 from './Components/NewUserFlow/Level3/index';
@@ -61,7 +61,10 @@ function App() {
 
   let path = window.location.pathname
 
-  return <LandingPage isLoggedIn={isLoggedIn}></LandingPage>
+  return (
+    <DarkModeContext.Provider value={[darkMode, setDarkMode]}>
+      <LandingPage isLoggedIn={isLoggedIn}></LandingPage>
+    </DarkModeContext.Provider>)
 
   /*
   return ( 
