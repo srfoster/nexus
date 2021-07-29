@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import {MagicMirror, CastButton} from '../MagicMirror.js';
 import {linkTo, topDocLink} from './util.js';
 import AddBadgeOnRender from '../Badges/AddBadgeOnRender';
+import { spread } from '../../Util';
 
 // Chosen -> Initiate -> Novice -> Apprentice -> Adept 
 
@@ -170,11 +171,11 @@ function GettingStarted(props) {
           if (isStepSkipped(index)) {
             stepProps.completed = false;
           }
-          return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>{label}</StepLabel>
-            </Step>
-          );
+
+          let stepLabel = React.createElement(StepLabel, labelProps, label)
+          let step = React.createElement(Step, spread({ key: label }, stepProps), stepLabel)
+          return step;
+
         })}
       </Stepper>
       <div>

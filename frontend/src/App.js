@@ -1,3 +1,10 @@
+//Purpose: Do routing.  E.g. <Router><Switch />...</Router>
+//   /        -> Main story
+//   /spells  -> Backend for user's spells
+
+//   /level3  -> Main story continued in the 3D world download...
+//               (What gets loaded in Unreal's embedded Web Browser)
+
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import { Switch, Route, useHistory } from "react-router-dom";
@@ -6,18 +13,17 @@ import {Helmet} from "react-helmet";
 import AuthApiService from './Services/auth-api-service';
 // import IdleService from './Services/idle-service';
 import TokenService from './Services/token-service';
-import LoginForm from './Components/LoginForm';
-import SignupForm from './Components/SignupForm';
-import LandingPage from './Components/LandingPage';
-import SpellIndex from './Components/Dashboard/SpellIndex';
 import { ThemeProvider, createMuiTheme, CssBaseline } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+
 import SpellDetails from './Components/Dashboard/SpellDetails';
 import Dashboard from './Components/Dashboard/Dashboard';
 import PublicSpells from './Components/PublicSpells';
 import UserProfile from './Components/UserProfile';
+
 import NotFound from './Components/NotFound';
+
 import SpellsApiService from './Services/spells-api-service';
 import Downloads from './Components/Dashboard/Downloads';
 import Follows from './Components/Dashboard/Follows';
@@ -27,6 +33,11 @@ import { DarkModeContext } from './Components/Context';
 import { useLocalStorage } from './Util';
 
 import Level3 from './Components/NewUserFlow/Level3/index';
+
+import LoginForm from './Components/LoginForm';
+import SignupForm from './Components/SignupForm';
+import LandingPage from './Components/LandingPage';
+import SpellIndex from './Components/Dashboard/SpellIndex';
 
 require('codemirror/mode/scheme/scheme');
 
@@ -64,7 +75,6 @@ function App() {
 
   let path = window.location.pathname
 
-
   return ( 
     <DarkModeContext.Provider value={[darkMode,  setDarkMode]}>
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
@@ -87,7 +97,8 @@ function App() {
               />
               <Route
                 exact path={'/level3'}
-                component={(props) => <Container maxWidth="sm"><Level3 /></Container>}
+                component={(props) => <Container style={{float: "left", padding: 5}} maxWidth="sm"><Level3 />
+                </Container>}
               />
               <Route
                 exact path={'*'}
@@ -171,7 +182,3 @@ const outerPaper = makeStyles((theme) => ({
 }));
 
 export default App;
-
-
-
-

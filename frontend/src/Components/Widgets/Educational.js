@@ -18,6 +18,7 @@ import {
     LivePreview,
     LiveContext
 } from 'react-live'
+import { spread } from '../../Util';
 
 let useState = React.useState
 
@@ -50,7 +51,7 @@ export function MultipleChoiceQuestion(props) {
       <Fade in={true} timeout={1000}>
         <>
           <FormControl component="fieldset" error={error}
-            style={{ display: "flex", ...props.style }}>
+            style={spread({ display: "flex" }, props.style)}>
             <FormLabel component="legend">{props.question}</FormLabel>
             <RadioGroup aria-label="quiz" name="quiz" value={value} onChange={handleRadioChange}>
               {props.answers.map((e, i) => { return <FormControlLabel value={"" + i} key={"answer" + i} control={<Radio />} label={e.text} /> })}

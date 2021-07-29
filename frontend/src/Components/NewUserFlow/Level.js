@@ -18,6 +18,7 @@ import SignupForm from '../SignupForm';
 import Hidden from '@material-ui/core/Hidden';
 import Modal from '@material-ui/core/Modal';
 import LoginForm from '../LoginForm';
+import { spread } from '../../Util';
 
 // Every component from this file is exported!
 
@@ -39,7 +40,7 @@ export const ContinueButton = (props) => {
     <Fade in={true} timeout={1000}>
       <Button
         color="secondary"
-        style={{ marginLeft: "auto", ...props.style }}
+        style={spread({ marginLeft: "auto" }, props.style)}
         onClick={props.onClick}>Next</Button>
     </Fade>
   );
@@ -96,11 +97,11 @@ export const ShowAfter = (props) => {
   }, []);
 
   function GrowTransition(props) {
-    return <Grow {...props} />;
+    return React.createElement(Grow, props);
   }
 
   function Alert(props) {
-    return <MuiAlert elevation={6} variant="filled" {...props} />;
+    return React.createElement(MuiAlert, spread({elevation: 6, variant: "filled"}, props))
   }
 
   return (

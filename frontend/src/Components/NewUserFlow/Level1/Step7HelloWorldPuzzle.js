@@ -5,6 +5,7 @@ import { JSMirror } from '../../Widgets/Educational';
 import ReactPlayer from 'react-player'
 import { SockPuppetChip, StudentChip, VideoAndPuzzleLayout } from '../../Widgets/NexusVoice';
 import Typography from '@material-ui/core/Typography';
+import { spread } from '../../../Util';
 
 function Puzzle({ isComplete, code, hint }) {
   return <>
@@ -42,7 +43,10 @@ function ThePuzzle(props) {
     <Fade in={true} timeout={1000}>
       <Puzzle code={
         <JSMirror code={code}
-          scope={{ MagicButton: (userProps) => Magic({ ...userProps, ...props, setComplete, complete }) }}
+          scope={{
+            MagicButton: (userProps) =>
+              React.createElement(Magic, spread(userProps, spread(props, {setComplete, complete})))
+          }}
           onChange={(code) => {
             //Note: Could statically read code here...
             setCode(code);

@@ -32,7 +32,7 @@ import {Helmet} from "react-helmet";
 import { BlocklyWorkspace } from "react-blockly";
 import Blockly from "blockly";
 import "./customBlocks/custom_Blocks";
-
+import { spread } from "../../Util.js"
 
 let debounceTimer
 
@@ -266,7 +266,7 @@ export default function SpellDetails(props) {
       )
       .then((tag) => {
         setIsSaving(false)
-        setSpell({...spell, tags:[...spell.tags, tag]})
+        setSpell(spread(spell, {tags:[...spell.tags, tag]}))
       })
       .catch(errors => 
         console.log("add tag errors" , errors))
@@ -295,9 +295,9 @@ export default function SpellDetails(props) {
       )
       .then((tag) => {
         setIsSaving(false)
-        setSpell({...spell, tags: spell.tags.filter(t => {
+        setSpell(spread(spell, {tags: spell.tags.filter(t => {
           return t.name !== tag_name
-        })})
+        })}))
       })
       .catch(errors => 
         console.log("remove tag errors" , errors))
@@ -355,9 +355,9 @@ export default function SpellDetails(props) {
               label="Name"
               defaultValue={spell.name}
               onChange={(event) => {
-                setSpell({...spell, name: event.target.value})
+                setSpell(spread(spell, {name: event.target.value}))
                 setTimeout(() => {
-                  debounce(() => updateSpell({...spell, name: event.target.value}), debounceWait)
+                  debounce(() => updateSpell(spread(spell, {name: event.target.value})), debounceWait)
                 },500)
               }}
             />
@@ -382,8 +382,8 @@ export default function SpellDetails(props) {
                 <>
                 <Tooltip title="Public status" placement="top-end">
                   <IconButton  aria-label="isPublic" onClick={() => {
-                    setSpell({...spell, is_public: !spell.is_public})
-                    debounce(() => updateSpell({...spell, is_public: !spell.is_public}), debounceWait)
+                    setSpell(spread(spell, {is_public: !spell.is_public}))
+                    debounce(() => updateSpell(spread(spell, { is_public: !spell.is_public })), debounceWait)
                   }}>
                     {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}
                   </IconButton>
@@ -435,9 +435,9 @@ export default function SpellDetails(props) {
               label="Description"
               defaultValue={spell.description}
               onChange={(event) => {
-                setSpell({...spell, description: event.target.value})
+                setSpell(spread(spell, {description: event.target.value}))
                 setTimeout(() => {
-                  debounce(() => updateSpell({...spell, description: event.target.value}), debounceWait)
+                  debounce(() => updateSpell(spread(spell, {description: event.target.value})), debounceWait)
                 },500)
               }}
             />
@@ -543,10 +543,10 @@ export default function SpellDetails(props) {
                 styleActiveLine: true,
               }}
               onChange={(editor, data, value) => {
-                setSpell({...spell, text: value})
+                setSpell(spread(spell, {text: value}))
                 // setIsSaving(true)
                 setTimeout(() => {
-                  debounce(() => updateSpell({...spell, text: value}), debounceWait
+                  debounce(() => updateSpell(spread(spell, {text: value})), debounceWait
                 )}, 500)
               }}
             />

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocalStorage } from "../../../Util";
+import { useLocalStorage, spread } from "../../../Util";
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -82,12 +82,8 @@ function SockPuppetsMessage4(props) {
                           setNotes([])
                         }}
                       >{k}</Button>
-                    )}
-                    <PianoSimulator {...props}
-                      activeNotes={ notes }
-                      onNoteStarted={(midinumber) => {
-                      }}
-                    />
+                      )}
+                      {React.createElement(PianoSimulator, spread(props, { activeNotes: notes }))}
                   </>
                 }
               }}
@@ -128,7 +124,7 @@ function Puzzle4Piano(props) {
           time: 3000
         },
         {
-          text: <Card style={{marginTop: 20, marginBottom:20}}>
+          text: <Card style={{ marginTop: 20, marginBottom: 20 }}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom
@@ -144,19 +140,19 @@ function Puzzle4Piano(props) {
           time: 3000
         },
         {
-          text: <><Card style={{marginTop: 20, marginBottom:20}}>
+          text: <><Card style={{ marginTop: 20, marginBottom: 20 }}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom
               >Did you know...</Typography>
 
-              A small group of cyber-criminals known as "the Wizards" attempted to infiltrate the Nexus in the year 2063.  They were caught (and disciplined) by the Nexus's state of the art security algorithms. 
+              A small group of cyber-criminals known as "the Wizards" attempted to infiltrate the Nexus in the year 2063.  They were caught (and disciplined) by the Nexus's state of the art security algorithms.
             </CardContent>
           </Card></>,
           time: 10000
         },
       ]}
-      SockPuppetMessage={<SockPuppetsMessage4 {...props} />}
+      SockPuppetMessage={React.createElement(SockPuppetsMessage4, props)}
     />
 
   </>)

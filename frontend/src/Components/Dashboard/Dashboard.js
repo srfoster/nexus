@@ -20,6 +20,7 @@ import SpellsApiService from '../../Services/spells-api-service';
 // import useStyles from '../../styles.js';
 import { makeStyles} from '@material-ui/core/styles';
 import TokenService from '../../Services/token-service';
+import { spread } from '../../Util';
 
 function Dashboard(props) {
   const classes = useStyles();
@@ -139,13 +140,12 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
   },
-  toolbarIcon: {
+  toolbarIcon: spread({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
+  }, theme.mixins.toolbar),
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
@@ -190,12 +190,12 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(9),
     },
   },
-  appBarSpacer: {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'flex-end',
-  padding: theme.spacing(0, 1),
-  ...theme.mixins.toolbar,},
+  appBarSpacer: spread({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+  }, theme.mixins.toolbar),
   content: {
     flexGrow: 1,
     height: '100vh',

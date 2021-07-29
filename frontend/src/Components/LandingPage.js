@@ -17,9 +17,7 @@ import Level9 from "./NewUserFlow/Level9/";
 import Level10 from "./NewUserFlow/Level10/";
 import LastLevel from "./NewUserFlow/LastLevel";
 //Drafts...
-import Level20 from "./NewUserFlow/Level20";
 import Level57 from "./NewUserFlow/Level57";
-import Level101 from "./NewUserFlow/Level101";
 
 import { useLocalStorage } from "../Util";
 
@@ -39,11 +37,6 @@ function SecretLevels(props) {
   //const [selection, setSelection] = useState(0)
   console.log('landingpage:', props)
   let Secrets = [
-    <Level20
-      setBadges={props.setBadges}
-      badges={props.badges}
-      badgeName={"Finished:ch20:Terminal Button anyone?"}
-    />,
     <Level57
       setBadges={props.setBadges}
       badges={props.badges}
@@ -51,7 +44,6 @@ function SecretLevels(props) {
       darkMode={props.darkMode}
       setDarkMode={props.setDarkMode}
     />,
-    <Level101 />
   ]
 
   return <>

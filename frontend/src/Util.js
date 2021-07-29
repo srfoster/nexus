@@ -7,6 +7,22 @@ import clsx from 'clsx';
 import IconButton from '@material-ui/core/IconButton';
 import useStyles from './styles.js';
 
+//Thanks Kenzo!! :)
+export function spread(aObj,bObj){
+  let ret = {}
+
+  for (let key of Object.keys(aObj || {})){
+    ret[key] = aObj[key]
+  }
+
+  for (let key of Object.keys(bObj || {})){
+    ret[key] = bObj[key]
+  }
+
+  return ret
+}
+
+
 export function titleCase(str) {
   str = str.toLowerCase();
   str = str.split(' ');

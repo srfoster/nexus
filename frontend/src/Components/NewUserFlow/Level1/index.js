@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocalStorage } from "../../../Util";
+import { useLocalStorage, spread } from "../../../Util";
 import { AccountCreationReminder, ContinueButton, Level, LoginButton, withConfetti } from "../Level";
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
@@ -62,7 +62,8 @@ function MeetYourTeacher (props) {
     <Step4ChooseYourTeacher setCanContinue={withConfetti(setCanContinue)} />,
     <Step5SockPuppetIntro setCanContinue={withConfetti(setCanContinue)} username={username} />,
     <Step6WaitingOnSockPuppet setCanContinue={withConfetti(setCanContinue)} username={username} />,
-    <Level1CompletePage {...props} />]
+    React.createElement(Level1CompletePage, props)
+    ]
 
   return (
     <>
@@ -102,7 +103,7 @@ function Level1(props) {
 
   return (!titleScreenComplete ? <TitleScreen /> :
     <Level setBadges={props.setBadges} number={1} subtitle={title} >
-      <MeetYourTeacher key="meet-your-teacher" setTitle={setTitle} {...props} />
+      {React.createElement(MeetYourTeacher, spread({ key: "meet-your-teacher", setTitle: setTitle }, props))}
     </Level>)
 }
 

@@ -237,7 +237,7 @@ function Puzzle5Diabolical(props) {
           time: 5000
         },
       ]}
-      SockPuppetMessage={<SockPuppetsMessage5 {...props} />}
+      SockPuppetMessage={React.createElement(SockPuppetsMessage5, props)}
     />
   </>)
 }

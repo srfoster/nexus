@@ -20,10 +20,10 @@ import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import Spellcard from './Spellcard';
-
+import { spread } from '../Util';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return React.createElement(Slide, spread({direction: "up", ref: ref}, props))
 });
 
 export default function FollowCard(props) {

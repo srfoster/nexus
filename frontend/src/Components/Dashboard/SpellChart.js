@@ -18,7 +18,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Tooltip from '@material-ui/core/Tooltip';
 import SpellsApiService from '../../Services/spells-api-service';
-import {textTrim, SearchBar} from '../../Util.js'
+import {textTrim, SearchBar, spread} from '../../Util.js'
 import Pagination from '@material-ui/lab/Pagination';
 import TableContainer from '@material-ui/core/TableContainer';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -376,7 +376,7 @@ export default function SpellChart(props) {
                       id={spell.id} 
                       aria-label="isPublic" 
                       onClick={(event) => {
-                        updateSpell({...spell, is_public: !spell.is_public});
+                        updateSpell(spread(spell, { is_public: !spell.is_public }));
                         event.stopPropagation();
                     }}>
                       {spell.is_public ? <VisibilityIcon /> : <VisibilityOffIcon />}

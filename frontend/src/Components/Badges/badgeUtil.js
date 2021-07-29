@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import useStyles from '../../styles';
+import { spread } from "../../Util.js";
 
 //Badge success popup
 function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
+  return React.createElement(MuiAlert, spread({elevation:6, variant: "filled"}, props))
 }
 
 export function BadgeConfirmation(props) {

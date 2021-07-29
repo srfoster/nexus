@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocalStorage } from "../../../Util";
+import { useLocalStorage, spread } from "../../../Util";
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -16,11 +16,9 @@ const SockPuppetsMessage2 = (props) => {
 
   let Toy = (props) => {
 
-    return <Game {...props}
-      setCells={(cells) => {
-        props.setCells(cells)
-      }}
-    />
+    return React.createElement(Game, spread(props, {
+      setCells:
+        (cells) => { props.setCells(cells) }}))
   }
 
   useEffect(() => {
@@ -90,16 +88,16 @@ const SockPuppetsMessage2 = (props) => {
             <JSMirror code={firstCode}
               scope={{
                 Toy: (props) => { 
-                  return <Toy {...props} 
-                    noRun={true}
-                    cells={firstGameState}
-                    setCells={(cells) => {
+                  return React.createElement(Toy, spread(props, {
+                    noRun: true,
+                    cells: firstGameState,
+                    setCells: (cells) => {
                       if (cells.length !== 0) {
                         setFirstColor(cells[0].color)
                       }
                       setFirstGameState(cells)
-                    }}
-                  />
+                    }
+                  }))
                 }
               }}
 
@@ -109,16 +107,18 @@ const SockPuppetsMessage2 = (props) => {
               }} />
             <JSMirror code={secondCode}
               scope={{
-                Toy: (props) => <Toy {...props} 
-                  noRun={true}
-                  cells={secondGameState}
-                  setCells={(cells) => {
-                      if (cells.length !== 0) {
-                        setSecondColor(cells[0].color)
+                Toy: (props) =>
+                  React.createElement(Toy, spread(props,
+                    {
+                      noRun: true,
+                      cells: secondGameState,
+                      setCells: (cells) => {
+                        if (cells.length !== 0) {
+                          setSecondColor(cells[0].color)
+                        }
+                        setSecondGameState(cells)
                       }
-                    setSecondGameState(cells)
-                  }}
-                />
+                    }))
               }}
               onChange={(code) => {
                 setSecondCode(code)
@@ -141,7 +141,7 @@ function Puzzle2ConwaysGameOfLife(props) {
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
         <span><SockPuppetChip /> is making video content!</span>,
-        { 
+        {
           text: <ChatBubble>My entertainment algorithms tell me that humans like to play with toys.</ChatBubble>,
           time: 3000
         },
@@ -150,7 +150,7 @@ function Puzzle2ConwaysGameOfLife(props) {
           time: 1000
         },
         {
-          text: <><Game/></>,
+          text: <><Game /></>,
           time: 10000
         },
         {
@@ -162,7 +162,7 @@ function Puzzle2ConwaysGameOfLife(props) {
           time: 10000
         }
       ]}
-      SockPuppetMessage={<SockPuppetsMessage2 {...props} />}
+      SockPuppetMessage={React.createElement(SockPuppetsMessage2, props)}
     />
   )
 }

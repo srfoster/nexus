@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CardContent from '@material-ui/core/CardContent';
-import { useLocalStorage } from "../../Util";
+import { spread, useLocalStorage } from "../../Util";
 import { Level } from './Level';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
@@ -15,7 +15,7 @@ const ContinueButton = (props) => {
     <Fade in={true} timeout={1000}>
       <Button
         color="secondary"
-        style={{ marginLeft: "auto", ...props.style }}
+        style={spread({ marginLeft: "auto"}, props.style)}
         onClick={props.onClick}>Next</Button>
     </Fade>
   );

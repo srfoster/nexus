@@ -158,7 +158,7 @@ function Puzzle1TheFavor(props) {
           time: 1000
         },
       ]}
-      SockPuppetMessage={<SockPuppetsMessage {...props} />}
+      SockPuppetMessage={<SockPuppetsMessage /> /*<SockPuppetsMessage {...props} />*/}
     />
   )
 }

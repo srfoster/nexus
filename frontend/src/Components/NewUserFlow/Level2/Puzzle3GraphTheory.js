@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocalStorage } from "../../../Util";
+import { useLocalStorage, spread } from "../../../Util";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ChatBubble from '../../Widgets/ChatBubble/';
@@ -55,14 +55,14 @@ function SockPuppetsMessage3(props) {
 
 
                   return (<>
-                    { showSimulator ?
-                      <NetworkDiseaseSimulator {...props}
-                        onChange={(data) => {
-                          if (data.explored.indexOf("easteregg") >= 0 || (data.explored.indexOf("John") >= 0 && data.iteration == 5)) setCanContinue(true)
-
-                        }}
-                      /> :
-                      <Card style={{height: "525px"}}><CardContent><CircularProgress/></CardContent></Card>
+                    {showSimulator ?
+                      React.createElement(NetworkDiseaseSimulator,
+                        spread(props, {
+                          onChange: (data) => {
+                            if (data.explored.indexOf("easteregg") >= 0 || (data.explored.indexOf("John") >= 0 && data.iteration == 5)) setCanContinue(true)
+                          }
+                        })) :
+                      <Card style={{ height: "525px" }}><CardContent><CircularProgress /></CardContent></Card>
                     }
                   </>)
                 }
@@ -105,7 +105,7 @@ function Puzzle3GraphTheory(props) {
           time: 10000
         },
       ]}
-      SockPuppetMessage={<SockPuppetsMessage3 {...props} />}
+      SockPuppetMessage={ React.createElement(SockPuppetsMessage3, props) }
     />
 
   </>)
