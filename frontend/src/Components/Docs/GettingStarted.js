@@ -8,12 +8,11 @@ import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import {MagicMirror, CastButton} from '../MagicMirror.js';
+import {MagicMirror} from '../MagicMirror.js';
 import {linkTo, topDocLink} from './util.js';
 import AddBadgeOnRender from '../Badges/AddBadgeOnRender';
 import { spread } from '../../Util';
-
-// Chosen -> Initiate -> Novice -> Apprentice -> Adept 
+import { CastButton } from '../WorldWidgets/Util';
 
 const useStyles = makeStyles((theme) => ({
   root: {

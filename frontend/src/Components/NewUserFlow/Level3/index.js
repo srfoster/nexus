@@ -10,17 +10,20 @@ import { SBS, Level, withConfetti, ContinueButton } from '../Level';
 import useStyles from '../../../styles.js';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
+import { Game } from '../../Widgets/react-gameoflife/Game.js';
 
 // //3d Stuff...
-// import { Canvas, useFrame } from '@react-three/fiber'
+//import { Canvas, useFrame } from '@react-three/fiber'
 
 // //Blockly...
-// import { BlocklyWorkspace } from "react-blockly";
-// import Blockly from "blockly";
+import { BlocklyWorkspace } from "react-blockly";
+import Blockly from "blockly";
 
 // //Runes...
-// import Draggable from 'react-draggable';
+import Draggable from 'react-draggable';
 import ChatBubble from '../../Widgets/ChatBubble/';
+import { MagicMirror } from '../../MagicMirror';
+import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 
 
 // /*
@@ -74,98 +77,105 @@ const SockPuppetsMessage = (props) => {
   )
 }
 
-// function Box(props) {
-//   // This reference will give us direct access to the THREE.Mesh object
-//   const mesh = useRef()
-//   // Set up state for the hovered and active state
-//   const [hovered, setHover] = useState(false)
-//   const [active, setActive] = useState(false)
-//   const [speed, setSpeed] = useState(props.speed)
-//   // Subscribe this component to the render-loop, rotate the mesh every frame
-//   useFrame((state, delta) => {
-//     (mesh.current.rotation.x += mesh.current.speed)
-//   })
 
-//   useEffect(() => { mesh.current.speed = speed },[speed])
+/*
 
-//   // Return the view, these are regular Threejs elements expressed in JSX
-//   return (
-//     <mesh
-//       {...props}
-//       ref={mesh}
-//       scale={active ? 1.5 : 1}
-//       onClick={(event) => {
-//         setActive(!active)
-//       }}
-//       onPointerOver={(event) => setHover(true)}
-//       onPointerOut={(event) => setHover(false)}>
-//       <boxGeometry args={[1, 1, 1]} />
-//       <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-//     </mesh>
-//   )
-// }
+function Box(props) {
+  // This reference will give us direct access to the THREE.Mesh object
+  const meshRef = useRef()
+  // Set up state for the hovered and active state
+  const [hovered, setHover] = useState(false)
+  const [active, setActive] = useState(false)
+  const [speed, setSpeed] = useState(props.speed)
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame((state, delta) => {
+    (meshRef.current.rotation.x += meshRef.current.speed)
+  })
 
-// function BoxDemo(props) {
-//   const [sliderValue, setSliderValue] = useState(50);
-//   return <>
-//     <Canvas>
-//       <ambientLight />
-//       <pointLight position={[10, 10, 10]} />
-//       <Box speed={sliderValue / 1000} position={[-1.2, 0, 0]} />
-//       <Box speed={sliderValue / 500} position={[1.2, 0, 0]} />
-//     </Canvas>
-//     <Slider
-//       value={sliderValue}
-//       onChange={
-//         (e, newValue) => {
-//           setSliderValue(newValue)
-//         }
-//       }
-//       aria-labelledby="continuous-slider" />
-//   </>
-// }
+  useEffect(() => { meshRef.current.speed = speed },[speed])
+
+  // Return the view, these are regular Threejs elements expressed in JSX
+  return (
+    React.createElement('mesh',
+      spread(props,
+        {
+          ref: meshRef,
+          scale: active ? 1.5 : 1,
+          onClick: (event) => {
+            setActive(!active)
+          },
+          onPointerOver: (event) => setHover(true),
+          onPointerOut: (event) => setHover(false)
+        }),
+      [
+        <boxGeometry args={[1, 1, 1]} />,
+        <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+      ]
+    ))
+}
+
+function BoxDemo(props) {
+  const [sliderValue, setSliderValue] = useState(50);
+  return <>
+    <Canvas>
+      <ambientLight />
+      <pointLight position={[10, 10, 10]} />
+      <Box speed={sliderValue / 1000} position={[-1.2, 0, 0]} />
+      <Box speed={sliderValue / 500} position={[1.2, 0, 0]} />
+    </Canvas>
+    <Slider
+      value={sliderValue}
+      onChange={
+        (e, newValue) => {
+          setSliderValue(newValue)
+        }
+      }
+      aria-labelledby="continuous-slider" />
+  </>
+}
+
+*/
 
 
-// function Rune(props){
-//   return <Draggable
-//     grid={[25, 25]} >
-//     <div style={{
-//       margin: 0,
-//       padding: 0,
-//       width: 50,
-//       height: 50,
-//       backgroundColor: props.color,
-//       cursor: "pointer",
-//       display: "inline-block"
-//     }}>{props.children}</div>
-//   </Draggable>
-// }
+function Rune(props){
+  return <Draggable
+    grid={[25, 25]} >
+    <div style={{
+      margin: 0,
+      padding: 0,
+      width: 50,
+      height: 50,
+      backgroundColor: props.color,
+      cursor: "pointer",
+      display: "inline-block"
+    }}>{props.children}</div>
+  </Draggable>
+}
 
-// function Parens(props) {
-//   return <Draggable handle=".handle">
-//     <div style={{
-//       backgroundColor: "gray",
-//       cursor: "pointer",
-//       width: props.children.length*50, //What?
-//       height: 100,
-//       display: "inline-block"
-//     }}>
-//       <div className={"handle"}>Drag here</div>
-//       {props.children}
-//     </div>
-//   </Draggable>
-// }
+function Parens(props) {
+  return <Draggable handle=".handle">
+    <div style={{
+      backgroundColor: "gray",
+      cursor: "pointer",
+      width: props.children.length*50, //What?
+      height: 100,
+      display: "inline-block"
+    }}>
+      <div className={"handle"}>Drag here</div>
+      {props.children}
+    </div>
+  </Draggable>
+}
 
-// function RuneDemo(props){
-//   return <Card style={{height: 500}}><CardContent>
-//     <Rune color="blue">Water</Rune>
-//     <Parens>
-//       <Rune color="blue">Water</Rune>
-//       <Rune color="red">Fire</Rune>
-//     </Parens>
-//     <Rune color="black"><BoxDemo/></Rune>
-//   </CardContent></Card> 
-// }
+function RuneDemo(props){
+  return <Card style={{ height: 500 }}><CardContent>
+    <Rune color="blue">Water</Rune>
+    <Parens>
+      <Rune color="blue">Water</Rune>
+      <Rune color="red">Fire</Rune>
+    </Parens>
+  </CardContent></Card> 
+}
 
 function Page1(props) {
   const classes = useStyles();
@@ -176,27 +186,39 @@ function Page1(props) {
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={
-        [<Typography>Hello</Typography>, <Typography>How's the 3d world, buddy?</Typography>].map((e)=><ChatBubble message={e} />)
-        /*
         [
-        <span><SockPuppetChip level={2} /> welcomes you to his fork of the Nexus!<br/><br/></span>,
-        <BoxDemo />,
-        <BlocklyWorkspace
-        toolboxConfiguration={{ kind: "categoryToolbox", contents: [ { kind: "category", name: "Logic", colour: "#5C81A6", contents: [ { kind: "block", type: "controls_if", } ], }, ] } }
-        className={classes.spellDetailsCodeMirror}
-        workspaceConfiguration={{
-          grid: {
-            spacing: 20,
-            length: 3,
-            colour: "#ccc",
-            snap: true,
+          <CloseUIButton></CloseUIButton>, 
+          <span><SockPuppetChip /> welcomes you to his Nexus fork!</span>,
+          <ChatBubble><Typography>My personality algorithms have been adjusted by Sock Puppet</Typography></ChatBubble>,
+          <ChatBubble><Typography>For example, I no longer get frustrated when Sock Puppet takes too long.</Typography></ChatBubble>,
+          <ChatBubble><Typography>And I can be configured to deliver custom messages from Sock Puppet.  Like this one:</Typography></ChatBubble>,
+          {
+            text: <Card style={{ marginTop: 20, marginBottom: 20 }}>
+              <CardContent>
+                <Typography
+                  color="textSecondary" gutterBottom
+                >Did you know...</Typography>
+                <h1>Socks Rule!!!</h1>
+              </CardContent>
+            </Card>,
+            time: 5000
           },
-        }}
-        onWorkspaceChange={()=>{}}
-        />,
-        <RuneDemo />,
-      ]
-    */}
+          <ChatBubble><Typography>Or this one:</Typography></ChatBubble>,
+          {
+            text: <Card style={{ marginTop: 20, marginBottom: 20 }}>
+              <CardContent>
+                <Typography
+                  color="textSecondary" gutterBottom
+                >Did you know...</Typography>
+                
+              </CardContent>
+            </Card>,
+            time: 5000
+          },
+          <ChatBubble><Typography>But that's not why we're here.</Typography></ChatBubble>,
+        ]
+      }
+
       SockPuppetMessage={
         spread(<SockPuppetsMessage></SockPuppetsMessage>, props)
       }
