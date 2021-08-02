@@ -90,42 +90,47 @@ const LandingPage = (props) => {
       gotoNextLevel={ gotoNextLevel }
       gotoPrevLevel={ gotoPrevLevel }
     />,
-    <Level4
+    // <Level4
+    //   setBadges={setBadges}
+    //   badges={badges}
+    //   badgeName={"Finished:ch4:TBD"}
+    // />,
+    // <Level5
+    //   setBadges={setBadges}
+    //   badges={badges}
+    //   badgeName={"Finished:ch5:TBD"}
+    // />,
+    // <Level6
+    //   setBadges={setBadges}
+    //   badges={badges}
+    //   badgeName={"Finished:ch6:TBD"}
+    // />,
+    // <Level7
+    //   setBadges={setBadges}
+    //   badges={badges}
+    //   badgeName={"Finished:ch7:TBD"}
+    // />,
+    // <Level8
+    //   setBadges={setBadges}
+    //   badges={badges}
+    //   badgeName={"Finished:ch8:TBD"}
+    // />,
+    // <Level9
+    //   setBadges={setBadges}
+    //   badges={badges}
+    //   badgeName={"Finished:ch9:TBD"}
+    // />,
+    // <Level10
+    //   setBadges={setBadges}
+    //   badges={badges}
+    //   badgeName={"Finished:ch10:TBD"}
+    // />,
+    <LastLevel
       setBadges={setBadges}
       badges={badges}
-      badgeName={"Finished:ch4:TBD"}
-    />,
-    <Level5
-      setBadges={setBadges}
-      badges={badges}
-      badgeName={"Finished:ch5:TBD"}
-    />,
-    <Level6
-      setBadges={setBadges}
-      badges={badges}
-      badgeName={"Finished:ch6:TBD"}
-    />,
-    <Level7
-      setBadges={setBadges}
-      badges={badges}
-      badgeName={"Finished:ch7:TBD"}
-    />,
-    <Level8
-      setBadges={setBadges}
-      badges={badges}
-      badgeName={"Finished:ch8:TBD"}
-    />,
-    <Level9
-      setBadges={setBadges}
-      badges={badges}
-      badgeName={"Finished:ch9:TBD"}
-    />,
-    <Level10
-      setBadges={setBadges}
-      badges={badges}
-      badgeName={"Finished:ch10:TBD"}
-    />,
-    <LastLevel setBadges={ setBadges } badges={ badges }/>
+      badgeName={"Finished:ch11:To-Be-Continued"}
+      gotoPrevLevel={gotoPrevLevel}
+    />
   ];
 
   useEffect(() => {

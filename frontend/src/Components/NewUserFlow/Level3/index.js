@@ -305,7 +305,7 @@ export function Level3(props) {
                 setCanContinue(false);
               }
             }}>Back</Button>
-          <ContinueButton onClick={() => setCurrentPart(currentPart + 1)} />
+          <ContinueButton onClick={() => props.gotoNextLevel()} />
         </CardActions>
       </Level>
     </>
