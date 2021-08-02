@@ -12,6 +12,8 @@ import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import { Game } from '../../Widgets/react-gameoflife/Game.js';
 
+import { defineStatementRacketBlock, defineRacketBlock } from "../../Dashboard/customBlocks/custom_Blocks.js";
+
 // //3d Stuff...
 //import { Canvas, useFrame } from '@react-three/fiber'
 
@@ -177,8 +179,104 @@ function RuneDemo(props){
   </CardContent></Card> 
 }
 
-function Page1(props) {
+function BlocklyPuzzle() {
   const classes = useStyles();
+  const [blockIds, setBlockIds] = useState([]);
+  
+  useEffect(
+    () => {
+      setBlockIds([
+        defineStatementRacketBlock(
+          {
+            blockName: "build-sphere",
+            inputs: ["position 3#s", "radius #"],
+            output: false,
+            doParens: true,
+            doBlockName: true,
+            color: 230
+          }
+        ),
+        defineStatementRacketBlock(
+          {
+            blockName: "3#s",
+            inputs: ["x #", "y #", "z #"],
+            output: "3#s",
+            doParens: true,
+            doBlockName: true,
+            color: 100 
+          }
+        ),
+        defineRacketBlock(
+          {
+            blockName: "#",
+            inputs: [""],
+            output: "#",
+            doParens: false,
+            doBlockName: false,
+            color: 80
+          }
+        ),
+        defineStatementRacketBlock(
+          {
+            blockName: "+",
+            inputs: ["#", "#"],
+            output: "#",
+            doParens: true,
+            doBlockName: true,
+            color: 80
+          }
+        ),
+      ])
+    },
+    [])
+
+  return (!blockIds ? "" : <BlocklyWorkspace
+            toolboxConfiguration={{
+              kind: "categoryToolbox",
+              contents: [
+                {
+                  kind: "category",
+                  name: "Math",
+                  colour: "#5CA65C",
+                  contents: [
+                    {
+                      kind: "block",
+                      type: "math_number",
+                    },
+                  ],
+                },
+                {
+                  kind: "category",
+                  name: "Spells",
+                  colour: "#c1ba31",
+                  contents: 
+                    blockIds.map((i) => {
+                      return { kind: "block", type: i }
+                    })
+                },
+              ],
+            }
+            }
+            initialXml={'<xml xmlns="http://www.w3.org/1999/xhtml"></xml>'}
+            className={classes.spellDetailsCodeMirror}
+            workspaceConfiguration={{
+              grid: {
+                spacing: 20,
+                length: 3,
+                colour: "#ccc",
+                snap: true,
+              },
+            }}
+            onWorkspaceChange={(workspace) => {
+              const code = Blockly.JavaScript.workspaceToCode(workspace);
+
+              console.log(code)
+            }}
+            onXmlChange={() => { }}
+          />)
+}
+
+function Page1(props) {
 
   var [messageOpened, setMessageOpened] = useState(false) //useLocalStorage("sock-puppet-lesson-opened-2", false)
   return (
@@ -188,6 +286,11 @@ function Page1(props) {
       NexusStallingMessages={
         [
           <CloseUIButton></CloseUIButton>, 
+          <MagicMirror code={ "(build-sphere (vec -484 1818 6166) 100)" }></MagicMirror>,
+
+          <BlocklyPuzzle />
+          ,
+
           <span><SockPuppetChip /> welcomes you to his Nexus fork!</span>,
           <ChatBubble><Typography>My personality algorithms have been adjusted by Sock Puppet</Typography></ChatBubble>,
           <ChatBubble><Typography>For example, I no longer get frustrated when Sock Puppet takes too long.</Typography></ChatBubble>,

@@ -14,6 +14,16 @@
 (define-namespace-anchor a)
 (define ns (namespace-anchor->namespace a))
 
+(define (build-sphere pos r)
+  (displayln (->unreal-value pos))
+  (unreal-eval-js 
+   @unreal-value{
+ var C = Root.ResolveClass('JSVoxelManager');
+ var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+ o.BuildSphere(@(->unreal-value pos), @(->unreal-value r))
+ })
+  )
+
 (define (close-ui)
   (unreal-eval-js 
    @unreal-value{
@@ -23,7 +33,10 @@
  }))
 
 (define (should-spawn-orb? s)
-  (not (string-contains? s "close-ui")))
+  (and 
+   (not (string-contains? s "close-ui"))
+   (not (string-contains? s "build-sphere"))
+   ))
 
 ;Change start-ui name to start-websocket-server
 (define (start-ui)
@@ -42,45 +55,47 @@
                     (define msg (ws-recv c #:payload-type 'text))
                     (displayln (~a "Got: " msg))
                     
-                    (if (not (should-spawn-orb? msg))
-                        (let()
-                          (eval (read (open-input-string (~a "(let ()" msg ")")))     ns))
-                        (let () 
-                          
-                          (define (r)
-                            (random -100 100))
-                          
-                          (define (random-vec)
-                            (vec (r) (r) (r)))
-                          
-                          (define character 
-                            (unreal-eval-js (find-actor ".*OrbCharacter.*")))
-                          
-                          (define character-location 
-                            (unreal-eval-js (locate character)))
-                          
-                          (define loc
-                            (+vec (random-vec)
-                                  character-location))  
-                          
-                          (define (spawn-other-orb loc)
-                            @unreal-value{
+                    (when (not (eof-object? msg))
+                        (if (not (should-spawn-orb? msg))
+                            (let() 
+                              (with-handlers ([exn:fail? (lambda (e) (displayln e))])
+                                  (eval (read (open-input-string (~a "(let ()" msg ")"))) ns)))
+                            (let () 
+                              
+                              (define (r)
+                                (random -100 100))
+                              
+                              (define (random-vec)
+                                (vec (r) (r) (r)))
+                              
+                              (define character 
+                                (unreal-eval-js (find-actor ".*OrbCharacter.*")))
+                              
+                              (define character-location 
+                                (unreal-eval-js (locate character)))
+                              
+                              (define loc
+                                (+vec (random-vec)
+                                      character-location))  
+                              
+                              (define (spawn-other-orb loc)
+                                @unreal-value{
                                 var Spawn = Root.ResolveClass('PickupMini');
                                 var spawn = new Spawn(GWorld, @(->unreal-value loc));
                                 spawn.SetText("");
                                 
                                 return spawn;
                                 })
-                          
-                          (define other (unreal-eval-js (spawn-other-orb loc)))
-                          
-                          (add-spawn! (hash-ref other 'id) other)
-                          
-                          (run-spell (hash-ref other 'id)
-                                     (read (open-input-string (~a "(let ()" msg ")")))
-                                     '()))
-                          
-                          )
+                              
+                              (define other (unreal-eval-js (spawn-other-orb loc)))
+                              
+                              (add-spawn! (hash-ref other 'id) other)
+                              
+                              (run-spell (hash-ref other 'id)
+                                         (read (open-input-string (~a "(let ()" msg ")")))
+                                         '()))
+                            
+                            ))
                         
                         
                         (ws-send! c msg)
