@@ -9,20 +9,28 @@
          unreal/libs/basic-types
          unreal/external-runtime/main
          
-         orb-game-1/lang)
+         orb-game-1/lang
+         
+         json)
 
 (define-namespace-anchor a)
 (define ns (namespace-anchor->namespace a))
 
 (define (build-sphere pos r)
-  (displayln (->unreal-value pos))
   (unreal-eval-js 
    @unreal-value{
  var C = Root.ResolveClass('JSVoxelManager');
  var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
- o.BuildSphere(@(->unreal-value pos), @(->unreal-value r))
- })
-  )
+ return o.BuildSphere(@(->unreal-value pos), @(->unreal-value r))
+ }))
+
+(define (check-voxels [pos1 (vec -484 1818 6166)] [pos2 (vec -484 1818 9166)])
+  (unreal-eval-js 
+   @unreal-value{
+ var C = Root.ResolveClass('JSVoxelManager');
+ var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+ return o.VoxelsFromPositions(@(->unreal-value pos1), @(->unreal-value pos2))
+ }))
 
 (define (close-ui)
   (unreal-eval-js 
@@ -36,6 +44,7 @@
   (and 
    (not (string-contains? s "close-ui"))
    (not (string-contains? s "build-sphere"))
+   (not (string-contains? s "check-voxels"))
    ))
 
 ;Change start-ui name to start-websocket-server
@@ -59,7 +68,10 @@
                         (if (not (should-spawn-orb? msg))
                             (let() 
                               (with-handlers ([exn:fail? (lambda (e) (displayln e))])
-                                  (eval (read (open-input-string (~a "(let ()" msg ")"))) ns)))
+                                  (define ret 
+                                    (eval (read (open-input-string (~a "(let ()" msg ")"))) ns))
+                                  
+                                  (ws-send! c (jsexpr->string ret))))
                             (let () 
                               
                               (define (r)
@@ -91,14 +103,17 @@
                               
                               (add-spawn! (hash-ref other 'id) other)
                               
-                              (run-spell (hash-ref other 'id)
-                                         (read (open-input-string (~a "(let ()" msg ")")))
-                                         '()))
+                              (define ret
+                                (run-spell (hash-ref other 'id)
+                                           (read (open-input-string (~a "(let ()" msg ")")))
+                                           '()))
+                                         
+                              (ws-send! c ret)
+                                         )
                             
                             ))
                         
                         
-                        (ws-send! c msg)
                   
                   (when (not (eof-object? msg))
                     (loop)))

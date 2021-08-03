@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { spread } from '../Util.js';
 import ConnectionIndicator from './Client/ConnectionIndicator.js';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import { CastButton } from './WorldWidgets/Util.js';
@@ -12,16 +13,17 @@ export function MagicMirror(props) {
             value={
                 props.code || props.value
             }
-            options={props.options ||
-        {
-            lineWrapping: true,
-            mode: 'scheme',
-            theme: 'material',
-            lineNumbers: true,
-            matchBrackets: true,
-            autoCloseBrackets: true,
-            styleActiveLine: true,
-        }}
+            options={
+                spread({
+                    lineWrapping: true,
+                    mode: 'scheme',
+                    theme: 'material',
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    autoCloseBrackets: true,
+                    styleActiveLine: true,
+                }, props.options)
+            }
             onChange={(editor, data, value) => {
                 setCode(value);
                 if (props.onChange) {

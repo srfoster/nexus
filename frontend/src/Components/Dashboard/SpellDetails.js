@@ -62,21 +62,6 @@ export default function SpellDetails(props) {
       },
       {
         kind: "category",
-        name: "Math",
-        colour: "#5CA65C",
-        contents: [
-          {
-            kind: "block",
-            type: "math_round",
-          },
-          {
-            kind: "block",
-            type: "math_number",
-          },
-        ],
-      },
-      {
-        kind: "category",
         name: "Spells",
         colour: "#c1ba31",
         contents: [

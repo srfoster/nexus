@@ -71,7 +71,8 @@ const SockPuppetsMessage = (props) => {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/2.3.ogv"
         text={
           <>
-            hiiiii
+            <BlocklyPuzzle />
+            <CloseUIButton></CloseUIButton>
           </>
         }
       />
@@ -182,14 +183,15 @@ function RuneDemo(props){
 function BlocklyPuzzle() {
   const classes = useStyles();
   const [blockIds, setBlockIds] = useState([]);
-  
+  const [code, setCode] = useState(undefined);
+
   useEffect(
     () => {
       setBlockIds([
         defineStatementRacketBlock(
           {
             blockName: "build-sphere",
-            inputs: ["position 3#s", "radius #"],
+            inputs: ["position vec", "radius #"],
             output: false,
             doParens: true,
             doBlockName: true,
@@ -198,9 +200,19 @@ function BlocklyPuzzle() {
         ),
         defineStatementRacketBlock(
           {
-            blockName: "3#s",
+            blockName: "check-voxels",
+            inputs: ["position1 vec", "position2 vec"],
+            output: false,
+            doParens: true,
+            doBlockName: true,
+            color: 280
+          }
+        ),
+        defineStatementRacketBlock(
+          {
+            blockName: "vec",
             inputs: ["x #", "y #", "z #"],
-            output: "3#s",
+            output: "vec",
             doParens: true,
             doBlockName: true,
             color: 100 
@@ -230,21 +242,20 @@ function BlocklyPuzzle() {
     },
     [])
 
-  return (!blockIds ? "" : <BlocklyWorkspace
+  return (!blockIds ? "" : <>
+    <Typography paragraph>The puzzle is to build a sphere of radius 100 at your orb's location. The location of your orb is:
+      <ul>
+        <li>X: -484</li>
+        <li>Y: 1818</li>
+        <li>Z: 6166</li>
+      </ul>
+    </Typography>
+
+    
+    <BlocklyWorkspace
             toolboxConfiguration={{
               kind: "categoryToolbox",
               contents: [
-                {
-                  kind: "category",
-                  name: "Math",
-                  colour: "#5CA65C",
-                  contents: [
-                    {
-                      kind: "block",
-                      type: "math_number",
-                    },
-                  ],
-                },
                 {
                   kind: "category",
                   name: "Spells",
@@ -269,28 +280,26 @@ function BlocklyPuzzle() {
             }}
             onWorkspaceChange={(workspace) => {
               const code = Blockly.JavaScript.workspaceToCode(workspace);
-
-              console.log(code)
+              setCode(code);
+              console.log(code);
             }}
             onXmlChange={() => { }}
-          />)
+  />
+    <MagicMirror code={code} options={{ readOnly: "nocursor" }} />
+  </>
+  )
 }
 
 function Page1(props) {
 
-  var [messageOpened, setMessageOpened] = useState(false) //useLocalStorage("sock-puppet-lesson-opened-2", false)
+  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3.1", false)
+
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={
         [
-          <CloseUIButton></CloseUIButton>, 
-          <MagicMirror code={ "(build-sphere (vec -484 1818 6166) 100)" }></MagicMirror>,
-
-          <BlocklyPuzzle />
-          ,
-
           <span><SockPuppetChip /> welcomes you to his Nexus fork!</span>,
           <ChatBubble><Typography>My personality algorithms have been adjusted by Sock Puppet</Typography></ChatBubble>,
           <ChatBubble><Typography>For example, I no longer get frustrated when Sock Puppet takes too long.</Typography></ChatBubble>,
@@ -329,57 +338,6 @@ function Page1(props) {
   ) 
 }
 
-// function Page2(props) {
-  
-//   return (<>
-//     <ul>
-//       <li>Page 2</li>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//     </ul>
-    
-//   </>)
-// }
-
-// function Page3(props) {
-  
-//   return (<>
-//     <ul>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//     </ul>
-    
-//   </>)
-// }
-
-// function Page4(props) {
-  
-//   return (<>
-//     <ul>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//     </ul>
-    
-//   </>)
-// }
-
-// function Page5(props) {
-  
-//   return (<>
-//     <ul>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//     </ul>
-    
-//   </>)
-// }
 
 export function Level3(props) {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl3:currentPart", 0)
