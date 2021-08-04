@@ -26,6 +26,7 @@ import Draggable from 'react-draggable';
 import ChatBubble from '../../Widgets/ChatBubble/';
 import { MagicMirror } from '../../MagicMirror';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
+import { sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
 
 
 // /*
@@ -46,6 +47,8 @@ import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 
 
 const SockPuppetsMessage = (props) => {
+  console.log(props)
+
   const [messageOpened, setMessageOpened] = useState(false)
   const openedMessage = useRef(null);
 
@@ -71,7 +74,7 @@ const SockPuppetsMessage = (props) => {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/2.3.ogv"
         text={
           <>
-            <BlocklyPuzzle />
+            <BlocklyPuzzle setCanContinue={props.setCanContinue} />
             <CloseUIButton></CloseUIButton>
           </>
         }
@@ -121,7 +124,7 @@ function RuneDemo(props){
   </CardContent></Card> 
 }
 
-function BlocklyPuzzle() {
+function BlocklyPuzzle(props) {
   const classes = useStyles();
   const [blockIds, setBlockIds] = useState([]);
   const [code, setCode] = useState(undefined);
@@ -231,13 +234,34 @@ function BlocklyPuzzle() {
       options={{
         readOnly: false //"nocursor"
       }}
-      onReturn={ (fromUnreal) => {console.log("w000oot",fromUnreal)}}
+      onReturn={(fromUnreal) => {
+        console.log(fromUnreal)
+        if (fromUnreal.responseFor.includes("build-sphere")) {
+          console.log("Right function!")
+          //They called the right function...
+          //  Now, are the voxels right?
+
+          //Should this take an onerror 3rd param?
+          sendOnCodeSpellsSocket("(check-voxels (vec -485 1818 6166))", (d) => {
+          console.log("checked voxels",d)
+            if (d.response && d.response.VoxelValueMaterials && d.response.VoxelValueMaterials[0] && d.response.VoxelValueMaterials[0].Value < 1) {
+               props.setCanContinue(true)
+             }
+          })
+
+
+
+
+        }
+
+      }}
     />
   </>
   )
 }
 
 function Page1(props) {
+  console.log("Page1",props)
 
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3.1", false)
 
@@ -279,7 +303,7 @@ function Page1(props) {
       }
 
       SockPuppetMessage={
-        spread(<SockPuppetsMessage></SockPuppetsMessage>, props)
+        <SockPuppetsMessage setCanContinue={ props.setCanContinue}></SockPuppetsMessage>
       }
     />
   ) 
@@ -290,7 +314,7 @@ export function Level3(props) {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl3:currentPart", 0)
   const [canContinue, setCanContinue] = useState(false)
   
-  let parts = [<Page1/>]
+  let parts = [<Page1 setCanContinue={withConfetti(setCanContinue)} />]
   //   [<Page1/>,
   //   <Page2/>,
   //   <Page3/>,

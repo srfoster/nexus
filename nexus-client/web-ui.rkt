@@ -28,20 +28,28 @@
 (define ns (namespace-anchor->namespace a))
 
 (define (build-sphere pos r)
-  (unreal-eval-js 
-   @unreal-value{
- var C = Root.ResolveClass('JSVoxelManager');
- var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
- return o.BuildSphere(@(->unreal-value pos), @(->unreal-value r))
- }))
+  (define unreal-response
+    (unreal-eval-js 
+    @unreal-value{
+  var C = Root.ResolveClass('JSVoxelManager');
+  var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+  return o.BuildSphere(@(->unreal-value pos), @(->unreal-value r))
+  }))
+  
+  unreal-response)
 
-(define (check-voxels [pos1 (vec -484 1818 6166)] [pos2 (vec -484 1818 9166)])
-  (unreal-eval-js 
-   @unreal-value{
- var C = Root.ResolveClass('JSVoxelManager');
- var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
- return o.VoxelsFromPositions(@(->unreal-value pos1), @(->unreal-value pos2))
- }))
+(define (check-voxels . vecs)
+  ;Why string-join?  Why can't ->unreal-value handle a list?
+  (define unreal-response
+    (unreal-eval-js 
+    @unreal-value{
+  var C = Root.ResolveClass('JSVoxelManager');
+  var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+  return o.VoxelsFromPositions(@(->unreal-value vecs))
+  }))
+ 
+  unreal-response)
+ 
 
 (define (close-ui)
   (unreal-eval-js 
@@ -115,9 +123,16 @@
                           )])
 
                               (define ret 
-                                (eval (read (open-input-string (~a "(let ()" msg ")"))) ns))
+                                (with-handlers ([exn:fail? (lambda (e)
+                                  (hash 'error (~a e)))])
 
-                              (ws-send! c (jsexpr->string ret)))))
+                                  (eval (read (open-input-string (~a "(let ()" msg ")"))) ns))
+                                )
+
+                              (ws-send! c (jsexpr->string 
+                                (hash 
+                                  'responseFor msg 
+                                  'response ret))))))
                   
                   (when (not (eof-object? msg))
                     (loop)))

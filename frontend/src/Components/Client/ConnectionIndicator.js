@@ -27,7 +27,7 @@ const ConnectionIndicator = (props) => {
 
     useEffect(() => {
         sendOnCodeSpellsSocket("(hash 'hello \"world\")", (payload) => {
-            if(payload.hello == "world")
+            if(payload.response.hello == "world")
               setConnected(true)
         })
     },[])
