@@ -67,6 +67,10 @@ const LandingPage = (props) => {
     setCurrentLevelNum(currentLevelNum - 1)
   }
 
+  const skiptoLastLevel = () => {
+    setCurrentLevelNum(levels.length - 1)
+  }
+
   const levels = [
     <Level1
       dummy="dummy"
@@ -80,6 +84,7 @@ const LandingPage = (props) => {
       setBadges={setBadges}
       badges={badges}
       badgeName={"Finished:ch2:Beyond-the-Gate"}
+      skiptoLastLevel={ skiptoLastLevel }
       gotoNextLevel={ gotoNextLevel }
       gotoPrevLevel={ gotoPrevLevel }
     />,
