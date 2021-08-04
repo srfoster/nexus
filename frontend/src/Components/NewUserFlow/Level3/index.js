@@ -81,65 +81,6 @@ const SockPuppetsMessage = (props) => {
 }
 
 
-/*
-
-function Box(props) {
-  // This reference will give us direct access to the THREE.Mesh object
-  const meshRef = useRef()
-  // Set up state for the hovered and active state
-  const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
-  const [speed, setSpeed] = useState(props.speed)
-  // Subscribe this component to the render-loop, rotate the mesh every frame
-  useFrame((state, delta) => {
-    (meshRef.current.rotation.x += meshRef.current.speed)
-  })
-
-  useEffect(() => { meshRef.current.speed = speed },[speed])
-
-  // Return the view, these are regular Threejs elements expressed in JSX
-  return (
-    React.createElement('mesh',
-      spread(props,
-        {
-          ref: meshRef,
-          scale: active ? 1.5 : 1,
-          onClick: (event) => {
-            setActive(!active)
-          },
-          onPointerOver: (event) => setHover(true),
-          onPointerOut: (event) => setHover(false)
-        }),
-      [
-        <boxGeometry args={[1, 1, 1]} />,
-        <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-      ]
-    ))
-}
-
-function BoxDemo(props) {
-  const [sliderValue, setSliderValue] = useState(50);
-  return <>
-    <Canvas>
-      <ambientLight />
-      <pointLight position={[10, 10, 10]} />
-      <Box speed={sliderValue / 1000} position={[-1.2, 0, 0]} />
-      <Box speed={sliderValue / 500} position={[1.2, 0, 0]} />
-    </Canvas>
-    <Slider
-      value={sliderValue}
-      onChange={
-        (e, newValue) => {
-          setSliderValue(newValue)
-        }
-      }
-      aria-labelledby="continuous-slider" />
-  </>
-}
-
-*/
-
-
 function Rune(props){
   return <Draggable
     grid={[25, 25]} >
@@ -285,7 +226,13 @@ function BlocklyPuzzle() {
             }}
             onXmlChange={() => { }}
   />
-    <MagicMirror code={code} options={{ readOnly: "nocursor" }} />
+    <MagicMirror
+      code={code}
+      options={{
+        readOnly: false //"nocursor"
+      }}
+      onReturn={ (fromUnreal) => {console.log("w000oot",fromUnreal)}}
+    />
   </>
   )
 }

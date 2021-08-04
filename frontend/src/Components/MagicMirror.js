@@ -31,6 +31,6 @@ export function MagicMirror(props) {
                 }
         }}
         />
-        <ConnectionIndicator afterConnection={<CastButton code={code} />}></ConnectionIndicator>
+        <ConnectionIndicator afterConnection={<CastButton code={code} onReturn={ props.onReturn }/>}></ConnectionIndicator>
     </>
 }
