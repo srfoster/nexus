@@ -1,12 +1,23 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useLocalStorage, spread } from "../../Util";
 import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import { ContinueButton } from './Level';
 import { Level } from './Level';
 import { NewMessageNotification, OpenedMessage, NexusDevsChip, StudentChip } from '../Widgets/NexusVoice';
 import Typography from '@material-ui/core/Typography';
+
+function CustomButtonGroup(props) {
+  return (
+    <ButtonGroup color="secondary" aria-label="outlined primary button group" style={{ paddingBottom: 20 }}>
+      {props.children.map(e=><Button href={e.link}>{e.name}</Button>)}
+    </ButtonGroup>
+  )
+}
+
 
 function LastLevelContent(props) {
   const openedMessage = useRef(null);
@@ -29,15 +40,58 @@ function LastLevelContent(props) {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
         text={
           <>
-            <Typography paragraph>
-              Thanks so much for playing our game so far! We are still working on it, but if you'd like to support the project, here are some options: 
-            </Typography>
-            <Typography paragraph>
-              Links  
-            </Typography>
-            <Typography paragraph>
-            
-            </Typography>
+              <Typography paragraph>
+                Thanks so much for playing our game so far! We are still working on it, but if you'd like to support the project, here are some options:
+              </Typography>
+            <div style={{textAlign: 'center'}}>
+              <Typography variant="h6">
+                Share the Project!
+              </Typography>
+              <CustomButtonGroup>{[  //update links to start a new post
+                {
+                  name: "Facebook",
+                  link: "https://www.facebook.com"
+                },
+                {
+                  name: "Twitter",
+                  link: "https://www.twitter.com"
+                },
+                {
+                  name: "Instagram",
+                  link: "https://www.instagram.com"
+                }
+              ]}</CustomButtonGroup>
+              <Typography variant="h6">
+                Help Fund the Project!
+              </Typography>
+              <CustomButtonGroup>{[
+                {
+                  name: "Patreon",
+                  link: "https://patreon.com/codespells"
+                },
+                {
+                  name: "Buy Our Book",
+                  link: "https://amzn.to/3lGjrQ5" 
+                },
+                {
+                  name: "Buy CodeSpells Merch",
+                  link: "" //Create merch link
+                }
+              ]}</CustomButtonGroup>
+              <Typography variant="h6">
+                Help Contribute to the Project!
+              </Typography>
+              <CustomButtonGroup>{[
+                {
+                  name: "Create Learning Resources",
+                  link: "" //need link to instructions for how to create/submit
+                },
+                {
+                  name: "Contribute to Codebase",
+                  link: ""
+                },
+              ]}</CustomButtonGroup>
+            </div>
           </>
         }
       />
@@ -54,7 +108,12 @@ function LastLevel(props) {
       <Level number={99} subtitle={"To Be Continued..."}>
         <CardContent>
           <LastLevelContent />
-          {props.children}
+          <Card>
+            <CardContent>
+              <Typography variant="h6">Table of Contents</Typography>
+              {props.children}
+            </CardContent>
+          </Card>
         </CardContent>
         <CardActions>
           <Button key="back-button"
