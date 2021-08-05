@@ -314,6 +314,15 @@ export function Level3(props) {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl3:currentPart", 0)
   const [canContinue, setCanContinue] = useState(false)
   
+  let reallyContinue = () => {
+    if (currentPart + 1 != parts.length) {
+      setCanContinue(false);
+      setCurrentPart(1 + currentPart)
+    } else {
+      props.gotoNextLevel()
+    }
+  }
+
   let parts = [<Page1 setCanContinue={withConfetti(setCanContinue)} />]
   //   [<Page1/>,
   //   <Page2/>,
@@ -337,7 +346,9 @@ export function Level3(props) {
                 setCanContinue(false);
               }
             }}>Back</Button>
-          <ContinueButton onClick={() => setCurrentPart(currentPart + 1)} />
+          {canContinue ?
+            <ContinueButton key="continue-button" onClick={reallyContinue} />
+            : ""}
         </CardActions>
       </Level>
     </>
