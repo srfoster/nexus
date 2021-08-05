@@ -49,12 +49,12 @@ function LastLevel(props) {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl11:currentPart", 0)
   const [canContinue, setCanContinue] = useState(false)
 
-  //Arbitrarily decided this was Level 11
   return (
     <>
-      <Level number={11} subtitle={"To Be Continued..."}>
+      <Level number={99} subtitle={"To Be Continued..."}>
         <CardContent>
           <LastLevelContent />
+          {props.children}
         </CardContent>
         <CardActions>
           <Button key="back-button"

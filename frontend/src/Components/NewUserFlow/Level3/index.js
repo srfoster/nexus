@@ -12,6 +12,8 @@ import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import { Game } from '../../Widgets/react-gameoflife/Game.js';
 
+import { defineStatementRacketBlock, defineRacketBlock } from "../../Dashboard/customBlocks/custom_Blocks.js";
+
 // //3d Stuff...
 //import { Canvas, useFrame } from '@react-three/fiber'
 
@@ -24,6 +26,7 @@ import Draggable from 'react-draggable';
 import ChatBubble from '../../Widgets/ChatBubble/';
 import { MagicMirror } from '../../MagicMirror';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
+import { sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
 
 
 // /*
@@ -44,6 +47,8 @@ import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 
 
 const SockPuppetsMessage = (props) => {
+  console.log(props)
+
   const [messageOpened, setMessageOpened] = useState(false)
   const openedMessage = useRef(null);
 
@@ -69,72 +74,14 @@ const SockPuppetsMessage = (props) => {
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/2.3.ogv"
         text={
           <>
-            hiiiii
+            <BlocklyPuzzle setCanContinue={props.setCanContinue} />
+            <CloseUIButton></CloseUIButton>
           </>
         }
       />
     </div>
   )
 }
-
-
-/*
-
-function Box(props) {
-  // This reference will give us direct access to the THREE.Mesh object
-  const meshRef = useRef()
-  // Set up state for the hovered and active state
-  const [hovered, setHover] = useState(false)
-  const [active, setActive] = useState(false)
-  const [speed, setSpeed] = useState(props.speed)
-  // Subscribe this component to the render-loop, rotate the mesh every frame
-  useFrame((state, delta) => {
-    (meshRef.current.rotation.x += meshRef.current.speed)
-  })
-
-  useEffect(() => { meshRef.current.speed = speed },[speed])
-
-  // Return the view, these are regular Threejs elements expressed in JSX
-  return (
-    React.createElement('mesh',
-      spread(props,
-        {
-          ref: meshRef,
-          scale: active ? 1.5 : 1,
-          onClick: (event) => {
-            setActive(!active)
-          },
-          onPointerOver: (event) => setHover(true),
-          onPointerOut: (event) => setHover(false)
-        }),
-      [
-        <boxGeometry args={[1, 1, 1]} />,
-        <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-      ]
-    ))
-}
-
-function BoxDemo(props) {
-  const [sliderValue, setSliderValue] = useState(50);
-  return <>
-    <Canvas>
-      <ambientLight />
-      <pointLight position={[10, 10, 10]} />
-      <Box speed={sliderValue / 1000} position={[-1.2, 0, 0]} />
-      <Box speed={sliderValue / 500} position={[1.2, 0, 0]} />
-    </Canvas>
-    <Slider
-      value={sliderValue}
-      onChange={
-        (e, newValue) => {
-          setSliderValue(newValue)
-        }
-      }
-      aria-labelledby="continuous-slider" />
-  </>
-}
-
-*/
 
 
 function Rune(props){
@@ -177,17 +124,153 @@ function RuneDemo(props){
   </CardContent></Card> 
 }
 
-function Page1(props) {
+function BlocklyPuzzle(props) {
   const classes = useStyles();
+  const [blockIds, setBlockIds] = useState([]);
+  const [code, setCode] = useState(undefined);
 
-  var [messageOpened, setMessageOpened] = useState(false) //useLocalStorage("sock-puppet-lesson-opened-2", false)
+  useEffect(
+    () => {
+      setBlockIds([
+        defineStatementRacketBlock(
+          {
+            blockName: "build-sphere",
+            inputs: ["position vec", "radius #"],
+            output: false,
+            doParens: true,
+            doBlockName: true,
+            color: 230
+          }
+        ),
+        defineStatementRacketBlock(
+          {
+            blockName: "check-voxels",
+            inputs: ["position1 vec", "position2 vec"],
+            output: false,
+            doParens: true,
+            doBlockName: true,
+            color: 280
+          }
+        ),
+        defineStatementRacketBlock(
+          {
+            blockName: "vec",
+            inputs: ["x #", "y #", "z #"],
+            output: "vec",
+            doParens: true,
+            doBlockName: true,
+            color: 100 
+          }
+        ),
+        defineRacketBlock(
+          {
+            blockName: "#",
+            inputs: [""],
+            output: "#",
+            doParens: false,
+            doBlockName: false,
+            color: 80
+          }
+        ),
+        defineStatementRacketBlock(
+          {
+            blockName: "+",
+            inputs: ["#", "#"],
+            output: "#",
+            doParens: true,
+            doBlockName: true,
+            color: 80
+          }
+        ),
+      ])
+    },
+    [])
+
+  return (!blockIds ? "" : <>
+    <Typography paragraph>The puzzle is to build a sphere of radius 100 at your orb's location. The location of your orb is:
+      <ul>
+        <li>X: -484</li>
+        <li>Y: 1818</li>
+        <li>Z: 6166</li>
+      </ul>
+    </Typography>
+
+    
+    <BlocklyWorkspace
+            toolboxConfiguration={{
+              kind: "categoryToolbox",
+              contents: [
+                {
+                  kind: "category",
+                  name: "Spells",
+                  colour: "#c1ba31",
+                  contents: 
+                    blockIds.map((i) => {
+                      return { kind: "block", type: i }
+                    })
+                },
+              ],
+            }
+            }
+            initialXml={'<xml xmlns="http://www.w3.org/1999/xhtml"></xml>'}
+            className={classes.spellDetailsCodeMirror}
+            workspaceConfiguration={{
+              grid: {
+                spacing: 20,
+                length: 3,
+                colour: "#ccc",
+                snap: true,
+              },
+            }}
+            onWorkspaceChange={(workspace) => {
+              const code = Blockly.JavaScript.workspaceToCode(workspace);
+              setCode(code);
+              console.log(code);
+            }}
+            onXmlChange={() => { }}
+  />
+    <MagicMirror
+      code={code}
+      options={{
+        readOnly: false //"nocursor"
+      }}
+      onReturn={(fromUnreal) => {
+        console.log(fromUnreal)
+        if (fromUnreal.responseFor.includes("build-sphere")) {
+          console.log("Right function!")
+          //They called the right function...
+          //  Now, are the voxels right?
+
+          //Should this take an onerror 3rd param?
+          sendOnCodeSpellsSocket("(check-voxels (vec -485 1818 6166))", (d) => {
+          console.log("checked voxels",d)
+            if (d.response && d.response.VoxelValueMaterials && d.response.VoxelValueMaterials[0] && d.response.VoxelValueMaterials[0].Value < 1) {
+               props.setCanContinue(true)
+             }
+          })
+
+
+
+
+        }
+
+      }}
+    />
+  </>
+  )
+}
+
+function Page1(props) {
+  console.log("Page1",props)
+
+  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3.1", false)
+
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={
         [
-          <CloseUIButton></CloseUIButton>, 
           <span><SockPuppetChip /> welcomes you to his Nexus fork!</span>,
           <ChatBubble><Typography>My personality algorithms have been adjusted by Sock Puppet</Typography></ChatBubble>,
           <ChatBubble><Typography>For example, I no longer get frustrated when Sock Puppet takes too long.</Typography></ChatBubble>,
@@ -220,69 +303,27 @@ function Page1(props) {
       }
 
       SockPuppetMessage={
-        spread(<SockPuppetsMessage></SockPuppetsMessage>, props)
+        <SockPuppetsMessage setCanContinue={ props.setCanContinue}></SockPuppetsMessage>
       }
     />
   ) 
 }
 
-// function Page2(props) {
-  
-//   return (<>
-//     <ul>
-//       <li>Page 2</li>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//     </ul>
-    
-//   </>)
-// }
-
-// function Page3(props) {
-  
-//   return (<>
-//     <ul>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//     </ul>
-    
-//   </>)
-// }
-
-// function Page4(props) {
-  
-//   return (<>
-//     <ul>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//     </ul>
-    
-//   </>)
-// }
-
-// function Page5(props) {
-  
-//   return (<>
-//     <ul>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//       <li></li>
-//     </ul>
-    
-//   </>)
-// }
 
 export function Level3(props) {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl3:currentPart", 0)
   const [canContinue, setCanContinue] = useState(false)
   
-  let parts = [<Page1/>]
+  let reallyContinue = () => {
+    if (currentPart + 1 != parts.length) {
+      setCanContinue(false);
+      setCurrentPart(1 + currentPart)
+    } else {
+      props.gotoNextLevel()
+    }
+  }
+
+  let parts = [<Page1 setCanContinue={withConfetti(setCanContinue)} />]
   //   [<Page1/>,
   //   <Page2/>,
   //   <Page3/>,
@@ -305,7 +346,9 @@ export function Level3(props) {
                 setCanContinue(false);
               }
             }}>Back</Button>
-          <ContinueButton onClick={() => props.gotoNextLevel()} />
+          {canContinue ?
+            <ContinueButton key="continue-button" onClick={reallyContinue} />
+            : ""}
         </CardActions>
       </Level>
     </>

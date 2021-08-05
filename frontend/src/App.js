@@ -36,7 +36,7 @@ import Level3 from './Components/NewUserFlow/Level3/index';
 
 import LoginForm from './Components/LoginForm';
 import SignupForm from './Components/SignupForm';
-import LandingPage from './Components/LandingPage';
+import LevelManager from './Components/LevelManager';
 import SpellIndex from './Components/Dashboard/SpellIndex';
 
 require('codemirror/mode/scheme/scheme');
@@ -93,12 +93,13 @@ function App() {
             <Switch>
               <Route
                 exact path={'/'}
-                component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage >}
+                component={(props) => <LevelManager isLoggedIn={isLoggedIn} startingLevel={1} endingLevel={ 2 } ></LevelManager >}
               />
               <Route
                 exact path={'/level3'}
-                component={(props) => <Container style={{float: "left", padding: 5}} maxWidth="sm"><Level3 />
-                </Container>}
+                component={(props) =>
+                  <LevelManager isLoggedIn={isLoggedIn} startingLevel={3}></LevelManager >
+                  }
               />
               <Route
                 exact path={'*'}
@@ -110,7 +111,7 @@ function App() {
                       <Switch>
                         <Route
                           exact path={'/panel.html'}
-                          component={(props) => <LandingPage isLoggedIn={isLoggedIn}></LandingPage>}
+                          component={(props) => <LevelManager isLoggedIn={isLoggedIn}></LevelManager>}
                         />
                         <Route
                           exact path={'/signup'}
