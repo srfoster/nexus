@@ -22,19 +22,63 @@
          
          orb-game-1/lang
          
-         json)
+         json
+         
+         errortrace)
+
 
 (define-namespace-anchor a)
 (define ns (namespace-anchor->namespace a))
 
-(define (build-sphere pos r)
+
+
+(define/contract (build-sphere pos r)
+  ;If the radius is too big, you end up crashing the game.
+  ;  1000 can probably be bumped up if we wanted to.  
+  (-> vec? (between/c 0 2000) any/c)
+  
   (define unreal-response
     (unreal-eval-js 
-    @unreal-value{
-  var C = Root.ResolveClass('JSVoxelManager');
-  var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
-  return o.BuildSphere(@(->unreal-value pos), @(->unreal-value r))
-  }))
+     @unreal-value{
+ var BS = Root.ResolveClass('VoxelAddEffect');
+
+ let sphere = new BS(GWorld, @(->unreal-value pos))  
+ 
+ var sphere_bounds = GameplayStatics.GetActorArrayBounds([sphere], false); 
+ var sphere_radius = sphere_bounds.BoxExtent.Z
+ var scaling_factor = @(->unreal-value r) / sphere_radius
+
+ sphere.SetActorScale3D({X:scaling_factor, Y:scaling_factor, Z:scaling_factor})
+
+  setTimeout(()=>{
+    var C = Root.ResolveClass('JSVoxelManager');
+    var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+    o.BuildSphere(@(->unreal-value pos), @(->unreal-value r))
+  }, 200)
+
+ setTimeout(()=>{
+  sphere.DestroyActor()
+  }, 400)
+
+ return true
+ }))
+  
+  unreal-response)
+
+(require syntax/parse)
+
+(define/contract (dig-sphere pos r)
+  ;If the radius is too big, you end up crashing the game.
+  ;  1000 can probably be bumped up if we wanted to.  
+  (-> vec? (between/c 0 2000) hash?)
+  
+  (define unreal-response
+    (unreal-eval-js 
+     @unreal-value{
+ var C = Root.ResolveClass('JSVoxelManager');
+ var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+ return o.DigSphere(@(->unreal-value pos), @(->unreal-value r))
+ }))
   
   unreal-response)
 
@@ -42,14 +86,14 @@
   ;Why string-join?  Why can't ->unreal-value handle a list?
   (define unreal-response
     (unreal-eval-js 
-    @unreal-value{
-  var C = Root.ResolveClass('JSVoxelManager');
-  var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
-  return o.VoxelsFromPositions(@(->unreal-value vecs))
-  }))
- 
+     @unreal-value{
+ var C = Root.ResolveClass('JSVoxelManager');
+ var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+ return o.VoxelsFromPositions(@(->unreal-value vecs))
+ }))
+  
   unreal-response)
- 
+
 
 (define (close-ui)
   (unreal-eval-js 
@@ -63,41 +107,56 @@
   (string-contains? s "in-orb"))
 
 (define (in-orb code)
-    (define (r)
-      (random -100 100))
-    
-    (define (random-vec)
-      (vec (r) (r) (r)))
-    
-    (define character 
-      (unreal-eval-js (find-actor ".*OrbCharacter.*")))
-    
-    (define character-location 
-      (unreal-eval-js (locate character)))
-    
-    (define loc
-      (+vec (random-vec)
-            character-location))  
-    
-    (define (spawn-other-orb loc)
-      @unreal-value{
-      var Spawn = Root.ResolveClass('PickupMini');
-      var spawn = new Spawn(GWorld, @(->unreal-value loc));
-      spawn.SetText("");
-      
-      return spawn;
-      })
-    
-    (define other (unreal-eval-js (spawn-other-orb loc)))
-    
-    (add-spawn! (hash-ref other 'id) other)
-    
-    (define ret
-      (run-spell (hash-ref other 'id)
-                  (read (open-input-string (~a "(let ()" code ")")))
-                  '()))
-                
-    ret)
+  (define (r)
+    (random -100 100))
+  
+  (define (random-vec)
+    (vec (r) (r) (r)))
+  
+  (define character 
+    (unreal-eval-js (find-actor ".*OrbCharacter.*")))
+  
+  (define character-location 
+    (unreal-eval-js (locate character)))
+  
+  (define loc
+    (+vec (random-vec)
+          character-location))  
+  
+  (define (spawn-other-orb loc)
+    @unreal-value{
+ var Spawn = Root.ResolveClass('PickupMini');
+ var spawn = new Spawn(GWorld, @(->unreal-value loc));
+ spawn.SetText("");
+ 
+ return spawn;
+ })
+  
+  (define other (unreal-eval-js (spawn-other-orb loc)))
+  
+  (add-spawn! (hash-ref other 'id) other)
+  
+  (define ret
+    (run-spell (hash-ref other 'id)
+               (read (open-input-string (~a "(let ()" code ")")))
+               '()))
+  
+  ret)
+
+(define (apply-transformer f stx)
+  (define parts (and (syntax? stx) (syntax->list stx)))
+  
+  (if (not (list? parts)) (f stx)
+      (map (curry apply-transformer f)
+           parts)))
+
+;OMG.  This is ugly and doesn't even catch a lot of errors (e.g. syntax errors).
+;  We should ask on the Racket list/discord?
+;  But if we must fall back to this, we'll need to do this to (at least) our API: build-sphere, dig-sphere, etc.  
+(define (handle-errors-intelligently lineNumber f)
+  (lambda (a . args)
+    (with-continuation-mark 'lineNumber lineNumber
+      (apply f a args))))
 
 ;Change start-ui name to start-websocket-server
 (define (start-ui)
@@ -118,25 +177,51 @@
                       (when (not (eof-object? msg))
                         (let() 
                           (with-handlers 
-                          ([exn:fail? (lambda (e) 
-                            (displayln e)
-                          )])
+                              ([exn:fail? (lambda (e) 
+                                            (displayln e))])
+                            
+                            (define ret 
+                              (with-handlers ([exn:fail? (lambda (e)
+                                                           (displayln e)
+                                                           
+                                                           (define blockId
+                                                             (continuation-mark-set-first   
+                                                              (exn-continuation-marks e) 
+                                                              'blockId
+                                                              #f))
+                                                           (define error-message 
+                                                             (string-append (exn-message e)
+                                                                            (with-output-to-string (thunk (print-error-trace (current-output-port) e)))))
+                                                           (define lineNumber (string->number 
+                                                                               (second 
+                                                                                (regexp-match  
+                                                                                                       #px"NexusUserCode:([0-9]+)"
+                                                                                                       error-message 
+                                                                                                       )))) 
+                                                           (hash 'error  
+                                                                 error-message
+                                                                 'blockId blockId
+                                                                 'lineNumber lineNumber))])
+                                
+                                (define in (open-input-string (string-append "(let () " msg ")")))
+                                (port-count-lines! in)
+                                
+                                (define stx (read-syntax 'NexusUserCode in))
+                                
+                                (eval stx ns)
+                                ))
+                            
+                            (ws-send! c (jsexpr->string 
+                                         (hash 
+                                          'responseFor msg 
+                                          'response ret))))))
+                    
+                    (when (not (eof-object? msg))
+                      (loop)))
+                  )]])))
 
-                              (define ret 
-                                (with-handlers ([exn:fail? (lambda (e)
-                                  (hash 'error (~a e)))])
 
-                                  (eval (read (open-input-string (~a "(let ()" msg ")"))) ns))
-                                )
 
-                              (ws-send! c (jsexpr->string 
-                                (hash 
-                                  'responseFor msg 
-                                  'response ret))))))
-                  
-                  (when (not (eof-object? msg))
-                    (loop)))
-                )]])))
 
 (module+ main
   (start-ui)
