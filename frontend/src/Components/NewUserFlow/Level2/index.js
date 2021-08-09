@@ -11,6 +11,7 @@ import Puzzle2ConwaysGameOfLife from './Puzzle2ConwaysGameOfLife';
 import Puzzle3GraphTheory from './Puzzle3GraphTheory';
 import Puzzle4Piano from './Puzzle4Piano';
 import Puzzle5Diabolical from './Puzzle5Diabolical';
+import DiabolicalPuzzleSolvedPage from './ForDiabolicalPuzzleSolvers';
 
 //Questions we're asking (and answering) with our..
 //What if there were no difference between edtech, entertainment, content, game, community, open source project, etc.?
@@ -25,16 +26,17 @@ export function Level2(props) {
       setCanContinue(false);
       setCurrentPart(1 + currentPart)
     } else {
-      props.gotoNextLevel()
+      props.skiptoLastLevel()
     }
   }
 
   let parts =
     [<Puzzle1TheFavor setCanContinue={withConfetti(setCanContinue)} />,
-    <Puzzle2ConwaysGameOfLife setCanContinue={withConfetti(setCanContinue)} />,
-    <Puzzle3GraphTheory setCanContinue={withConfetti(setCanContinue)} />,
-    <Puzzle4Piano setCanContinue={withConfetti(setCanContinue)} />,
-    <Puzzle5Diabolical setCanContinue={withConfetti(setCanContinue)} />]
+      <Puzzle2ConwaysGameOfLife setCanContinue={withConfetti(setCanContinue)} />,
+      <Puzzle3GraphTheory setCanContinue={withConfetti(setCanContinue)} />,
+      <Puzzle4Piano setCanContinue={withConfetti(setCanContinue)} />,
+      <Puzzle5Diabolical setCanContinue={withConfetti(setCanContinue)} />,
+      <DiabolicalPuzzleSolvedPage setCanContinue={setCanContinue} />]
 
   return (
     <>

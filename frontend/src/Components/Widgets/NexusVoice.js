@@ -35,6 +35,7 @@ export const VideoAndPuzzleLayout = (props) => {
     </>)
 }
 
+
 export function NewMessageNotification(props) {
   return(<Grid container spacing={1}>
     <Fade in={true} timeout={1000}>
@@ -68,6 +69,10 @@ export function Gong(){
 
 export function SockPuppetChip() {
   return <Chip avatar={<Avatar alt="Sock Puppet"><SchoolIcon/></Avatar>} label="Sock Puppet (Teacher Lvl 1)"></Chip>
+}
+
+export function NexusDevsChip() {
+  return <Chip avatar={<Avatar alt="Nexus Devs"><SchoolIcon/></Avatar>} label="Nexus Devs (Teacher Lvl 99)"></Chip>
 }
 
 export function StudentChip(props) {
