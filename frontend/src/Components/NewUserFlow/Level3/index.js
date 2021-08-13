@@ -71,7 +71,7 @@ const SockPuppetsMessage = (props) => {
         from={<SockPuppetChip />}
         to={<StudentChip name={props.username} level={2} />}
         subject={"A Whole New World!"}
-        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/2.3.ogv"
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-3.1.ogv"
         text={
           <>
             <BlocklyPuzzle setCanContinue={props.setCanContinue} />
@@ -272,33 +272,33 @@ function Page1(props) {
       NexusStallingMessages={
         [
           <span><SockPuppetChip /> welcomes you to his Nexus fork!</span>,
-          <ChatBubble><Typography>My personality algorithms have been adjusted by Sock Puppet</Typography></ChatBubble>,
-          <ChatBubble><Typography>For example, I no longer get frustrated when Sock Puppet takes too long.</Typography></ChatBubble>,
-          <ChatBubble><Typography>And I can be configured to deliver custom messages from Sock Puppet.  Like this one:</Typography></ChatBubble>,
+          {
+            text: <ChatBubble><Typography>My personality algorithms have been adjusted by Sock Puppet.</Typography></ChatBubble>,
+            time: 4000
+          },
+          {
+            text: <ChatBubble><Typography>For example, I no longer get frustrated when Sock Puppet takes too long.</Typography></ChatBubble>,
+            time: 4000
+          },
+          {
+            text: <ChatBubble><Typography>And I can be configured to deliver custom messages from Sock Puppet.  Like this one:</Typography></ChatBubble>,
+            time: 4000
+          },
           {
             text: <Card style={{ marginTop: 20, marginBottom: 20 }}>
               <CardContent>
                 <Typography
                   color="textSecondary" gutterBottom
                 >Did you know...</Typography>
-                <h1>Socks Rule!!!</h1>
+                <h1>Socks Rock!!!</h1>
               </CardContent>
             </Card>,
-            time: 5000
+            time: 4000
           },
-          <ChatBubble><Typography>Or this one:</Typography></ChatBubble>,
           {
-            text: <Card style={{ marginTop: 20, marginBottom: 20 }}>
-              <CardContent>
-                <Typography
-                  color="textSecondary" gutterBottom
-                >Did you know...</Typography>
-                
-              </CardContent>
-            </Card>,
-            time: 5000
+            text: <ChatBubble><Typography>But that's not why we're here.</Typography></ChatBubble>,
+            time: 4000
           },
-          <ChatBubble><Typography>But that's not why we're here.</Typography></ChatBubble>,
         ]
       }
 
