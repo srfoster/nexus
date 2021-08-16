@@ -47,7 +47,7 @@ function LastLevelContent(props) {
               <Typography variant="h6">
                 Share the Project!
               </Typography>
-              <CustomButtonGroup>{[  //update links to start a new post
+              <CustomButtonGroup>{[  //update social links to start a new post
                 {
                   name: "Facebook",
                   link: "https://www.facebook.com"

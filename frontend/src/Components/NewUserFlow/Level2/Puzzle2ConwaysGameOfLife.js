@@ -48,7 +48,7 @@ const SockPuppetsMessage2 = (props) => {
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
-    from={<SockPuppetChip></SockPuppetChip>}
+    from={<SockPuppetChip level={2}></SockPuppetChip>}
     onOpenClicked={
       () => {
         setMessageOpened(true)
@@ -57,7 +57,7 @@ const SockPuppetsMessage2 = (props) => {
   /> :
     <div ref={openedMessage}>
       <OpenedMessage
-        from={<SockPuppetChip />}
+        from={<SockPuppetChip level={2} />}
         to={<StudentChip name={props.username} level={1} />}
         subject={"Simulations are Fun!"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/2.2.mp4"
@@ -133,14 +133,14 @@ const SockPuppetsMessage2 = (props) => {
 
 
 function Puzzle2ConwaysGameOfLife(props) {  
-  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3", false)
+  var [messageOpened, setMessageOpened] = useLocalStorage("level-2-puzzle-2-message-opened", false)
 
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <span><SockPuppetChip /> is making video content!</span>,
+        <span><SockPuppetChip level={2} /> is making video content!</span>,
         {
           text: <ChatBubble>My entertainment algorithms tell me that humans like to play with toys.</ChatBubble>,
           time: 3000

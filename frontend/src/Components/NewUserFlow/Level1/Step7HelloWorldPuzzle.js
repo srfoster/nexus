@@ -89,7 +89,7 @@ function Step7HelloWorldPuzzle(props) {
     <VideoAndPuzzleLayout
       leftSideTitle={
         <>
-          <Typography component='span' paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
+          <Typography component='span' paragraph>From <SockPuppetChip level={1}/> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography >Subject: Hello, World!</Typography>
         </>}
       leftSide={

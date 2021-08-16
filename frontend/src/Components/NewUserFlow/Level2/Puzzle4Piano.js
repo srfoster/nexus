@@ -18,7 +18,7 @@ function SockPuppetsMessage4(props) {
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
-    from={<SockPuppetChip></SockPuppetChip>}
+    from={<SockPuppetChip level={2}></SockPuppetChip>}
     onOpenClicked={
       () => {
         setMessageOpened(true)
@@ -27,9 +27,9 @@ function SockPuppetsMessage4(props) {
   /> :
     <div ref={openedMessage}>
       <OpenedMessage
-        from={<SockPuppetChip />}
+        from={<SockPuppetChip level={2} />}
         to={<FakeTeacherChip name={props.username} level={1} />}
-        subject={"Fundamentals of Magic, Part 3"}
+        subject={"Introduction to Musical Coding"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.4.ogv"
         text={
           <>
@@ -99,14 +99,14 @@ function SockPuppetsMessage4(props) {
 }
 
 function Puzzle4Piano(props) {
-  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-5", false)
+  var [messageOpened, setMessageOpened] = useLocalStorage("level-2-puzzle-4-message-opened", false)
 
   return (<>
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <span><SockPuppetChip /> is making video content!</span>,
+        <span><SockPuppetChip level={2} /> is making video content!</span>,
         {
           text: <ChatBubble>My edutainment algorithms are still active.  I will now give you another educational mystery toy while we wait (again).</ChatBubble>,
           time: 3000
@@ -146,7 +146,7 @@ function Puzzle4Piano(props) {
                 color="textSecondary" gutterBottom
               >Did you know...</Typography>
 
-              A small group of cyber-criminals known as "the Wizards" attempted to infiltrate the Nexus in the year 2063.  They were caught (and disciplined) by the Nexus's state of the art security algorithms.
+              A small group of cyber-criminals attempted to infiltrate the Nexus in the year 2063.  They were caught (and disciplined) by the Nexus's state of the art security algorithms.
             </CardContent>
           </Card></>,
           time: 10000

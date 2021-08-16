@@ -19,7 +19,7 @@ function SockPuppetsMessage3(props) {
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
-    from={<SockPuppetChip></SockPuppetChip>}
+    from={<SockPuppetChip level={2}></SockPuppetChip>}
     onOpenClicked={
       () => {
         setMessageOpened(true)
@@ -28,9 +28,9 @@ function SockPuppetsMessage3(props) {
   /> :
     <div ref={openedMessage}>
       <OpenedMessage
-        from={<SockPuppetChip />}
+        from={<SockPuppetChip level={2} />}
         to={<FakeTeacherChip name={props.username} level={1} />}
-        subject={"Fundamentals of Magic, Part 2"}
+        subject={"Introduction to Networks"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/2.3.mp4"
         text={
           <>
@@ -80,14 +80,14 @@ function SockPuppetsMessage3(props) {
 
 
 function Puzzle3GraphTheory(props) {
-  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-4", false)
+  var [messageOpened, setMessageOpened] = useLocalStorage("level-2-puzzle-3-message-opened", false)
 
   return (<>
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <span><SockPuppetChip /> is making video content!</span>,
+        <span><SockPuppetChip level={2} /> is making video content!</span>,
         {
           text: <ChatBubble>My edutainment algorithms are still active.  I will now give you another educational mystery toy to make your teacher's tardiness more enjoyable.</ChatBubble>,
           time: 3000

@@ -31,7 +31,7 @@ export default function NetworkDiseaseSimulator(props) {
     <Card>
       <CardContent>
       <Typography
-        color="textSecondary" gutterBottom>Play with the slider and "Next" button...</Typography>
+        color="textSecondary" gutterBottom>Play with the slider and "Infect" and "Cure" buttons...</Typography>
 
         <Grid container
           spacing={1}
