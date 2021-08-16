@@ -14,7 +14,7 @@ function Step5SockPuppetIntro(props) {
     messageOpened ?
       <VideoAndPuzzleLayout
         leftSideTitle={<>
-          <Typography component='span' paragraph>From <SockPuppetChip /> to <StudentChip name={props.username} level={1} /></Typography>
+          <Typography component='span' paragraph>From <SockPuppetChip level={1} /> to <StudentChip name={props.username} level={1} /></Typography>
           <Typography>Subject: Video Introduction!!</Typography>
         </>}
         leftSide={
@@ -41,7 +41,7 @@ function Step5SockPuppetIntro(props) {
       :
       <NewMessageNotification
         nexusSays={"Wow!  New messages(s)..."}
-        from={<SockPuppetChip></SockPuppetChip>}
+        from={<SockPuppetChip level={1}></SockPuppetChip>}
         onOpenClicked={
           () => setMessageOpened(true)
         }

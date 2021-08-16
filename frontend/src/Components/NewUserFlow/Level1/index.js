@@ -4,7 +4,6 @@ import { AccountCreationReminder, ContinueButton, Level, LoginButton, withConfet
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import { Gong } from '../../Widgets/NexusVoice';
 import Fade from '@material-ui/core/Fade';
 import Typography from '@material-ui/core/Typography';
 
@@ -67,7 +66,6 @@ function MeetYourTeacher (props) {
 
   return (
     <>
-      {currentPart == 0 && !canContinue ? <Gong /> : "" /* First visit */}
       <CardContent>
         {parts[currentPart]}
       </CardContent>

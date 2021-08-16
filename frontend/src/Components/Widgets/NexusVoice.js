@@ -47,7 +47,6 @@ export function NewMessageNotification(props) {
     </Fade>
     <Fade in={true} timeout={2000}>
       <Grid item xs={6}>
-        <Gong />
         <Badge badgeContent={1} color="secondary">
           <MailIcon />
         </Badge>
@@ -59,16 +58,8 @@ export function NewMessageNotification(props) {
   </Grid>)
 }
 
-export function Gong(){
-  return <Sound
-    url="/gong.mp3"
-    playStatus={Sound.status.PLAYING}
-    playFromPosition={0 /* in milliseconds */}
-  />
-}
-
-export function SockPuppetChip() {
-  return <Chip avatar={<Avatar alt="Sock Puppet"><SchoolIcon/></Avatar>} label="Sock Puppet (Teacher Lvl 1)"></Chip>
+export function SockPuppetChip(props) {
+  return <Chip avatar={<Avatar alt="Sock Puppet"><SchoolIcon/></Avatar>} label={"Sock Puppet (Teacher Lvl " + (props.level !== undefined ? props.level : "undefined") + ")"}></Chip>
 }
 
 export function NexusDevsChip() {

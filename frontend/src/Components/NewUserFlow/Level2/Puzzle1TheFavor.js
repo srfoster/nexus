@@ -51,7 +51,7 @@ const SockPuppetsMessage = (props) => {
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
-    from={<SockPuppetChip></SockPuppetChip>}
+    from={<SockPuppetChip level={2}></SockPuppetChip>}
     onOpenClicked={
       () => {
         setMessageOpened(true)
@@ -60,7 +60,7 @@ const SockPuppetsMessage = (props) => {
   /> :
     <div ref={openedMessage}>
       <OpenedMessage
-        from={<SockPuppetChip />}
+        from={<SockPuppetChip level={2}/>}
         to={<StudentChip name={props.username} level={1} />}
         subject={"The Favor I Owe"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
@@ -98,13 +98,13 @@ const SockPuppetsMessage = (props) => {
 }
 
 function Puzzle1TheFavor(props) {
-  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-2", false)
+  var [messageOpened, setMessageOpened] = useLocalStorage("level-2-puzzle-1-message-opened", false)
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <span><SockPuppetChip /> is making video content!</span>,
+        <span><SockPuppetChip level={2}/> is making video content!</span>,
         {
           text: <ChatBubble>Because Sock Puppet has been slower than average, my entertainment algorithms have been activated.</ChatBubble>,
           time: 2000
@@ -126,7 +126,7 @@ function Puzzle1TheFavor(props) {
           time: 5000
         },
         {
-          text: <span><SockPuppetChip /> is <strong>still</strong> making video content...<br/><br/></span>,
+          text: <span><SockPuppetChip  level={2}/> is <strong>still</strong> making video content...<br/><br/></span>,
           time: 2000
         },
         {
@@ -146,7 +146,7 @@ function Puzzle1TheFavor(props) {
           time: 5000
         },
         {
-          text: <span><SockPuppetChip /> is <strong>still</strong> making video content...<br/><br/></span>,
+          text: <span><SockPuppetChip level={2} /> is <strong>still</strong> making video content...<br/><br/></span>,
           time: 2000
         },
         {
@@ -154,7 +154,7 @@ function Puzzle1TheFavor(props) {
           time: 1000
         },
         {
-          text: <ChatBubble>Ahh.  Never mind.  <SockPuppetChip /> is <strong>finally</strong> finished.</ChatBubble>,
+          text: <ChatBubble>Ahh.  Never mind.  <SockPuppetChip level={2} /> is <strong>finally</strong> finished.</ChatBubble>,
           time: 1000
         },
       ]}

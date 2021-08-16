@@ -59,7 +59,7 @@ const SockPuppetsMessage = (props) => {
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
-    from={<SockPuppetChip></SockPuppetChip>}
+    from={<SockPuppetChip level={3}></SockPuppetChip>}
     onOpenClicked={
       () => {
         setMessageOpened(true)
@@ -68,7 +68,7 @@ const SockPuppetsMessage = (props) => {
   /> :
     <div ref={openedMessage}>
       <OpenedMessage
-        from={<SockPuppetChip />}
+        from={<SockPuppetChip level={3} />}
         to={<StudentChip name={props.username} level={2} />}
         subject={"A Whole New World!"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-3.1.ogv"
@@ -271,7 +271,7 @@ function Page1(props) {
       setContentComplete={setMessageOpened}
       NexusStallingMessages={
         [
-          <span><SockPuppetChip /> welcomes you to his Nexus fork!</span>,
+          <span><SockPuppetChip level={3}/> welcomes you to his Nexus fork!</span>,
           {
             text: <ChatBubble><Typography>My personality algorithms have been adjusted by Sock Puppet.</Typography></ChatBubble>,
             time: 4000

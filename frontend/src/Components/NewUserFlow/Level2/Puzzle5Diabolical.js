@@ -125,7 +125,7 @@ function SockPuppetsMessage5(props) {
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
-    from={<SockPuppetChip></SockPuppetChip>}
+    from={<SockPuppetChip level={2}></SockPuppetChip>}
     onOpenClicked={
       () => {
         setMessageOpened(true)
@@ -134,15 +134,15 @@ function SockPuppetsMessage5(props) {
   /> :
     <div ref={openedMessage}>
       <OpenedMessage
-        from={<SockPuppetChip />}
+        from={<SockPuppetChip level={2} />}
         to={<FakeTeacherChip name={props.username} level={1} />}
-        subject={"Fundamentals of Magic, Part 4"}
+        subject={"Your next puzzel"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.5.ogv"
         text={
           <>
-            <ChatBubble>
+            <Typography paragraph>
               hello friend.  i am definite same sock puppet.  not replacement.  very disciplined.  try puzzel below.  it is solvable.  i do not lie.
-            </ChatBubble>
+            </Typography>
             <Terminal
               commands={{
                 startPuzzle: {
@@ -196,14 +196,14 @@ function SockPuppetsMessage5(props) {
 }
 
 function Puzzle5Diabolical(props) {
-  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-6", false)
+  var [messageOpened, setMessageOpened] = useLocalStorage("level-2-puzzle-5-message-opened", false)
 
   return (<>
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <span><SockPuppetChip /> is being disciplined!</span>,
+        <span><SockPuppetChip level={2} /> is being disciplined!</span>,
         {
           text: <ChatBubble>My edutainment algorithms are still active.  I will now give you another educational mystery toy while Sock Puppet gets disciplined.</ChatBubble>,
           time: 3000
@@ -227,7 +227,7 @@ function Puzzle5Diabolical(props) {
                 color="textSecondary" gutterBottom
               >It's official!</Typography>
 
-              <SockPuppetChip/> has been almost fully disciplined!
+              <SockPuppetChip level={2}/> has been almost fully disciplined!
             </CardContent>
           </Card>,
           time: 5000
@@ -241,5 +241,6 @@ function Puzzle5Diabolical(props) {
     />
   </>)
 }
+
 
 export default Puzzle5Diabolical;

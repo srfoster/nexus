@@ -15,7 +15,7 @@ function SockPuppetsMessage(props) {
 
   return (!messageOpened ? <NewMessageNotification
     nexusSays={"Wow!  New messages(s)..."}
-    from={<SockPuppetChip></SockPuppetChip>}
+    from={<SockPuppetChip level={1}></SockPuppetChip>}
     onOpenClicked={
       () => {
         setMessageOpened(true)
@@ -29,14 +29,14 @@ function SockPuppetsMessage(props) {
 }
 
 function Step6WaitingOnSockPuppet(props) {
-  var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-password-lesson-opened", false)
+  var [messageOpened, setMessageOpened] = useLocalStorage("level-1-step-6-message-opened", false)
 
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <Typography paragraph><SockPuppetChip /><span>is making video content!</span></Typography>,
+        <Typography paragraph><SockPuppetChip level={1}/><span>is making video content!</span></Typography>,
         <ChatBubble message={"While you wait, please know:"}></ChatBubble>,
         <ChatBubble message={"The Nexus prides itself in its educational content for magic users."}></ChatBubble>,
         <ChatBubble message={"At the Nexus, your educational experience is our highest priority."}></ChatBubble>,
@@ -44,7 +44,7 @@ function Step6WaitingOnSockPuppet(props) {
         <ChatBubble message={"and their ability to produce educational content"}></ChatBubble>,
         <ChatBubble message={"under strict deadlines"}></ChatBubble>,
         <ChatBubble message={"..."}></ChatBubble>,
-        <ChatBubble message={<><span>Sometimes our low-level teachers, like</span> <SockPuppetChip /></>}></ChatBubble>,
+        <ChatBubble message={<><span>Sometimes our low-level teachers, like</span> <SockPuppetChip level={1}/></>}></ChatBubble>,
         <ChatBubble message={"may not always meet the expected deadlines"}></ChatBubble>,
         <ChatBubble message={"that we strive for"}></ChatBubble>
       ].map(e => { return { text: e, time: 3000 } })}
