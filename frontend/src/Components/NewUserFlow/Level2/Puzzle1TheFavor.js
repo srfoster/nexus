@@ -7,6 +7,7 @@ import { NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreates
 import SockPuppetFavorInInventory from './SockPuppetFavorInInventory';
 import Terminal from 'react-console-emulator'
 import Typography from '@material-ui/core/Typography';
+import { Level2Puzzle1EducationalContent } from '../EducationalResources';
 
 //VIDEO SCRIPT
 // Thanking
@@ -99,6 +100,7 @@ const SockPuppetsMessage = (props) => {
 
 function Puzzle1TheFavor(props) {
   var [messageOpened, setMessageOpened] = useLocalStorage("level-2-puzzle-1-message-opened", false)
+
   return (
     <PleaseWaitWhileSockPuppetCreatesContent
       contentComplete={messageOpened}

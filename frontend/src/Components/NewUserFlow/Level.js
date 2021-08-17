@@ -57,17 +57,36 @@ export const LoginButton = () => {
   );
 }
 
+function EducationalResources(props) {
+  return (
+    <Card>
+      <CardHeader title="Educational Resources"></CardHeader>
+      {props.content}
+    </Card>)
+}
 
 export const Level = (props) => {
+  const [showEducationalResources, setShowEducationalResources] = useState(false);
+  
+  var pressedKeys = {};
+  window.onkeyup = function(e) { pressedKeys[e.keyCode] = false; }
+  window.onkeydown = function(e) { pressedKeys[e.keyCode] = true; } 
+
   return (
     <>
-      <Card>
-        <CardHeader title={"Level " + props.number + ""}
-          subheader={props.subtitle}>
-        </CardHeader>
-        {props.children}
-      </Card>
-      
+      <div onClick={(e) => {
+        if ('69' in pressedKeys && '68' in pressedKeys) {
+          setShowEducationalResources(!showEducationalResources)
+        }
+      }}>
+        <Card>
+          <CardHeader title={"Level " + props.number + ""}
+            subheader={props.subtitle}>
+          </CardHeader>
+          {props.children}
+        </Card>
+      </div>
+      {showEducationalResources ? <EducationalResources content={props.educationalContent}/>:""} 
       <LoginButton/>
     </>
   );
