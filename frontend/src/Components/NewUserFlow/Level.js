@@ -65,32 +65,6 @@ function EducationalResources(props) {
     </Card>)
 }
 
-export const Level = (props) => {
-  const [showEducationalResources, setShowEducationalResources] = useState(false);
-  
-  var pressedKeys = {};
-  window.onkeyup = function(e) { pressedKeys[e.keyCode] = false; }
-  window.onkeydown = function(e) { pressedKeys[e.keyCode] = true; } 
-
-  return (
-    <>
-      <div onClick={(e) => {
-        if ('69' in pressedKeys && '68' in pressedKeys) {
-          setShowEducationalResources(!showEducationalResources)
-        }
-      }}>
-        <Card>
-          <CardHeader title={"Level " + props.number + ""}
-            subheader={props.subtitle}>
-          </CardHeader>
-          {props.children}
-        </Card>
-      </div>
-      {showEducationalResources ? <EducationalResources content={props.educationalContent}/>:""} 
-      <LoginButton/>
-    </>
-  );
-}
 
 export const ShowAfter = (props) => {
   const [shown, setShown] = useState(false);
@@ -250,4 +224,31 @@ export const AccountCreationReminder = (props) => {
 
     </>
   )
+}
+
+export const Level = (props) => {
+  const [showEducationalResources, setShowEducationalResources] = useState(false);
+  
+  var pressedKeys = {};
+  window.onkeyup = function(e) { pressedKeys[e.keyCode] = false; }
+  window.onkeydown = function(e) { pressedKeys[e.keyCode] = true; } 
+
+  return (
+    <>
+      <div onClick={(e) => {
+        if ('69' in pressedKeys && '68' in pressedKeys) {
+          setShowEducationalResources(!showEducationalResources)
+        }
+      }}>
+        <Card>
+          <CardHeader title={"Level " + props.number + ""}
+            subheader={props.subtitle}>
+          </CardHeader>
+          {props.children}
+        </Card>
+      </div>
+      {showEducationalResources ? <EducationalResources content={props.educationalContent}/>:""} 
+      <LoginButton/>
+    </>
+  );
 }

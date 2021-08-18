@@ -28,6 +28,9 @@ import { MagicMirror } from '../../MagicMirror';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 import { sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
 
+//Educational Resources
+import { Level3Puzzle1EducationalContent } from '../EducationalResources';
+
 
 // /*
 
@@ -323,7 +326,12 @@ export function Level3(props) {
     }
   }
 
-  let parts = [<Page1 setCanContinue={withConfetti(setCanContinue)} />]
+  let educationalResources =
+    [<Level3Puzzle1EducationalContent/>
+    //... create educational resources as we add new puzzles
+    ]
+
+    let parts = [<Page1 setCanContinue={withConfetti(setCanContinue)} />]
   //   [<Page1/>,
   //   <Page2/>,
   //   <Page3/>,

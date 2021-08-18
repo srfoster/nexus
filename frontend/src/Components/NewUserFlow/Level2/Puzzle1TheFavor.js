@@ -7,7 +7,6 @@ import { NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreates
 import SockPuppetFavorInInventory from './SockPuppetFavorInInventory';
 import Terminal from 'react-console-emulator'
 import Typography from '@material-ui/core/Typography';
-import { Level2Puzzle1EducationalContent } from '../EducationalResources';
 
 //VIDEO SCRIPT
 // Thanking

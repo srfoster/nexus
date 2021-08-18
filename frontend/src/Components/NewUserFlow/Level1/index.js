@@ -15,6 +15,9 @@ import Step4ChooseYourTeacher from './Step4ChooseYourTeacher';
 import Step5SockPuppetIntro from './Step5SockPuppetIntro';
 import Step6WaitingOnSockPuppet from './Step6WaitingOnSockPuppet';
 
+//Educational Resources
+import { Level1Step2EducationalContent, Level1Step3EducationalContent, Level1Step4EducationalContent, Level1Step5EducationalContent, Level1Step6EducationalContent, Level1CompletePageEducationalContent } from '../EducationalResources';
+
 /*
 An educational text adventure that leads you on epic quest
 to learn coding through a variety of media: text, video, and 2D/3D environments
@@ -54,6 +57,14 @@ function MeetYourTeacher (props) {
   //let setTitle = props.setTitle
   const [currentPart, setCurrentPart] = useLocalStorage("lvl1:currentPart", 0)
   const [canContinue, setCanContinue] = useState(false)
+
+  let educationalResources =
+    [<Level1Step2EducationalContent />,
+    <Level1Step3EducationalContent />,
+    <Level1Step4EducationalContent />,
+    <Level1Step5EducationalContent />,
+    <Level1Step6EducationalContent />,
+    <Level1CompletePageEducationalContent />]
 
   let parts =
     [<Step2UsernameForm setCanContinue={withConfetti(setCanContinue)} setUsername={setUsername} username={username} />,
