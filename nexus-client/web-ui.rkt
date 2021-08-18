@@ -160,8 +160,11 @@
 
 ;Change start-ui name to start-websocket-server
 (define (start-ui)
-  (spell-language-module 'orb-game-1/run-lang-external)
-  (preload-spell-sandbox)
+  ;(displayln "spell-language-module...")
+  ;(spell-language-module 'orb-game-1/run-lang-external)
+  ;(displayln "preload-spell-sandbox")
+  ;(preload-spell-sandbox)
+  (displayln "ws-serve")
   (ws-serve* #:port 8082 
              (ws-service-mapper
               ["/test" 
