@@ -2,12 +2,16 @@
 ; Gets fetched & eval-ed by main.rkt
 
 ;TODO Progress bar
-;     Start new thread for downloading so GUI doesn't freeze up 
+;     Get racket executable to not launch cmd?
 
 (let ()
   (local-require racket/gui
                  file/unzip)
-  
+
+  ;Creates Versions directory if doesn't exist yet
+  (when (not (directory-exists? (build-path "Versions")))
+      (make-directory (build-path "Versions")))
+
   ; Main window
   (define frame (new frame% [label "CodeSpells"]
                             [width 600]
@@ -75,6 +79,7 @@
       (~a "https://codespells-org.s3.amazonaws.com/Nexus/Versions/" (latest-version) ".zip"))
 
     (dl download-from-location install-location #:on-progress progress-function)
+    (send msg set-label "Unzipping...")
     (unzip install-location)
   )
 
