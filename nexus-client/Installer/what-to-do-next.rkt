@@ -81,7 +81,14 @@
     (dl download-from-location install-location #:on-progress progress-function)
     (send msg set-label "Unzipping...")
     (unzip install-location)
-  )
+    (rename-file-or-directory 
+      (build-path (latest-version)) 
+      (build-path "Versions" (latest-version)))
+    (send msg set-label "Complete!")
+
+    (update-local-latest-version!)
+
+    (play-button))
 
   ;Downloads latest version (puts it in Versions folder) 
   ;& updates the latest-version file
@@ -103,7 +110,9 @@
     (new button% [parent a-panel]
                   [label "Play the Game"]
                   [callback (lambda (button event)
-                                (send msg set-label "Launching..."))]))
+                                (send msg set-label "Launching...")
+                                (system (~a "cd Versions/" (get-local-latest-version) " && main.exe"))
+                                )]))
 
   ;TODO: What if this fails? How to report errors to user
   ;Fetch from the internet what the latest version is
@@ -115,16 +124,23 @@
     (string-trim (bytes->string/utf-8 body))  
   )
 
+  (define latest-version-file-path 
+      (build-path "Versions" "latest-version"))
+
   ;Check latest version against local version
   (define (latest-version? str)
     (string=? str (latest-version)))
 
   (define (get-local-latest-version)
-    (define latest-version-file-path 
-      (build-path "Versions" "latest-version"))
     (if (file-exists? latest-version-file-path)
       (string-trim (file->string latest-version-file-path))
       "No versions installed"))
+
+(define (update-local-latest-version!)
+  (with-output-to-file latest-version-file-path
+    #:exists 'replace
+    (lambda () 
+      (printf (latest-version)))))
 
   ; Check to see if there's anything installed
   ; If not, download latest version and put in Versions folder
@@ -138,6 +154,4 @@
   )
   ; check to see if it's version is current
   ; If not, update! If it is, offer a Launch button. 
-  
-  (displayln "Is this taking changes?")
 )

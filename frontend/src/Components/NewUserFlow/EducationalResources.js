@@ -1,4 +1,5 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 
 //Level1
 export const Level1Step2EducationalContent = () => {
@@ -26,11 +27,33 @@ export const Level1CompletePageEducationalContent = () => {
 
 //Level2
 export const Level2Puzzle1EducationalContent = () => {
-	return(<ul>
-		<li>Resource1</li>
-		<li>Resource2</li>
-		<li>Resource3</li>
-	</ul>)
+	return (
+		<>
+			<p>The words, terminal, console, shell, and command line, are closely related ideas. For those interested in the precise definitions, see <a href="https://www.geeksforgeeks.org/difference-between-terminal-console-shell-and-command-line/">this article</a>.</p>
+			<p>Our philosophy here is that the precise definitions are less important than the big idea: one powerful kind of interface is one in which a person types commands, and the computer runs them. This interface has been a way that programmers talk to computers since the earliest days of computer science. Modern programmers still use them today.</p>
+			<p>The simple terminal in the puzzle above understands just a few commands, but the reality is every terminal is different and most terminals that come with modern operating systems understand MANY more commands.</p>
+			<p>The basic anatomy of a command though is often the same: <tt>command arg1 arg2 arg3 ...</tt>. That is, there is a command, followed by 0 or more arguments.</p>
+			<Typography variant="h6">Suggested Exercises</Typography>
+			<ol>
+				<li><strong>Exploring Your Terminal</strong>
+					<ol>
+						<li><strong>Easy</strong> Can you figure out how to open the terminal on your computer?</li>	
+						<li><strong>Medium</strong> Does the <tt>help</tt> command work? Can you find a command that takes one or more arguments?</li>	
+						<li><strong>Hard</strong> Theoretically, you can do anything from the terminal that you could do from your graphical user interface. Can you figure out how to launch a web browser? Can you create a new file? Can you create a folder? Can you navigate your file system? Can you remove contents of a folder? (Hint: The <tt>help</tt> command is used as a reference for experts, not necessarily as a learning resource for terminal novices. You may have to research these things online.) &#129409;</li>	
+					</ol>
+				</li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ol>
+			<Typography variant="h6">Resources</Typography>
+			<ul>
+				<li>https://ss64.com/</li>
+				<li>Resource2</li>
+				<li>Resource3</li>
+			</ul>
+		</>
+	)
 }
 export const Level2Puzzle2EducationalContent = () => {
 	return(<ul>

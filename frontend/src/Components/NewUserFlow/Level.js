@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -61,7 +62,7 @@ function EducationalResources(props) {
   return (
     <Card>
       <CardHeader title="Educational Resources"></CardHeader>
-      {props.content}
+      <CardContent>{props.content}</CardContent>
     </Card>)
 }
 
