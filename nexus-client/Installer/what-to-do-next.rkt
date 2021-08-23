@@ -62,13 +62,8 @@
 
       (define percent-complete (* 100 (exact->inexact (/ pos (* total-metabytes 1000000)))))
 
-      ;(displayln percent-complete)
-
       (if (> percent-complete (+ 1 last-percent-complete))
           (begin
-            (printf "World download progress: ~a%\n"
-                  (~r (min percent-complete 100)
-                      #:precision 2))
             (progress-function (min percent-complete 100))
             (listen-for-progress in percent-complete total-metabytes progress-function))
           (listen-for-progress in last-percent-complete total-metabytes progress-function))))
@@ -144,14 +139,14 @@
 
   ; Check to see if there's anything installed
   ; If not, download latest version and put in Versions folder
-  (if (not (latest-version? (get-local-latest-version)))
+  (void (if (not (latest-version? (get-local-latest-version)))
       (let () 
         (send msg set-label "New version available")
         (update-button))
       (let ()
         (send msg set-label "Up-to-date!")
-        (play-button))
+        (play-button)))
   )
   ; check to see if it's version is current
-  ; If not, update! If it is, offer a Launch button. 
+  ; If not, update! If it is, offer a Lunch button. 
 )
