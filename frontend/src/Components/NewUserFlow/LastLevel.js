@@ -18,7 +18,6 @@ function CustomButtonGroup(props) {
   )
 }
 
-
 function LastLevelContent(props) {
   const openedMessage = useRef(null);
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-last-lesson", false)
