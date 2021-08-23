@@ -37,7 +37,7 @@ function LastLevelContent(props) {
         from={<NexusDevsChip />}
         to={<StudentChip name={props.username} level={1} />}
         subject={"The End of the Line... So Far"}
-        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e3.mp4"
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-behind-the-green-screen-with-cta.ogv"
         text={
           <>
               <Typography paragraph>
