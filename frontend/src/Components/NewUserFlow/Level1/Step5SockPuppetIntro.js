@@ -21,7 +21,7 @@ function Step5SockPuppetIntro(props) {
           <div style={{ backgroundColor: "black" }}>
             <ReactPlayer
               width={"100%"}
-              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e1-sock-4.mp4"
+              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e-1.1-smaller.ogv"
               controls={true}
               style={{}}
               playing={playing}

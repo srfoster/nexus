@@ -98,7 +98,7 @@ function Step7HelloWorldPuzzle(props) {
             <ReactPlayer
               playsInline
               width={"100%"}
-              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e2-sock-4.mp4"
+              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e-1.2-smaller.ogv"
               controls={true}
               style={{}}
               playing={false}

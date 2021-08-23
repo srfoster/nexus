@@ -137,7 +137,7 @@ function SockPuppetsMessage5(props) {
         from={<SockPuppetChip level={2} />}
         to={<FakeTeacherChip name={props.username} level={1} />}
         subject={"Your next puzzel"}
-        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.5.ogv"
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.5-smaller.ogv"
         text={
           <>
             <Typography paragraph>

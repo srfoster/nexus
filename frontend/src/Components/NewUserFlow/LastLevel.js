@@ -36,7 +36,7 @@ function LastLevelContent(props) {
         from={<NexusDevsChip />}
         to={<StudentChip name={props.username} level={1} />}
         subject={"The End of the Line... So Far"}
-        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-behind-the-green-screen-with-cta.ogv"
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-behind-the-green-screen-with-cta-smaller.ogv"
         text={
           <>
               <Typography paragraph>
@@ -44,50 +44,42 @@ function LastLevelContent(props) {
               </Typography>
             <div style={{textAlign: 'center'}}>
               <Typography variant="h6">
-                Share the Project!
+                Share the Project with Your Friends!
               </Typography>
               <CustomButtonGroup>{[  //update social links to start a new post
                 {
                   name: "Facebook",
-                  link: "https://www.facebook.com"
+                  link: "https://www.facebook.com/codespells/"
                 },
                 {
                   name: "Twitter",
-                  link: "https://www.twitter.com"
+                  link: "https://twitter.com/codespells"
                 },
-                {
-                  name: "Instagram",
-                  link: "https://www.instagram.com"
-                }
               ]}</CustomButtonGroup>
               <Typography variant="h6">
                 Help Fund the Project!
               </Typography>
               <CustomButtonGroup>{[
                 {
-                  name: "Patreon",
+                  name: "Become a Patron",
                   link: "https://patreon.com/codespells"
                 },
                 {
                   name: "Buy Our Book",
                   link: "https://amzn.to/3lGjrQ5" 
                 },
-                {
-                  name: "Buy CodeSpells Merch",
-                  link: "" //Create merch link
-                }
+                //{
+                //  name: "Buy CodeSpells Merch",
+                //  link: "" //Create merch link
+                //}
               ]}</CustomButtonGroup>
               <Typography variant="h6">
                 Help Contribute to the Project!
               </Typography>
               <CustomButtonGroup>{[
                 {
-                  name: "Create Learning Resources",
-                  link: "" //need link to instructions for how to create/submit
-                },
-                {
-                  name: "Contribute to Codebase",
-                  link: ""
+                  name: "Join the Discord & Post Your Interest in #general",
+                  link: "https://discord.gg/prsZZnm" //need link to instructions for how to create/submit
                 },
               ]}</CustomButtonGroup>
             </div>
