@@ -1,0 +1,5 @@
+Installer/CodeSpells/lib
+Installer/CodeSpells/*.exe
+Installer/*.exe
+Installer/*.zip
+*.bak
