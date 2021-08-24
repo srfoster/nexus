@@ -74,7 +74,7 @@ const SockPuppetsMessage = (props) => {
         from={<SockPuppetChip level={3} />}
         to={<StudentChip name={props.username} level={2} />}
         subject={"A Whole New World!"}
-        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-3.1.ogv"
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-3.1-smaller.ogv"
         text={
           <>
             <BlocklyPuzzle setCanContinue={props.setCanContinue} />

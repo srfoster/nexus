@@ -137,7 +137,7 @@ function SockPuppetsMessage5(props) {
         from={<SockPuppetChip level={2} />}
         to={<FakeTeacherChip name={props.username} level={1} />}
         subject={"Your next puzzel"}
-        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.5.ogv"
+        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.5-smaller.ogv"
         text={
           <>
             <Typography paragraph>
@@ -163,7 +163,8 @@ function SockPuppetsMessage5(props) {
                           <p>He's also given you a puzzle that's impossible to solve without looking at the source code!  The Nexus is trying to trap you here.</p>
                           <p>Look, I'm taking a big risk by doing this, but if you download the world below, I can finally talk freely with you about the Nexus.</p>
                           <p>~Your Friend, Socky</p>
-                          <Button color="secondary" variant="outlined">Download</Button>
+                          <Button color="secondary" variant="outlined"
+                          href="https://codespells-org.s3.amazonaws.com/Nexus/Installer/CodeSpells.zip">Download</Button>
                         </>
                       }
                     />
