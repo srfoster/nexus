@@ -76,6 +76,12 @@
     (dl download-from-location install-location #:on-progress progress-function)
     (send msg set-label "Unzipping...")
     (unzip install-location)
+    (sleep 1) ;there may be a race condition between
+    ;unzip and the rename, so we've added the sleep
+    ;here to manage that problem. We're not certain
+    ;that is what sometimes causes the following
+    ;rename operation to fail with an access
+    ;denied error. It happened once & we are confused
     (rename-file-or-directory 
       (build-path (latest-version)) 
       (build-path "Versions" (latest-version)))
