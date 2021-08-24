@@ -31,6 +31,47 @@
   (define msg (new message% [parent a-panel]
                             [auto-resize #t]
                             [label ""]))
+<<<<<<< HEAD
+
+(define (update-button)
+  (new button% [parent a-panel]
+                 [label "Download Latest Version"]
+                 [callback (lambda (button event)
+                              (send msg set-label "Downloading..."))]))
+
+(define (play-button)
+  (new button% [parent a-panel]
+                 [label "Play the Game"]
+                 [callback (lambda (button event)
+                              (send msg set-label "Launching..."))]))
+
+;This should instead scrape version # from a file and check it against current version?
+(define (latest-version? str)
+  (string=? str "0.1"))
+
+  ; Check to see if there's anything installed (Check for Versions folder)i
+  ; If not, download latest version and put in Versions folder
+  (when (not (directory-exists? "Versions"))
+    (send msg set-label "No Versions found")
+    (update-button)
+    )
+
+ ; If there is something installed,
+  (when (directory-exists? "Versions")
+    (if (not (latest-version? "0.1")
+        (let () 
+          (send msg set-label "New version available")
+          (update-button))
+        (let ()
+          (send msg set-label "Up-to-date!")
+          (play-button)
+          ))))
+ ; check to see if it's version is current
+ ; If not, update! If it is, offer a Launch button. 
+  
+  (displayln "Is this taking changes?")
+  )
+=======
 
   (define (find-dl-size url)
     (local-require net/http-easy)
@@ -76,6 +117,12 @@
     (dl download-from-location install-location #:on-progress progress-function)
     (send msg set-label "Unzipping...")
     (unzip install-location)
+    (sleep 1) ;there may be a race condition between
+    ;unzip and the rename, so we've added the sleep
+    ;here to manage that problem. We're not certain
+    ;that is what sometimes causes the following
+    ;rename operation to fail with an access
+    ;denied error. It happened once & we are confused
     (rename-file-or-directory 
       (build-path (latest-version)) 
       (build-path "Versions" (latest-version)))
@@ -150,3 +197,4 @@
   ; check to see if it's version is current
   ; If not, update! If it is, offer a Lunch button. 
 )
+>>>>>>> cc5647cf85cb5b9cddc907e5d57e72aff20f4f19

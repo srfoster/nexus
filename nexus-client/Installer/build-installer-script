@@ -1,2 +1,2 @@
-raco exe --gui ++lib racket/gui ++lib file/unzip .\main.rkt
-raco distribute CodeSpells .\main.exe
+raco exe --gui ++lib racket/gui ++lib file/unzip .\CodeSpells.rkt
+raco distribute CodeSpells .\CodeSpells.exe
