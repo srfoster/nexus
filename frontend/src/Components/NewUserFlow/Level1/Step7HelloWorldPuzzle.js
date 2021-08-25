@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Fade from '@material-ui/core/Fade';
 import { JSMirror } from '../../Widgets/Educational';
-import ReactPlayer from 'react-player'
-import { SockPuppetChip, StudentChip, VideoAndPuzzleLayout } from '../../Widgets/NexusVoice';
+import { SockPuppetChip, StudentChip, OpenedMessage } from '../../Widgets/NexusVoice';
 import Typography from '@material-ui/core/Typography';
 import { spread } from '../../../Util';
 
@@ -86,38 +85,19 @@ function Step7HelloWorldPuzzle(props) {
   */
 
   return (
-    <VideoAndPuzzleLayout
-      leftSideTitle={
-        <>
-          <Typography component='span' paragraph>From <SockPuppetChip level={1}/> to <StudentChip name={props.username} level={1} /></Typography>
-          <Typography >Subject: Hello, World!</Typography>
-        </>}
-      leftSide={
-        <>
-          <div style={{ backgroundColor: "black" }}>
-            <ReactPlayer
-              playsInline
-              width={"100%"}
-              url="https://codespells-org.s3.amazonaws.com/NexusVideos/e-1.2-smaller.ogv"
-              controls={true}
-              style={{}}
-              playing={false}
-              onEnded={() => {
-                setVideoFinished(true)
-              }}
-            />
-          </div>
-        </>
+    <OpenedMessage
+      from={<SockPuppetChip level={1} />}
+      to={<StudentChip name={props.username} level={1} />}
+      subject={"Hello, World!"}
+      videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-1.2-smaller.ogv"
+      text={<>
+        <Typography paragraph>The puzzle is to modify the code below to generate a button that lets you proceed to the next part of the Nexus.</Typography>
+        <Typography paragraph>~Your Friend, Socky</Typography>
+        <ThePuzzle onComplete={() => props.setCanContinue(true)} />
+      </>
       }
-      rightSide={videoFinished ?
-        <>
-          <Typography paragraph>The puzzle is to modify the code below to generate a button that lets you proceed to the next part of the Nexus.</Typography>
-          <ThePuzzle onComplete={() => props.setCanContinue(true)} />
-        </>
-        : ""}
     />
-
-  )
+  ) 
 }
 
 export default Step7HelloWorldPuzzle;
