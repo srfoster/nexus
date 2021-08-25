@@ -34,14 +34,18 @@ export function MultipleChoiceQuestion(props) {
   };
 
   const handleSubmit = () => {
-    let selection = props.answers[Number(value)]
-    if (selection) {
-      setHelperText(selection.feedback);
-      setError(!selection.correct);
-      if (selection.correct) {
-        props.onCorrect();
-      } else {
-        props.onIncorrect();
+    if (value == "") {
+      props.onIncorrect();
+    } else {
+      let selection = props.answers[Number(value)]
+      if (selection) {
+        setHelperText(selection.feedback);
+        setError(!selection.correct);
+        if (selection.correct) {
+          props.onCorrect();
+        } else {
+          props.onIncorrect();
+        }
       }
     }
   }
