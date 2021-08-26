@@ -68,7 +68,7 @@ ffmpeg -i INPUT.mp4 -c:v libtheora -q:v 7 -c:a libvorbis -q:a 4 OUTPUT.ogv
 Also, for efficient loading 640x480 is a good resolution, so use:
 
 ```
-ffmpeg -i INPUT.ogv -vf scale=640x480 OUTPUT.ogv
+ffmpeg -i INPUT.ogv -vf scale=640:480 -c:v libtheora -q:v 7 -c:a libvorbis -q:a 4 OUTPUT.ogv
 ```
 
 
