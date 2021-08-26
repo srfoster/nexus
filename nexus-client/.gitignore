@@ -1,5 +1,6 @@
 Installer/CodeSpells/lib
 Installer/CodeSpells/*.exe
+Installer/CodeSpells/Versions
 Installer/*.exe
 Installer/*.zip
 *.bak
