@@ -47,11 +47,8 @@ import { Level3Puzzle1EducationalContent } from '../EducationalResources';
 // * Konva
 // */
 
-
-
 const SockPuppetsMessage = (props) => {
-  console.log(props)
-
+  let [username, setUsername] = useLocalStorage("user-name", undefined);
   const [messageOpened, setMessageOpened] = useState(false)
   const openedMessage = useRef(null);
 
@@ -72,7 +69,7 @@ const SockPuppetsMessage = (props) => {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={3} />}
-        to={<StudentChip name={props.username} level={2} />}
+        to={<StudentChip name={username} level={2} />}
         subject={"A Whole New World!"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-3.1-smaller.ogv"
         text={

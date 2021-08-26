@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 function SockPuppetsMessage3(props) {
   const [messageOpened, setMessageOpened] = useState(false);
   const openedMessage = useRef(null);
+  let [username, setUsername] = useLocalStorage("user-name", undefined);
   const [code, setCode] = useState("<Toy\n  nodes={['You!','Sock Puppet']}\n  edges={[['You!','Sock Puppet']]}\n  patientZero={'Sock Puppet'}/>");
 
   const setCanContinue = props.setCanContinue
@@ -29,7 +30,7 @@ function SockPuppetsMessage3(props) {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={2} />}
-        to={<FakeTeacherChip name={props.username} level={1} />}
+        to={<FakeTeacherChip name={username} level={1} />}
         subject={"Introduction to Networks"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.3-smaller.ogv"
         text={

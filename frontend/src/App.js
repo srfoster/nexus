@@ -98,7 +98,8 @@ function App() {
               <Route
                 exact path={'/level3'}
                 component={(props) =>
-                  <LevelManager isLoggedIn={isLoggedIn} startingLevel={3}></LevelManager >
+                  <LevelManager isLoggedIn={isLoggedIn} startingLevel={3} backgroundTransparent={ true }>
+                  </LevelManager>
                   }
               />
               <Route

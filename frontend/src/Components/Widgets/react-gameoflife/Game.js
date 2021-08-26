@@ -33,7 +33,7 @@ function boardToCells(board){
     for (var y = 0; y < board.length; y++) {
         for (var x = 0; x < board[0].length; x++) {
             if (board[y][x]) {
-                cells.push({ color: "red", x: y, y: x })
+                cells.push({ color: "#6FE379", x: y, y: x })
             }
 
         }
@@ -101,7 +101,7 @@ function Cell(props) {
                 top: `${CELL_SIZE * y + 1}px`,
                 width: `${CELL_SIZE - 1}px`,
                 height: `${CELL_SIZE - 1}px`,
-                backgroundColor: props.color || "red" }}
+                backgroundColor: props.color || "#6FE379" }}
 
             onClick={(e) => { e.stopPropagation(); props.onClick(x,y) }}
 />

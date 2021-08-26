@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 function SockPuppetsMessage4(props) {
   const [messageOpened, setMessageOpened] = useState(false);
   const openedMessage = useRef(null);
+  let [username, setUsername] = useLocalStorage("user-name", undefined);
   const [code, setCode] = useState("<Toy\n  instrument=\"alto_sax\"\n  buttons={\n    {\"C-Chord\": [\"A\",\"D\",\"G\"],\n     \"F-Chord\": [\"A\",\"F\",\"H\"]}\n  } />");
   const setCanContinue = props.setCanContinue
 
@@ -28,7 +29,7 @@ function SockPuppetsMessage4(props) {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={2} />}
-        to={<FakeTeacherChip name={props.username} level={1} />}
+        to={<FakeTeacherChip name={username} level={1} />}
         subject={"Introduction to Musical Coding"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.4-smaller.ogv"
         text={

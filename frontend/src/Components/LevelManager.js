@@ -60,6 +60,14 @@ const LevelManager = (props) => {
   const [badges, setBadges] = useState(undefined);
   const [currentLevelNum, setCurrentLevelNum] = useLocalStorage("current-level-num", props.startingLevel || 1);
 
+  useEffect(() => {
+    if (props.backgroundTransparent) {
+      document.body.style.setProperty("background-color", "transparent", "important");
+    } else {
+      document.body.style.setProperty("background-color", "");
+    }
+   }, [])
+
   const gotoNextLevel = () => {
     if (props.endingLevel && currentLevelNum + 1 > props.endingLevel ) {
       setCurrentLevelNum(levels.length);

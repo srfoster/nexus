@@ -57,5 +57,18 @@ Logging:
 docker-compose -f prod-stack.yml logs -f -t prod-backend > backend.log 2>&1 &
 ```
 
+# Video Content Guidelines
+
+Videos in the nexus need to render inside of Unreal.  Currently, the only known format that renders correctly is OGV, so convert videos from mp4 to ogv with:
+
+```
+ffmpeg -i INPUT.mp4 -c:v libtheora -q:v 7 -c:a libvorbis -q:a 4 OUTPUT.ogv
+```
+
+Also, for efficient loading 640x480 is a good resolution, so use:
+
+```
+ffmpeg -i INPUT.ogv -vf scale=640x480 OUTPUT.ogv
+```
 
 

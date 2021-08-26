@@ -43,6 +43,7 @@ You'll see.  Try the puzzle below.
 const SockPuppetsMessage = (props) => {
   const [messageOpened, setMessageOpened] = useState(false)
   const openedMessage = useRef(null);
+  let [username, setUsername] = useLocalStorage("user-name", undefined);
 
   useEffect(() => {
     if (openedMessage.current)
@@ -61,7 +62,7 @@ const SockPuppetsMessage = (props) => {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={2}/>}
-        to={<StudentChip name={props.username} level={1} />}
+        to={<StudentChip name={username} level={1} />}
         subject={"The Favor I Owe"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.1-smaller.ogv"
         text={

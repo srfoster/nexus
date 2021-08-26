@@ -94,6 +94,7 @@ function SockPuppetsMessage5(props) {
   const openedMessage = useRef(null);
   const [code, setCode] = useState("<Toy\n  />");
   const [cells, setCells] = useState([]);
+  let [username, setUsername] = useLocalStorage("user-name", undefined);
   const [showSimulator, setShowSimulator] = useState(false);
   const [puzzleStarted, setPuzzleStarted] = useState(false);
   const [numberSick, setNumberSick] = useState(0);
@@ -135,7 +136,7 @@ function SockPuppetsMessage5(props) {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={2} />}
-        to={<FakeTeacherChip name={props.username} level={1} />}
+        to={<FakeTeacherChip name={username} level={1} />}
         subject={"Your next puzzel"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.5-smaller.ogv"
         text={

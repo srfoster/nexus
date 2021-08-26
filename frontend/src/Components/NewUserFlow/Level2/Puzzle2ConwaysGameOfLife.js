@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 const SockPuppetsMessage2 = (props) => {
   const [messageOpened, setMessageOpened] = useState(false)
   const openedMessage = useRef(null);
+  let [username, setUsername] = useLocalStorage("user-name", undefined);
 
   let Toy = (props) => {
 
@@ -58,7 +59,7 @@ const SockPuppetsMessage2 = (props) => {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={2} />}
-        to={<StudentChip name={props.username} level={1} />}
+        to={<StudentChip name={username} level={1} />}
         subject={"Simulations are Fun!"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.2-smaller.ogv"
         text={
@@ -75,7 +76,7 @@ const SockPuppetsMessage2 = (props) => {
                   Alter the Spell for each Toy so that the color properties are <tt style={{ color: "#FF1493" }}><span> #FF1493 </span></tt> and <tt style={{ color: "#00BFFF" }}>#00BFFF</tt>.
                 </Typography>
                 <Typography paragraph>
-                  Then, click <Button variant="outlined"><CasinoIcon /> Random</Button> and on each Toy at least once.
+                  Then, click <Button variant="outlined"><CasinoIcon /> Random</Button> on each Toy at least once.
 
                   (If you can't figure out what the <Button variant="outlined">Next</Button> button does, don't worry.  That's for later puzzles!)
             </Typography>
