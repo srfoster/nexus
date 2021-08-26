@@ -5,7 +5,7 @@ import CardContent from '@material-ui/core/CardContent';
 import ChatBubble from '../../Widgets/ChatBubble/';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { JSMirror } from '../../Widgets/Educational';
-import { FakeTeacherChip, NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreatesContent, SockPuppetChip} from '../../Widgets/NexusVoice';
+import { StudentChip, NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreatesContent, SockPuppetChip} from '../../Widgets/NexusVoice';
 import NetworkDiseaseSimulator from '../../Widgets/NetworkDiseaseSimulator.js';
 import Typography from '@material-ui/core/Typography';
 
@@ -30,7 +30,7 @@ function SockPuppetsMessage3(props) {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={2} />}
-        to={<FakeTeacherChip name={username} level={1} />}
+        to={<StudentChip name={username} level={2} />}
         subject={"Introduction to Networks"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.3-smaller.ogv"
         text={

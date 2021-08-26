@@ -36,7 +36,7 @@ function Level1CompletePage(props) {
       <Fade in={true} timeout={1000}>
         <Typography>Congratulations!</Typography></Fade>
       <Fade in={true} timeout={10000}>
-        <Typography>You've completed Level 1!</Typography>
+        <Typography>You've leveled up! You're now a Level 2 Student!</Typography>
       </Fade>
     </>
   );

@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ChatBubble from '../../Widgets/ChatBubble/';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { FakeTeacherChip, NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreatesContent, SockPuppetChip} from '../../Widgets/NexusVoice';
+import { StudentChip, NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreatesContent, SockPuppetChip} from '../../Widgets/NexusVoice';
 import { JSMirror } from '../../Widgets/Educational';
 import PianoSimulator from '../../Widgets/PianoSimulator.js';
 import Typography from '@material-ui/core/Typography';
@@ -29,7 +29,7 @@ function SockPuppetsMessage4(props) {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={2} />}
-        to={<FakeTeacherChip name={username} level={1} />}
+        to={<StudentChip name={username} level={2} />}
         subject={"Introduction to Musical Coding"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.4-smaller.ogv"
         text={

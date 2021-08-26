@@ -69,7 +69,7 @@ const SockPuppetsMessage = (props) => {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={3} />}
-        to={<StudentChip name={username} level={2} />}
+        to={<StudentChip name={username} level={3} />}
         subject={"A Whole New World!"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-3.1-smaller.ogv"
         text={

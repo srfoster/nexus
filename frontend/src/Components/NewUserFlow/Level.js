@@ -229,15 +229,34 @@ export const AccountCreationReminder = (props) => {
 
 export const Level = (props) => {
   const [showEducationalResources, setShowEducationalResources] = useState(false);
-  
-  var pressedKeys = {};
-  window.onkeyup = function(e) { pressedKeys[e.keyCode] = false; }
-  window.onkeydown = function(e) { pressedKeys[e.keyCode] = true; } 
+  let [keyEDown,setKeyEDown] = useState(false);
+  let [keyDDown,setKeyDDown] = useState(false);
+ 
+  useEffect(() => {
+    window.onkeyup = function (e) {
+      if (e.keyCode == "69") {
+        setKeyEDown(false);
+      }
+      if (e.keyCode == "68") {
+        setKeyDDown(false);
+      }
+    }
+    window.onkeydown = function (e) {
+      if (e.keyCode == "69") {
+        setKeyEDown(true);
+      }
+      if (e.keyCode == "68") {
+        setKeyDDown(true);
+      }
+    }
+  },
+    [])
+
 
   return (
     <>
       <div onClick={(e) => {
-        if ('69' in pressedKeys && '68' in pressedKeys) {
+        if (keyEDown && keyDDown) {
           setShowEducationalResources(!showEducationalResources)
         }
       }}>

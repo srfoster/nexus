@@ -7,7 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import ChatBubble from '../../Widgets/ChatBubble/';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Game } from '../../Widgets/react-gameoflife/Game.js';
-import { FakeTeacherChip, NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreatesContent, SockPuppetChip} from '../../Widgets/NexusVoice';
+import { StudentChip, NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreatesContent, SockPuppetChip} from '../../Widgets/NexusVoice';
 import NetworkDiseaseSimulator from '../../Widgets/NetworkDiseaseSimulator.js';
 import SockPuppetFavorInInventory from './SockPuppetFavorInInventory';
 import Terminal from 'react-console-emulator'
@@ -136,7 +136,7 @@ function SockPuppetsMessage5(props) {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={2} />}
-        to={<FakeTeacherChip name={username} level={1} />}
+        to={<StudentChip name={username} level={2} />}
         subject={"Your next puzzel"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.5-smaller.ogv"
         text={

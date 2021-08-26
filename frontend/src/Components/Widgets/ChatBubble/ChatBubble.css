@@ -13,7 +13,7 @@
 	top: 15px;
 	width: auto;
 	height: auto;
-	background-color: #616161;
+	background-color: #2f2f2f;
 
 }
 
@@ -40,7 +40,7 @@
   	top: 10px;
 	bottom: auto;
 	border: 12px solid;
-	border-color: #616161 #616161 transparent transparent;
+	border-color: #2f2f2f #2f2f2f transparent transparent;
 }
 
 .img-circle {

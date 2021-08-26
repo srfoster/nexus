@@ -62,7 +62,7 @@ const SockPuppetsMessage = (props) => {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={2}/>}
-        to={<StudentChip name={username} level={1} />}
+        to={<StudentChip name={username} level={2} />}
         subject={"The Favor I Owe"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.1-smaller.ogv"
         text={
@@ -142,7 +142,7 @@ function Puzzle1TheFavor(props) {
                 color="textSecondary" gutterBottom
               >Did you know...</Typography>
 
-              ...the Nexus's software architects have not been seen since the year 2022?
+              ...the Nexus's software architects have not been seen since the year 2062?
             </CardContent>
           </Card>,
           time: 5000

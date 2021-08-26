@@ -52,7 +52,9 @@ function ThePuzzle(props) {
             return true
           }} />
       }
-        hint={<><Typography paragraph>Hint: The magic button will only work if it contains the same text as the subject of my email.</Typography></>}
+        hint={<>
+          <Typography paragraph>Hint: The magic button will only work if it contains the same text as the subject of my email.</Typography>
+        </>}
         isComplete={complete} />
     </Fade>
   )
