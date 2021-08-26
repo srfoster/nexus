@@ -109,10 +109,8 @@ function Puzzle1TheFavor(props) {
         <span><SockPuppetChip level={2}/> is making video content!</span>,
         {
           text: <ChatBubble>Because Sock Puppet has been slower than average, my entertainment algorithms have been activated.</ChatBubble>,
-          time: 2000
         },
         { text: <ChatBubble>Here's a fun fact!</ChatBubble>,
-          time: 2000
         },
         
         {
@@ -125,15 +123,12 @@ function Puzzle1TheFavor(props) {
               ...I (the Nexus) was built by two eccentric thousandaires during the COVID-19 lockdown of the year 2020?
             </CardContent>
           </Card>,
-          time: 5000
         },
         {
           text: <span><SockPuppetChip  level={2}/> is <strong>still</strong> making video content...<br/><br/></span>,
-          time: 2000
         },
         {
           text: <ChatBubble>Here's another fact!</ChatBubble>,
-          time: 1000
         },
         {
           text: <Card style={{marginTop: 20, marginBottom:20}}>
@@ -145,19 +140,15 @@ function Puzzle1TheFavor(props) {
               ...the Nexus's software architects have not been seen since the year 2062?
             </CardContent>
           </Card>,
-          time: 5000
         },
         {
           text: <span><SockPuppetChip level={2} /> is <strong>still</strong> making video content...<br/><br/></span>,
-          time: 2000
         },
         {
           text: <ChatBubble>Here's another fact!</ChatBubble>,
-          time: 1000
         },
         {
           text: <ChatBubble>Ahh.  Never mind.  <SockPuppetChip level={2} /> is <strong>finally</strong> finished.</ChatBubble>,
-          time: 1000
         },
       ]}
       SockPuppetMessage={<SockPuppetsMessage setCanContinue={ props.setCanContinue } /> /*<SockPuppetsMessage {...props} />*/}

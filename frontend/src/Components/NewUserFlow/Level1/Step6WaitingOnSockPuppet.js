@@ -47,11 +47,11 @@ function Step6WaitingOnSockPuppet(props) {
         <ChatBubble message={"and their ability to produce educational content"}></ChatBubble>,
         <ChatBubble message={"under strict deadlines"}></ChatBubble>,
         <ChatBubble message={"..."}></ChatBubble>,
-        <ChatBubble message={<span>Sometimes our low-level teachers, like <SockPuppetChip level={1}/></span>}></ChatBubble>,
+        <ChatBubble message={<><span>Sometimes our low-level teachers, like</span> <SockPuppetChip level={1}/></>}></ChatBubble>,
         <ChatBubble message={"may not always meet the expected deadlines"}></ChatBubble>,
         <ChatBubble message={"that we strive for"}></ChatBubble>,
         <ChatBubble message={"Ah! Here we are:"}></ChatBubble>
-      ].map(e => { return { text: e, time: 3000 } })}
+      ].map(e => { return { text: e } })}
       SockPuppetMessage={React.createElement(SockPuppetsMessage, props)}
     />
   )

@@ -90,6 +90,31 @@ export function SpinThen(props) {
 export function PleaseWaitWhileSockPuppetCreatesContent(props) {
   var [step, setStep] = useState(props.contentComplete ? props.NexusStallingMessages.length : 0)
 
+  // Takes NexusStallingMessage (like a ChatBubble or Typography), 
+  // checks the number of words in content
+  // translates # of words into # of milliseconds (~180 words / min)
+    // Won't work for ALL elements, so user can still 
+    // set time prop for NexusStallingMessage
+  function waitTimeForReading(content){
+    let extraTime = 1000; //A little extra buffer time for reader to see there's a new message
+    // if the content isn't an object with a text key
+    if(!content.text) {
+      return 3000
+    }
+    //if the content is a chat bubble w/ a child (that's the message)
+    if(content.text.props.children && typeof content.text.props.children == "string"){
+      return content.text.props.children.split(" ").length / 180 * 60 * 1000 + extraTime
+    }
+    //if the content is a chat bubble w/ a message prop
+    else if(content.text.props.message && typeof content.text.props.message == "string"){
+      return content.text.props.message.split(" ").length / 180 * 60 * 1000 + extraTime
+    }
+
+    else{ // defaults to 3000 for everything else
+      return 3000;
+    } 
+  }
+
   useEffect(() => {
 
     if (!props.contentComplete) {
@@ -103,7 +128,7 @@ export function PleaseWaitWhileSockPuppetCreatesContent(props) {
           setStep(i+1)
         },  total)
 
-        total += (e.time || 2000)
+        total += (e.time || waitTimeForReading(e))
       }
     }
   }, [])
