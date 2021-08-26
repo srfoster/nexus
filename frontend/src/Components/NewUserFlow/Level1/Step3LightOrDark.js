@@ -6,7 +6,6 @@ import Typography from '@material-ui/core/Typography';
 
 function Step3LightOrDark(props) {
   let [darkModeDecisionMade, setDarkModeDecisionMade] = useState(undefined);
-  //Add sounds effects to Light vs Dark mode
 
   useEffect(() => {
     if (window.localStorage.getItem("dark-mode")) {

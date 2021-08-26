@@ -13,7 +13,6 @@ import Fade from '@material-ui/core/Fade';
 import MailIcon from '@material-ui/icons/Mail';
 import ReactPlayer from 'react-player'
 import SchoolIcon from '@material-ui/icons/School';
-import Sound from 'react-sound';
 import Typography from '@material-ui/core/Typography';
 
 export const VideoAndPuzzleLayout = (props) => {
@@ -132,8 +131,14 @@ export function OpenedMessage(props) {
   return (<>
     <VideoAndPuzzleLayout
       leftSideTitle={<>
-        <Typography component='span' paragraph>From {props.from} to {props.to} </Typography>
-        <Typography>Subject: {props.subject}</Typography>
+        <Grid container spacing={0.5}>
+          <Grid item xs={2}><Typography paragraph><strong>From:</strong></Typography></Grid>
+          <Grid item xs={10}><Typography paragraph>{props.from}</Typography></Grid>
+          <Grid item xs={2}><Typography paragraph><strong>To:</strong></Typography></Grid>
+          <Grid item xs={10}><Typography paragraph>{props.to}</Typography></Grid>
+          <Grid item xs={2}><Typography paragraph><strong>Subject:</strong></Typography></Grid>
+          <Grid item xs={10}><Typography paragraph>{props.subject}</Typography></Grid>
+        </Grid>
       </>}
       leftSide={
         <div style={{ backgroundColor: "black" }}>
