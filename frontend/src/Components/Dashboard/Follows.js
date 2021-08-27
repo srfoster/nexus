@@ -24,7 +24,6 @@ function Follows(props) {
         if (isMounted) {
           setFollows(follows.follows)
           setTotalFollows(follows.total)
-          console.log(follows)
         }
       })
       .catch(res => {

@@ -225,7 +225,6 @@ function BlocklyPuzzle(props) {
             onWorkspaceChange={(workspace) => {
               const code = Blockly.JavaScript.workspaceToCode(workspace);
               setCode(code);
-              console.log(code);
             }}
             onXmlChange={() => { }}
   />
@@ -235,15 +234,12 @@ function BlocklyPuzzle(props) {
         readOnly: false //"nocursor"
       }}
       onReturn={(fromUnreal) => {
-        console.log(fromUnreal)
         if (fromUnreal.responseFor.includes("build-sphere")) {
-          console.log("Right function!")
           //They called the right function...
           //  Now, are the voxels right?
 
           //Should this take an onerror 3rd param?
           sendOnCodeSpellsSocket("(check-voxels (vec -485 1818 6166))", (d) => {
-          console.log("checked voxels",d)
             if (d.response && d.response.VoxelValueMaterials && d.response.VoxelValueMaterials[0] && d.response.VoxelValueMaterials[0].Value < 1) {
                props.setCanContinue(true)
              }
@@ -261,8 +257,6 @@ function BlocklyPuzzle(props) {
 }
 
 function Page1(props) {
-  console.log("Page1",props)
-
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3.1", false)
 
   return (

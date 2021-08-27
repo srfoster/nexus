@@ -21,7 +21,6 @@ import LastLevel from "./NewUserFlow/LastLevel";
 
 // Badge -> Boolean
 function finished(badge) {
-  console.log(badge)
   return badge.name.startsWith("Finished:")
 }
 

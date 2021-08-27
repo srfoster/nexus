@@ -15,7 +15,6 @@ export function badgeOnWhitelist(badgeName) {
 
 function AddBadgeOnRender(props) {
   const [gotBadge, setGotBadge] = useState(false)
-  console.log("Badge added...")
 
   if(!badgeOnWhitelist(props.name)){
     throw 'Badge not on white list: ' + props.name 

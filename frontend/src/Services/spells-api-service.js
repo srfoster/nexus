@@ -78,7 +78,6 @@ const SpellsApiService = {
 
     })
       .then(res => {
-        console.log(res)
         return (!res.ok)
           ? res.json().then(e => console.log("Not logged in"))
           : res.json()
