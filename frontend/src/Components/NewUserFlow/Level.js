@@ -216,7 +216,12 @@ export const AccountCreationReminder = (props) => {
               Oh no! We can't save your progress!
             </Typography>
             <Typography style={{ color: "white" }}>
-              <a onClick={handleOpen}><strong><span style={{ textDecoration: "underline", color: "white" }}>Create an account or login</span></strong></a>. You will return where you left off.
+              <a style={{ cursor: "pointer" }}
+                onClick={handleOpen}>
+                <strong><span style={{ textDecoration: "underline", color: "white" }}>
+                  Create an account or login
+                </span></strong>
+              </a>. You will return where you left off.
             </Typography>
             <AccountCreationOrLoginModal />
           </Box>
