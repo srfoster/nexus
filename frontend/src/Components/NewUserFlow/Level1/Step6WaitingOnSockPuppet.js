@@ -36,7 +36,7 @@ function Step6WaitingOnSockPuppet(props) {
       contentComplete={messageOpened}
       setContentComplete={setMessageOpened}
       NexusStallingMessages={[
-        <Typography paragraph><SockPuppetChip level={1}/><span> is making video content!</span></Typography>,
+        <span><SockPuppetChip level={1}/> is making video content!</span>,
         <ChatBubble message={"Hello!"}></ChatBubble>,
         <ChatBubble message={"This is the Nexus speaking to you."}></ChatBubble>,
         <ChatBubble message={<><span>While we wait for</span> <SockPuppetChip level={1}/><span>, I will keep you entertained.</span></>}></ChatBubble>,

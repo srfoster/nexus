@@ -187,13 +187,13 @@ function BlocklyPuzzle(props) {
     [])
 
   return (!blockIds ? "" : <>
-    <Typography paragraph>The puzzle is to build a sphere of radius 100 at your orb's location. The location of your orb is:
+    <span>The puzzle is to build a sphere of radius 100 at your orb's location. The location of your orb is:
       <ul>
         <li>X: -484</li>
         <li>Y: 1818</li>
         <li>Z: 6166</li>
       </ul>
-    </Typography>
+    </span>
 
     
     <BlocklyWorkspace
