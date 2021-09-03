@@ -14,6 +14,11 @@ import MailIcon from '@material-ui/icons/Mail';
 import ReactPlayer from 'react-player'
 import SchoolIcon from '@material-ui/icons/School';
 import Typography from '@material-ui/core/Typography';
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import PauseIcon from "@material-ui/icons/Pause";
+import IconButton from "@material-ui/core/IconButton";
+
+
 
 export const VideoAndPuzzleLayout = (props) => {
   return (
@@ -157,8 +162,8 @@ export function PleaseWaitWhileSockPuppetCreatesContent(props) {
 }
 
 export function OpenedMessage(props) {
-  const [videoFinished,setVideoFinished] = useState(false) 
-
+  const [videoFinished,setVideoFinished] = useState(false)
+  
   return (<>
     <VideoAndPuzzleLayout
       leftSideTitle={<>
@@ -172,21 +177,60 @@ export function OpenedMessage(props) {
         </Grid>
       </>}
       leftSide={
-        <div style={{ backgroundColor: "black" }}>
-          <ReactPlayer
-            width={"100%"}
-            url={props.videoUrl}
-            controls={true}
-            style={{}}
-            progressInterval={100}
-            onProgress={(p) => { }}
-            onEnded={() => {
-              setVideoFinished(true)
-            }}
-          />
-        </div>
+        <CustomVideoPlayer
+          videoUrl={props.videoUrl}
+          setVideoFinished={setVideoFinished} />
       }
       rightSide={!videoFinished ? "" : props.text }
     />
+  </>)
+}
+
+function CustomVideoPlayer(props) {
+  const [playing, setPlaying] = useState(false)
+
+  const handlePlayPause = () => {
+    console.log("Playing video now")
+    setPlaying(!playing);
+  }
+
+  return (
+    <>
+      <div style={{ backgroundColor: "black" }}>
+        <ReactPlayer
+          width={"100%"}
+          url={props.videoUrl}
+          controls={false}
+          playing={playing}
+          style={{}}
+          progressInterval={100}
+          onProgress={(p) => { }}
+          onEnded={() => {
+            props.setVideoFinished(true)
+          }}
+        />
+        <PlayerControls
+          onPlayPause={handlePlayPause}
+          playing={playing}
+        />
+      </div>
+    </>
+  )
+
+}
+
+function PlayerControls({ onPlayPause, playing }) {
+
+  return (<>
+    <IconButton
+      onClick={onPlayPause}
+      aria-label="play"
+    >
+      {playing ? (
+        <PauseIcon fontSize="inherit" />
+      ) : (
+        <PlayArrowIcon fontSize="inherit" />
+      )}
+    </IconButton>
   </>)
 }
