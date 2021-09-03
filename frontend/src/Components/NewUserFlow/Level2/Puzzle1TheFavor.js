@@ -3,7 +3,7 @@ import { useLocalStorage } from "../../../Util";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ChatBubble from '../../Widgets/ChatBubble/';
-import { NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreatesContent, SockPuppetChip, StudentChip } from '../../Widgets/NexusVoice';
+import { DidYouKnowCard, NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreatesContent, SockPuppetChip, StudentChip } from '../../Widgets/NexusVoice';
 import SockPuppetFavorInInventory from './SockPuppetFavorInInventory';
 import Terminal from 'react-console-emulator'
 import Typography from '@material-ui/core/Typography';
@@ -114,15 +114,7 @@ function Puzzle1TheFavor(props) {
         },
         
         {
-          text: <Card elevation={4} style={{marginTop: 20, marginBottom:20}}>
-            <CardContent>
-              <Typography
-                color="textSecondary" gutterBottom
-              >Did you know...</Typography>
-
-              ...I (the Nexus) was built by two eccentric thousandaires during the COVID-19 lockdown of the year 2020?
-            </CardContent>
-          </Card>,
+          text: <DidYouKnowCard>...I (the Nexus) was built by two eccentric thousandaires during the COVID-19 lockdown of the year 2020?</DidYouKnowCard>
         },
         {
           text: <span><SockPuppetChip  level={2}/> is <strong>still</strong> making video content...<br/><br/></span>,
@@ -131,15 +123,7 @@ function Puzzle1TheFavor(props) {
           text: <ChatBubble>Here's another fact!</ChatBubble>,
         },
         {
-          text: <Card elevation={4} style={{marginTop: 20, marginBottom:20}}>
-            <CardContent>
-              <Typography
-                color="textSecondary" gutterBottom
-              >Did you know...</Typography>
-
-              ...the Nexus's software architects have not been seen since the year 2062?
-            </CardContent>
-          </Card>,
+          text: <DidYouKnowCard>...the Nexus's software architects have not been seen since the year 2062?</DidYouKnowCard>
         },
         {
           text: <span><SockPuppetChip level={2} /> is <strong>still</strong> making video content...<br/><br/></span>,

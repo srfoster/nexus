@@ -5,7 +5,7 @@ import CardActions from '@material-ui/core/CardActions';
 import { useLocalStorage, spread } from "../../../Util";
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
-import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage } from '../../Widgets/NexusVoice';
+import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage, DidYouKnowCard } from '../../Widgets/NexusVoice';
 import { SBS, Level, withConfetti, ContinueButton } from '../Level';
 import useStyles from '../../../styles.js';
 import Slider from '@material-ui/core/Slider';
@@ -279,14 +279,7 @@ function Page1(props) {
             time: 4000
           },
           {
-            text: <Card elevation={4} style={{ marginTop: 20, marginBottom: 20 }}>
-              <CardContent>
-                <Typography
-                  color="textSecondary" gutterBottom
-                >Did you know...</Typography>
-                <h1>Socks Rock!!!</h1>
-              </CardContent>
-            </Card>,
+            text: <DidYouKnowCard><h1>Socks Rock!!!</h1></DidYouKnowCard>,
             time: 4000
           },
           {

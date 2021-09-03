@@ -5,7 +5,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import ChatBubble from '../../Widgets/ChatBubble/';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { StudentChip, NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreatesContent, SockPuppetChip} from '../../Widgets/NexusVoice';
+import { StudentChip, NewMessageNotification, OpenedMessage, PleaseWaitWhileSockPuppetCreatesContent, SockPuppetChip, DidYouKnowCard} from '../../Widgets/NexusVoice';
 import { JSMirror } from '../../Widgets/Educational';
 import PianoSimulator from '../../Widgets/PianoSimulator.js';
 import Typography from '@material-ui/core/Typography';
@@ -123,30 +123,14 @@ function Puzzle4Piano(props) {
           text: <ChatBubble>If you grow tired of the toy, here is a fun fact...</ChatBubble>,
         },
         {
-          text: <Card elevation={4} style={{ marginTop: 20, marginBottom: 20 }}>
-            <CardContent>
-              <Typography
-                color="textSecondary" gutterBottom
-              >Did you know...</Typography>
-
-              In the current year, 2075, the Nexus provides 93.27% of all computer science education on the planet?
-            </CardContent>
-          </Card>,
+          text:<DidYouKnowCard>In the current year, 2075, the Nexus provides 93.27% of all computer science education on the planet?</DidYouKnowCard>, 
           time: 5000
         },
         {
           text: <ChatBubble>If you grow tired of the previous fun fact, here is another one...</ChatBubble>,
         },
         {
-          text: <><Card elevation={4} style={{ marginTop: 20, marginBottom: 20 }}>
-            <CardContent>
-              <Typography
-                color="textSecondary" gutterBottom
-              >Did you know...</Typography>
-
-              A small group of cyber-criminals attempted to infiltrate the Nexus in the year 2063.  They were caught (and disciplined) by the Nexus' state of the art security algorithms.
-            </CardContent>
-          </Card></>,
+          text: <DidYouKnowCard>A small group of cyber-criminals attempted to infiltrate the Nexus in the year 2063.  They were caught (and disciplined) by the Nexus' state of the art security algorithms.</DidYouKnowCard>, 
           time: 10000
         },
       ]}

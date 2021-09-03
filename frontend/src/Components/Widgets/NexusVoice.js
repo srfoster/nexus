@@ -11,7 +11,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
 import Fade from '@material-ui/core/Fade';
 import MailIcon from '@material-ui/icons/Mail';
-import ReactPlayer from 'react-player'
 import SchoolIcon from '@material-ui/icons/School';
 import Typography from '@material-ui/core/Typography';
 import SimpleVideoPlayer from "./SimpleVideoPlayer";
@@ -35,7 +34,6 @@ export const VideoAndPuzzleLayout = (props) => {
     </>)
 }
 
-
 export function NewMessageNotification(props) {
   return(<Grid container spacing={1}>
     <Fade in={true} timeout={1000}>
@@ -56,6 +54,21 @@ export function NewMessageNotification(props) {
       </Grid>
     </Fade>
   </Grid>)
+}
+
+export function DidYouKnowCard(props) {
+  return (
+    <Card elevation={4} style={{ marginTop: 20, marginBottom: 20 }}>
+      <CardContent>
+        <Typography
+          color="textSecondary" gutterBottom
+        >Did you know...</Typography>
+
+        {props.children} 
+      </CardContent>
+    </Card>
+  )
+
 }
 
 export function SockPuppetChip(props) {
