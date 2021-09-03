@@ -30,8 +30,8 @@ function PlayerControls({ onPlayPause, playing, played, onSeek, onSeekMouseDown,
   const classes = useStyles();
 
 	return (<>
-		<div style={{ paddingRight: 20, }}>
-			<Grid container direction="row">
+		<div style={{ paddingRight: 20 }}>
+			<Grid container direction="row" spacing={4}>
 				<Grid item xs={2}>
 					<IconButton
 						onClick={onPlayPause}
