@@ -91,7 +91,6 @@ function Puzzle3GraphTheory(props) {
         <span><SockPuppetChip level={2} /> is making video content!</span>,
         {
           text: <ChatBubble>My edutainment algorithms are still active.  I will now give you another educational mystery toy to make your teacher's tardiness more enjoyable.</ChatBubble>,
-          time: 3000
         },
         {
           text: <NetworkDiseaseSimulator

@@ -114,7 +114,7 @@ function Puzzle1TheFavor(props) {
         },
         
         {
-          text: <Card style={{marginTop: 20, marginBottom:20}}>
+          text: <Card elevation={4} style={{marginTop: 20, marginBottom:20}}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom
@@ -131,7 +131,7 @@ function Puzzle1TheFavor(props) {
           text: <ChatBubble>Here's another fact!</ChatBubble>,
         },
         {
-          text: <Card style={{marginTop: 20, marginBottom:20}}>
+          text: <Card elevation={4} style={{marginTop: 20, marginBottom:20}}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom

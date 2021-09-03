@@ -67,7 +67,7 @@ const SockPuppetsMessage2 = (props) => {
             <Typography paragraph>
               The Puzzle is to interpret the cryptic message below.
             </Typography>
-            <Card>
+            <Card elevation={4}>
               <CardContent>
                 <Typography paragraph
                   color="textSecondary" gutterBottom >
@@ -144,11 +144,9 @@ function Puzzle2ConwaysGameOfLife(props) {
         <span><SockPuppetChip level={2} /> is making video content!</span>,
         {
           text: <ChatBubble>My entertainment algorithms tell me that humans like to play with toys.</ChatBubble>,
-          time: 3000
         },
         {
           text: <ChatBubble>Here is a toy...</ChatBubble>,
-          time: 1000
         },
         {
           text: <><Game /></>,

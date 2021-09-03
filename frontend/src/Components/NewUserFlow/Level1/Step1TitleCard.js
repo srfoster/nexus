@@ -43,7 +43,7 @@ function Step1TitleCard({ setTitleScreenComplete }) {
 			<CardActions>
 				{os_name == "Windows OS" ?
 					<Alert severity="error" style={{ visibility: "hidden" }}>Warning: This game is currently only compatible with <br />Windows OS. On other operating systems, you won't be <br />able to proceed beyond Level 2. Proceed with caution.</Alert> :
-					<Alert severity="error">Warning: This game is currently only compatible with <br />Windows OS. On other operating systems, you won't be <br />able to proceed beyond Level 2. Proceed with caution.</Alert>
+					<Alert severity="error">Warning: This game is currently only compatible with <br />Windows OS. On your operating system, you won't be <br />able to proceed beyond Level 2. Proceed with caution.</Alert>
 				}
 				{step < 1 ? //This hidden button trick is a bit gross.  
 					// Makes sure the button is there to force the container

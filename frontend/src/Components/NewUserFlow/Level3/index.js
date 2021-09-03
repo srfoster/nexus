@@ -279,7 +279,7 @@ function Page1(props) {
             time: 4000
           },
           {
-            text: <Card style={{ marginTop: 20, marginBottom: 20 }}>
+            text: <Card elevation={4} style={{ marginTop: 20, marginBottom: 20 }}>
               <CardContent>
                 <Typography
                   color="textSecondary" gutterBottom

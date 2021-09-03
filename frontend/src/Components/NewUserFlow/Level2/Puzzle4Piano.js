@@ -65,7 +65,7 @@ function SockPuppetsMessage4(props) {
                   return !showPiano ? <CircularProgress /> :
                    <>
                     {Object.keys(buttons).map((k) =>
-                      <Button key={k}
+                      <Button variant="contained" color="primary" style={{margin:"5px"}} key={k}
                         onMouseDown={() => {
                           setTimeout(() => {
                             if (buttons[k].indexOf("S") >= 0 &&
@@ -110,7 +110,6 @@ function Puzzle4Piano(props) {
         <span><SockPuppetChip level={2} /> is making video content!</span>,
         {
           text: <ChatBubble>My edutainment algorithms are still active.  I will now give you another educational mystery toy while we wait (again).</ChatBubble>,
-          time: 3000
         },
         {
           text: <PianoSimulator />,
@@ -122,10 +121,9 @@ function Puzzle4Piano(props) {
         },
         {
           text: <ChatBubble>If you grow tired of the toy, here is a fun fact...</ChatBubble>,
-          time: 3000
         },
         {
-          text: <Card style={{ marginTop: 20, marginBottom: 20 }}>
+          text: <Card elevation={4} style={{ marginTop: 20, marginBottom: 20 }}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom
@@ -138,16 +136,15 @@ function Puzzle4Piano(props) {
         },
         {
           text: <ChatBubble>If you grow tired of the previous fun fact, here is another one...</ChatBubble>,
-          time: 3000
         },
         {
-          text: <><Card style={{ marginTop: 20, marginBottom: 20 }}>
+          text: <><Card elevation={4} style={{ marginTop: 20, marginBottom: 20 }}>
             <CardContent>
               <Typography
                 color="textSecondary" gutterBottom
               >Did you know...</Typography>
 
-              A small group of cyber-criminals attempted to infiltrate the Nexus in the year 2063.  They were caught (and disciplined) by the Nexus's state of the art security algorithms.
+              A small group of cyber-criminals attempted to infiltrate the Nexus in the year 2063.  They were caught (and disciplined) by the Nexus' state of the art security algorithms.
             </CardContent>
           </Card></>,
           time: 10000

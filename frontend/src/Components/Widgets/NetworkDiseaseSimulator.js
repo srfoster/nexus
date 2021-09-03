@@ -28,7 +28,7 @@ export default function NetworkDiseaseSimulator(props) {
   
   let cy;
   return (
-    <Card>
+    <Card elevation={4}>
       <CardContent>
       <Typography
         color="textSecondary" gutterBottom>Play with the slider and "Infect" and "Cure" buttons...</Typography>

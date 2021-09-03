@@ -22,11 +22,11 @@ function Step4ChooseYourTeacher(props) {
         <Fade in={true} timeout={2000}>
           <Grid item xs={6}>
             <MultipleChoiceQuestion question="Which School of Magic would you prefer to join?" answers={[
-              { correct: true, text: "School of Witchcraft", feedback: <SpinThen spinTime={500}>Available!</SpinThen> },
-              { correct: true, text: "School of the Druids", feedback: <SpinThen spinTime={1000}>Available!</SpinThen> },
-              { correct: true, text: "School of the Dark Arts", feedback: <SpinThen spinTime={1000}>Available!</SpinThen>},
-              { correct: true, text: "School of Elemental Magic", feedback: <SpinThen spinTime={1000}>Available!</SpinThen> },
-              { correct: false, text: "None of these", feedback: <SpinThen spinTime={5000}>Sorry, your current level is too low for you to continue without a school.</SpinThen> },
+              { correct: true, text: "School of Witchcraft", feedback: "Available!" },
+              { correct: true, text: "School of the Druids", feedback: "Available!" },
+              { correct: true, text: "School of the Dark Arts", feedback: "Available!" },
+              { correct: true, text: "School of Elemental Magic", feedback: "Available!" },
+              { correct: false, text: "None of these", feedback: <SpinThen spinTime={2000}>Sorry, your current level is too low for you to continue without a school.</SpinThen> },
             ]}
               buttonText="Check Availability"
               onCorrect={() => props.setCanContinue(true)}

@@ -199,7 +199,7 @@ export function Game(props) {
     }
 
     return (
-        <Card>
+        <Card elevation={4}>
             <CardContent>
                 <Grid container
                     spacing={1}

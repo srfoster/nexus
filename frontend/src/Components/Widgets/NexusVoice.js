@@ -18,7 +18,7 @@ import Typography from '@material-ui/core/Typography';
 export const VideoAndPuzzleLayout = (props) => {
   return (
     <>
-      <Card>
+      <Card elevation={4}>
         <CardHeader title={
           <span style={{ fontSize: 16 }}>
             {props.leftSideTitle}
@@ -98,20 +98,26 @@ export function PleaseWaitWhileSockPuppetCreatesContent(props) {
   function waitTimeForReading(content){
     let extraTime = 1000; //A little extra buffer time for reader to see there's a new message
     // if the content isn't an object with a text key
+    let waitTime;
     if(!content.text) {
-      return 3000
+      waitTime = 3000;
+      return waitTime;
     }
     //if the content is a chat bubble w/ a child (that's the message)
     if(content.text.props.children && typeof content.text.props.children == "string"){
-      return content.text.props.children.split(" ").length / 180 * 60 * 1000 + extraTime
+      waitTime = content.text.props.children.split(" ").length / 180 * 60 * 1000 + extraTime;
+      //console.log(waitTime);
+      return waitTime;
     }
     //if the content is a chat bubble w/ a message prop
     else if(content.text.props.message && typeof content.text.props.message == "string"){
-      return content.text.props.message.split(" ").length / 180 * 60 * 1000 + extraTime
+      waitTime = content.text.props.message.split(" ").length / 180 * 60 * 1000 + extraTime;
+      //console.log(waitTime)
+      return waitTime;
     }
-
     else{ // defaults to 3000 for everything else
-      return 3000;
+      waitTime = 3000;
+      return waitTime;
     } 
   }
 
@@ -156,13 +162,13 @@ export function OpenedMessage(props) {
   return (<>
     <VideoAndPuzzleLayout
       leftSideTitle={<>
-        <Grid container spacing={0.5}>
-          <Grid item xs={2}><Typography paragraph><strong>From:</strong></Typography></Grid>
-          <Grid item xs={10}><Typography paragraph>{props.from}</Typography></Grid>
-          <Grid item xs={2}><Typography paragraph><strong>To:</strong></Typography></Grid>
-          <Grid item xs={10}><Typography paragraph>{props.to}</Typography></Grid>
-          <Grid item xs={2}><Typography paragraph><strong>Subject:</strong></Typography></Grid>
-          <Grid item xs={10}><Typography paragraph>{props.subject}</Typography></Grid>
+        <Grid container spacing={1}>
+          <Grid item xs={2}><Typography><strong>From:</strong></Typography></Grid>
+          <Grid item xs={10}>{props.from}</Grid>
+          <Grid item xs={2}><Typography><strong>To:</strong></Typography></Grid>
+          <Grid item xs={10}>{props.to}</Grid>
+          <Grid item xs={2}><Typography><strong>Subject:</strong></Typography></Grid>
+          <Grid item xs={10}><Typography>{props.subject}</Typography></Grid>
         </Grid>
       </>}
       leftSide={
