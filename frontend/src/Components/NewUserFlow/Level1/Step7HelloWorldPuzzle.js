@@ -91,7 +91,7 @@ function Step7HelloWorldPuzzle(props) {
       from={<SockPuppetChip level={1} />}
       to={<StudentChip name={props.username} level={1} />}
       subject={"Hello, World!"}
-      videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-1.2-smaller.ogv"
+      videoUrl="https://d37uis87scphnk.cloudfront.net/NexusVideos/e-1.2-smaller.ogv"
       text={<>
         <Typography paragraph>The puzzle is to modify the code below to generate a button that lets you proceed to the next part of the Nexus.</Typography>
         <Typography paragraph>~Your Friend, Socky</Typography>

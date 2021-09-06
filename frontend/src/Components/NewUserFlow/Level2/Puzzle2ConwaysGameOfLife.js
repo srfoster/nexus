@@ -61,7 +61,7 @@ const SockPuppetsMessage2 = (props) => {
         from={<SockPuppetChip level={2} />}
         to={<StudentChip name={username} level={2} />}
         subject={"Simulations are Fun!"}
-        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.2-smaller.ogv"
+        videoUrl="https://d37uis87scphnk.cloudfront.net/NexusVideos/e-2.2-smaller.ogv"
         text={
           <>
             <Typography paragraph>

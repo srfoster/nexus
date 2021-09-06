@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import ReactPlayer from 'react-player'
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
@@ -50,7 +50,10 @@ function PlayerControls({ onPlayPause, playing, played, onSeek, onSeekMouseDown,
 						min={0}
 						max={100}
 						value={played * 100}
-						ValueLabelComponent={(props) => <ValueLabelComponent {...props} value={elapsedTime} />}
+            valueLabelDisplay="on"
+            valueLabelFormat={() => {
+              return elapsedTime
+            }}
 						onChange={onSeek}
 						onMouseDown={onSeekMouseDown}
 						onChangeCommitted={onSeekMouseUp}
@@ -129,28 +132,28 @@ function SimpleVideoPlayer(props) {
     return `${mm}:${ss}`
   }
 
-  const handlePlayPause = () => {
+  const handlePlayPause = useCallback(() => {
     setPlaying(!playing);
-  }
+  })
 
-  const handleProgress = (changeState) => {
+  const handleProgress = useCallback((changeState) => {
     if(!state.seeking){
       setState({ ...state, ...changeState })
     }
-  }
+  })
 
-  const handleSeekChange = (e, newVal) => {
+  const handleSeekChange = useCallback((e, newVal) => {
     setState({...state, played: parseFloat(newVal / 100)})
-  }
+  })
 
-  const handleSeekMouseDown = (e) => {
+  const handleSeekMouseDown = useCallback((e) => {
     setState({...state, seeking:true})
-  }
+  })
 
-  const handleSeekMouseUp = (e, newVal) => {
+  const handleSeekMouseUp = useCallback((e, newVal) => {
     setState({...state, seeking: false})
     playerRef.current.seekTo(newVal / 100)
-  }
+  })
 
   const currentTime = playerRef.current ? playerRef.current.getCurrentTime() : '00:00'
   const duration = playerRef.current? playerRef.current.getDuration() : '00:00'

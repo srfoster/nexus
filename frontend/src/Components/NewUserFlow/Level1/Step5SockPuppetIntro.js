@@ -26,7 +26,7 @@ function Step5SockPuppetIntro(props) {
         from={<SockPuppetChip level={1}/>}
         to={<StudentChip name={props.username} level={1} />}
         subject={"Video Introduction!"}
-        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-1.1-smaller.ogv"
+        videoUrl="https://d37uis87scphnk.cloudfront.net/NexusVideos/e-1.1-smaller.ogv"
         text={<SockPuppetVideoIntroText setCanContinue={props.setCanContinue} username={props.username} />}
       />
     </div>

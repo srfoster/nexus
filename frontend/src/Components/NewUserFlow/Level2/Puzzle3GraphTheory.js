@@ -32,11 +32,11 @@ function SockPuppetsMessage3(props) {
         from={<SockPuppetChip level={2} />}
         to={<StudentChip name={username} level={2} />}
         subject={"Introduction to Networks"}
-        videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.3-smaller.ogv"
+        videoUrl="https://d37uis87scphnk.cloudfront.net/NexusVideos/e-2.3-smaller.ogv"
         text={
           <>
             <Typography paragraph>
-              The Puzzle is to make someone named John sick on the 5th day.  There are many solutions.
+              The Puzzle is to make someone named John sick on the 5th day.  There are many solutions.  (But there are also many wrong answers.  I'm sorry.  I had to make it hard...)
             </Typography>
             <Typography paragraph>
               ~Your Friend, Socky
