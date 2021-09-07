@@ -6,6 +6,7 @@ import SpellsApiService from '../Services/spells-api-service';
 import { Helmet } from "react-helmet";
 import TokenService from '../Services/token-service';
 import Container from '@material-ui/core/Container';
+import LevelTableOfContents from './LevelTableOfContents';
 
 import Level1 from "./NewUserFlow/Level1"
 import Level2 from "./NewUserFlow/Level2";
@@ -30,30 +31,6 @@ function currentLevelNum(badges) {
   return badges.filter(finished).length + 2;
 }
 
-export const LevelTableOfContents = (props) => {
-
-  function clearCurrentPuzzleData() {
-    for (let key of Object.keys(localStorage)) {
-      if (key.match(/^lvl\d+:currentPart/)) {
-        localStorage.setItem(key, 0) 
-      }
-      if (key.match(/sock-puppet-lesson-opened/)) {
-        localStorage.setItem(key, false)
-      }
-    }
-  }
-  
-  return (<>
-    {props.levels.map((e, i) => {
-      return <Button
-        onClick={() => {
-          clearCurrentPuzzleData()
-          props.setCurrentLevelNum(i + 1)
-        }}>Level {i+1}
-      </Button>
-    })}
-  </>)
-}
 
 const LevelManager = (props) => {
   const [badges, setBadges] = useState(undefined);
