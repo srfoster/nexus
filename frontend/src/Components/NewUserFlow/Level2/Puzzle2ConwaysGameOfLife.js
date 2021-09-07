@@ -93,6 +93,9 @@ const SockPuppetsMessage2 = (props) => {
                     noRun: true,
                     cells: firstGameState,
                     setCells: (cells) => {
+                      if(typeof cells == "function"){
+                        cells = cells(firstGameState); 
+                      }
                       if (cells.length !== 0) {
                         setFirstColor(cells[0].color)
                       }
@@ -114,6 +117,9 @@ const SockPuppetsMessage2 = (props) => {
                       noRun: true,
                       cells: secondGameState,
                       setCells: (cells) => {
+                        if (typeof cells == "function") {
+                          cells = cells(secondGameState);
+                        }
                         if (cells.length !== 0) {
                           setSecondColor(cells[0].color)
                         }
