@@ -109,12 +109,9 @@ function ValueLabelComponent(props) {
 function SimpleVideoPlayer(props) {
   const playerRef = useRef(null);
   const [playing, setPlaying] = useState(false)
-
-  const [state, setState] = useState({
-    played: 0,
-    duration: 0,
-    seeking: false,
-  });
+  const [played, setPlayed] = useState(0)
+  const [duration, setDuration] = useState('00:00')
+  const [seeking, setSeeking] = useState(false)
 
   const format = (sec) => {
     if(isNaN(sec)){
@@ -136,27 +133,26 @@ function SimpleVideoPlayer(props) {
     setPlaying(!playing);
   })
 
-  const handleProgress = useCallback((changeState) => {
-    if(!state.seeking){
-      setState({ ...state, ...changeState })
+  const handleProgress = useCallback((change) => {
+    if(!seeking){
+      setPlayed(change.played)
+      setDuration(playerRef.current? playerRef.current.getDuration() : '00:00')
     }
   })
 
   const handleSeekChange = useCallback((e, newVal) => {
-    setState({...state, played: parseFloat(newVal / 100)})
+    setPlayed(parseFloat(newVal / 100))
   })
 
   const handleSeekMouseDown = useCallback((e) => {
-    setState({...state, seeking:true})
-  })
+    setSeeking(true)})
 
   const handleSeekMouseUp = useCallback((e, newVal) => {
-    setState({...state, seeking: false})
+    setSeeking(false) 
     playerRef.current.seekTo(newVal / 100)
   })
 
   const currentTime = playerRef.current ? playerRef.current.getCurrentTime() : '00:00'
-  const duration = playerRef.current? playerRef.current.getDuration() : '00:00'
   const elapsedTime = format(currentTime)
   const totalDuration = format(duration)
 
@@ -179,7 +175,7 @@ function SimpleVideoPlayer(props) {
         <PlayerControls
           onPlayPause={handlePlayPause}
           playing={playing}
-          played={state.played}
+          played={played}
           onSeek={handleSeekChange}
           onSeekMouseDown={handleSeekMouseDown}
           onSeekMouseUp={handleSeekMouseUp}
