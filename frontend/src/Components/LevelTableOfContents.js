@@ -53,9 +53,43 @@ const LevelTableOfContents = (props) => {
     // e.g. localStorage.setItem("lvl2:currentPart", 3)
     // HOW TO DYNAMICALLY GET THE # OF PARTS FOR EACH LEVEL? THIS DATA IS STORED IN
     // EACH PUZZLE'S INDEX.JS FILE RIGHT NOW... MOVE TO A MORE GLOBAL LOCATION?
+    
+    let toc = {
+        levels: [
+            {
+                name: 1,
+                puzzles: [
+                   "Set Username",
+                   "Light/Dark Mode",
+                   "School of Magic",
+                   "Meet Your Teacher",
+                   "Hello World" 
+                ]
+            },
+            {
+                name: 2,
+                puzzles: [
+                   "Terminal Basics",
+                   "Simulation Basics",
+                   "Network Basics",
+                   "Piano Magic",
+                   "Diabolical" 
+                ]
+            },
+            {
+                name: 3,
+                puzzles: [
+                   "Build Sphere",
+                ]
+            },
+        ]
+    } 
+
+
     return (<>
         <Grid container direction="row">
             {props.levels.map((e, i) => {
+                let puzzles = [0,1,2,3,4];
                 return (<>
                     <Grid item xs={3}>
                         <h2>Level {i + 1}</h2>
@@ -64,11 +98,11 @@ const LevelTableOfContents = (props) => {
                             color="secondary"
                             aria-label="vertical button group"
                             variant="contained"
-                        >
-                            <PuzzleButton levelNum={i + 1} puzzleNum={0} setCurrentLevelNum={props.setCurrentLevelNum}></PuzzleButton>
-                            <PuzzleButton levelNum={i + 1} puzzleNum={1} setCurrentLevelNum={props.setCurrentLevelNum}></PuzzleButton>
-                            <PuzzleButton levelNum={i + 1} puzzleNum={2} setCurrentLevelNum={props.setCurrentLevelNum}></PuzzleButton>
-                            <PuzzleButton levelNum={i + 1} puzzleNum={3} setCurrentLevelNum={props.setCurrentLevelNum}></PuzzleButton>
+                        >{
+                            puzzles.map((e,j)=>{
+                                <PuzzleButton levelNum={i + 1} puzzleNum={j} setCurrentLevelNum={props.setCurrentLevelNum}></PuzzleButton>
+                            })
+                         }
                         </ButtonGroup>
                     </Grid>
                 </>)
