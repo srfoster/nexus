@@ -39,9 +39,11 @@ const LevelTableOfContents = (props) => {
             <Button 
                 onClick={() => {
                     clearCurrentPuzzleData()
+                    console.log("Level Num: ", props.levelNum)
+                    console.log("Puzzle Num: ", props.puzzleNum)
                     updatePuzzleNumInStorage(props.levelNum, props.puzzleNum)
-                    props.setCurrentLevelNum(props.levelNum + 1)
-                }}>Puzzle {props.puzzleNum + 1}
+                    props.setCurrentLevelNum(props.levelNum)
+                }}>{props.puzzleName}
             </Button>
         )
     }
@@ -88,19 +90,18 @@ const LevelTableOfContents = (props) => {
 
     return (<>
         <Grid container direction="row">
-            {props.levels.map((e, i) => {
-                let puzzles = [0,1,2,3,4];
+            {toc.levels.map((level, i) => {
                 return (<>
                     <Grid item xs={3}>
-                        <h2>Level {i + 1}</h2>
+                        <h2>Level {level.name}</h2>
                         <ButtonGroup
                             orientation="vertical"
                             color="secondary"
                             aria-label="vertical button group"
                             variant="contained"
                         >{
-                            puzzles.map((e,j)=>{
-                                <PuzzleButton levelNum={i + 1} puzzleNum={j} setCurrentLevelNum={props.setCurrentLevelNum}></PuzzleButton>
+                            level.puzzles.map((puzzle,j)=>{
+                                return <PuzzleButton levelNum={level.name} puzzleName={puzzle} puzzleNum={j} setCurrentLevelNum={props.setCurrentLevelNum}></PuzzleButton>
                             })
                          }
                         </ButtonGroup>
