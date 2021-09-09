@@ -39,19 +39,14 @@ function Step6WaitingOnSockPuppet(props) {
         <span><SockPuppetChip level={1}/> is making video content!</span>,
         <ChatBubble message={"Hello!"}></ChatBubble>,
         <ChatBubble message={"This is the Nexus speaking to you."}></ChatBubble>,
-        <ChatBubble message={<><span>While we wait for</span> <SockPuppetChip level={1}/><span>, I will keep you entertained.</span></>}></ChatBubble>,
-        <ChatBubble message={"My algorithms tell me that humans are entertained by short text messages..."}></ChatBubble>,
-        <ChatBubble message={"so I will share information with you in a concise format."}></ChatBubble>,
-        <ChatBubble message={"The Nexus prides itself in its educational content for magic users."}></ChatBubble>,
-        <ChatBubble message={"At the Nexus, your educational experience is our highest priority."}></ChatBubble>,
-        <ChatBubble message={"At the Nexus, our teachers are carefully chosen for their teaching prowess..."}></ChatBubble>,
-        <ChatBubble message={"and their ability to produce educational content..."}></ChatBubble>,
-        <ChatBubble message={"under strict deadlines."}></ChatBubble>,
-        <ChatBubble message={"..."}></ChatBubble>,
-        <ChatBubble message={<><span>Sometimes our low-level teachers, like</span> <SockPuppetChip level={1}/></>}></ChatBubble>,
-        <ChatBubble message={"may not always meet the expected deadlines..."}></ChatBubble>,
-        <ChatBubble message={"that we strive for."}></ChatBubble>,
-        <ChatBubble message={"Ah! Here we are:"}></ChatBubble>
+        <ChatBubble message={<><span>While we wait for</span> <SockPuppetChip level={1}/><span>, my edutainment algorithms will keep you entertained.</span></>}></ChatBubble>,
+        <ChatBubble message={"Please note: I will communicate with you in short text messages, like these..."}></ChatBubble>,
+        <ChatBubble message={"... because I know humans prefer short messages over walls of text."}></ChatBubble>,
+        <ChatBubble message={"Also note: I normally wouldn't have to do this..."}></ChatBubble>,
+        <ChatBubble message={<><span>... but</span> <SockPuppetChip level={1}/> <span>has been a slower-than-average video content producer.</span></>}></ChatBubble>,
+        <ChatBubble message={"Oh! I know! I have a database of fun historical facts! I'm loading it now..."}></ChatBubble>,
+        <ChatBubble message={"Here's the first fun historical fact..."}></ChatBubble>,
+        <ChatBubble message={<><span>Ah! Nevermind.</span> <SockPuppetChip level={1}/> <span>just finished:</span></>}></ChatBubble>
       ].map(e => { return { text: e } })}
       SockPuppetMessage={React.createElement(SockPuppetsMessage, props)}
     />
