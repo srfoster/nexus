@@ -60,7 +60,7 @@ function PlayerControls({ onPlayPause, playing, played, onSeek, onSeekMouseDown,
 					/>
 				</Grid>
 				<Grid item xs={2} className={classes.gridItems}>
-					<Typography>{elapsedTime}/{totalDuration}</Typography>
+					<Typography style={{color: "white"}}>{elapsedTime}/{totalDuration}</Typography>
 				</Grid>
 			</Grid>
 		</div>
