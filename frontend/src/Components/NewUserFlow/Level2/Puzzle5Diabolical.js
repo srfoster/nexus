@@ -48,13 +48,14 @@ function bfs(first, rest) {
   return island;
 }
 
-//AKA find disconnected components in the graph
-//  Cytoscape can obviously do this, but for educational purposes, let's do the algorithm ourselves 
-//  (for the few brave souls who actually attempt this puzzle instead of just 
-//   listening to Sock Puppet and downloading Orb World!)
-//  TODO: Put link to Orb World here in the source code so people can get to it easier 
-//  TODO: Put in some kind of message here that makes it clear to the player to that the
-//        correct next step in the game is actually to do the Orb World download (not this diabolical puzzle) 
+//  Woah! You found the source code for the Diabolical Puzzle!
+//  This wasn't our expectation. We expected you to use the Favor from Sock Puppet
+//  in your inventory! But you're welcome to try to solve the puzzle if you like...
+// 
+//  The findIslands function: AKA find disconnected clusters of cells in the graph.
+//  Cytoscape can obviously do this, but for educational purposes, let's do the algorithm ourselves.
+//  (This is an easter egg for the few brave souls who actually attempt this puzzle instead of just 
+//  following Sock Puppet's Favor and downloading Orb World!)
 function findIslands(cells) {
   // Cells -> List of Islands (List of Cells)
   // Input: Cells are a list of objects
