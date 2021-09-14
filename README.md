@@ -69,11 +69,5 @@ Some resources are local (i.e. run on the user's computer).  Here's how you depl
 
 * To deploy a new **CodeSpells.exe Launcher Installer**: Put a new `CodeSpells.exe` in the `codespells-org` S3 Bucket in the `Nexus/Installer/` folder.  It should be hosted here: `https://codespells-org.s3.amazonaws.com/Nexus/Installer/CodeSpells.exe`.  NOTE: Updating this file does nothing for users who have already downloaded and installed it.   Only new installations are affected.  You should rarely need to change this.  All it does is fetch the "Installer Logic" and run it.
 * To deploy a new **CodeSpells.exe Launcher Installer Logic**: Update `https://codespells-org.s3.amazonaws.com/Nexus/Installer/what-to-do-next.rkt`.  The above installer merely fetches this file and evals it.  NOTE: Changing this file changes what happens when ANY CodeSpells users launches the game.  If you break this file, you break all CodeSpells installations (much like if you broke a webpage, you would break it all visitors).  Currently, this file looks for new versions of CodeSpells, fetches them, and unzips them.  You would update this file if you wanted to make changes to the UI for managing/fetching/unzipping CodeSpells versions.
-* To deploy a new version of the **CodeSpells World**: Make a new Unreal build (see https://github.com/srfoster/OrbWorldVoxels).   NOTE: The world bundles its own Racket and Racket-based language.  So you would deploy a new version if you wanted to, say, add a new Racket identifier to the in-game language.
-
-## Local 
-
-* To deploy changes to the Racket language
- 
-* To deploy a new **CodeSpells Orb World Version**: 
+* To deploy a new version of the **CodeSpells World** (the world itself or its bundled Racket langauge): Make a new Unreal build (see https://github.com/srfoster/OrbWorldVoxels), bundle Racket with it (see the Wiki page on creating a Build. TODO: Where is that wiki page?).  Compress it with 7zip into an archive named `0.1.zip` (replacing `0.1` with the actual version number).  Then update the file https://codespells-org.s3.amazonaws.com/Nexus/Versions/latest-version to ensure that the **Installer Logic** detects a new version and fetches/unzips it. 
 
