@@ -138,12 +138,12 @@ function SockPuppetsMessage5(props) {
       <OpenedMessage
         from={<SockPuppetChip level={2} />}
         to={<StudentChip name={username} level={2} />}
-        subject={"Your next puzzel"}
+        subject={"yur next puzzel"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-2.5-smaller.ogv"
         text={
           <>
             <Typography paragraph>
-              hello friend.  i am definite same sock puppet.  not replacement.  very disciplined.  try puzzel below.  it is solvable.  i do not lie.
+              hello friend.  i am definite same sock puppet.  not replacement.  very disciplind.  try puzzel below.  it is solvable.  i do not lie.
             </Typography>
             <Terminal
               commands={{
@@ -216,7 +216,7 @@ function Puzzle5Diabolical(props) {
           time: 10000
         },
         {
-          text: <ChatBubble>Please keep enjoying the toy...</ChatBubble>,
+          text: <ChatBubble>Do you like the toy? I thought it was very colorful.</ChatBubble>,
           time: 3000
         },
         {
