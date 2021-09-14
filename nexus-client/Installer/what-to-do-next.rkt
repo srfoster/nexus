@@ -5,8 +5,7 @@
 ;     Get racket executable to not launch cmd?
 
 (let ()
-  (local-require racket/gui
-                 file/unzip)
+  (local-require racket/gui)
 
   ;Creates Versions directory if doesn't exist yet
   (when (not (directory-exists? (build-path "Versions")))
@@ -69,22 +68,30 @@
           (listen-for-progress in last-percent-complete total-metabytes progress-function))))
 
   (define (download-latest-version! progress-function)
-    (define install-location (~a "Versions/" (latest-version) ".zip"))
+    (define install-location (~a "Versions/" (latest-version) ".7z"))
     (define download-from-location 
-      (~a "https://codespells-org.s3.amazonaws.com/Nexus/Versions/" (latest-version) ".zip"))
+      (~a "https://codespells-org.s3.amazonaws.com/Nexus/Versions/" (latest-version) ".7z"))
 
     (dl download-from-location install-location #:on-progress progress-function)
     (send msg set-label "Unzipping...")
-    (unzip install-location)
-    (sleep 1) ;there may be a race condition between
+  
+    (define-values (s in out err)
+      (subprocess #f #f #f ".\\7z\\7za.exe" "x" install-location)
+    )
+
+    (subprocess-wait s)
+
+    (rename-file-or-directory 
+      (build-path (latest-version)) 
+      (build-path "Versions" (latest-version)))          
+                
+    ;(unzip install-location)
+    ;(sleep 1) ;there may be a race condition between
     ;unzip and the rename, so we've added the sleep
     ;here to manage that problem. We're not certain
     ;that is what sometimes causes the following
     ;rename operation to fail with an access
     ;denied error. It happened once & we are confused
-    (rename-file-or-directory 
-      (build-path (latest-version)) 
-      (build-path "Versions" (latest-version)))
     (send msg set-label "Complete!")
 
     (update-local-latest-version!)
@@ -147,10 +154,10 @@
   ; If not, download latest version and put in Versions folder
   (void (if (not (latest-version? (get-local-latest-version)))
       (let () 
-        (send msg set-label "New version available")
+        (send msg set-label "Welcome to the CodeSpells Launcher!")
         (update-button))
       (let ()
-        (send msg set-label "Up-to-date!")
+        (send msg set-label "Welcome to the CodeSpells Launcher! You're up-to-date!")
         (play-button)))
   )
   ; check to see if it's version is current

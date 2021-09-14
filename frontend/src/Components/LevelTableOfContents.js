@@ -22,7 +22,7 @@ const LevelTableOfContents = (props) => {
             if (key.match(/^lvl\d+:currentPart/)) {
                 localStorage.setItem(key, 0)
             }
-            if (key.match(/sock-puppet-lesson-opened/)) {
+            if (key.match(/-opened/)) {
                 localStorage.setItem(key, false)
             }
         }

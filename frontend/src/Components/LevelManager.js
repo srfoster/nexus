@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocalStorage } from "../Util";
-import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
 import SpellsApiService from '../Services/spells-api-service';
 import { Helmet } from "react-helmet";
