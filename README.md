@@ -41,22 +41,6 @@ docker exec -it frontend npm test -- FileTo.test.js
 docker exec -it backend npm test -- FileTo.test.js
 ```
 
-# Production
-
-For now (until we need to scale things up), we are running postgres in a docker container, with data persisted on the local machine.   
-
-```
-cd nexus
-mkdir ../data
-docker-compose -f prod-stack.yml up
-```
-
-Logging:
-
-```
-docker-compose -f prod-stack.yml logs -f -t prod-backend > backend.log 2>&1 &
-```
-
 # Video Content Guidelines
 
 Videos in the nexus need to render inside of Unreal.  Currently, the only known format that renders correctly is OGV, so convert videos from mp4 to ogv with:
@@ -72,3 +56,9 @@ ffmpeg -i INPUT.ogv -vf scale=640:480 -c:v libtheora -q:v 7 -c:a libvorbis -q:a 
 ```
 
 
+# Production
+
+Some obvious devops improvements 
+
+* To deploy the **React UI**: Run `npm run build` in `frontend/` and copy `build/*` to the S3 Bucket `nexus-codespells-org`.  You should then see the contents live here: https://nexus-codespells-org.s3.amazonaws.com/index.html
+* To deploy the **React UI Backend**: ssh
