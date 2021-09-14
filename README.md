@@ -63,7 +63,7 @@ Many obvious DevOps improvements could be made here (up to a level of fanciness 
 Some resources are remote (i.e. do not run on a user's computer).  Here's how you deploy changes:
 
 * To deploy the **React UI**: Run `npm run build` in `frontend/` and copy `build/*` to the S3 Bucket `nexus-codespells-org`.  You should then see the contents live at https://nexus-codespells-org.s3.amazonaws.com/index.html and (via Rout53 and Cloudfront) at https://nexus.codespells.org.
-* To deploy the **React UI Node.js Backend**: ssh into the box running the production server (`ubuntu@52.54.6.58`), follow the steps in the `README` to pull down the latest code from `backend` and to restart the webserver.
+* To deploy the **React UI Node.js Backend**: ssh into the box running the production server (`ubuntu@50.19.137.51`), follow the steps in the `README` to pull down the latest code from `backend` and to restart the webserver.
 
 Some resources are local (i.e. run on the user's computer).  Here's how you deploy changes to those:
 
