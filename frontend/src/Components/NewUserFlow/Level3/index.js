@@ -303,6 +303,10 @@ export function Level3(props) {
   
   let reallyContinue = () => {
     if (currentPart + 1 != parts.length) {
+      window.gtag('event', "partFinished", {
+        'event_category': "playerProgress",
+        'value': "lvl3:" + currentPart
+      });
       setCanContinue(false);
       setCurrentPart(1 + currentPart)
     } else {

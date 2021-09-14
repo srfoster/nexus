@@ -81,13 +81,6 @@ function App() {
       <CssBaseline />
       <div className="App">
         <Helmet>
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-J6N2NMKYC9"></script>
-          <script>
-            {`window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-J6N2NMKYC9');`}
-          </script>
         </Helmet>
         <div >
             <Switch>
