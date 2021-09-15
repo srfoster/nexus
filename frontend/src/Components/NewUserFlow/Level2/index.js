@@ -26,10 +26,7 @@ export function Level2(props) {
 
   let reallyContinue = () => {
     if (currentPart + 1 != parts.length) {
-      window.gtag('event', "partFinished", {
-        'event_category': "playerProgress",
-        'value': "lvl2:" + currentPart
-      });
+      window.gtag('event', "partFinished:lvl2:" + currentPart);
       setCanContinue(false);
       setCurrentPart(1 + currentPart)
     } else {

@@ -47,10 +47,7 @@ function MeetYourTeacher (props) {
 
   let reallyContinue = () => {
     if (currentPart + 1 != parts.length) {
-      window.gtag('event', "partFinished", {
-        'event_category': "playerProgress",
-        'value': "lvl1:" + currentPart
-      });
+      window.gtag('event', "partFinished:lvl1:" + currentPart);
       setCanContinue(false);
       setCurrentPart(1 + currentPart)
     } else {
