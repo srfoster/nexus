@@ -51,5 +51,6 @@ export function MagicMirror(props) {
                 }} />
                 &nbsp;
                 {props.additionalButtons}
+                <ConnectionIndicator afterConnection="" />
     </>
 }
