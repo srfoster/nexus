@@ -132,7 +132,7 @@ function App() {
                           component={(props) => <PublicSpells  />}
                         />
                         <Route
-                          path={'/wizards/:id'}
+                          path={'/mages/:id'}
                           component={(props) => <UserProfile  match={props.match} />}
                         />
                         <Route
