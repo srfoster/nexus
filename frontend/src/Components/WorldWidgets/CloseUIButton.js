@@ -4,12 +4,11 @@ import ConnectionIndicator from '../Client/ConnectionIndicator';
 
 function CloseUIButton(props) {
     return (
-        <ConnectionIndicator afterConnection={
             <CastButton
+                color="secondary" variant="contained"
                 onReturn={(d) => { console.log("UI closed",d) }}
-                code={"(close-ui)"}>Close UI</CastButton>
-        }></ConnectionIndicator>
-    )
+                code={"(close-ui)"}>Enter World</CastButton>
+            )
 }
 
 export default CloseUIButton;

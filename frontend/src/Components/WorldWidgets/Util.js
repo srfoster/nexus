@@ -32,14 +32,16 @@ export const sendOnCodeSpellsSocket = (code, cb) => {
 }
 
 export function CastButton(props) {
-    return <><Button
-        onClick={() => {
-            sendOnCodeSpellsSocket(props.code, (data) => {
-                props.onReturn(data)
-            });
-        }} 
-        variant="contained"
-        color="secondary">
-        { props.children || "Cast" }
-        </Button></>
+  return (
+    <Button
+      color={props.color}
+      variant={props.variant}
+      onClick={() => {
+        sendOnCodeSpellsSocket(props.code, (data) => {
+          props.onReturn(data)
+        });
+      }}>
+      {props.children || "Cast Spell"}
+    </Button>
+  )
 }

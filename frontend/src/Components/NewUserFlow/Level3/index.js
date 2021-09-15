@@ -81,7 +81,7 @@ const SockPuppetsMessage = (props) => {
         text={
           <>
             <BlocklyPuzzle setCanContinue={props.setCanContinue} />
-            <CloseUIButton></CloseUIButton>
+           
           </>
         }
       />
@@ -202,7 +202,8 @@ function BlocklyPuzzle(props) {
         <li>Z: 6166</li>
       </ul>
     </span>
-
+    <p>~Your Friend, Socky</p>
+    <p>P.S. BEWARE: If you choose to enter the world, you can only return to the puzzle by pressing spacebar.</p>
     
     <BlocklyWorkspace
       toolboxConfiguration={{
@@ -242,6 +243,7 @@ function BlocklyPuzzle(props) {
       options={{
         readOnly: false //"nocursor"
       }}
+      additionalButtons={<CloseUIButton/>}
       onReturn={(fromUnreal) => {
         if (fromUnreal.responseFor.includes("build-sphere")) {
           //They called the right function...
@@ -331,13 +333,13 @@ export function Level3(props) {
     }
   }
 
+
   let educationalResources =
     [<Level3Puzzle1EducationalContent/>
     //... create educational resources as we add new puzzles
     ]
 
     let parts = [<Page1 setCanContinue={withConfetti(setCanContinue)} />]
-  //   [<Page1/>,
   //   <Page2/>,
   //   <Page3/>,
   //   <Page4/>,
@@ -350,7 +352,7 @@ export function Level3(props) {
           {parts[currentPart]}
         </CardContent>
         <CardActions>
-          <Button key="back-button"
+          {currentPart==0?"":<Button key="back-button"
             onClick={() => {
               if (currentPart == 0) {
                 props.gotoPrevLevel()
@@ -358,7 +360,7 @@ export function Level3(props) {
                 setCurrentPart(currentPart - 1);
                 setCanContinue(false);
               }
-            }}>Back</Button>
+            }}>Back</Button>}
           {canContinue ?
             <ContinueButton key="continue-button" onClick={reallyContinue} />
             : ""}

@@ -4,7 +4,8 @@ import ConnectionIndicator from './Client/ConnectionIndicator.js';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import { CastButton, isError, racketErrorMessage, racketErrorBlockNumber, racketErrorLineNumber } from './WorldWidgets/Util.js';
 import { Alert, AlertTitle } from '@material-ui/lab';
-
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Button from '@material-ui/core/Button'
 
 export function MagicMirror(props) {
     const [code, setCode] = useState(props.code);
@@ -32,21 +33,23 @@ export function MagicMirror(props) {
                 if (props.onChange) {
                     props.onChange(editor, data, value);
                 }
-        }}
+            }}
         />
         {!error ? "" :
             <Alert severity="error">{
-              !errorLineNumber ? "" : <>Error on line {errorLineNumber}<br /></>
-            }{error}</Alert>}
-        <ConnectionIndicator afterConnection={<CastButton code={code} onReturn={(fromUnreal) => {
-            if (isError(fromUnreal)) {
-               setError(racketErrorMessage(fromUnreal))
-               setErrorLineNumber(racketErrorLineNumber(fromUnreal))
-            } else {
-               setError(false)
-               setErrorLineNumber(false)
-            }
-            props.onReturn(fromUnreal)
-        }} />}></ConnectionIndicator>
+                !errorLineNumber ? "" : <>Error on line {errorLineNumber}<br /></>
+            }{error}</Alert>} 
+                <CastButton color="secondary" variant="contained" code={code} onReturn={(fromUnreal) => {
+                    if (isError(fromUnreal)) {
+                        setError(racketErrorMessage(fromUnreal))
+                        setErrorLineNumber(racketErrorLineNumber(fromUnreal))
+                    } else {
+                        setError(false)
+                        setErrorLineNumber(false)
+                    }
+                    props.onReturn(fromUnreal)
+                }} />
+                &nbsp;
+                {props.additionalButtons}
     </>
 }
