@@ -7,11 +7,11 @@ import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
 import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage, DidYouKnowCard } from '../../Widgets/NexusVoice';
 import { SBS, Level, withConfetti, ContinueButton } from '../Level';
-import useStyles from '../../../styles.js';
+// import useStyles from '../../../styles.js';
+import { makeStyles } from '@material-ui/core/styles';
 import Slider from '@material-ui/core/Slider';
 import Typography from '@material-ui/core/Typography';
 import { Game } from '../../Widgets/react-gameoflife/Game.js';
-
 import { defineStatementRacketBlock, defineRacketBlock } from "../../Dashboard/customBlocks/custom_Blocks.js";
 
 // //3d Stuff...
@@ -26,7 +26,7 @@ import Draggable from 'react-draggable';
 import ChatBubble from '../../Widgets/ChatBubble/';
 import { MagicMirror } from '../../MagicMirror';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
-import { sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
+import { CastButton, sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
 
 //Educational Resources
 import { Level3Puzzle1EducationalContent } from '../EducationalResources';
@@ -46,6 +46,12 @@ import { Level3Puzzle1EducationalContent } from '../EducationalResources';
 // * Tensor Flow - What is an interesting model to use?  How to get it to work with react-tensorflow?
 // * Konva
 // */
+  
+const useStyles = makeStyles((theme) => ({
+    blocklyPuzzle: {
+      height: 200,
+    },
+  }))
 
 const SockPuppetsMessage = (props) => {
   let [username, setUsername] = useLocalStorage("user-name", undefined);
@@ -124,11 +130,13 @@ function RuneDemo(props){
   </CardContent></Card> 
 }
 
+
+
 function BlocklyPuzzle(props) {
-  const classes = useStyles();
   const [blockIds, setBlockIds] = useState([]);
   const [code, setCode] = useState(undefined);
-
+  const classes = useStyles();
+  
   useEffect(
     () => {
       setBlockIds([
@@ -142,16 +150,16 @@ function BlocklyPuzzle(props) {
             color: 230
           }
         ),
-        defineStatementRacketBlock(
-          {
-            blockName: "check-voxels",
-            inputs: ["position1 vec", "position2 vec"],
-            output: false,
-            doParens: true,
-            doBlockName: true,
-            color: 280
-          }
-        ),
+        // defineStatementRacketBlock(
+        //   {
+        //     blockName: "check-voxels",
+        //     inputs: ["position1 vec", "position2 vec"],
+        //     output: false,
+        //     doParens: true,
+        //     doBlockName: true,
+        //     color: 280
+        //   }
+        // ),
         defineStatementRacketBlock(
           {
             blockName: "vec",
@@ -197,37 +205,38 @@ function BlocklyPuzzle(props) {
 
     
     <BlocklyWorkspace
-            toolboxConfiguration={{
-              kind: "categoryToolbox",
-              contents: [
-                {
-                  kind: "category",
-                  name: "Spells",
-                  colour: "#c1ba31",
-                  contents: 
-                    blockIds.map((i) => {
-                      return { kind: "block", type: i }
-                    })
-                },
-              ],
-            }
-            }
-            initialXml={'<xml xmlns="http://www.w3.org/1999/xhtml"></xml>'}
-            className={classes.spellDetailsCodeMirror}
-            workspaceConfiguration={{
-              grid: {
-                spacing: 20,
-                length: 3,
-                colour: "#ccc",
-                snap: true,
-              },
-            }}
-            onWorkspaceChange={(workspace) => {
-              const code = Blockly.JavaScript.workspaceToCode(workspace);
-              setCode(code);
-            }}
-            onXmlChange={() => { }}
-  />
+      toolboxConfiguration={{
+        kind: "categoryToolbox",
+        contents: [
+          {
+            kind: "category",
+            name: "Spells",
+            colour: "#c1ba31",
+            contents:
+              blockIds.map((i) => {
+                return { kind: "block", type: i }
+              })
+          },
+        ],
+      }
+      }
+      initialXml={'<xml xmlns="http://www.w3.org/1999/xhtml"></xml>'}
+      // style={{height: 200}}
+      className={classes.blocklyPuzzle}
+      workspaceConfiguration={{
+        grid: {
+          spacing: 20,
+          length: 3,
+          colour: "#ccc",
+          snap: true,
+        },
+      }}
+      onWorkspaceChange={(workspace) => {
+        const code = Blockly.JavaScript.workspaceToCode(workspace);
+        setCode(code);
+      }}
+      onXmlChange={() => { }}
+    />
     <MagicMirror
       code={code}
       options={{
@@ -296,6 +305,17 @@ function Page1(props) {
   ) 
 }
 
+function ExitGameButton(props){
+  function exitGame () {
+    console.log("Exit the Game!")
+  }
+
+  return (
+    <CastButton
+      onReturn={(d) => { console.log("Exiting game", d) }}
+      code={"(unreal-eval-js \"KismetSystemLibrary.QuitGame(GWorld.GetPlayerController(0))\")"}>Exit Game</CastButton>
+  )
+}
 
 export function Level3(props) {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl3:currentPart", 0)
@@ -325,7 +345,7 @@ export function Level3(props) {
 
   return (
     <>
-      <Level number={3} subtitle={"The Mission"}>
+      <Level number={3} subtitle={"The Mission"} action={<ExitGameButton/>}>
         <CardContent>
           {parts[currentPart]}
         </CardContent>

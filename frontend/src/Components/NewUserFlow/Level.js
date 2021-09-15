@@ -273,8 +273,11 @@ export const Level = (props) => {
         }
       }}>
         <Card>
-          <CardHeader title={"Level " + props.number + ""}
-            subheader={props.subtitle}>
+          <CardHeader 
+            title={"Level " + props.number + ""}
+            subheader={props.subtitle}
+            action={props.action}
+            >
           </CardHeader>
           {props.children}
         </Card>
