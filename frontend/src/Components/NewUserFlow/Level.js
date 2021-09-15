@@ -155,8 +155,10 @@ export const AccountCreationReminder = (props) => {
   const useStyles = makeStyles((theme) => ({
     paper: {
       position: 'absolute',
+      height: "80vh",
       backgroundColor: theme.palette.background.paper,
       padding: theme.spacing(2, 4, 3),
+      overflowY:'auto',
     },
   }));
   const classes = useStyles();
@@ -278,7 +280,6 @@ export const Level = (props) => {
         </Card>
       </div>
       {showEducationalResources ? <EducationalResources content={props.educationalContent}/>:""} 
-      <LoginButton/>
     </>
   );
 }
