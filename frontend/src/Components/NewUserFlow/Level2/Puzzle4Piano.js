@@ -35,7 +35,7 @@ function SockPuppetsMessage4(props) {
         text={
           <>
             <Typography paragraph>
-              The Puzzle is to add a button that plays a G-Chord
+              The Puzzle is to add a button that plays a G-Chord. Unless you're a particularly musical person, I'd recommend doing some Googling to see what notes are in a G Chord and how those notes correspond to notes on a piano.
             </Typography>
             <Typography paragraph>
               <br />
