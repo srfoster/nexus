@@ -119,7 +119,11 @@
                   [label "Play the Game"]
                   [callback (lambda (button event)
                                 (send msg set-label "Launching...")
-                                (system (~a "cd Versions/" (get-local-latest-version) " && main.exe"))
+                                (define-values (sp out in err)
+                                  (subprocess #f #f #f (~a "Versions/" (get-local-latest-version) "/main.exe")))
+                                (send msg set-label "")
+                                (void)
+                                ;(system (~a "cd Versions/" (get-local-latest-version) " && main.exe"))
                                 )]))
 
   ;TODO: What if this fails? How to report errors to user

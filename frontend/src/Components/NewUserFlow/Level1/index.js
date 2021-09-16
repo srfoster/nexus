@@ -106,7 +106,6 @@ function Level1(props) {
         <Fade in={true} timeout={1000}>
           <Step1TitleCard setTitleScreenComplete={ setTitleScreenComplete }/>
         </Fade>
-        <LoginButton />
       </>
     );
   }

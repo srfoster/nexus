@@ -164,28 +164,31 @@
   ;(spell-language-module 'orb-game-1/run-lang-external)
   ;(displayln "preload-spell-sandbox")
   ;(preload-spell-sandbox)
-  (displayln "ws-serve")
+  ;(displayln "ws-serve")
   (ws-serve* #:port 8082 
              (ws-service-mapper
               ["/test" 
                [(#f) ; if client did not request any subprotocol
                 (lambda (c) 
-                  (displayln "Connection established")
+                  ;(displayln "Connection established")
                   (let loop ()
-                    (displayln "Waiting for message")
+                    ;(displayln "Waiting for message")
                     
                     (define msg (ws-recv c #:payload-type 'text))
-                    (displayln (~a "Got: " msg))
+                    ;(displayln (~a "Got: " msg))
                     
                       (when (not (eof-object? msg))
                         (let() 
                           (with-handlers 
-                              ([exn:fail? (lambda (e) 
-                                            (displayln e))])
+                              ([exn:fail? (lambda (e)
+                                            (void) 
+                                            ;(displayln e)
+                                            )])
                             
                             (define ret 
                               (with-handlers ([exn:fail? (lambda (e)
-                                                           (displayln e)
+                                                           
+                                                           ;(displayln e)
                                                            
                                                            (define blockId
                                                              (continuation-mark-set-first   

@@ -179,8 +179,8 @@ export function OpenedMessage(props) {
         <Grid container spacing={1}>
           <Grid item xs={2}><Typography><strong>From:</strong></Typography></Grid>
           <Grid item xs={10}>{props.from}</Grid>
-          <Grid item xs={2}><Typography><strong>To:</strong></Typography></Grid>
-          <Grid item xs={10}>{props.to}</Grid>
+          {props.to?<><Grid item xs={2}><Typography><strong>To:</strong></Typography></Grid>
+          <Grid item xs={10}>{props.to}</Grid></>:""}
           <Grid item xs={2}><Typography><strong>Subject:</strong></Typography></Grid>
           <Grid item xs={10}><Typography>{props.subject}</Typography></Grid>
         </Grid>

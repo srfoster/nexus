@@ -75,7 +75,6 @@ const SockPuppetsMessage = (props) => {
     <div ref={openedMessage}>
       <OpenedMessage
         from={<SockPuppetChip level={3} />}
-        to={<StudentChip name={username} level={3} />}
         subject={"A Whole New World!"}
         videoUrl="https://codespells-org.s3.amazonaws.com/NexusVideos/e-3.1-smaller.ogv"
         text={
@@ -195,7 +194,7 @@ function BlocklyPuzzle(props) {
     [])
 
   return (!blockIds ? "" : <>
-    <span>The puzzle is to build a sphere of radius 100 at your orb's location. The location of your orb is:
+    <span>The puzzle is to build a sphere of radius 1000 at your orb's location. The location of your orb is:
       <ul>
         <li>X: -484</li>
         <li>Y: 1818</li>
