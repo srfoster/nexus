@@ -15,7 +15,11 @@
   "https://codespells-org.s3.amazonaws.com/Nexus/Installer/what-to-do-next.rkt")
 
 (define res
-  (get url #:stream? #t))
+  (with-handlers ([exn:fail? 
+                    (lambda (exn) 
+                      (displayln "Your internet is not good.")
+                      (exit))])
+    (get url #:stream? #t)))
 
 (define body 
   (response-body res))
