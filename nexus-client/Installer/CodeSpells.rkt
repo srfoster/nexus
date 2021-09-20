@@ -17,7 +17,7 @@
 (define res
   (with-handlers ([exn:fail? 
                     (lambda (exn) 
-                      (displayln "Your internet is not good.")
+                      (displayln "You need an internet connection to run CodeSpells. Check that you are online.")
                       (exit))])
     (get url #:stream? #t)))
 
