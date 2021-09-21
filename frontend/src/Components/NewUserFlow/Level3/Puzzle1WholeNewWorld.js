@@ -19,7 +19,6 @@ import { MagicMirror } from '../../MagicMirror';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 import { CastButton, sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
 
-
 const useStyles = makeStyles((theme) => ({
     blocklyPuzzle: {
       height: 200,
@@ -101,8 +100,6 @@ function RuneDemo(props){
     </Parens>
   </CardContent></Card> 
 }
-
-
 
 function BlocklyPuzzle(props) {
   const [blockIds, setBlockIds] = useState([]);
@@ -279,14 +276,4 @@ function Page1(props) {
   ) 
 }
 
-function ExitGameButton(props){
-  function exitGame () {
-    console.log("Exit the Game!")
-  }
-
-  return (
-    <CastButton
-      onReturn={(d) => { console.log("Exiting game", d) }}
-      code={"(unreal-eval-js \"KismetSystemLibrary.QuitGame(GWorld.GetPlayerController(0))\")"}>Exit Game</CastButton>
-  )
-}
+export default Page1;

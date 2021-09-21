@@ -7,6 +7,7 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button'
 
+
 export function MagicMirror(props) {
     const [code, setCode] = useState(props.code);
     const [error, setError] = useState(false);
@@ -40,14 +41,17 @@ export function MagicMirror(props) {
                 !errorLineNumber ? "" : <>Error on line {errorLineNumber}<br /></>
             }{error}</Alert>} 
                 <CastButton color="secondary" variant="contained" code={code} onReturn={(fromUnreal) => {
+                    console.log("Before the if", fromUnreal)
                     if (isError(fromUnreal)) {
+                        console.log("Inside the if")
                         setError(racketErrorMessage(fromUnreal))
                         setErrorLineNumber(racketErrorLineNumber(fromUnreal))
                     } else {
+                        console.log("Inside the else")
                         setError(false)
                         setErrorLineNumber(false)
                     }
-                    props.onReturn(fromUnreal)
+                    props.onReturn && props.onReturn(fromUnreal)
                 }} />
                 &nbsp;
                 {props.additionalButtons}

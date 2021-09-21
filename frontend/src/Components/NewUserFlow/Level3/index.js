@@ -4,11 +4,12 @@ import CardActions from '@material-ui/core/CardActions';
 import { useLocalStorage, spread } from "../../../Util";
 import Button from '@material-ui/core/Button';
 import { SBS, Level, withConfetti, ContinueButton } from '../Level';
+import Page1 from './Puzzle1WholeNewWorld'
+import Page2 from './Puzzle2CodeMemorization';
+import ExitGameButton from '../../WorldWidgets/ExitGameButton';
 
 //Educational Resources
 import { Level3Puzzle1EducationalContent } from '../EducationalResources';
-
-
 // /*
 
 // Stephen's widget wishlist:
@@ -44,8 +45,8 @@ export function Level3(props) {
     //... create educational resources as we add new puzzles
     ]
 
-    let parts = [<Page1 setCanContinue={withConfetti(setCanContinue)} />]
-  //   <Page2/>,
+  let parts = [<Page1 setCanContinue={withConfetti(setCanContinue)} />,
+               <Page2 setCanContinue={withConfetti(setCanContinue)} />]
   //   <Page3/>,
   //   <Page4/>,
   //   <Page5/>]

@@ -14,23 +14,36 @@
 (provide start-ui)
 
 (require net/rfc6455
-         (prefix-in unreal: orb-game-1/lang)
          unreal
          unreal/libs/actors
          unreal/libs/basic-types
          unreal/external-runtime/main
-         
-         orb-game-1/lang
-         
          json
-         
          errortrace)
 
 
 (define-namespace-anchor a)
 (define ns (namespace-anchor->namespace a))
 
+(define/contract (current-location)
+  (-> vec?)
+  
+  (unreal-eval-js 
+    (location (character))))
 
+(define (character)
+  (get-actor-by-exported-class-name "OrbCharacter"))
+
+(define (valid-javascript-variable-name? var)
+  (regexp-match #px"^\\w+$" var))
+
+; Should this be get-actorS-by-class-name? What if there are multiple??
+(define (get-actor-by-exported-class-name cn)
+  (when (not (valid-javascript-variable-name? cn))
+    (raise-user-error "You must pass a valid javascript class name to get-actor-by-class-name."))
+  @unreal-value{
+     return GWorld.GetAllActorsOfClass(Root.ResolveClass(@(->unreal-value cn))).OutActors[0]
+ })
 
 (define/contract (build-sphere pos r)
   ;If the radius is too big, you end up crashing the game.
@@ -220,7 +233,9 @@
                             (ws-send! c (jsexpr->string 
                                          (hash 
                                           'responseFor msg 
-                                          'response ret))))))
+                                          'response (if (void? ret )
+                                                        'null
+                                                        ret)))))))
                     
                     (when (not (eof-object? msg))
                       (loop)))
