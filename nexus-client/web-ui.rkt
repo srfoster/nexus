@@ -29,7 +29,7 @@
   (-> vec?)
   
   (unreal-eval-js 
-    (location (character))))
+   (location (character))))
 
 (define (character)
   (get-actor-by-exported-class-name "OrbCharacter"))
@@ -42,7 +42,7 @@
   (when (not (valid-javascript-variable-name? cn))
     (raise-user-error "You must pass a valid javascript class name to get-actor-by-class-name."))
   @unreal-value{
-     return GWorld.GetAllActorsOfClass(Root.ResolveClass(@(->unreal-value cn))).OutActors[0]
+ return GWorld.GetAllActorsOfClass(Root.ResolveClass(@(->unreal-value cn))).OutActors[0]
  })
 
 #|
@@ -52,21 +52,65 @@ Begin functional API for Voxel Worlds:
 
 |#
 
-(struct builder (f p w h c))
+(struct builder (t p w d h c))
 
 (define (builder-translate b v)
   (struct-copy builder b [p (+vec v (builder-p b))]))
 
 (define (above b1 b2)
+  (define recenter (vec 0
+                        0
+                        (/ (- 
+                            (builder-h b2) 
+                            (builder-h b1))
+                           2)))
   (builder 'above 
-          (vec 0 0 0) 
-          (max (builder-w b1) (builder-w b2))
-          (+ (builder-h b1) (builder-h b2))
-          (list (builder-translate b1 (vec 0 0 (/ (builder-h b1) 2))) 
-                (builder-translate b2 (vec 0 0 (/ (builder-h b2) -2))))))
+           (vec 0 0 0) 
+           (max (builder-w b1) (builder-w b2))
+           (max (builder-d b1) (builder-d b2))
+           (+ (builder-h b1) (builder-h b2))
+           (list (builder-translate b1 (+vec recenter (vec 0 0 (/ (builder-h b1) 2)))) 
+                 (builder-translate b2 (+vec recenter (vec 0 0 (/ (builder-h b2) -2)))))))
+
+(define (beside b1 b2)
+  (define recenter (vec (/ (- 
+                            (builder-w b2) 
+                            (builder-w b1))
+                           2)
+                        0 0 ))
+  (builder 'beside 
+           (vec 0 0 0) 
+           (+ (builder-w b1) (builder-w b2))
+           (max (builder-d b1) (builder-d b2))
+           (max (builder-h b1) (builder-h b2))
+           (list (builder-translate b1 (+vec recenter (vec (/ (builder-w b1) 2) 0 0)))
+                 (builder-translate b2 (+vec recenter (vec (/ (builder-w b2) -2) 0 0))))))
+
+(define (before b1 b2)
+  (define recenter (vec 0
+                        (/ (- 
+                            (builder-d b2) 
+                            (builder-d b1))
+                           2)
+                        0 ))
+  (builder 'before 
+           (vec 0 0 0) 
+           (max (builder-w b1) (builder-w b2))
+           (+ (builder-d b1) (builder-d b2))
+           (max (builder-h b1) (builder-h b2))
+           (list (builder-translate b1 (+vec recenter (vec 0 (/ (builder-d b1) 2) 0)))
+                 (builder-translate b2 (+vec recenter (vec 0 (/ (builder-d b2) -2) 0))))))
 
 (define (sphere r)
-  (builder 'sphere (vec 0 0 0) (* 2 r) (* 2 r) #f))
+  (builder 'sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f))
+
+(define (build-builder b [at (current-location)])
+  (define at-rel (+vec at (builder-p b)))
+
+  (match (builder-t b)
+    ['sphere (build-sphere at-rel (/ (builder-w b) 2))] 
+    [else (map (curryr build-builder at-rel) 
+               (builder-c b))]))
 
 (define/contract (build-sphere pos r)
   ;If the radius is too big, you end up crashing the game.
