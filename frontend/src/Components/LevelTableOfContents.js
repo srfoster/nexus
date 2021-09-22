@@ -82,6 +82,10 @@ const LevelTableOfContents = (props) => {
                 name: 3,
                 puzzles: [
                    "Build Sphere",
+                   "Code Memorization",
+                   "TBD",
+                   "TBD",
+                   "TBD"
                 ]
             },
         ]

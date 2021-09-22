@@ -4,13 +4,13 @@ import CardActions from '@material-ui/core/CardActions';
 import { useLocalStorage, spread } from "../../../Util";
 import Button from '@material-ui/core/Button';
 import { SBS, Level, withConfetti, ContinueButton } from '../Level';
+import ExitGameButton from '../../WorldWidgets/ExitGameButton';
 import Page1 from './Puzzle1WholeNewWorld'
 import Page2 from './Puzzle2CodeMemorization';
-import ExitGameButton from '../../WorldWidgets/ExitGameButton';
-
-//Educational Resources
+import Page3 from './Puzzle3TBD';
+import Page4 from './Puzzle4TBD';
+import Page5 from './Puzzle5TBD';
 import { Level3Puzzle1EducationalContent } from '../EducationalResources';
-// /*
 
 // Stephen's widget wishlist:
 // * Calendar?  Trello?  (Meta: time management of learning)
@@ -23,7 +23,6 @@ import { Level3Puzzle1EducationalContent } from '../EducationalResources';
 // * Impress js - Hard to confine to one div...
 // * Tensor Flow - What is an interesting model to use?  How to get it to work with react-tensorflow?
 // * Konva
-// */
 
 export function Level3(props) {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl3:currentPart", 0)
@@ -46,10 +45,11 @@ export function Level3(props) {
     ]
 
   let parts = [<Page1 setCanContinue={withConfetti(setCanContinue)} />,
-               <Page2 setCanContinue={withConfetti(setCanContinue)} />]
-  //   <Page3/>,
-  //   <Page4/>,
-  //   <Page5/>]
+               <Page2 setCanContinue={withConfetti(setCanContinue)} />,
+               <Page3 setCanContinue={withConfetti(setCanContinue)} />,
+               <Page4 setCanContinue={withConfetti(setCanContinue)} />,
+               <Page5 setCanContinue={withConfetti(setCanContinue)} />
+              ]
 
   return (
     <>

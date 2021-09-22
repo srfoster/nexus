@@ -48,7 +48,7 @@
 (define/contract (build-sphere pos r)
   ;If the radius is too big, you end up crashing the game.
   ;  1000 can probably be bumped up if we wanted to.  
-  (-> vec? (between/c 0 2000) any/c)
+  (-> vec? (between/c 0 1000) any/c)
   
   (define unreal-response
     (unreal-eval-js 
@@ -240,9 +240,6 @@
                     (when (not (eof-object? msg))
                       (loop)))
                   )]])))
-
-
-
 
 (module+ main
   (start-ui)
