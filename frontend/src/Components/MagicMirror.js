@@ -7,7 +7,6 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button'
 
-
 export function MagicMirror(props) {
     const [code, setCode] = useState(props.code);
     const [error, setError] = useState(false);

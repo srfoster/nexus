@@ -49,17 +49,17 @@ services:
     networks: 
       - dev-codespells-network
 
-  lang-server:
-    image: codespells-lang-server
-    build: ./lang-server
-    restart: always
-    ports:
-      - 8091:8090
-    volumes:
-      - ./lang-server:/usr/src/app
-    container_name: lang-server
-    networks: 
-      - dev-codespells-network
+  #lang-server:
+  #  image: codespells-lang-server
+  #  build: ./lang-server
+  #  restart: always
+  #  ports:
+  #    - 8091:8090
+  #  volumes:
+  #    - ./lang-server:/usr/src/app
+  #  container_name: lang-server
+  #  networks: 
+  #    - dev-codespells-network
 
   racket-bridge:
     image: racket-bridge
