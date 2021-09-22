@@ -45,6 +45,29 @@
      return GWorld.GetAllActorsOfClass(Root.ResolveClass(@(->unreal-value cn))).OutActors[0]
  })
 
+#|
+Begin functional API for Voxel Worlds:
+
+(above (sphere 5) (sphere 10))
+
+|#
+
+(struct builder (f p w h c))
+
+(define (builder-translate b v)
+  (struct-copy builder b [p (+vec v (builder-p b))]))
+
+(define (above b1 b2)
+  (builder 'above 
+          (vec 0 0 0) 
+          (max (builder-w b1) (builder-w b2))
+          (+ (builder-h b1) (builder-h b2))
+          (list (builder-translate b1 (vec 0 0 (/ (builder-h b1) 2))) 
+                (builder-translate b2 (vec 0 0 (/ (builder-h b2) -2))))))
+
+(define (sphere r)
+  (builder 'sphere (vec 0 0 0) (* 2 r) (* 2 r) #f))
+
 (define/contract (build-sphere pos r)
   ;If the radius is too big, you end up crashing the game.
   ;  1000 can probably be bumped up if we wanted to.  
