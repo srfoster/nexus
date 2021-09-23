@@ -101,6 +101,9 @@ Begin functional API for Voxel Worlds:
            (list (builder-translate b1 (+vec recenter (vec 0 (/ (builder-d b1) 2) 0)))
                  (builder-translate b2 (+vec recenter (vec 0 (/ (builder-d b2) -2) 0))))))
 
+(define (empty-space w d h)
+  (builder 'empty (vec 0 0 0) w d h #f))
+
 (define (sphere r)
   (builder 'sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f))
 
@@ -109,6 +112,7 @@ Begin functional API for Voxel Worlds:
 
   (match (builder-t b)
     ['sphere (build-sphere at-rel (/ (builder-w b) 2))] 
+    ['empty  (void)] 
     [else (map (curryr build-builder at-rel) 
                (builder-c b))]))
 
