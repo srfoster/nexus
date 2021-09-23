@@ -70,5 +70,8 @@ services:
       - 8888:8888
     volumes:
       - ./nexus-client:/usr/src/app
+    command: "racket main.rkt"
     container_name: racket-bridge
+    networks: 
+      - dev-codespells-network
   

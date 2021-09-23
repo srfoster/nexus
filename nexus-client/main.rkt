@@ -2,11 +2,23 @@
 
 (require file-watchers)
 
+(displayln "Running main.rkt")
+
+;(system "racket ./web-ui.rkt")
+
+; (define-values (s out in err) (subprocess #f #f #f "/usr/bin/racket" "web-ui.rkt"))
+; (printf "stdout:\n~a" (port->string out))
+; (printf "stderr:\n~a" (port->string err))
+; ; (close-input-port out)
+; ; (close-output-port in)
+; ; (close-input-port err)
+; (subprocess-wait s)
+
 (define should-restart (make-channel))
 
 (thread (thunk
          (let loop ()
-           (define-values (s in err out) (subprocess #f #f #f "racket web-ui.rkt"))
+           (define-values (s out in err) (subprocess #f #f #f "/usr/bin/racket" "web-ui.rkt"))
            (displayln "Racket bridge running...")
            (channel-get should-restart)
            (subprocess-kill s #f) 

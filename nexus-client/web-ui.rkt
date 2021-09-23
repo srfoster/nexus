@@ -57,7 +57,25 @@ Begin functional API for Voxel Worlds:
 (define (builder-translate b v)
   (struct-copy builder b [p (+vec v (builder-p b))]))
 
-(define (above b1 b2)
+(define (above . bs)
+  (combine-all above_ bs))
+
+(define (beside . bs)
+  (combine-all beside_ bs))
+
+(define (before . bs)
+  (combine-all before_ bs))
+
+(define (combine-all f bs)
+  (if (= (length bs) 1)
+      (first bs)
+      ;(above_ (first bs) (apply above (rest bs)))
+      (combine-all f (cons
+                      (f (first bs) (second bs))
+                      (drop bs 2)))
+      ))
+
+(define (above_ b1 b2)
   (define recenter (vec 0
                         0
                         (/ (- 
@@ -72,7 +90,7 @@ Begin functional API for Voxel Worlds:
            (list (builder-translate b1 (+vec recenter (vec 0 0 (/ (builder-h b1) 2)))) 
                  (builder-translate b2 (+vec recenter (vec 0 0 (/ (builder-h b2) -2)))))))
 
-(define (beside b1 b2)
+(define (beside_ b1 b2)
   (define recenter (vec (/ (- 
                             (builder-w b2) 
                             (builder-w b1))
@@ -86,7 +104,7 @@ Begin functional API for Voxel Worlds:
            (list (builder-translate b1 (+vec recenter (vec (/ (builder-w b1) 2) 0 0)))
                  (builder-translate b2 (+vec recenter (vec (/ (builder-w b2) -2) 0 0))))))
 
-(define (before b1 b2)
+(define (before_ b1 b2)
   (define recenter (vec 0
                         (/ (- 
                             (builder-d b2) 
@@ -101,7 +119,10 @@ Begin functional API for Voxel Worlds:
            (list (builder-translate b1 (+vec recenter (vec 0 (/ (builder-d b1) 2) 0)))
                  (builder-translate b2 (+vec recenter (vec 0 (/ (builder-d b2) -2) 0))))))
 
-(define (empty-space w d h)
+(define (empty w d h)
+  (builder 'empty (vec 0 0 0) w d h #f))
+
+(define (hexagon w d h)
   (builder 'empty (vec 0 0 0) w d h #f))
 
 (define (sphere r)
