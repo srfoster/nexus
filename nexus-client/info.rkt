@@ -1,6 +1,6 @@
 #lang info
 (define collection "nexus-client")
-(define deps '("base" "rfc6455" "https://github.com/srfoster/unreal.git" "reloadable"))
+(define deps '("base" "rfc6455" "https://github.com/srfoster/unreal.git" "file-watchers"))
 (define build-deps '("scribble-lib" "racket-doc" "rackunit-lib"))
 (define pkg-desc "Description Here")
 (define version "0.0")
