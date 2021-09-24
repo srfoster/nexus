@@ -6,7 +6,7 @@
 
 (provide floor wall/wide wall/deep room)
 
-(define s (sphere 100))
+(define s (sphere 200))
 
 (define (floor w d)    
     (define ss (map (thunk* s) (range w)))
@@ -28,22 +28,21 @@
 
 (define (room w d h)
   (overlay
-   (above (floor w d)
-          (sphere (/ h 2) 'air)
-          #;(empty (- w (width s))
-                   (- d (depth s))
-                   (- h (height s)))
-          (floor w d))
-   (beside/deep (wall/wide w h)
-                (sphere (/ w 2) 'air)
-                #;(empty (- w (width s))
-                         (- d (depth s))
-                         (- h (height s)))
-                (wall/wide w h))
-   (beside/wide (wall/deep d h)
-                (sphere (/ d 2) 'air)
-                #;(empty (- w (width s))
-                         (- d (depth s))
-                         (- h (height s)))
-                (wall/deep d h))
-   ))
+   (above 
+     (floor w d)
+     (empty (* (width s) (- w 1))
+            (* (depth s) (- d 1))
+            (* (height s) (- h 1)))
+     (floor w d))
+   (beside/deep 
+     (wall/wide w h)
+     (empty (* (width s) (- w 1))
+            (* (depth s) (- d 1))
+            (* (height s) (- h 1)))
+     (wall/wide w h))
+   (beside/wide 
+     (wall/deep d h)
+     (empty (* (width s) (- w 1))
+            (* (depth s) (- d 1))
+            (* (height s) (- h 1)))
+     (wall/deep d h))))
