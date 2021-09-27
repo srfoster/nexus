@@ -12,45 +12,41 @@ import ChatBubble from '../../Widgets/ChatBubble';
 import { MagicMirror } from '../../MagicMirror';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 import Alert from '@material-ui/lab/Alert';
+import Draggable from 'react-draggable';
+import 'react-resizable/css/styles.css';
+const {Resizable} = require('react-resizable');
 
+function Room(props){
+  const [width, setWidth] = useState(100)
+  const [height, setHeight] = useState(100)
 
-function Rune(props){
-  return <Draggable
+  const onResize = (event, {element, size, handle}) => {
+    setWidth(size.width)
+    setHeight(size.height)
+  }
+
+  return (
+  <Draggable handle="strong"
     grid={[25, 25]} >
-    <div style={{
+    <Resizable width={width} height={height} onResize={onResize} resizeHandles={['se']}>
+      <div style={{
       margin: 0,
       padding: 0,
-      width: 50,
-      height: 50,
+      width: width,
+      height: height,
       backgroundColor: props.color,
       cursor: "pointer",
       display: "inline-block"
-    }}>{props.children}</div>
-  </Draggable>
-}
-
-function Parens(props) {
-  return <Draggable handle=".handle">
-    <div style={{
-      backgroundColor: "gray",
-      cursor: "pointer",
-      width: props.children.length*50, //What?
-      height: 100,
-      display: "inline-block"
     }}>
-      <div className={"handle"}>Drag here</div>
-      {props.children}
-    </div>
+      <strong className="cursor"><div>Drag here</div></strong>
+      {props.children}</div>
+    </Resizable>
   </Draggable>
+  )
 }
-
-function RuneDemo(props){
+function RoomUI(props){
   return <Card style={{ height: 500 }}><CardContent>
-    <Rune color="blue">Water</Rune>
-    <Parens>
-      <Rune color="blue">Water</Rune>
-      <Rune color="red">Fire</Rune>
-    </Parens>
+    <Room color="blue">Room</Room>
   </CardContent></Card> 
 }
 
@@ -58,6 +54,7 @@ function RuneDemo(props){
 function FadedExamplePuzzle(props){
     
 }
+
 
 const SockPuppetsMessage = (props) => {
   let [username, setUsername] = useLocalStorage("user-name", undefined);
@@ -102,7 +99,7 @@ function Page5(props){
             setContentComplete={setMessageOpened}
             NexusStallingMessages={
                 [
-                    <RuneDemo/>,
+                    <RoomUI/>,
                     <span><SockPuppetChip level={3} /> reminds you that you are still in his fork of the Nexus!</span>,
                     {
                         text: <ChatBubble><Typography>Write content.</Typography></ChatBubble>,
