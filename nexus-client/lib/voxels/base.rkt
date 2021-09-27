@@ -6,9 +6,9 @@
 )
 
 (provide current-location
-        empty sphere 
+        empty sphere builder? 
         width depth height 
-        scale rotate above beside/wide beside/deep overlay build)
+        scale rotate above beside/wide beside/deep overlay translate build)
 
 #|
 Begin functional API for Voxel Worlds:
@@ -63,6 +63,9 @@ Begin functional API for Voxel Worlds:
 (define (builder-translate b v)
   (struct-copy builder b [p (+vec v (builder-p b))]))
 
+(define (translate v b)
+  (builder-translate b v))
+
 (define (scale s b)
   (struct-copy builder b 
     [p (*vec s (builder-p b))]
@@ -72,6 +75,7 @@ Begin functional API for Voxel Worlds:
     [c (and 
         (builder-c b)
         (map (curry scale s) (builder-c b)))]))
+
 
 (define (rotate b)
   b)

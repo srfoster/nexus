@@ -1,48 +1,52 @@
 #lang at-exp racket
 
 (require 
-         "./base.rkt"
-)
+         "./base.rkt")
 
 (provide floor wall/wide wall/deep room)
 
-(define s (sphere 200))
+;TODO: Parameterize this
+(define s (sphere 100))
 
-(define (floor w d)    
-    (define ss (map (thunk* s) (range w)))
+(define (divisible-by-200? x)
+    (= (modulo x 200) 0))
+
+(define/contract (floor w d) 
+  (-> divisible-by-200? divisible-by-200? builder?)
+    (define ss (map (thunk* s) (range (/ w 200))))
     (define log (apply beside/wide ss))
-    (define logs (map (thunk* log) (range d)))
+    (define logs (map (thunk* log) (range (/ d 200))))
     (apply beside/deep logs))
 
-(define (wall/wide w h)    
-    (define ss (map (thunk* s) (range h)))
+(define/contract (wall/wide w h)    
+  (-> divisible-by-200? divisible-by-200? builder?)
+    (define ss (map (thunk* s) (range (/ h 200))))
     (define log (apply above ss))
-    (define logs (map (thunk* log) (range w)))
+    (define logs (map (thunk* log) (range (/ w 200))))
     (apply beside/wide logs))
 
-(define (wall/deep d h)    
-    (define ss (map (thunk* s) (range h)))
+(define/contract (wall/deep d h)    
+  (-> divisible-by-200? divisible-by-200? builder?)
+    (define ss (map (thunk* s) (range (/ h 200))))
     (define log (apply above ss))
-    (define logs (map (thunk* log) (range d)))
+    (define logs (map (thunk* log) (range (/ d 200))))
     (apply beside/deep logs))
 
-(define (room w d h)
+(define/contract (room w d h)
+  (-> divisible-by-200? divisible-by-200? divisible-by-200? builder?)
+  (define _ (empty (- w (width s))
+            (- d (width s))
+            (- h (width s))))
   (overlay
    (above 
      (floor w d)
-     (empty (* (width s) (- w 1))
-            (* (depth s) (- d 1))
-            (* (height s) (- h 1)))
+     _
      (floor w d))
    (beside/deep 
      (wall/wide w h)
-     (empty (* (width s) (- w 1))
-            (* (depth s) (- d 1))
-            (* (height s) (- h 1)))
+     _ 
      (wall/wide w h))
    (beside/wide 
      (wall/deep d h)
-     (empty (* (width s) (- w 1))
-            (* (depth s) (- d 1))
-            (* (height s) (- h 1)))
+     _ 
      (wall/deep d h))))
