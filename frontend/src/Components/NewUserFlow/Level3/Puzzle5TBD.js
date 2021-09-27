@@ -14,40 +14,87 @@ import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 import Alert from '@material-ui/lab/Alert';
 import Draggable from 'react-draggable';
 import 'react-resizable/css/styles.css';
+import { CardActions } from '@material-ui/core';
+import OpenWithIcon from '@material-ui/icons/OpenWith';
+
 const {Resizable} = require('react-resizable');
 
 function Room(props){
-  const [width, setWidth] = useState(100)
-  const [height, setHeight] = useState(100)
+  const [width, setWidth] = useState(props.data.width)
+  const [height, setHeight] = useState(props.data.height)
+  const [x, setX] = useState(props.data.x)
+  const [y, setY] = useState(props.data.y)
 
   const onResize = (event, {element, size, handle}) => {
     setWidth(size.width)
     setHeight(size.height)
+    props.onRoomChange(props.data.name, {width: size.width, height: size.height, x, y})
+  }
+
+  const onDrag = (event, {x, y}) => {
+    setX(x)
+    setY(y)
+    props.onRoomChange(props.data.name, {width, height, x, y})
   }
 
   return (
-  <Draggable handle="strong"
+  <Draggable handle="strong" bounds="parent"
+    onDrag={onDrag}
     grid={[25, 25]} >
-    <Resizable width={width} height={height} onResize={onResize} resizeHandles={['se']}>
+    <Resizable width={width} height={height} onResize={onResize} resizeHandles={['se']} draggableOpts={{grid: [25, 25]}}>
       <div style={{
       margin: 0,
       padding: 0,
+      position: 'absolute', 
       width: width,
       height: height,
       backgroundColor: props.color,
+      border: "1px solid white",
       cursor: "pointer",
       display: "inline-block"
     }}>
-      <strong className="cursor"><div>Drag here</div></strong>
+      <strong style={{ cursor: "pointer" }}><OpenWithIcon/></strong>
       {props.children}</div>
     </Resizable>
   </Draggable>
   )
 }
+
 function RoomUI(props){
-  return <Card style={{ height: 500 }}><CardContent>
-    <Room color="blue">Room</Room>
-  </CardContent></Card> 
+  const [rooms, setRooms] = useState([])
+
+  function onRoomChange(name, data){
+    console.log(data)
+    data.name = name
+    let newRooms = rooms.map((r)=>r.name==name? data : r )
+    setRooms(newRooms)
+  }
+
+  function addRoom(){
+    let room = {
+      name: "room" + rooms.length,
+      width:75,
+      height:75,
+      x: 0,
+      y: 0
+    }
+    
+    setRooms(rooms.concat([room]));
+  }
+
+  return (
+  <Card style={{ height: 500 }}>
+    {JSON.stringify(rooms)}
+    <CardActions>
+      <Button onClick={addRoom}>New Room</Button>
+    </CardActions>
+      <CardContent>
+        <div className="box" style={{ height: '500px', width: '100%', position: 'relative', overflow: 'auto', padding: '10' }}>
+          {rooms.map((e) => <Room color="gray" key={e.name} data={e} onRoomChange={onRoomChange}></Room>)}
+      </div>
+    </CardContent>
+  </Card>
+  )
 }
 
 
