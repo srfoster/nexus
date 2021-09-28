@@ -16,6 +16,7 @@ import Draggable from 'react-draggable';
 import 'react-resizable/css/styles.css';
 import { CardActions } from '@material-ui/core';
 import OpenWithIcon from '@material-ui/icons/OpenWith';
+import { overlayMode } from 'codemirror';
 
 const {Resizable} = require('react-resizable');
 
@@ -24,6 +25,7 @@ function Room(props){
   const [height, setHeight] = useState(props.data.height)
   const [x, setX] = useState(props.data.x)
   const [y, setY] = useState(props.data.y)
+
 
   const onResize = (event, {element, size, handle}) => {
     setWidth(size.width)
@@ -60,14 +62,51 @@ function Room(props){
   )
 }
 
+function Door(props){
+  const [x, setX] = useState(props.data.x)
+  const [y, setY] = useState(props.data.y)
+
+  const onDrag = (event, {x, y}) => {
+    setX(x)
+    setY(y)
+    props.onDoorChange(props.data.name, {x, y})
+  }
+
+  return (
+    <Draggable handle="strong" bounds="parent"
+      onDrag={onDrag}
+      grid={[5, 5]} >
+      <div style={{
+        margin: 0,
+        padding: 0,
+        position: 'absolute',
+        width: 26,
+        height: 26,
+        backgroundColor: props.color,
+        border: "1px solid white",
+        cursor: "pointer",
+        display: "inline-block"
+      }}>
+        <strong style={{ cursor: "pointer" }}><OpenWithIcon /></strong>
+        {props.children}</div>
+    </Draggable>
+  )
+}
+
 function RoomUI(props){
   const [rooms, setRooms] = useState([])
+  const [doors, setDoors] = useState([])
 
   function onRoomChange(name, data){
-    console.log(data)
     data.name = name
     let newRooms = rooms.map((r)=>r.name==name? data : r )
     setRooms(newRooms)
+  }
+  
+  function onDoorChange(name, data){
+    data.name = name
+    let newDoors = doors.map((r)=>r.name==name? data : r )
+    setDoors(newDoors)
   }
 
   function addRoom(){
@@ -77,13 +116,44 @@ function RoomUI(props){
       height:75,
       x: 0,
       y: 0
-    }
-    
+    }    
     setRooms(rooms.concat([room]));
   }
 
+  function addDoor() {
+    let door = {
+      name: "door" + doors.length,
+      x: 0,
+      y: 0
+    }
+    setDoors(doors.concat([door]))
+  }
+
+// [{"width":75,"height":75,"x":125,"y":50,"name":"room0"},
+// {"width":75,"height":75,"x":200,"y":50,"name":"room1"},
+// {"width":150,"height":75,"x":125,"y":125,"name":"room2"},
+// {"width":75,"height":150,"x":275,"y":50,"name":"room3"}]
   function compile() {
-    return JSON.stringify(rooms)
+    let roomCode = rooms.map(e=>`(translate (vec ${Math.floor((e.x + e.width/2) / 10) * 200} ${Math.floor((e.y - e.height/2)/10) * 200} 0) (room ${Math.floor(e.width/10) * 200} ${Math.floor(e.height/10) * 200} 1000))`)
+    let doorCode = doors.map(e=>`(translate (vec ${Math.floor((e.x + 26/2) / 10) * 200} ${Math.floor((e.y - 26/2)/10) * 200} 500) (sphere ${Math.floor(26/10) * 200} 'air))`)
+    return "(build (overlay \n" + 
+              roomCode.join("\n") + 
+              doorCode.join("\n") +
+              "))"
+    //adjust x & y by half width and half height
+    /* (overlay
+        (translate (vec 125 50 0) (room 75 75 5))
+        (translate (vec 200 50 0) (room 75 75 5))
+        (translate (vec 125 125 0) (room 150 75 5))
+        (translate (vec 275 50 0) (room 75 150 5))
+        )
+    */
+    
+    return 
+  }
+
+  function clearRooms(){
+    setRooms([])
   }
 
   return (
@@ -91,14 +161,18 @@ function RoomUI(props){
   <Card style={{ height: 500 }}>
     <CardActions>
       <Button onClick={addRoom}>New Room</Button>
+      <Button onClick={addDoor}>New Door</Button>
+      <Button onClick={clearRooms}>Clear</Button>
     </CardActions>
       <CardContent>
         <div className="box" style={{ height: '500px', width: '100%', position: 'relative', overflow: 'auto', padding: '10' }}>
           {rooms.map((e) => <Room color="gray" key={e.name} data={e} onRoomChange={onRoomChange}></Room>)}
+          {doors.map((e) => <Door color="red" key={e.name} data={e} onDoorChange={onDoorChange}></Door>)}
       </div>
     </CardContent>
   </Card>
-      <MagicMirror code={compile()}/>
+      <MagicMirror code={compile()}
+      additionalButtons={<CloseUIButton/>}/>
     </>
   )
 }
