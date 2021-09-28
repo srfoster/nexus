@@ -82,9 +82,13 @@ function RoomUI(props){
     setRooms(rooms.concat([room]));
   }
 
+  function compile() {
+    return JSON.stringify(rooms)
+  }
+
   return (
+    <>
   <Card style={{ height: 500 }}>
-    {JSON.stringify(rooms)}
     <CardActions>
       <Button onClick={addRoom}>New Room</Button>
     </CardActions>
@@ -94,6 +98,8 @@ function RoomUI(props){
       </div>
     </CardContent>
   </Card>
+      <MagicMirror code={compile()}/>
+    </>
   )
 }
 
