@@ -13,7 +13,6 @@ import { BlocklyWorkspace } from "react-blockly";
 import Blockly from "blockly";
 
 // //Runes...
-import Draggable from 'react-draggable';
 import ChatBubble from '../../Widgets/ChatBubble/';
 import { MagicMirror } from '../../MagicMirror';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
@@ -58,47 +57,6 @@ const SockPuppetsMessage = (props) => {
       />
     </div>
   )
-}
-
-
-function Rune(props){
-  return <Draggable
-    grid={[25, 25]} >
-    <div style={{
-      margin: 0,
-      padding: 0,
-      width: 50,
-      height: 50,
-      backgroundColor: props.color,
-      cursor: "pointer",
-      display: "inline-block"
-    }}>{props.children}</div>
-  </Draggable>
-}
-
-function Parens(props) {
-  return <Draggable handle=".handle">
-    <div style={{
-      backgroundColor: "gray",
-      cursor: "pointer",
-      width: props.children.length*50, //What?
-      height: 100,
-      display: "inline-block"
-    }}>
-      <div className={"handle"}>Drag here</div>
-      {props.children}
-    </div>
-  </Draggable>
-}
-
-function RuneDemo(props){
-  return <Card style={{ height: 500 }}><CardContent>
-    <Rune color="blue">Water</Rune>
-    <Parens>
-      <Rune color="blue">Water</Rune>
-      <Rune color="red">Fire</Rune>
-    </Parens>
-  </CardContent></Card> 
 }
 
 function BlocklyPuzzle(props) {

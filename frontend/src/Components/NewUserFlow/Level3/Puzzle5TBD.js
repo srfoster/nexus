@@ -17,6 +17,7 @@ import 'react-resizable/css/styles.css';
 import { CardActions } from '@material-ui/core';
 import OpenWithIcon from '@material-ui/icons/OpenWith';
 import { overlayMode } from 'codemirror';
+import { sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
 
 const {Resizable} = require('react-resizable');
 
@@ -50,6 +51,7 @@ function Room(props){
       position: 'absolute', 
       width: width,
       height: height,
+      opacity:0.5,
       backgroundColor: props.color,
       border: "1px solid white",
       cursor: "pointer",
@@ -80,6 +82,7 @@ function Door(props){
         margin: 0,
         padding: 0,
         position: 'absolute',
+        opacity: 0.5,
         width: 26,
         height: 26,
         backgroundColor: props.color,
@@ -96,17 +99,20 @@ function Door(props){
 function RoomUI(props){
   const [rooms, setRooms] = useState([])
   const [doors, setDoors] = useState([])
+  const [compiledCode, setCompiledCode] = useState("")
 
   function onRoomChange(name, data){
     data.name = name
     let newRooms = rooms.map((r)=>r.name==name? data : r )
     setRooms(newRooms)
+    compile();
   }
   
   function onDoorChange(name, data){
     data.name = name
     let newDoors = doors.map((r)=>r.name==name? data : r )
     setDoors(newDoors)
+    compile();
   }
 
   function addRoom(){
@@ -118,6 +124,7 @@ function RoomUI(props){
       y: 0
     }    
     setRooms(rooms.concat([room]));
+    compile();
   }
 
   function addDoor() {
@@ -127,34 +134,28 @@ function RoomUI(props){
       y: 0
     }
     setDoors(doors.concat([door]))
+    compile();
   }
 
-// [{"width":75,"height":75,"x":125,"y":50,"name":"room0"},
-// {"width":75,"height":75,"x":200,"y":50,"name":"room1"},
-// {"width":150,"height":75,"x":125,"y":125,"name":"room2"},
-// {"width":75,"height":150,"x":275,"y":50,"name":"room3"}]
   function compile() {
-    let roomCode = rooms.map(e=>`(translate (vec ${Math.floor((e.x + e.width/2) / 10) * 200} ${Math.floor((e.y - e.height/2)/10) * 200} 0) (room ${Math.floor(e.width/10) * 200} ${Math.floor(e.height/10) * 200} 1000))`)
-    let doorCode = doors.map(e=>`(translate (vec ${Math.floor((e.x + 26/2) / 10) * 200} ${Math.floor((e.y - 26/2)/10) * 200} 500) (sphere ${Math.floor(26/10) * 200} 'air))`)
-    return "(build (overlay \n" + 
-              roomCode.join("\n") + 
-              doorCode.join("\n") +
-              "))"
-    //adjust x & y by half width and half height
-    /* (overlay
-        (translate (vec 125 50 0) (room 75 75 5))
-        (translate (vec 200 50 0) (room 75 75 5))
-        (translate (vec 125 125 0) (room 150 75 5))
-        (translate (vec 275 50 0) (room 75 150 5))
-        )
-    */
+    let roomCode = rooms.map(e=>`(translate (vec ${Math.floor((e.x + e.width/2) / 10) * 200} ${Math.floor((e.y + e.height/2)/10) * 200} 0) (room ${Math.floor(e.width/10) * 200} ${Math.floor(e.height/10) * 200} 1000))`)
+    let doorCode = doors.map(e=>`(translate (vec ${Math.floor((e.x + 26/2) / 10) * 200} ${Math.floor((e.y + 26/2)/10) * 200} 0) (sphere ${Math.floor(26/2/10) * 200} 'air))`)
     
-    return 
+    sendOnCodeSpellsSocket("(format-racket-code \"(build (overlay \n" +
+      roomCode.join("\n") +
+      doorCode.join("\n") +
+      "))\")",
+      (res) => { 
+        setCompiledCode(res.response)
+      })
   }
 
   function clearRooms(){
     setRooms([])
+    setDoors([])
   }
+
+
 
   return (
     <>
@@ -171,7 +172,7 @@ function RoomUI(props){
       </div>
     </CardContent>
   </Card>
-      <MagicMirror code={compile()}
+      <MagicMirror code={ compiledCode }
       additionalButtons={<CloseUIButton/>}/>
     </>
   )

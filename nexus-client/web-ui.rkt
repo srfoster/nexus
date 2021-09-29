@@ -14,6 +14,7 @@
 (provide start-ui)
 
 (require net/rfc6455
+         fmt
          unreal
          (only-in unreal/libs/actors find-actor locate)
          unreal/libs/basic-types
@@ -24,6 +25,11 @@
          "lib/voxels/rooms.rkt"
          )
 
+
+(define (format-racket-code code)
+  (program-format code
+                  standard-formatter-map
+                  #:width 40))
 
 (define-namespace-anchor a)
 (define ns (namespace-anchor->namespace a))
