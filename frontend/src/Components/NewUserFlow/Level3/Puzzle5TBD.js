@@ -18,6 +18,8 @@ import { CardActions } from '@material-ui/core';
 import OpenWithIcon from '@material-ui/icons/OpenWith';
 import { overlayMode } from 'codemirror';
 import { sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const {Resizable} = require('react-resizable');
 
@@ -26,6 +28,7 @@ function Room(props){
   const [height, setHeight] = useState(props.data.height)
   const [x, setX] = useState(props.data.x)
   const [y, setY] = useState(props.data.y)
+  const [contextMenuTarget, setContextMenuTarget] = useState(null);
 
 
   const onResize = (event, {element, size, handle}) => {
@@ -40,27 +43,49 @@ function Room(props){
     props.onRoomChange(props.data.name, {width, height, x, y})
   }
 
+  const handleClose = (e) => {
+    setContextMenuTarget(null);
+  }
+
+  const deleteRoom = () => {
+    props.onRoomDelete(props.data.name)
+  }
+
   return (
-  <Draggable handle="strong" bounds="parent"
-    onDrag={onDrag}
-    grid={[25, 25]} >
-    <Resizable width={width} height={height} onResize={onResize} resizeHandles={['se']} draggableOpts={{grid: [25, 25]}}>
-      <div style={{
-      margin: 0,
-      padding: 0,
-      position: 'absolute', 
-      width: width,
-      height: height,
-      opacity:0.5,
-      backgroundColor: props.color,
-      border: "1px solid white",
-      cursor: "pointer",
-      display: "inline-block"
-    }}>
-      <strong style={{ cursor: "pointer" }}><OpenWithIcon/></strong>
-      {props.children}</div>
-    </Resizable>
-  </Draggable>
+    <><Menu
+      id="simple-menu"
+      anchorEl={contextMenuTarget}
+      keepMounted
+      open={Boolean(contextMenuTarget)}
+      onClose={handleClose}
+    >
+      <MenuItem onClick={deleteRoom}>Delete</MenuItem>
+    </Menu>
+      <Draggable handle="strong" bounds="parent"
+        onDrag={onDrag}
+        grid={[25, 25]} >
+        <Resizable width={width} height={height} onResize={onResize} resizeHandles={['se']} draggableOpts={{ grid: [25, 25] }}>
+          <div 
+          onContextMenu={(e)=>{
+            e.preventDefault()
+            setContextMenuTarget(e.target)
+          }}
+          style={{
+            margin: 0,
+            padding: 0,
+            position: 'absolute',
+            width: width,
+            height: height,
+            opacity: 0.5,
+            backgroundColor: props.color,
+            border: "1px solid white",
+            cursor: "pointer",
+            display: "inline-block"
+          }}>
+            <strong style={{ cursor: "pointer" }}><OpenWithIcon /></strong>
+            {props.children}</div>
+        </Resizable>
+      </Draggable></>
   )
 }
 
@@ -107,7 +132,12 @@ function RoomUI(props){
     setRooms(newRooms)
     compile();
   }
-  
+ 
+  function onRoomDelete(name){
+    setRooms(rooms.filter(e=>e.name != name))
+    compile();
+  }
+
   function onDoorChange(name, data){
     data.name = name
     let newDoors = doors.map((r)=>r.name==name? data : r )
@@ -155,8 +185,6 @@ function RoomUI(props){
     setDoors([])
   }
 
-
-
   return (
     <>
   <Card style={{ height: 500 }}>
@@ -167,7 +195,7 @@ function RoomUI(props){
     </CardActions>
       <CardContent>
         <div className="box" style={{ height: '500px', width: '100%', position: 'relative', overflow: 'auto', padding: '10' }}>
-          {rooms.map((e) => <Room color="gray" key={e.name} data={e} onRoomChange={onRoomChange}></Room>)}
+          {rooms.map((e) => <Room color="gray" key={e.name} data={e} onRoomChange={onRoomChange} onRoomDelete={onRoomDelete}></Room>)}
           {doors.map((e) => <Door color="red" key={e.name} data={e} onDoorChange={onDoorChange}></Door>)}
       </div>
     </CardContent>
