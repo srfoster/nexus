@@ -25,6 +25,31 @@
          "lib/voxels/rooms.rkt"
          )
 
+(define (get-docs)
+  (list
+   (hash
+    'name "sphere"
+    'use (format-racket-code "(sphere [radius (between/c 0 1000)] [material (or/c 'voxel 'air) 'voxel] builder?)")
+    'parameter (list "radius" "material")
+    'type (list "(between/c 0 1000)" "(or/c 'voxel 'air)")
+    'optional (list #f #t)
+    'parameterDesc (list "Radius of the sphere. Must be between 0 and 1000." "Material of the sphere. Available materials are 'air and 'sphere")
+    'desc "Returns a sphere builder, which when passed into `build` instantiates a voxel sphere into the world."
+    'example (list "(build (sphere 1000))" "(build (sphere 500 'air))" )
+    'returns "builder?"
+   )
+   (hash
+    'name "sphere"
+    'use (format-racket-code "(sphere [radius (between/c 0 1000)] [material (or/c 'voxel 'air) 'voxel] builder?)")
+    'parameter (list "radius" "material")
+    'type (list "(between/c 0 1000)" "(or/c 'voxel 'air)")
+    'optional (list #f #t)
+    'parameterDesc (list "Radius of the sphere. Must be between 0 and 1000." "Material of the sphere. Available materials are 'air and 'sphere")
+    'desc "Returns a sphere builder, which when passed into `build` instantiates a voxel sphere into the world."
+    'example (list "(build (sphere 1000))" "(build (sphere 500 'air))" )
+    'returns "builder?"
+   )
+   ))
 
 (define (format-racket-code code)
   (program-format code

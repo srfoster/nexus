@@ -1,17 +1,33 @@
 
 import React, { useRef, useEffect, useState } from 'react';
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import CardContent from '@material-ui/core/CardContent';
 import Card from '@material-ui/core/Card';
 import Paper from '@material-ui/core/Paper'
 import Button from '@material-ui/core/Button'
 import { useLocalStorage, spread } from "../../../Util";
 import { SockPuppetChip, FakeTeacherChip, StudentChip, NewMessageNotification, PleaseWaitWhileSockPuppetCreatesContent, OpenedMessage, DidYouKnowCard } from '../../Widgets/NexusVoice';
-import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ChatBubble from '../../Widgets/ChatBubble/';
 import { MagicMirror } from '../../MagicMirror';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 import Alert from '@material-ui/lab/Alert';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import CardHeader from "@material-ui/core/CardHeader";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableCell from "@material-ui/core/TableCell";
+import TableBody from "@material-ui/core/TableBody";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableRow from "@material-ui/core/TableRow";
+import CheckIcon from "@material-ui/icons/Check";
+import ClearIcon from "@material-ui/icons/Clear";
+import { sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
+import Markdown from 'markdown-to-jsx';
 
 function FadedExamplePuzzle(props){
     const answer = "(build-sphere (vec -484 1818 6166) 1000)"
@@ -132,10 +148,143 @@ const SockPuppetsMessage = (props) => {
   )
 }
 
+
+
+const useStyles = makeStyles((theme) => ({
+  card: {
+    flexGrow: 1,
+    marginRight: "0px"//240
+  },
+  toolbar: theme.mixins.toolbar
+}));
+
+function DocDefinition(props){
+  const classes = useStyles();
+  const StyledTableCell = withStyles((theme) => ({
+  head: {
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.common.white
+  },
+  body: {
+    fontSize: 14
+  }
+}))(TableCell);
+
+  return(
+        <div key={props.data.name}>
+          <Card className={classes.card} id={props.data.name} elevation={4} style={{borderRadius:"5px"}}>
+            {/* <CardHeader align="left" subheader={} /> */}
+            <CardContent>
+          <code><pre style={{marginTop: 0, marginBottom: 10}}>{props.data.use}</pre></code>
+              <TableContainer style={{borderRadius:"5px"}}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <StyledTableCell align="center">
+                        parameter
+                      </StyledTableCell>
+                      <StyledTableCell align="center">type</StyledTableCell>
+                      <StyledTableCell align="center">optional</StyledTableCell>
+                      <StyledTableCell align="center">
+                        description
+                      </StyledTableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {props.data.parameter.map((param) => (
+                      <TableRow>
+                        <StyledTableCell align="center">
+                          {param}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          <code>{props.data.type[props.data.parameter.indexOf(param)]}</code>
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {props.data.optional[props.data.parameter.indexOf(param)] ? (
+                            <CheckIcon />
+                          ) : (
+                            <ClearIcon />
+                          )}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {props.data.parameterDesc[props.data.parameter.indexOf(param)]}
+                        </StyledTableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <br />
+              <Typography align="left">
+                Returns: <code>{props.data.returns ? props.data.returns : "void?"}</code>
+              </Typography>
+              <br />
+              <Markdown>{props.data.desc}</Markdown>
+              <br />
+              {props.data.example.map((codeExample) => (
+                <div style={{paddingTop: 20}}>
+               <MagicMirror code={codeExample} additionalButtons={[]} /> 
+              </div>
+              ))}
+            </CardContent>
+          </Card>
+          <br />
+        </div>
+  )
+}
+
+function DocModal(props){
+  const [open, setOpen] = useState(false);
+  const [scroll, setScroll] = useState('paper');
+  const [definitionList, setDefinitionList] = useState([])
+
+  useEffect(()=>{
+    sendOnCodeSpellsSocket("(get-docs)",
+      (res)=>setDefinitionList(res.response))
+  },[])
+
+  const handleClickOpen = (scrollType) => () => {
+    setOpen(true);
+    setScroll(scrollType);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+      <div>
+        <Button onClick={handleClickOpen('paper')}>Docs</Button>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          scroll='paper'
+          aria-labelledby="scroll-dialog-title"
+          aria-describedby="scroll-dialog-description"
+        >
+          <DialogTitle id="scroll-dialog-title">Docs</DialogTitle>
+          <DialogContent dividers={true}>
+            <DialogContentText
+              id="scroll-dialog-description"
+              tabIndex={-1}>
+              {definitionList.map(e=><DocDefinition data={e}/>)}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="secondary">
+              Done
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+ )
+}
+
 function Page2(props){
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3.2", false)
 
     return (<>
+        <DocModal/>
         <PleaseWaitWhileSockPuppetCreatesContent
             contentComplete={messageOpened}
             setContentComplete={setMessageOpened}

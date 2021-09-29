@@ -45,6 +45,15 @@ Begin functional API for Voxel Worlds:
 (define (empty w [d w] [h w])
   (builder 'empty (vec 0 0 0) w d h #f))
 
+; @doc[(sphere [radius (between/c 0 1000)] [material (or/c 'voxel 'air) 'voxel]) builder?)]{
+;   Returns a sphere builder. 
+;   
+;   ##Examples
+;   
+;   `(sphere 1000)`
+;
+;   `(sphere 500 'air)`
+;}
 (define (sphere r [material 'voxel])
   (if (not (eq? material 'voxel)) 
     (builder 'air-sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f)
