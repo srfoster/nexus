@@ -25,7 +25,9 @@ export const sendOnCodeSpellsSocket = (code, cb) => {
         cb(JSON.parse(event.data))
     }
     let i = setInterval(() => {
+      console.log("Trying to connect")
         if (s.readyState == 1) {
+            console.log("Sending")
             s.send(code)
             clearInterval(i)
         }

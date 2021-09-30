@@ -168,12 +168,12 @@ Begin functional API for Voxel Worlds:
 (define (build b [at (current-location)])
   (define at-rel (+vec at (builder-p b)))
 
-  (match (builder-t b)
+  (void (match (builder-t b)
     ['sphere (build-sphere at-rel (/ (builder-w b) 2))]
     ['air-sphere (dig-sphere at-rel (/ (builder-w b) 2))] 
     ['empty  (void)] 
     [else (map (curryr build at-rel) 
-               (builder-c b))]))
+               (builder-c b))])))
 
 
 ;Side-effectful functions we are building our effect-free API atop of

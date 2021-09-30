@@ -173,10 +173,11 @@ function DocDefinition(props){
   return(
         <div key={props.data.name}>
           <Card className={classes.card} id={props.data.name} elevation={4} style={{borderRadius:"5px"}}>
-            {/* <CardHeader align="left" subheader={} /> */}
+            <CardHeader style={{backgroundColor: "#222222"}} title={props.data.name}>
+            </CardHeader>
             <CardContent>
-          <code><pre style={{marginTop: 0, marginBottom: 10}}>{props.data.use}</pre></code>
-              <TableContainer style={{borderRadius:"5px"}}>
+          <code><pre style={{ marginTop: 0, marginBottom: 10 }}>{props.data.use}</pre></code>
+              {props.data.parameter.length > 0? <TableContainer style={{borderRadius:"5px"}}>
                 <Table>
                   <TableHead>
                     <TableRow>
@@ -213,14 +214,12 @@ function DocDefinition(props){
                     ))}
                   </TableBody>
                 </Table>
-              </TableContainer>
+              </TableContainer> : <Typography align="left">This function does not take any parameters.</Typography>}
               <br />
-              <Typography align="left">
-                Returns: <code>{props.data.returns ? props.data.returns : "void?"}</code>
+              <Typography gutterBottom={true} align="left">
+                Return Type: <code>{props.data.returns ? props.data.returns : "void?"}</code>
               </Typography>
-              <br />
-              <Markdown>{props.data.desc}</Markdown>
-              <br />
+              <Typography><Markdown>{props.data.desc}</Markdown></Typography>
               {props.data.example.map((codeExample) => (
                 <div style={{paddingTop: 20}}>
                <MagicMirror code={codeExample} additionalButtons={[]} /> 
@@ -233,15 +232,31 @@ function DocDefinition(props){
   )
 }
 
+function DocLibrary(props) {
+  const [definitionCategories, setDefinitionCategories] = useState([])
+
+  useEffect(() => {
+    sendOnCodeSpellsSocket(props.lib,
+      (res) => {
+        setDefinitionCategories(res.response)
+      })
+  }, [])
+
+  return (
+    definitionCategories.map(category => {
+      let defs = category.definitions
+      return <>
+        <h3>{category.name}</h3>
+        {
+          defs.map(def => <DocDefinition data={def} />)
+        }</>
+    })
+  )
+}
+
 function DocModal(props){
   const [open, setOpen] = useState(false);
   const [scroll, setScroll] = useState('paper');
-  const [definitionList, setDefinitionList] = useState([])
-
-  useEffect(()=>{
-    sendOnCodeSpellsSocket("(get-docs)",
-      (res)=>setDefinitionList(res.response))
-  },[])
 
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
@@ -253,31 +268,28 @@ function DocModal(props){
   };
 
   return (
-      <div>
-        <Button onClick={handleClickOpen('paper')}>Docs</Button>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          scroll='paper'
-          aria-labelledby="scroll-dialog-title"
-          aria-describedby="scroll-dialog-description"
-        >
-          <DialogTitle id="scroll-dialog-title">Docs</DialogTitle>
-          <DialogContent dividers={true}>
-            <DialogContentText
-              id="scroll-dialog-description"
-              tabIndex={-1}>
-              {definitionList.map(e=><DocDefinition data={e}/>)}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="secondary">
-              Done
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
- )
+    <div>
+      <Button onClick={handleClickOpen('paper')}>Docs</Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        scroll='paper'
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+      >
+        <DialogTitle id="scroll-dialog-title">Docs</DialogTitle>
+        <DialogContent dividers={true}>
+          <DocLibrary lib={"(get-base-api-docs)"} />
+          <DocLibrary lib={"(get-voxel-api-docs)"} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="secondary">
+            Done
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  )
 }
 
 function Page2(props){

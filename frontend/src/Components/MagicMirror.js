@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button'
 
 export function MagicMirror(props) {
     const [code, setCode] = useState(props.code);
+    const [response, setResponse] = useState(undefined);
     const [error, setError] = useState(false);
     const [errorLineNumber, setErrorLineNumber] = useState(false);
 
@@ -39,13 +40,17 @@ export function MagicMirror(props) {
             <Alert severity="error">{
                 !errorLineNumber ? "" : <>Error on line {errorLineNumber}<br /></>
             }{error}</Alert>} 
+        {response === undefined ? "" :
+            <Alert severity="success">{JSON.stringify(response)}</Alert>} 
                 <CastButton color="secondary" variant="contained" code={code} onReturn={(fromUnreal) => {
                     if (isError(fromUnreal)) {
                         setError(racketErrorMessage(fromUnreal))
                         setErrorLineNumber(racketErrorLineNumber(fromUnreal))
+                        setResponse(undefined)
                     } else {
                         setError(false)
                         setErrorLineNumber(false)
+                        setResponse(fromUnreal.response)
                     }
                     props.onReturn && props.onReturn(fromUnreal)
                 }} />
