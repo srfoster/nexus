@@ -174,8 +174,7 @@
       'parameterDesc (list "Radius of the sphere. Must be between 0 and 1000." "Material of the sphere. Available materials are 'air and 'sphere")
       'desc "Returns a sphere builder, which when passed into `build` instantiates a voxel sphere into the world."
       'example (map format-racket-code (list "(build (sphere 1000))" "(build (sphere 500 'air))" ))
-      'returns "builder?"
-      )
+      'returns "builder?")
      (hash
       'name "empty"
       'use (format-racket-code "(empty [width number?] [depth number? width] [height number? depth])")
@@ -194,10 +193,57 @@
          (list))
    (hash 'name "Control Flow"
          'definitions
-         (list))
+         (list
+
+          ))
    (hash 'name "Logic"
          'definitions
-         (list))
+         (list
+          (hash
+           'name "and"
+           'use (format-racket-code "(and [v1 any/c] [v2 any/c] ...)")
+           'parameter (list "v1" "v2")
+           'type (list "any/c" "any/c")
+           'optional (list #f #f)
+           'parameterDesc (list "First value." "Second value. More can follow.")
+           'desc "This can take any number of values, but requires at least two. This returns the last value given, if all preceding values are not false. Returns false if any given value is false."
+           'example (map format-racket-code (list
+                                             "(and #t #t #f)"
+                                             "(and #t #t #t)"
+                                             "(and (vec? (vec 100 200 -100)) (builder? (sphere 1000)) (boolean? #f))"))
+           'returns "list?")
+          (hash
+           'name "or"
+           'use (format-racket-code "(or [b1 boolean?] [b2 boolean?] ...)")
+           'parameter (list "b1" "b2")
+           'type (list "boolean?" "boolean?")
+           'optional (list #f #f)
+           'parameterDesc (list "First boolean." "Second boolean. More can follow.")
+           'desc "This can take any number of values, but requires at least two. This returns the first value that is not false. Returns false if all given values are false."
+           'example (map format-racket-code (list
+                                             "(or #t #t #f)"
+                                             "(or #f #t)"
+                                             "(or 5 #t #t)"
+                                             "(or (vec? (vec 100 200 -100)) (builder? (sphere 1000)) (boolean? #f))"))
+           'returns "list?")
+         ))
+   (hash 'name "Lists"
+         'definitions
+         (list
+          (hash
+           'name "map"
+           'use (format-racket-code "(map [function function?] [list list?])")
+           'parameter (list "function" "list")
+           'type (list "function?" "list?")
+           'optional (list #f #f)
+           'parameterDesc (list "A function to apply to each element of the list." "The list.")
+           'desc "Returns a new list after applying a given function to each element of a given list."
+           'example (map format-racket-code (list
+                                             "(define (add1 num) (+ num 1)) (map add1 (list 1 2 3 4 5))"
+                                             "(map string-upcase (list \"socks\" \"rock\"))"))
+           'returns "list?")
+          ;;Lots more list stuff todo later
+          ))
    (hash
     'name "Locations"
     'definitions
@@ -252,9 +298,7 @@
       'desc "Returns true if `something` is a vector. Returns false otherwise."
       'example (map format-racket-code (list "(vec? (current-location))" "(vec? (vec 340 2340 123))" "(vec? (sphere 100))"))
       'returns "boolean?")
-      ))
-   )
-  )
+     ))))
 
 
 (define (format-racket-code code)
@@ -406,7 +450,9 @@
                                           'responseFor msg 
                                           'response (if (void? ret )
                                                         'null
-                                                        ret)))))))
+                                                        ret)
+                                          'racketResponse (format-racket-code (~v ret))
+                                                        ))))))
                     
                     (when (not (eof-object? msg))
                       (loop)))

@@ -41,7 +41,7 @@ export function MagicMirror(props) {
                 !errorLineNumber ? "" : <>Error on line {errorLineNumber}<br /></>
             }{error}</Alert>} 
         {response === undefined ? "" :
-            <Alert severity="success">{JSON.stringify(response)}</Alert>} 
+            <Alert severity="success"><pre><code>{response}</code></pre></Alert>} 
                 <CastButton color="secondary" variant="contained" code={code} onReturn={(fromUnreal) => {
                     if (isError(fromUnreal)) {
                         setError(racketErrorMessage(fromUnreal))
@@ -50,7 +50,7 @@ export function MagicMirror(props) {
                     } else {
                         setError(false)
                         setErrorLineNumber(false)
-                        setResponse(fromUnreal.response)
+                        setResponse(fromUnreal.racketResponse)
                     }
                     props.onReturn && props.onReturn(fromUnreal)
                 }} />
