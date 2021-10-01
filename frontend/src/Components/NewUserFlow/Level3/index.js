@@ -11,6 +11,10 @@ import Page3 from './Puzzle3TBD';
 import Page4 from './Puzzle4TBD';
 import Page5 from './Puzzle5TBD';
 import { Level3Puzzle1EducationalContent } from '../EducationalResources';
+import CloseUIButton from '../../WorldWidgets/CloseUIButton';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import DocModal from '../../Widgets/Docs';
 
 // Stephen's widget wishlist:
 // * Calendar?  Trello?  (Meta: time management of learning)
@@ -23,6 +27,37 @@ import { Level3Puzzle1EducationalContent } from '../EducationalResources';
 // * Impress js - Hard to confine to one div...
 // * Tensor Flow - What is an interesting model to use?  How to get it to work with react-tensorflow?
 // * Konva
+
+function HamburgerMenu(props) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  }; 
+ 
+  return (
+    <>
+      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+        Open Menu
+      </Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem ><CloseUIButton/></MenuItem>
+        <MenuItem ><DocModal/></MenuItem>
+        <MenuItem ><ExitGameButton/></MenuItem>
+      </Menu>
+    </>
+  )
+}
 
 export function Level3(props) {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl3:currentPart", 0)
@@ -53,7 +88,7 @@ export function Level3(props) {
 
   return (
     <>
-      <Level number={3} subtitle={"The Mission"} action={<ExitGameButton/>}>
+      <Level number={3} subtitle={"The Mission"} action={<HamburgerMenu/>}>
         <CardContent>
           {parts[currentPart]}
         </CardContent>

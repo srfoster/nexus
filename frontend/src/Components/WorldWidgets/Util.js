@@ -31,7 +31,7 @@ export const sendOnCodeSpellsSocket = (code, cb) => {
             s.send(code)
             clearInterval(i)
         }
-    }, 100);
+    }, 1000);
 }
 
 export function CastButton(props) {

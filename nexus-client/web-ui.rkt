@@ -23,6 +23,7 @@
          errortrace
          "lib/voxels/base.rkt"
          "lib/voxels/rooms.rkt"
+         "lib/character/base.rkt"
          )
 
 (define (get-voxel-structures-docs)
@@ -185,6 +186,29 @@
       'desc "Returns an empty space builder, which when passed into `build` instantiates an empty space into the world. Useful for spacing other primitives out."
       'example (map format-racket-code (list "(build (beside/wide (sphere 1000) (empty 2000 2000 2000) (sphere 1000)))" ))
       'returns "builder?")))))
+
+(define (get-character-api-docs)
+  (list
+   (hash 'name "Base"
+         'definitions
+         (list
+          (hash
+           'name "on-projectile-hit"
+           'use (format-racket-code "(on-projectile-hit [function function?] ...)")
+           'parameter (list "function")
+           'type (list "function?")
+           'optional (list #f)
+           'parameterDesc (list "Function to run when projectile hits something in the world.")
+           'desc "This function configures the projectile of your character to execute a given function when it lands. The given function will be called with the location that the projectile hit."
+           'example (map format-racket-code (list
+                                             "(on-projectile-hit (lambda (loc) (displayln loc)))"
+                                             "(on-projectile-hit (lambda (loc) (build (sphere 1000) loc)))"
+                                             ))
+           'returns "void?")
+         
+         ))
+  )
+)
 
 (define (get-base-api-docs)
   (list
