@@ -194,16 +194,50 @@
          (list
           (hash
            'name "on-projectile-hit"
-           'use (format-racket-code "(on-projectile-hit [function function?] ...)")
+           'use (format-racket-code "(on-projectile-hit [function function?])")
            'parameter (list "function")
            'type (list "function?")
            'optional (list #f)
-           'parameterDesc (list "Function to run when projectile hits something in the world.")
+           'parameterDesc (list "Function to stop running when projectile hits something in the world.")
            'desc "This function configures the projectile of your character to execute a given function when it lands. The given function will be called with the location that the projectile hit."
            'example (map format-racket-code (list
                                              "(on-projectile-hit (lambda (loc) (displayln loc)))"
                                              "(on-projectile-hit (lambda (loc) (build (sphere 1000) loc)))"
+                                             "(define size 0)
+                                             
+                                             (on-projectile-hit 
+                                               (lambda (loc) 
+                                                 (set! size (+ size 200))
+                                                 (build (sphere size) loc)))"
                                              ))
+           'returns "void?")
+          (hash
+           'name "cancel-on-projectile-hit"
+           'use (format-racket-code "(cancel-on-projectile-hit [function function?])")
+           'parameter (list "function")
+           'type (list "function?")
+           'optional (list #f)
+           'parameterDesc (list "Function to run when projectile hits something in the world.")
+           'desc "This function can be used to cancel a previous call to `on-projectile-hit`.  You must pass in the same function you registered with `on-projectile-hit`.  This will prevent it from being called the next time the character's projectile lands.  This can also be used to make one-off spells (ones that cancel themselves when complete)"
+           'example (map format-racket-code (list
+                                             "(define (build-once loc)
+                                                (build (sphere 1000) loc)
+                                                (cancel-on-projectile-hit build-once))
+
+                                             (on-projectile-hit build-once)"
+
+                                             "(define num-builds 0)
+                                             
+                                              (define (build-thrice loc)
+                                                (set! num-builds (add1 num-builds))
+                                                (build (sphere 1000) loc)
+                                                (when (>= num-builds 3)
+                                                  (cancel-on-projectile-hit build-thrice)))
+
+                                             (on-projectile-hit build-thrice)"
+                                             )
+                                             
+                                             )
            'returns "void?")
          
          ))
