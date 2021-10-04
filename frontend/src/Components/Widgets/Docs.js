@@ -51,7 +51,7 @@ function DocDefinition(props){
   return(
         <div key={props.data.name}>
           <Card className={classes.card} id={props.data.name} elevation={4} style={{borderRadius:"5px"}}>
-            <CardHeader style={{backgroundColor: "#222222"}} title={props.data.name}>
+            <CardHeader style={{backgroundColor: "#222222", color: "white"}} title={props.data.name}>
             </CardHeader>
             <CardContent>
           <code><pre style={{ marginTop: 0, marginBottom: 10 }}>{props.data.use}</pre></code>
@@ -134,11 +134,24 @@ const DocLibrary = (props) => {
   )
 }
 
-
-export default function DocModal(props){
+export function DocModalWithButton(props) {
   const [open, setOpen] = useState(false);
+  
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  return (
+
+    <>
+      <Button onClick={handleClickOpen}>Docs</Button>
+      <DocModal open={open} setOpen={setOpen}/>
+    </>
+  )
+}
+
+export function DocModal(props){
   const [value, setValue] = useState(0);
-  const [scroll, setScroll] = useState('paper');
   const [baseDefinitionCategories, setBaseDefinitionCategories] = useState([])
   const [voxelDefinitionCategories, setVoxelDefinitionCategories] = useState([])
   const [characterDefinitionCategories, setCharacterDefinitionCategories] = useState([])
@@ -169,13 +182,8 @@ export default function DocModal(props){
       })
   }, [])
 
-  const handleClickOpen = (scrollType) => () => {
-    setOpen(true);
-    setScroll(scrollType);
-  };
-
   const handleClose = () => {
-    setOpen(false);
+    props.setOpen(false);
   };
 
   const handleTabChange = (event, newValue) => {
@@ -184,9 +192,8 @@ export default function DocModal(props){
 
   return (
     <div>
-      <Button onClick={handleClickOpen('paper')}>Docs</Button>
       <Dialog
-        open={open}
+        open={props.open}
         onClose={handleClose}
         scroll='paper'
         aria-labelledby="scroll-dialog-title"

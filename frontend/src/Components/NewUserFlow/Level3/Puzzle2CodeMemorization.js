@@ -9,7 +9,8 @@ import ChatBubble from '../../Widgets/ChatBubble/';
 import { MagicMirror } from '../../MagicMirror';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 import Alert from '@material-ui/lab/Alert';
-import DocModal from '../../Widgets/Docs';
+import {DocModalWithButton } from '../../Widgets/Docs';
+import { EventLogger } from '../../WorldWidgets/Util';
 
 function FadedExamplePuzzle(props){
     const answer = "(build-sphere (vec -484 1818 6166) 1000)"
@@ -137,7 +138,8 @@ function Page2(props){
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3.2", false)
 
     return (<>
-        <DocModal/>
+        <DocModalWithButton/>
+        <EventLogger/>
         <PleaseWaitWhileSockPuppetCreatesContent
             contentComplete={messageOpened}
             setContentComplete={setMessageOpened}

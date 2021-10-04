@@ -16,6 +16,7 @@
 (require net/rfc6455
          fmt
          unreal
+         unreal/tcp/server
          (only-in unreal/libs/actors find-actor locate)
          unreal/libs/basic-types
          unreal/external-runtime/main
@@ -201,9 +202,13 @@
            'parameterDesc (list "Function to stop running when projectile hits something in the world.")
            'desc "This function configures the projectile of your character to execute a given function when it lands. The given function will be called with the location that the projectile hit."
            'example (map format-racket-code (list
-                                             "(on-projectile-hit (lambda (loc) (displayln loc)))"
-                                             "(on-projectile-hit (lambda (loc) (build (sphere 1000) loc)))"
-                                             "(define size 0)
+                                             "(clear-projectile-functions)
+                                             
+                                             (on-projectile-hit (lambda (loc) (build (sphere 1000) loc)))"
+
+                                             "(clear-projectile-functions)
+                                             
+                                             (define size 0)
                                              
                                              (on-projectile-hit 
                                                (lambda (loc) 
@@ -239,7 +244,18 @@
                                              
                                              )
            'returns "void?")
-         
+          (hash
+           'name "clear-projectile-functions"
+           'use (format-racket-code "(clear-projectile-functions [function function?])")
+           'parameter (list)
+           'type (list)
+           'optional (list)
+           'parameterDesc (list)
+           'desc "This function clears all previously made configurations for the projectile of your character. This can be particularly useful to call before configuring a new `on-projectile-hit`, if you want to clear previous configurations."
+           'example (map format-racket-code (list
+                                             "(clear-projectile-functions)"
+                                             ))
+           'returns "void?")
          ))
   )
 )
@@ -387,6 +403,7 @@
  var BrowserLoader = Root.ResolveClass('BrowserLoader');
  var browserLoader = GWorld.GetAllActorsOfClass(BrowserLoader).OutActors[0]
  browserLoader.CloseBrowser()
+ return null;
  }))
 
 (define (should-spawn-orb? s)
@@ -457,15 +474,29 @@
                [(#f) ; if client did not request any subprotocol
                 (lambda (c) 
                   ;(displayln "Connection established")
+                  (subscribe-to-unreal-event "projectile-hit"
+                                             (lambda (data)
+                                              (displayln "Sending projectile-hit...")
+                                               (ws-send! c (jsexpr->string
+                                                            (hash
+                                                             'response (if (void? data)
+                                                                           'null
+                                                                           data)
+                                                             'racketResponse (format-racket-code (~v data))
+                                                             'eventType "projectile-hit"
+                                                             ))))
+                                               #:group "High Priority")
                   (let loop ()
                     ;(displayln "Waiting for message")
-                    
+
                     (define msg (ws-recv c #:payload-type 'text))
                     (displayln (~a "Got: " msg))
                     
-                      (when (not (eof-object? msg))
-                        (let() 
-                          (with-handlers 
+                    (when (not (eof-object? msg))
+                      (define code (hash-ref (string->jsexpr msg) 'code))
+                      (define event-type (hash-ref (string->jsexpr msg) 'eventType))
+                      (let()
+                        (with-handlers
                               ([exn:fail? (lambda (e)
                                             (void) 
                                             (displayln e)
@@ -494,8 +525,7 @@
                                                                  error-message
                                                                  'blockId blockId
                                                                  'lineNumber lineNumber))])
-                                
-                                (define in (open-input-string (string-append "(let () " msg ")")))
+                                (define in (open-input-string (string-append "(let () " code ")")))
                                 (port-count-lines! in)
                                 
                                 (define stx (read-syntax 'NexusUserCode in))
@@ -510,6 +540,7 @@
                                                         'null
                                                         ret)
                                           'racketResponse (format-racket-code (~v ret))
+                                          'eventType event-type
                                                         ))))))
                     
                     (when (not (eof-object? msg))

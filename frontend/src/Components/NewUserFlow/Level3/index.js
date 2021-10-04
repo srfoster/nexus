@@ -14,7 +14,8 @@ import { Level3Puzzle1EducationalContent } from '../EducationalResources';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import DocModal from '../../Widgets/Docs';
+import { DocModal, DocModalWithButton } from '../../Widgets/Docs';
+import { sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
 
 // Stephen's widget wishlist:
 // * Calendar?  Trello?  (Meta: time management of learning)
@@ -30,6 +31,7 @@ import DocModal from '../../Widgets/Docs';
 
 function HamburgerMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = useState(false);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,7 +40,20 @@ function HamburgerMenu(props) {
   const handleClose = () => {
     setAnchorEl(null);
   }; 
- 
+
+  const enterWorld = () => {
+    sendOnCodeSpellsSocket("(close-ui)")
+  }
+  
+  const exitGame = () => {
+    sendOnCodeSpellsSocket("(unreal-eval-js \"KismetSystemLibrary.QuitGame(GWorld.GetPlayerController(0))\")")
+  }
+  
+  const openModal = () => {
+    setOpen(true);
+  }
+
+
   return (
     <>
       <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
@@ -51,10 +66,12 @@ function HamburgerMenu(props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem ><CloseUIButton/></MenuItem>
-        <MenuItem ><DocModal/></MenuItem>
-        <MenuItem ><ExitGameButton/></MenuItem>
+        <MenuItem onClick={enterWorld}>Enter World</MenuItem>
+        <MenuItem onClick={openModal}>Docs</MenuItem>
+        <hr/>
+        <MenuItem onClick={exitGame}>Exit Game</MenuItem>
       </Menu>
+      <DocModal open={open} setOpen={setOpen}/>
     </>
   )
 }
