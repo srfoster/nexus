@@ -496,6 +496,7 @@
                 (lambda (c) 
                   ;(displayln "Connection established")
                   ; (one-time-setup c)
+                  ; (thread (thunk (sleep 3) (unreal-eval-js (current-location))))
                   (subscribe-to-unreal-event "projectile-hit"
                                              (lambda (data)
                                                (displayln "Sending projectile-hit...")

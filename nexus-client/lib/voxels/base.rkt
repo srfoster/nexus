@@ -164,15 +164,19 @@ Begin functional API for Voxel Worlds:
                  (builder-translate b2 (+vec recenter (vec 0 (/ (builder-d b2) -2) 0))))))
 
 
-;Renderer
 (define (build b [at (current-location)])
+  (thread (thunk (_build b at)))
+  (void))
+
+;Renderer
+(define (_build b [at (current-location)])
   (define at-rel (+vec at (builder-p b)))
 
   (void (match (builder-t b)
     ['sphere (build-sphere at-rel (/ (builder-w b) 2))]
     ['air-sphere (dig-sphere at-rel (/ (builder-w b) 2))] 
     ['empty  (void)] 
-    [else (map (curryr build at-rel) 
+    [else (map (curryr _build at-rel) 
                (builder-c b))])))
 
 

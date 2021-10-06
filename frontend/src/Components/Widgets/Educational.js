@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
@@ -19,8 +19,71 @@ import {
     LiveContext
 } from 'react-live'
 import { spread } from '../../Util';
+import { Card, CardContent } from '@material-ui/core';
+import { BlocklyWorkspace } from "react-blockly";
+import { makeStyles } from '@material-ui/core/styles';
+import Blockly from "blockly";
+import { MagicMirror } from '../MagicMirror';
+import CloseUIButton from '../WorldWidgets/CloseUIButton';
 
-let useState = React.useState
+const useStyles = makeStyles((theme) => ({
+    blocklyPuzzle: {
+      height: 200,
+    },
+  }))
+
+export function BlocklyIDE(props) {
+  const [blockIds, setBlockIds] = useState([]);
+  const [code, setCode] = useState(undefined);
+  const classes = useStyles();
+  
+  useEffect(
+    () => { setBlockIds(props.blockIds) },
+    [])
+
+  return (!blockIds ? "" : <>
+    <BlocklyWorkspace
+      toolboxConfiguration={{
+        kind: "categoryToolbox",
+        contents: [
+          {
+            kind: "category",
+            name: "Spells",
+            colour: "#c1ba31",
+            contents:
+              blockIds.map((i) => {
+                return { kind: "block", type: i }
+              })
+          },
+        ],
+      }
+      }
+      initialXml={'<xml xmlns="http://www.w3.org/1999/xhtml"></xml>'}
+      className={classes.blocklyPuzzle}
+      workspaceConfiguration={{
+        grid: {
+          spacing: 20,
+          length: 3,
+          colour: "#ccc",
+          snap: true,
+        },
+      }}
+      onWorkspaceChange={(workspace) => {
+        const code = Blockly.JavaScript.workspaceToCode(workspace);
+        setCode(code);
+      }}
+      onXmlChange={() => { }}
+    />
+    <MagicMirror
+      code={code}
+      options={{
+        readOnly: false //"nocursor"
+      }}
+      additionalButtons={<CloseUIButton/>}
+    />
+  </>
+  )
+}
 
 export function MultipleChoiceQuestion(props) {
   const [value, setValue] = React.useState('');
@@ -84,14 +147,18 @@ export function JSMirror(props) {
                   style={{ backgroundColor: "rgb(33,33,33)", borderRadius: "5px" }}
                   onChange={(code) => {
                     setCode(code)
-                    props.onChange(code)
+                    props.onChange && props.onChange(code)
                     onChange(code)}
                   }
                 />
               </Grid>
               <Grid item xs>
-                <LiveError />
-                <LivePreview />
+                <Card elevation={4}>
+                  <CardContent>
+                    <LiveError />
+                    <LivePreview />
+                  </CardContent>
+                </Card>
               </Grid>
             </Grid>
           }}

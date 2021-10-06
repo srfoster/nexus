@@ -169,7 +169,7 @@ function SimpleVideoPlayer(props) {
           progressInterval={100}
           onProgress={handleProgress}
           onEnded={() => {
-            props.setVideoFinished(true)
+            props.setVideoFinished && props.setVideoFinished(true)
           }}
         />
         <PlayerControls
