@@ -138,8 +138,6 @@ function Page2(props){
   var [messageOpened, setMessageOpened] = useLocalStorage("sock-puppet-lesson-opened-3.2", false)
 
     return (<>
-        <DocModalWithButton/>
-        <EventLogger/>
         <PleaseWaitWhileSockPuppetCreatesContent
             contentComplete={messageOpened}
             setContentComplete={setMessageOpened}

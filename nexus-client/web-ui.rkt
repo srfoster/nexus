@@ -209,10 +209,11 @@
                                              "(clear-projectile-functions)
                                              
                                              (define size 0)
-                                             
+
                                              (on-projectile-hit 
                                                (lambda (loc) 
                                                  (set! size (+ size 200))
+                                                 (when (> size 1000) (set! size 200))
                                                  (build (sphere size) loc)))"
                                              ))
            'returns "void?")
@@ -461,6 +462,26 @@
     (with-continuation-mark 'lineNumber lineNumber
       (apply f a args))))
 
+; (define setup-complete #f)
+
+; (define (one-time-setup connection)
+;   (when (not setup-complete)
+;     (set! setup-complete #t)
+;     (subscribe-to-unreal-event "projectile-hit"
+;                                (lambda (data)
+;                                  (displayln "Sending projectile-hit...")
+;                                  (ws-send! connection (jsexpr->string
+;                                               (hash
+;                                                'response (if (void? data)
+;                                                              'null
+;                                                              data)
+;                                                'racketResponse (format-racket-code (~v data))
+;                                                'eventType "projectile-hit"
+;                                                ))))
+;                                #:group "High Priority")
+;     )
+;   )
+
 ;Change start-ui name to start-websocket-server
 (define (start-ui)
   ;(displayln "spell-language-module...")
@@ -474,18 +495,20 @@
                [(#f) ; if client did not request any subprotocol
                 (lambda (c) 
                   ;(displayln "Connection established")
+                  ; (one-time-setup c)
                   (subscribe-to-unreal-event "projectile-hit"
                                              (lambda (data)
-                                              (displayln "Sending projectile-hit...")
+                                               (displayln "Sending projectile-hit...")
                                                (ws-send! c (jsexpr->string
-                                                            (hash
-                                                             'response (if (void? data)
-                                                                           'null
-                                                                           data)
-                                                             'racketResponse (format-racket-code (~v data))
-                                                             'eventType "projectile-hit"
-                                                             ))))
-                                               #:group "High Priority")
+                                                                     (hash
+                                                                      'response (if (void? data)
+                                                                                    'null
+                                                                                    data)
+                                                                      'racketResponse (format-racket-code (~v data))
+                                                                      'eventType "projectile-hit"
+                                                                      ))))
+                                             #:group "High Priority")
+
                   (let loop ()
                     ;(displayln "Waiting for message")
 

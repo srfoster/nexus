@@ -1,27 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 
+let subscribedEvents = {} 
+
 function subscribeToUnrealEvent(eventType, cb) {
   if (subscribedEvents[eventType])
     subscribedEvents[eventType].push(cb)
   else
     subscribedEvents[eventType] = [cb];
+  return cb
 }
 
-export function EventLogger(props){
-  const [events, setEvents] = useState([])
+function unsubscribeFromUnrealEvent(eventType, cb){
+  if(subscribedEvents[eventType]){
+    subscribedEvents[eventType] = subscribedEvents[eventType].filter((f)=>f!=cb)
+  }
+}
 
+let pastEvents = []
+
+subscribeToUnrealEvent("projectile-hit",(data)=>{
+  pastEvents.unshift(data)
+
+})
+
+export function EventLogger(props){
+  const [refreshToken, setRefreshToken] = useState(0)
+
+  //useEffect gets called everytime user types in JS Mirror!
   useEffect(()=>{
-    subscribeToUnrealEvent("projectile-hit", 
-                           (data)=>{
-                             console.log(events.concat([data]))
-                             setEvents(events.concat([data]))})},[])
+    let subscriptionID = subscribeToUnrealEvent("projectile-hit", 
+      (data) => {
+        setRefreshToken(Math.random())  
+      })
+      return ()=>{
+        console.log("Cleaning up event logger...")
+        unsubscribeFromUnrealEvent("projectile-hit", subscriptionID)}
+  }, [])
 
   return (
     <>
-    <p>{events.length == 0? "NO EVENTS YET" : "Events:"}</p>
+    <p>{pastEvents.length == 0? "NO EVENTS YET" : "Events:"}</p>
       <ul>
-        {events.map((e,i)=><li key={i}>{JSON.stringify(e)}</li>)}
+        {pastEvents.map((e, i) => {
+          return props.component ? <props.component data={e}></props.component> : <li key={i}>
+            <code><pre>{e.racketResponse}</pre></code>
+          </li>
+        })}
       </ul>
     </>
   )
@@ -45,35 +70,43 @@ export const racketErrorLineNumber = (x) => {
 }
 
 let codeSpellsWebSocket;
-
+let settingUpWebSocket = false;
 export const getWebSocket = (afterSetup) => {
   if (codeSpellsWebSocket) return afterSetup(codeSpellsWebSocket)
-  let s = new WebSocket("ws://localhost:8082/test");
-  
-  s.onmessage = function (event) {
-    console.log("This is a Racket Bridge Event: ", event)
-    let data = JSON.parse(event.data)
-    let eventType = data.eventType
-    let cbs = subscribedEvents[eventType]
-    cbs && cbs.map((cb)=>{
-      cb(data)
-    })
-    if((typeof eventType) == "number"){
-      delete subscribedEvents[eventType]
-    }
+
+  if (settingUpWebSocket) {
+    console.log("No websocket, but there should be one soon! Waiting...")
+    setTimeout(()=>{getWebSocket(afterSetup)}, 3000)
   }
-  let i = setInterval(() => {
-    console.log("Trying to connect")
-    if (s.readyState == 1) {
-      console.log("Sending")
-      clearInterval(i)
-      codeSpellsWebSocket = s;
-      return afterSetup(s)
+  else {
+    settingUpWebSocket = true
+
+    let s = new WebSocket("ws://localhost:8082/test");
+
+    s.onmessage = function (event) {
+      console.log("This is a Racket Bridge Event: ", event)
+      let data = JSON.parse(event.data)
+      let eventType = data.eventType
+      let cbs = subscribedEvents[eventType]
+      cbs && cbs.map((cb) => {
+        cb(data)
+      })
+      if ((typeof eventType) == "number") {
+        delete subscribedEvents[eventType]
+      }
     }
-  }, 1000);
+    let i = setInterval(() => {
+      console.log("Trying to connect")
+      if (s.readyState == 1) {
+        console.log("Sending")
+        clearInterval(i)
+        codeSpellsWebSocket = s;
+        return afterSetup(s)
+      }
+    }, 1000);
+  }
 }
 
-let subscribedEvents = {} 
 
 export const sendOnCodeSpellsSocket = (code, cb) => {
   console.log("Sending")
@@ -89,7 +122,7 @@ export function CastButton(props) {
       variant={props.variant}
       onClick={() => {
         sendOnCodeSpellsSocket(props.code, (data) => {
-          props.onReturn(data)
+          props.onReturn && props.onReturn(data)
         });
       }}>
       {props.children || "Cast Spell"}
