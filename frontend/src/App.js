@@ -38,6 +38,7 @@ import LoginForm from './Components/LoginForm';
 import SignupForm from './Components/SignupForm';
 import LevelManager from './Components/LevelManager';
 import SpellIndex from './Components/Dashboard/SpellIndex';
+import RacketCon from './Components/Docs/Racketcon';
 
 require('codemirror/mode/scheme/scheme');
 
@@ -86,15 +87,20 @@ function App() {
             <Switch>
               <Route
                 exact path={'/'}
-                component={(props) => <LevelManager isLoggedIn={isLoggedIn} startingLevel={1} endingLevel={ 2 } ></LevelManager >}
+                component={(props) => <LevelManager isLoggedIn={isLoggedIn} startingLevel={1} endingLevel={2} ></LevelManager >}
               />
               <Route
                 exact path={'/level3'}
                 component={(props) =>
-                  <LevelManager isLoggedIn={isLoggedIn} startingLevel={3} backgroundTransparent={ true }>
+                  <LevelManager isLoggedIn={isLoggedIn} startingLevel={3} backgroundTransparent={true}>
                   </LevelManager>
-                  }
+                }
               />
+              <Route
+                exact path={'/racketcon'}
+                component={RacketCon}
+              />
+
               <Route
                 exact path={'*'}
                 component={(props) =>

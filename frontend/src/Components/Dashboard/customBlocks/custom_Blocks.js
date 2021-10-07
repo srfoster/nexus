@@ -99,11 +99,14 @@ export let defineStatementRacketBlock = ({ blockName, inputs, doParens, doBlockN
   return blockId
 }
 
-
-
-
-
-
+export function JSONtoRacketBlock(json){
+  if(json.takesUserInput){
+    return defineRacketBlock(json)
+  }
+  else{
+    return defineStatementRacketBlock(json)
+  }
+}
 //Dummy Blocks, top-bottom connection
 // defineRacketBlock("color", ["string"]);
 // defineRacketBlock("force", ["number", "number", "number"]);

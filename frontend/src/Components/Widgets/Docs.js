@@ -101,7 +101,35 @@ function DocUILibrary(props) {
       <DocUILibrarySection name="Base" functionDefs={[
         {
           name: "BlocklyIDE",
-          examples: [`<BlocklyIDE blockIds={[]} />`]
+          examples: [`<BlocklyIDE height={400} blockIds={[]} />`,`<BlocklyIDE height={400} blockIds={[  
+          {
+            blockName: "build",
+            inputs: ["builder"],
+            output: false,
+            doParens: true,
+            doBlockName: true,
+            color: 230
+          },
+          {
+            blockName: "sphere",
+            inputs: ["radius #"],
+            output: true,
+            doParens: true,
+            doBlockName: true,
+            color: 230
+          } ,
+          {
+            blockName: "#",
+            takesUserInput: true,
+            inputs: [""],
+            output: "#",
+            doParens: false,
+            doBlockName: false,
+            color: 80
+          }
+        ]}
+        />
+          `]
         },
         {
           name: "NetworkDiseaseSimulator",
@@ -389,6 +417,7 @@ export function DocModal(props){
   return (
     <div>
       <Dialog
+        disableEnforceFocus
         open={props.open}
         onClose={handleClose}
         scroll='paper'
@@ -409,7 +438,7 @@ export function DocModal(props){
   )
 }
 
-let UIExampleScope = {
+export let UIExampleScope = {
   JSMirror: (props)=>{return <JSMirror code={props.code} onChange={props.onChange} scope={UIExampleScope}/>},
   EventLogger,
   MagicMirror,

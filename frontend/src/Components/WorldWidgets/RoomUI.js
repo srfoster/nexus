@@ -188,19 +188,25 @@ export default function RoomUI(props){
   function compile() {
     let roomCode = rooms.map(e=>`(translate (vec ${Math.floor((e.x + e.width/2) / 10) * 200} ${Math.floor((e.y + e.height/2)/10) * 200} 0) (room ${Math.floor(e.width/10) * 200} ${Math.floor(e.height/10) * 200} 1000))`)
     let doorCode = doors.map(e=>`(translate (vec ${Math.floor((e.x + 26/2) / 10) * 200} ${Math.floor((e.y + 26/2)/10) * 200} 0) (sphere ${Math.floor(26/2/10) * 200} 'air))`)
-   
-    console.log("COMPILING", doors, rooms)
+
+    let compiledCode = props.wrapper === false ? 
+    "(format-racket-code \"(overlay \n" +
+              roomCode.join("\n") +
+              doorCode.join("\n") +
+              ")\")" : 
+              "(format-racket-code \"(build (overlay \n" +
+              roomCode.join("\n") +
+              doorCode.join("\n") +
+              "))\")"
 
     if (!compilingTimeout) {
       setCompilingTimeout(
         setTimeout(
           () => {
-            sendOnCodeSpellsSocket("(format-racket-code \"(build (overlay \n" +
-              roomCode.join("\n") +
-              doorCode.join("\n") +
-              "))\")",
+            sendOnCodeSpellsSocket(compiledCode,
               (res) => {
                 setCompiledCode(res.response)
+                props.onCompile && (typeof props.onCompile === "function") && props.onCompile(res.response)
                 setCompilingTimeout(false)
               })
           }, 500)

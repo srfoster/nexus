@@ -25,20 +25,25 @@ import { makeStyles } from '@material-ui/core/styles';
 import Blockly from "blockly";
 import { MagicMirror } from '../MagicMirror';
 import CloseUIButton from '../WorldWidgets/CloseUIButton';
+import { JSONtoRacketBlock } from '../Dashboard/customBlocks/custom_Blocks';
 
-const useStyles = makeStyles((theme) => ({
-    blocklyPuzzle: {
-      height: 200,
-    },
-  }))
+
 
 export function BlocklyIDE(props) {
   const [blockIds, setBlockIds] = useState([]);
   const [code, setCode] = useState(undefined);
+
+  const useStyles = makeStyles((theme) => ({
+    blocklyPuzzle: {
+      height: props.height || 200,
+    },
+  }))
+
+
   const classes = useStyles();
-  
+
   useEffect(
-    () => { setBlockIds(props.blockIds) },
+    () => { setBlockIds(props.blockIds.map(JSONtoRacketBlock))},
     [])
 
   return (!blockIds ? "" : <>

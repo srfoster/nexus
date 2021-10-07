@@ -113,6 +113,8 @@ const LevelTableOfContents = (props) => {
                 </>)
             })}
         </Grid>
+        <h2>Other</h2>
+        <Button href={"/#/racketcon"}>RacketCon Talk</Button>
     </>)
 }
 

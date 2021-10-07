@@ -25,6 +25,7 @@
          "lib/voxels/base.rkt"
          "lib/voxels/rooms.rkt"
          "lib/character/base.rkt"
+         "lib/spawning/base.rkt"
          )
 
 (define (get-voxel-structures-docs)
