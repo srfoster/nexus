@@ -169,7 +169,7 @@ const [roomUICode, setRoomUICode] = React.useState("")
 return <>
   <RoomUI wrapper={false} onCompile={(code)=>{setRoomUICode(code)}}/>
   <MagicMirror onChange={(editor, data, value)=>{setMagicCode(value)}}/>
-  <MagicMirror code={magicCode.replace(/\(identity .*\)/, \`(identity ${roomUICode})\`)}/>
+  <MagicMirror code={magicCode.replace(/\(identity .*\)/, \`(identity \${roomUICode})\`)}/>
 </>}`} /></Example>
     </>
     )
