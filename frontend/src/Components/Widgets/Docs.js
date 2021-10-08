@@ -165,7 +165,7 @@ function DocUILibrary(props) {
           name: "EventLogger",
           examples: [`<EventLogger 
   component={(props)=>{
-    return <CastButton code={"(build (sphere 1000) " + props.data.racketResponse + ")"}></CastButton>
+    return <CastButton code={"(build (sphere 1000) (event-location " + props.data.racketResponse + "))"}></CastButton>
   }}></EventLogger>`]
         },
         {
@@ -364,11 +364,11 @@ export function DocContent(props) {
   const [value, setValue] = useState(0);
   const [baseDefinitionCategories, setBaseDefinitionCategories] = useState([])
   const [voxelDefinitionCategories, setVoxelDefinitionCategories] = useState([])
-  const [characterDefinitionCategories, setCharacterDefinitionCategories] = useState([])
+  const [eventDefinitionCategories, setEventDefinitionCategories] = useState([])
 
   const docArray = [<DocLibrary key="base" definitionCategories={baseDefinitionCategories} />,
   <DocLibrary key="voxel" definitionCategories={voxelDefinitionCategories} />,
-  <DocLibrary key="character" definitionCategories={characterDefinitionCategories} />,
+  <DocLibrary key="events" definitionCategories={eventDefinitionCategories} />,
   <DocUILibrary key="ui" />
   ];
 
@@ -391,9 +391,9 @@ export function DocContent(props) {
   }, [])
 
   useEffect(() => {
-    sendOnCodeSpellsSocket("(get-character-api-docs)",
+    sendOnCodeSpellsSocket("(get-events-api-docs)",
       (res) => {
-        setCharacterDefinitionCategories(res.response)
+        setEventDefinitionCategories(res.response)
       })
   }, [])
 
@@ -402,7 +402,7 @@ export function DocContent(props) {
       <Tabs value={value} onChange={handleTabChange} >
         <Tab label={"Base"}></Tab>
         <Tab label={"Voxel"}></Tab>
-        <Tab label={"Character"}></Tab>
+        <Tab label={"Events"}></Tab>
         <Tab label={"User Interface"}></Tab>
       </Tabs>
       {docArray[value]}

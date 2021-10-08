@@ -17,33 +17,43 @@ function unsubscribeFromUnrealEvent(eventType, cb){
   }
 }
 
-let pastEvents = []
+let pastEvents = {
+  "projectile-hit": [],
+  "zone-enter": [],
+}
 
 subscribeToUnrealEvent("projectile-hit",(data)=>{
-  pastEvents.unshift(data)
+  pastEvents["projectile-hit"].unshift(data)
+})
 
+subscribeToUnrealEvent("zone-enter",(data)=>{
+  pastEvents["zone-enter"].unshift(data)
 })
 
 export function EventLogger(props){
   const [refreshToken, setRefreshToken] = useState(0)
 
+  const type = props.type || "projectile-hit"
+  const [validEvent, setValidEvent] = useState(pastEvents[type] !== undefined)
+
+
   //useEffect gets called everytime user types in JS Mirror!
   useEffect(()=>{
-    let subscriptionID = subscribeToUnrealEvent("projectile-hit", 
+    let subscriptionID = subscribeToUnrealEvent(type, 
       (data) => {
         setRefreshToken(Math.random())  
       })
       return ()=>{
         console.log("Cleaning up event logger...")
-        unsubscribeFromUnrealEvent("projectile-hit", subscriptionID)}
+        unsubscribeFromUnrealEvent(type, subscriptionID)}
   }, [])
 
-  return (
+  return (!validEvent ? ("Not a valid event.  Must be one of: " + Object.keys(pastEvents)) :
     <>
-    <p>{pastEvents.length == 0? "NO EVENTS YET" : "Events:"}</p>
+      <p>{pastEvents[type].length == 0 ? "No "+type+" events yet" : "Events ("+type+"):"}</p>
       <ul>
-        {pastEvents.map((e, i) => {
-          return props.component ? <props.component data={e}></props.component> : <li key={i}>
+        {(props.lastEventOnly && pastEvents[type][0] ? [pastEvents[type][0]] : pastEvents[type]).map((e, i) => {
+          return props.component ? <props.component key={i} data={e}></props.component> : <li key={i}>
             <code><pre>{e.racketResponse}</pre></code>
           </li>
         })}

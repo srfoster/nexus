@@ -4,6 +4,7 @@ import { MagicMirror } from '../../MagicMirror';
 import { DocModalWithButton, UIExampleScope } from '../../Widgets/Docs';
 import { JSMirror } from '../../Widgets/Educational';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
+import { useLocalStorage } from '../../../Util';
 
 function Example(props){
 
@@ -233,7 +234,8 @@ return <>
   <RoomUI wrapper={false} onCompile={(code)=>{setRoomUICode(code)}}/>
   <MagicMirror onChange={(editor, data, value)=>{setMagicCode(value)}}/>
   <MagicMirror code={finalCode}/>
-</>} `} /></Example>
+</>} `
+      } /></Example>
     </>
     )
 }
@@ -298,8 +300,77 @@ function Slide8(props) {
     )
 }
 
+function Slide9(props) {
+    return (<>
+        <Typography variant="h3">Events + UI</Typography>
+        <Example><MagicMirrorWithEnterWorld scope={UIExampleScope} code={
+`
+(clear-projectile-hit-functions)
+(clear-zone-enter-functions)
+
+(define i 0)
+
+(on-projectile-hit
+  (lambda (e)
+    (set! i (add1 i))
+    (spawn (zone #:name (~a "Zone" i))
+           (event-location e))))`
+      } />
+      </Example>
+        <Example><JSMirror scope={UIExampleScope} code={
+`<EventLogger/>` } /></Example>
+
+      <Example><JSMirror scope={UIExampleScope} code={`
+<EventLogger
+  component={(props)=>{
+               return <CastButton 
+                         code={\`
+(build (sphere 300)
+       (event-location \${props.data.racketResponse}))\`} />
+                }}>
+</EventLogger>`
+      
+      } /></Example>
+    </>
+    )
+}
+
+function Slide10(props) {
+    return (<>
+         <Example><JSMirror scope={UIExampleScope} code={`//Sometimes code is tedious to write by hand...
+
+(props)=>{
+const [magicCode, setMagicCode] = React.useState("")
+const [roomUICode, setRoomUICode] = React.useState("")
+const [finalCode, setFinalCode] = React.useState("")
+
+useEffect(()=>{
+  let precompile = magicCode.replace(/\\(HOLE1 [^)]*\\)/, \`(HOLE1 \${roomUICode})\`)
+  prettifyRacketCode(precompile, (c)=>{setFinalCode(c)})
+  
+  }, [roomUICode, magicCode])
+
+return <>
+  <RoomUI wrapper={false} onCompile={(code)=>{setRoomUICode(code)}}/>
+  <MagicMirror onChange={(editor, data, value)=>{setMagicCode(value)}}/>
+  <MagicMirror code={finalCode}/>
+  <hr/>
+  <JSMirror code={\`<EventLogger type="zone-enter" lastEventOnly component={(props)=>{
+     return props.data.response.name == "Library" ? <DocModalWithButton /> : <MagicMirror code=";Don't know what to do?  Go to the library!!" /> }} />\`}/>
+</>} `
+      } /></Example>
+    </>
+    )
+}
+
+function Slide11(props) {
+    return (<>
+    </>
+    )
+}
+
 export default function RacketCon (props){
-    const [currentSlide, setCurrentSlide] = useState(0);
+    const [currentSlide, setCurrentSlide] = useLocalStorage("racketcon-talk-slide",0);
 
     let slides = [<Slide1 />,
         <Slide2 />,
@@ -309,6 +380,9 @@ export default function RacketCon (props){
         <Slide6 />,
         <Slide7 />,
         <Slide8 />,
+        <Slide9 />,
+        <Slide10 />,
+        <Slide11 />,
     ]
 
     useEffect(() => {

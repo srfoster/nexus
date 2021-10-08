@@ -22,9 +22,10 @@
          unreal/external-runtime/main
          json
          errortrace
+         "lib/base.rkt"
          "lib/voxels/base.rkt"
          "lib/voxels/rooms.rkt"
-         "lib/character/base.rkt"
+         "lib/events/base.rkt"
          "lib/spawning/base.rkt"
          )
 
@@ -39,8 +40,8 @@
 
 (define (get-voxel-structures-docs)
   (list
-    (hash 'name "Rooms"
-    'descriptions (list))))
+   (hash 'name "Rooms"
+         'descriptions (list))))
 
 ;each API will have its own get-...-docs function
 (define (get-voxel-api-docs)
@@ -198,7 +199,7 @@
       'example (map format-racket-code (list "(build (beside/wide (sphere 1000) (empty 2000 2000 2000) (sphere 1000)))" ))
       'returns "builder?")))))
 
-(define (get-character-api-docs)
+(define (get-events-api-docs)
   (list
    (hash 'name "Base"
          'definitions
@@ -216,7 +217,7 @@
                                              
                                              (on-projectile-hit 
                                                (lambda (e) (build (sphere 1000) (event-location e))))"
-
+                                             
                                              "(clear-projectile-hit-functions)
                                              
                                              (define size 0)
@@ -243,7 +244,7 @@
                                                 (cancel-on-projectile-hit build-once))
 
                                              (on-projectile-hit build-once)"
-
+                                             
                                              "(define num-builds 0)
                                              
                                               (define (build-thrice e)
@@ -252,10 +253,7 @@
                                                 (when (>= num-builds 3)
                                                   (cancel-on-projectile-hit build-thrice)))
 
-                                             (on-projectile-hit build-thrice)"
-                                             )
-                                             
-                                             )
+                                             (on-projectile-hit build-thrice)"))
            'returns "void?")
           (hash
            'name "clear-projectile-hit-functions"
@@ -269,9 +267,32 @@
                                              "(clear-projectile-hit-functions)"
                                              ))
            'returns "void?")
-         ))
-  )
-)
+          
+          (hash
+           'name "on-zone-enter"
+           'use (format-racket-code "(on-zone-enter [function function?])")
+           'parameter (list "function")
+           'type (list "function?")
+           'optional (list #f)
+           'parameterDesc (list "Function to run when a zone is entered.  Must take an event data structure.")
+           'desc "This allow you to register a function to be called when zones are entered.  Use the event data in the callback (e.g. with functions `(event-name e)`  and `(event-location e)`) to perform further calculations.  Note that zone enter events will only get fired if there are zones in the world.  See example below for how to spawn a zone (or see the Spawning section of the API).  Also note that `clear-zone-enter-functions` and `cancel-on-zone-enter` work analogously to `clear-projectile-hit-functions` and `cancel-on-projectil-hit` (see above)."
+           'example (map format-racket-code (list
+                                             "(clear-zone-enter-functions)
+                                             (clear-projectile-hit-functions)
+
+                                             (on-projectile-hit
+                                               (lambda (e)
+                                                 (spawn (zone #:name \"Trap\")
+                                                        (event-location e))))
+                                             
+                                             (on-zone-enter
+                                               (lambda (e) 
+                                                 (when (string=? \"Trap\" (event-name e))
+                                                   (build (room 1000 1000 1000) 
+                                                          (event-location e)))))"
+                                             
+                                             ))
+           'returns "void?")))))
 
 (define (get-base-api-docs)
   (list
@@ -281,7 +302,7 @@
    (hash 'name "Control Flow"
          'definitions
          (list
-
+          
           ))
    (hash 'name "Logic"
          'definitions
@@ -313,7 +334,7 @@
                                              "(or 5 #t #t)"
                                              "(or (vec? (vec 100 200 -100)) (builder? (sphere 1000)) (boolean? #f))"))
            'returns "list?")
-         ))
+          ))
    (hash 'name "Lists"
          'definitions
          (list
@@ -474,6 +495,19 @@
     (with-continuation-mark 'lineNumber lineNumber
       (apply f a args))))
 
+(define (forward-events-to-react type connection)
+  (subscribe-to-unreal-event type
+                             (lambda (data)
+                               (displayln (~a "Sending " type "..."))
+                               (ws-send! connection (jsexpr->string
+                                                     (hash
+                                                      'response (if (void? data)
+                                                                    'null
+                                                                    data)
+                                                      'racketResponse (format-racket-code (~v data))
+                                                      'eventType type
+                                                      ))))
+                             #:group "High Priority"))
 
 ;Change start-ui name to start-websocket-server
 (define (start-ui)
@@ -490,18 +524,9 @@
                   ;(displayln "Connection established")
                   ; (one-time-setup c)
                   ; (thread (thunk (sleep 3) (unreal-eval-js (current-location))))
-                  (subscribe-to-unreal-event "projectile-hit"
-                                             (lambda (data)
-                                               (displayln "Sending projectile-hit...")
-                                               (ws-send! c (jsexpr->string
-                                                                     (hash
-                                                                      'response (if (void? data)
-                                                                                    'null
-                                                                                    data)
-                                                                      'racketResponse (format-racket-code (~v data))
-                                                                      'eventType "projectile-hit"
-                                                                      ))))
-                                             #:group "High Priority")
+                  (forward-events-to-react "projectile-hit" c)
+                  (forward-events-to-react "zone-enter" c)
+                  
 
                   (let loop ()
                     ;(displayln "Waiting for message")
