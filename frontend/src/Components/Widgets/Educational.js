@@ -26,6 +26,7 @@ import Blockly from "blockly";
 import { MagicMirror } from '../MagicMirror';
 import CloseUIButton from '../WorldWidgets/CloseUIButton';
 import { JSONtoRacketBlock } from '../Dashboard/customBlocks/custom_Blocks';
+import { prettifyRacketCode } from '../WorldWidgets/Util';
 
 
 
@@ -74,8 +75,8 @@ export function BlocklyIDE(props) {
         },
       }}
       onWorkspaceChange={(workspace) => {
-        const code = Blockly.JavaScript.workspaceToCode(workspace);
-        setCode(code);
+        const precompile = Blockly.JavaScript.workspaceToCode(workspace);
+        prettifyRacketCode(precompile, (code)=>setCode(code))
       }}
       onXmlChange={() => { }}
     />
@@ -103,7 +104,7 @@ export function MultipleChoiceQuestion(props) {
 
   const handleSubmit = () => {
     if (value == "") {
-      props.onIncorrect();
+      props.onIncorrect && props.onIncorrect();
     } else {
       let selection = props.answers[Number(value)]
       if (selection) {
@@ -112,7 +113,7 @@ export function MultipleChoiceQuestion(props) {
         if (selection.correct) {
           props.onCorrect();
         } else {
-          props.onIncorrect();
+          props.onIncorrect && props.onIncorrect();
         }
       }
     }

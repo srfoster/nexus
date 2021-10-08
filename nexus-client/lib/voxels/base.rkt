@@ -35,6 +35,9 @@ Begin functional API for Voxel Worlds:
 ;   `(sphere 500 'air)`
 ;}
 (define (sphere r [material 'voxel])
+  (when (not ((between/c 0 1000) r))
+    (raise-user-error "Sphere's radius must be between 0 and 1000."))
+  
   (if (not (eq? material 'voxel)) 
     (builder 'air-sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f)
     (builder 'sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f)

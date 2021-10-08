@@ -12,7 +12,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableRow from "@material-ui/core/TableRow";
 import CheckIcon from "@material-ui/icons/Check";
 import ClearIcon from "@material-ui/icons/Clear";
-import { CastButton, EventLogger, sendOnCodeSpellsSocket } from '../WorldWidgets/Util';
+import { CastButton, EventLogger, prettifyRacketCode, sendOnCodeSpellsSocket } from '../WorldWidgets/Util';
 import Markdown from 'markdown-to-jsx';
 import { AppBar, Badge, Card, ButtonGroup, CardActions, CardContent, CardHeader, Chip, CircularProgress, Paper, Radio, RadioGroup, Slider, Tab } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
@@ -23,7 +23,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { MagicMirror } from '../MagicMirror';
-import { BlocklyIDE, JSMirror } from './Educational';
+import { BlocklyIDE, JSMirror, MultipleChoiceQuestion } from './Educational';
 import { useLocalStorage } from '../../Util';
 import { DidYouKnowCard, PleaseWaitWhileSockPuppetCreatesContent } from './NexusVoice';
 import SimpleVideoPlayer from './SimpleVideoPlayer';
@@ -34,6 +34,7 @@ import BlueBalls from './BlueBalls';
 import { Game } from './react-gameoflife/Game';
 import NetworkDiseaseSimulator from './NetworkDiseaseSimulator';
 import { defineRacketBlock, defineStatementRacketBlock } from '../Dashboard/customBlocks/custom_Blocks';
+import CloseUIButton from '../WorldWidgets/CloseUIButton';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -439,6 +440,9 @@ export function DocModal(props){
 }
 
 export let UIExampleScope = {
+  useEffect,
+  useState,
+  CloseUIButton,
   JSMirror: (props)=>{return <JSMirror code={props.code} onChange={props.onChange} scope={UIExampleScope}/>},
   EventLogger,
   MagicMirror,
@@ -460,4 +464,7 @@ export let UIExampleScope = {
   Badge, AppBar, Badge, Card, ButtonGroup, 
   CardActions, CardContent, CardHeader, Chip, 
   CircularProgress, Paper, Radio, RadioGroup, Slider,
+  Typography,
+  MultipleChoiceQuestion,
+  prettifyRacketCode
 }

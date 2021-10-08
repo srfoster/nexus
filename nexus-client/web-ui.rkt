@@ -28,6 +28,15 @@
          "lib/spawning/base.rkt"
          )
 
+(define HOLE1
+  identity)
+
+(define HOLE2
+  identity)
+
+(define HOLE3
+  identity)
+
 (define (get-voxel-structures-docs)
   (list
     (hash 'name "Rooms"

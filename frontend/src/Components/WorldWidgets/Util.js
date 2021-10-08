@@ -107,6 +107,16 @@ export const getWebSocket = (afterSetup) => {
   }
 }
 
+export const prettifyRacketCode = (code, cb) => {
+  sendOnCodeSpellsSocket(`(format-racket-code ${JSON.stringify(code)} )`,
+    (res) => {
+      if(isError(res)){
+        return code
+      }
+      else
+        return cb(res.response)
+    })
+}
 
 export const sendOnCodeSpellsSocket = (code, cb) => {
   console.log("Sending")
