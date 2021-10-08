@@ -4,7 +4,7 @@
          unreal/tcp/server)
 
 (provide on-projectile-hit
-         clear-projectile-functions
+         clear-projectile-hit-functions
          cancel-on-projectile-hit
          on-zone-enter
          cancel-on-zone-enter
@@ -19,7 +19,7 @@
 (define (cancel-on-projectile-hit f)
   (unsubscribe-from-unreal-event "projectile-hit" f))
 
-(define (clear-projectile-functions #:group [group #f])
+(define (clear-projectile-hit-functions #:group [group #f])
   (unsubscribe-all-from-unreal-event "projectile-hit" #:group group))
 
 (define (on-zone-enter f #:group [group #f])

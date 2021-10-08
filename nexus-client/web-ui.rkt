@@ -212,19 +212,21 @@
            'parameterDesc (list "Function to stop running when projectile hits something in the world.")
            'desc "This function configures the projectile of your character to execute a given function when it lands. The given function will be called with the location that the projectile hit."
            'example (map format-racket-code (list
-                                             "(clear-projectile-functions)
+                                             "(clear-projectile-hit-functions)
                                              
-                                             (on-projectile-hit (lambda (loc) (build (sphere 1000) loc)))"
+                                             (on-projectile-hit 
+                                               (lambda (e) (build (sphere 1000) (event-location e))))"
 
-                                             "(clear-projectile-functions)
+                                             "(clear-projectile-hit-functions)
                                              
                                              (define size 0)
 
                                              (on-projectile-hit 
-                                               (lambda (loc) 
+                                               (lambda (e) 
                                                  (set! size (+ size 200))
                                                  (when (> size 1000) (set! size 200))
-                                                 (build (sphere size) loc)))"
+                                                 (build (sphere size) 
+                                                        (event-location e))))"
                                              ))
            'returns "void?")
           (hash
@@ -236,17 +238,17 @@
            'parameterDesc (list "Function to run when projectile hits something in the world.")
            'desc "This function can be used to cancel a previous call to `on-projectile-hit`.  You must pass in the same function you registered with `on-projectile-hit`.  This will prevent it from being called the next time the character's projectile lands.  This can also be used to make one-off spells (ones that cancel themselves when complete)"
            'example (map format-racket-code (list
-                                             "(define (build-once loc)
-                                                (build (sphere 1000) loc)
+                                             "(define (build-once e)
+                                                (build (sphere 1000) (event-location e))
                                                 (cancel-on-projectile-hit build-once))
 
                                              (on-projectile-hit build-once)"
 
                                              "(define num-builds 0)
                                              
-                                              (define (build-thrice loc)
+                                              (define (build-thrice e)
                                                 (set! num-builds (add1 num-builds))
-                                                (build (sphere 1000) loc)
+                                                (build (sphere 1000) (event-location e))
                                                 (when (>= num-builds 3)
                                                   (cancel-on-projectile-hit build-thrice)))
 
@@ -256,15 +258,15 @@
                                              )
            'returns "void?")
           (hash
-           'name "clear-projectile-functions"
-           'use (format-racket-code "(clear-projectile-functions [function function?])")
+           'name "clear-projectile-hit-functions"
+           'use (format-racket-code "(clear-projectile-hit-functions [function function?])")
            'parameter (list)
            'type (list)
            'optional (list)
            'parameterDesc (list)
            'desc "This function clears all previously made configurations for the projectile of your character. This can be particularly useful to call before configuring a new `on-projectile-hit`, if you want to clear previous configurations."
            'example (map format-racket-code (list
-                                             "(clear-projectile-functions)"
+                                             "(clear-projectile-hit-functions)"
                                              ))
            'returns "void?")
          ))
@@ -472,25 +474,6 @@
     (with-continuation-mark 'lineNumber lineNumber
       (apply f a args))))
 
-; (define setup-complete #f)
-
-; (define (one-time-setup connection)
-;   (when (not setup-complete)
-;     (set! setup-complete #t)
-;     (subscribe-to-unreal-event "projectile-hit"
-;                                (lambda (data)
-;                                  (displayln "Sending projectile-hit...")
-;                                  (ws-send! connection (jsexpr->string
-;                                               (hash
-;                                                'response (if (void? data)
-;                                                              'null
-;                                                              data)
-;                                                'racketResponse (format-racket-code (~v data))
-;                                                'eventType "projectile-hit"
-;                                                ))))
-;                                #:group "High Priority")
-;     )
-;   )
 
 ;Change start-ui name to start-websocket-server
 (define (start-ui)
