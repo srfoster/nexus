@@ -1,10 +1,11 @@
 import { Button, Card, CardActions, CardContent, CardHeader, Container, Typography } from '@material-ui/core';
 import React, { useRef, useEffect, useState } from 'react';
 import { MagicMirror } from '../../MagicMirror';
-import { DocModalWithButton, UIExampleScope } from '../../Widgets/Docs';
+import { DocModalWithButton } from '../../Widgets/Docs';
 import { JSMirror } from '../../Widgets/Educational';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 import { useLocalStorage } from '../../../Util';
+import { UIScope } from '../../WorldWidgets/UIScope';
 
 function Example(props){
 
@@ -24,7 +25,7 @@ function Slide1(props){
 
     return (<>
         <Typography variant="h3">Intro</Typography>
-        <ul>
+        <ul style={{fontSize: 20}}>
             <li>Who We Are: ThoughtSTEM/coding education</li>
             <li>Graphic of React -- Racket -- Unreal architecture</li>
             <li>Looking for collaborators, funding, etc.</li>
@@ -36,7 +37,7 @@ function Slide2(props){
 
     return(<>
         <Typography variant="h3">History of CodeSpells</Typography>
-        <ul>
+        <ul style={{fontSize: 20}}>
             <li>Graduate Research of CodeSpells prototype</li>
             <li>Kickstarter for CodeSpells -> Game on Steam</li>
             <li>COVID version</li>
@@ -49,7 +50,7 @@ function Slide3(props){
 
     return(<>
         <Typography variant="h3">Related Work</Typography>
-        <ul>
+        <ul style={{fontSize: 20}}>
             <li>Visual Syntax</li>
             <li>Simulation/Multi-Agent Systems</li>
             <li>Games Research</li>
@@ -158,10 +159,10 @@ function Slide6(props){
 
     return(<>
         <Typography variant="h3">Compiler</Typography>
-         <Example><JSMirror scope={UIExampleScope} code={`//Sometimes code is tedious to write by hand...
+         <Example><JSMirror scope={UIScope} code={`//Sometimes code is tedious to write by hand...
 <RoomUI />
 `} /></Example>
-         <Example><JSMirror scope={UIExampleScope} code={`//Blockly...
+         <Example><JSMirror scope={UIScope} code={`//Blockly...
 <BlocklyIDE height={400} blockIds={[]} />`,`<BlocklyIDE height={400} blockIds={[  
           {
             blockName: "build",
@@ -199,7 +200,7 @@ function Slide6(props){
         ]}
         />
           `} /></Example>
-         <Example><JSMirror scope={UIExampleScope} code={`//Conway's Game of Life...
+         <Example><JSMirror scope={UIScope} code={`//Conway's Game of Life...
 <GameOfLife color={"purple"} />`, `(props)=> {
   const [cells, setCells] = React.useState([])
   
@@ -217,7 +218,7 @@ function Slide6(props){
   \${cells.map((c)=> \`(translate (vec 0 \${c.x * 500} \${-c.y * 500}) (sphere 250))\`).join("\\n")}
   ))\`} />    
   </>}`} /></Example>
-         <Example><JSMirror scope={UIExampleScope} code={`//Sometimes code is tedious to write by hand...
+         <Example><JSMirror scope={UIScope} code={`//Sometimes code is tedious to write by hand...
 
 (props)=>{
 const [magicCode, setMagicCode] = React.useState("")
@@ -244,7 +245,7 @@ function Slide7(props){
 
     return(<>
         <Typography variant="h3">Tools for Building Educational Experiences</Typography>
-         <Example><JSMirror scope={UIExampleScope} code={`//Here are some components that are useful for educational material
+         <Example><JSMirror scope={UIScope} code={`//Here are some components that are useful for educational material
 (props)=>{
 const [next, setNext] = useState(false);
 
@@ -283,7 +284,7 @@ function Slide8(props) {
 
     return (<>
         <Typography variant="h3">Isn't this fun?</Typography>
-        <Example><JSMirror scope={UIExampleScope} code={
+        <Example><JSMirror scope={UIScope} code={
 `(props)=>{
   const [start, setStart] = React.useState(false)
   
@@ -303,7 +304,7 @@ function Slide8(props) {
 function Slide9(props) {
     return (<>
         <Typography variant="h3">Events + UI</Typography>
-        <Example><MagicMirrorWithEnterWorld scope={UIExampleScope} code={
+        <Example><MagicMirrorWithEnterWorld scope={UIScope} code={
 `
 (clear-projectile-hit-functions)
 (clear-zone-enter-functions)
@@ -317,10 +318,10 @@ function Slide9(props) {
            (event-location e))))`
       } />
       </Example>
-        <Example><JSMirror scope={UIExampleScope} code={
+        <Example><JSMirror scope={UIScope} code={
 `<EventLogger/>` } /></Example>
 
-      <Example><JSMirror scope={UIExampleScope} code={`
+      <Example><JSMirror scope={UIScope} code={`
 <EventLogger
   component={(props)=>{
                return <CastButton 
@@ -337,7 +338,8 @@ function Slide9(props) {
 
 function Slide10(props) {
     return (<>
-         <Example><JSMirror scope={UIExampleScope} code={`//Sometimes code is tedious to write by hand...
+        <Typography variant="h3">Events + UI</Typography>
+         <Example><JSMirror scope={UIScope} code={`//Sometimes code is tedious to write by hand...
 
 (props)=>{
 const [magicCode, setMagicCode] = React.useState("")
@@ -365,8 +367,38 @@ return <>
 
 function Slide11(props) {
     return (<>
+        <Typography variant="h3">What about infinite loops?</Typography>
+        <p style={{fontSize: 20}}>Give users a way to stop spells.</p>
+         <Example><MagicMirror code={`(define s (spawn (projectile)))
+(define direction -1)
+
+(let loop ()
+  (shoot s 
+         #:with-force (vec 0 0 (* direction 1000)))
+  (sleep 1)
+  (set! direction (- direction))
+  (shoot s 
+         #:with-force (vec 0 0 (* direction 1000)))
+  (sleep 1)
+  (shoot s 
+         #:with-force (vec 0 0 (* direction 1000)))
+  (sleep 1)
+  (set! direction (- direction))
+  (shoot s 
+         #:with-force (vec 0 0 (* direction 1000)))
+  (sleep 1)
+  (loop))`} additionalButtons={[<CloseUIButton/>]}/></Example>
     </>
     )
+}
+
+function Slide12(props) {
+  return (<>
+    <Typography variant="h3">Call for Cool APIs</Typography>
+    <p style={{ fontSize: 20 }}>We got this dragon from the Unreal Marketplace.</p>
+    <Example><MagicMirror code="(spawn (dragon))" additionalButtons={[<CloseUIButton />]} /></Example>
+  </>
+  )
 }
 
 export default function RacketCon (props){
@@ -383,6 +415,7 @@ export default function RacketCon (props){
         <Slide9 />,
         <Slide10 />,
         <Slide11 />,
+        <Slide12 />,
     ]
 
     useEffect(() => {

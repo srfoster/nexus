@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 
+export function SpellThreadManager(props){
+  let threadId = props.data.threadId
+  return(
+    <>
+      <CastButton code={"(kill-spell-thread " + threadId + ")"}>Stop This Spell</CastButton>
+      <CastButton code={"(kill-all-spell-threads)"}>Stop All Spells</CastButton>
+    </>
+  )
+}
+
 let subscribedEvents = {} 
 
 function subscribeToUnrealEvent(eventType, cb) {

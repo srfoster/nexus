@@ -25,16 +25,7 @@ import Typography from '@material-ui/core/Typography';
 import { MagicMirror } from '../MagicMirror';
 import { BlocklyIDE, JSMirror, MultipleChoiceQuestion } from './Educational';
 import { useLocalStorage } from '../../Util';
-import { DidYouKnowCard, PleaseWaitWhileSockPuppetCreatesContent } from './NexusVoice';
-import SimpleVideoPlayer from './SimpleVideoPlayer';
-import ChatBubble from './ChatBubble';
-import { Alert } from '@material-ui/lab';
-import RoomUI from '../WorldWidgets/RoomUI';
-import BlueBalls from './BlueBalls';
-import { Game } from './react-gameoflife/Game';
-import NetworkDiseaseSimulator from './NetworkDiseaseSimulator';
-import { defineRacketBlock, defineStatementRacketBlock } from '../Dashboard/customBlocks/custom_Blocks';
-import CloseUIButton from '../WorldWidgets/CloseUIButton';
+import { UIScope } from '../WorldWidgets/UIScope'; // Note: Circular dependency!
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -51,7 +42,7 @@ function UIFunctionDefExample(props) {
     <>
       {code != props.code ? <Button onClick={() => { setCode(props.code) }}>Revert</Button> : ""}
       <JSMirror code={code}
-        scope={UIExampleScope}
+        scope={UIScope}
         onChange={(code) => {
           setCode(code)
           return true
@@ -437,34 +428,4 @@ export function DocModal(props){
       </Dialog>
     </div>
   )
-}
-
-export let UIExampleScope = {
-  useEffect,
-  useState,
-  CloseUIButton,
-  JSMirror: (props)=>{return <JSMirror code={props.code} onChange={props.onChange} scope={UIExampleScope}/>},
-  EventLogger,
-  MagicMirror,
-  RoomUI,
-  BallPitToy: BlueBalls,
-  GameOfLife: Game,
-  BlocklyIDE,
-  defineStatementRacketBlock,
-  defineRacketBlock,
-  NetworkDiseaseSimulator,
-  CastButton,
-  DocModalWithButton,
-  DocContent,
-  DidYouKnowCard,
-  SimpleVideoPlayer,
-  PleaseWaitWhileSockPuppetCreatesContent,
-  ChatBubble,
-  Button,
-  Badge, AppBar, Badge, Card, ButtonGroup, 
-  CardActions, CardContent, CardHeader, Chip, 
-  CircularProgress, Paper, Radio, RadioGroup, Slider,
-  Typography,
-  MultipleChoiceQuestion,
-  prettifyRacketCode
 }
