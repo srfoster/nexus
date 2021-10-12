@@ -92,6 +92,8 @@
 (define (kill-all-spell-threads)
   (map kill-spell-thread (hash-keys eval-threads)))
 
+(struct null-value ())
+
 ;Change start-ui name to start-websocket-server
 (define (start-ui)
   ;(displayln "spell-language-module...")
@@ -126,7 +128,7 @@
                                             (void) 
                                             (displayln e)
                                             )])
-                          (define ret (void))                            
+                          (define ret (null-value))                            
                           (define eval-thread
                             (thread
                              (thunk
@@ -163,9 +165,9 @@
                             
                             ; wait until there's something in ret, or a certain
                             ; amount of time has passed
-                            (for ([i (in-range 10)]) #:break (not (void? ret))
+                            (for ([i (in-range 10)]) #:break (not (null-value? ret))
                               (sleep .05))
-                            (when (void? ret)
+                            (when (null-value? ret)
                               (define thread-id (random))
                               (set! eval-threads (hash-set eval-threads thread-id eval-thread))
                               (set! ret (hash 'threadId thread-id 

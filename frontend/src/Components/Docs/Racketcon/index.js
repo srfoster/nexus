@@ -1,11 +1,13 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Container, Typography } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, CardHeader, Container, Fade, Typography } from '@material-ui/core';
 import React, { useRef, useEffect, useState } from 'react';
 import { MagicMirror } from '../../MagicMirror';
-import { DocModalWithButton } from '../../Widgets/Docs';
-import { JSMirror } from '../../Widgets/Educational';
+import { DocModal, DocModalWithButton } from '../../Widgets/Docs';
+import { BlocklyIDE, JSMirror } from '../../Widgets/Educational';
 import CloseUIButton from '../../WorldWidgets/CloseUIButton';
 import { useLocalStorage } from '../../../Util';
 import { UIScope } from '../../WorldWidgets/UIScope';
+import { ArchitecturalDiagram } from '../ArchitecturalDiagram';
+import RoomUI from '../../WorldWidgets/RoomUI';
 
 function Example(props){
 
@@ -16,6 +18,13 @@ function Example(props){
     </Card>)
 }
 
+function FadeInButton(props){
+  const [shown, setShown] = useState(false)
+
+  return (shown? <Fade in={true}><div>{props.children}</div></Fade>
+  :<Button onClick={()=>setShown(true)}>{props.prompt}</Button>)
+}
+
 function MagicMirrorWithEnterWorld(props){
 
     return(<MagicMirror code={props.code} additionalButtons={[<CloseUIButton/>]}/>)
@@ -23,39 +32,112 @@ function MagicMirrorWithEnterWorld(props){
 
 function Slide1(props){
 
-    return (<>
-        <Typography variant="h3">Intro</Typography>
-        <ul style={{fontSize: 20}}>
-            <li>Who We Are: ThoughtSTEM/coding education</li>
-            <li>Graphic of React -- Racket -- Unreal architecture</li>
-            <li>Looking for collaborators, funding, etc.</li>
-        </ul>
-    </>
-    )
+  return (<>
+    <Typography variant="h3">Intro</Typography>
+    <FadeInButton prompt="Teaser: Summoning a Dragon">
+    <p style={{ fontSize: 20 }}>As a teaser for what's to come, let's summon a dragon!</p>
+    <MagicMirror code={`(define d (spawn (dragon)))
+
+(sleep 5)
+
+(spit-fire d 4)`} additionalButtons={[<CloseUIButton />]} /></FadeInButton>
+    <ul style={{ fontSize: 20 }}>
+      
+      <li><FadeInButton prompt="Who are we?">Who are we?
+          <ul>
+            <li>Founded ThoughtSTEM in 2012 with goal of spreading computer science education</li>
+            <li>Spent the last 9 years developing educational technologies</li>
+            <li>Co-authored a book for computer science educators and students: <i>Don't Teach Coding: Until You Read This Book</i></li>
+          </ul></FadeInButton>
+      </li>
+      <li><FadeInButton prompt="Who is this talk for?">Who is this talk for?
+          <ul>
+            <li>Anyone interested in: Racket, Unreal, React. CodeSpells integrates these three runtimes.</li>
+            <li>Educators who want to show students the magic of coding.</li>
+          <li>Potential collaborators
+            <ul>
+              <li>Want to write a paper with us?</li>
+              <li>Want to use CodeSpells in your research or classroom?</li>
+              <li>Want to fund us/hire us/financially support the project?</li>
+            </ul>
+          </li>
+          </ul></FadeInButton>
+      </li>
+    </ul>
+  </>
+  )
 }
 function Slide2(props){
 
-    return(<>
-        <Typography variant="h3">History of CodeSpells</Typography>
-        <ul style={{fontSize: 20}}>
-            <li>Graduate Research of CodeSpells prototype</li>
-            <li>Kickstarter for CodeSpells -> Game on Steam</li>
-            <li>COVID version</li>
+  return (<>
+    <Typography variant="h3">History of CodeSpells</Typography>
+    <img width={"100%"} style={{ paddingTop: 20 }} src="https://codespells.org/images/old-spellbook.jpeg" />
+    <ul style={{ fontSize: 20 }}>
+      <li><FadeInButton prompt="PhD Thesis">Started as an undergraduate project that turned into a PhD thesis
+        <ul>
+          <li><i>Three Paradigms for Mixing Coding and Games.</i> Dissertation. Stephen Foster.</li>
+          <li><i>CodeSpells: embodying the metaphor of wizardry for programming.</i> ITiCSE '13. Sarah Esper, Stephen Foster, William Griswold.</li>
+          <li><i>From competition to metacognition: designing diverse, sustainable educational games.</i> CHI '13. Stephen Foster, Sarah Esper, William Griswold.</li>
         </ul>
-    </>
-    )
+      </FadeInButton></li>
+      <li><FadeInButton prompt="Kickstarter">Kickstarter for CodeSpells -> Game on Steam (2015)
+        <img width={"100%"} style={{ paddingTop: 20 }} src="https://codespells.org/images/in-game4.jpg" />
+        <img width={"100%"} style={{ paddingTop: 20 }} src="https://codespells.org/images/in-game-coding2.gif" /></FadeInButton></li>
+      <li><FadeInButton prompt="Current Version">In 2020, we started a re-write of the project.
+        <ul>
+          <li>Uses modern technologies: Racket, React, and Unreal.</li>
+          <li>More of a platform than a game.</li>
+          <li>Returned to a focus on education, making a tool for educators.</li>
+        </ul>
+      </FadeInButton>
+      </li>
+    </ul>
+  </>
+  )
 }
 
 function Slide3(props){
 
     return(<>
         <Typography variant="h3">Related Work</Typography>
-        <ul style={{fontSize: 20}}>
-            <li>Visual Syntax</li>
-            <li>Simulation/Multi-Agent Systems</li>
-            <li>Games Research</li>
-            <li>Education</li>
-        </ul>
+      <ul style={{ fontSize: 20 }}>
+        <li><FadeInButton prompt="Visual Syntax">Visual Syntax: Mixing Code and UI
+          <ul>
+            <img width={"100%"} style={{ paddingTop: 20 }} src="https://codespells-org.s3.amazonaws.com/LivelitsPaperFigure.png" />
+            <li><i>Filling Typed Holes with Live GUIs.</i> PLDI ’21. Cyrus Omar, David Moon, Andrew Blinn, Ian Voysey, Nick Collins, Ravi Chungh.</li>
+            <img width={"100%"} style={{ paddingTop: 20 }} src="https://codespells-org.s3.amazonaws.com/VisualSyntaxFigure.png" />
+            <li><i>Adding Interactive Visual Syntax to Textual Code.</i> OOPSLA '20. Lief Andersen, Michael Ballantyne, Matthias Felleisen.</li>
+            <li>CodeSpells can be a platform for prototyping novel coding interfaces like these, using the rich React ecosystem.</li>
+          </ul></FadeInButton>
+        </li>
+        <li><FadeInButton prompt="Simulation/Multi-Agent Systems">Simulation/Multi-Agent Systems
+          <ul>
+            <li>Well Known Results
+              <ul>
+                <li>Schelling's 1971 segregation models (see Parable of the Polygons.)</li>
+                <li>Sugarscape</li></ul></li>
+            <li>Netlogo is a multi-agent programmable modeling environment that has been used for building simulations in 2D environments.</li>
+            <li>CodeSpells could be a test bed for simulations that run in 3D and use the power of the Unreal game engine.</li>
+          </ul></FadeInButton>
+        </li>
+        <li><FadeInButton prompt="Games Research">Games Research
+          <ul>
+            <li>Gamification/Education</li>
+            <li>Serious Games (FoldIt)</li>
+            <li>VR-Based Interfaces</li>
+            <li>CodeSpells is a VR-capable platform that can put anything in the Unreal ecosystem within reach of researchers.</li>
+          </ul></FadeInButton>
+        </li>
+        <li><FadeInButton prompt="CS Education Research">CS Education Research
+          <ul>
+            <li>There are many open questions in this field.</li>
+            <li>Prior CodeSpells research has shown that the metaphor of magic is an effective way to teach coding. <u>How can this metaphor best be leveraged?</u></li>
+            <li>The Racket <i>How To Design Programs</i> philosophy teaches in the context of an increasingly interesting set of programming languages. <u>What interesting languages are possible in a 3D environment?</u></li>
+            <li>There's much debate about whether text- or block-based programming is best for novices. <u>What about the under-explored middle ground that includes both?</u></li>
+            <li>CodeSpells can be used to continue exploring these questions like these.</li>
+          </ul></FadeInButton>
+        </li>
+      </ul>
     </>
     )
 }
@@ -63,21 +145,43 @@ function Slide4(props){
 
     return(<>
         <Typography variant="h3">Basic Racket Evaluation</Typography>
+        <p style={{fontSize: 20}}>
+          For our first trick, basic Racket evaluation!
+        </p>
         <Example><MagicMirrorWithEnterWorld code={`;Racket evaluation
 (list (+ 4 5) 
       (string-append \"Hello \" \"World\") 
       (and #t #f))`} /></Example>
+        <p style={{fontSize: 20}}>
+          Let's think about what just happened there behind the curtain...
+        </p>
+      <ArchitecturalDiagram
+        highlightedNodes={[{ id: "React", color: "red" }, { id: "Racket", color: "orange" }]}
+        highlightedEdges={[{ id: "React-Racket", color: "red" }, {id: "Racket-React", color: "orange"}]} />
+        <p style={{fontSize: 20}}>
+          Let's do a more complex example: 
+        </p>
         <Example><MagicMirrorWithEnterWorld code={`;The full #lang racket is available
 ;Error messages work too
+(/ 3 0)
 (define (fib n)
   (if (< n 2)
       1
       (+ (fib (sub1 n)) 
-         (fib ((compose sub1 sub1) n))))
+         (fib ((compose sub1 sub1) n)))))
 
 (map fib (range 0 5))`} /></Example>
+        <p style={{fontSize: 20}}>
+          Let's use that cool 3D world back there behind the UI! 
+        </p>
         <Example><MagicMirrorWithEnterWorld code={`;But let's do something in Unreal now...
 (build (sphere 1000))`} /></Example>
+      <ArchitecturalDiagram
+        highlightedNodes={[{ id: "React", color: "red" }, { id: "Racket", color: "orange" }, {id: "Unreal", color: "yellow"}]}
+        highlightedEdges={[{ id: "React-Racket", color: "red" }, {id: "Racket-React", color: "orange"}, {id: "Racket-Unreal", color: "orange"}]} />
+        <p style={{fontSize: 20}}>
+          Some of you may notice that our voxel-building API is similar to 2htdp/image or Pict3D: 
+        </p>
          <Example><MagicMirrorWithEnterWorld code={`;We modeled the 3D API after 2htdp/image
 (define s (sphere 1000)) 
 
@@ -88,6 +192,9 @@ function Slide4(props){
 (build 
   (above s 
     (beside/wide s s)))`} /></Example>
+        <p style={{fontSize: 20}}>
+          Voxels are very performant, so we can make very large superstructures. What will this next code example do? 
+        </p>
          <Example><MagicMirrorWithEnterWorld code={`;Let's do something fancy!
 (define s (sphere 200))
 
@@ -103,8 +210,17 @@ function Slide4(props){
   (f s))
 
 (build (foo 3 s))`} /></Example>
-         <Example><MagicMirrorWithEnterWorld code={`;Libraries for more advanced builders...
+        <p style={{fontSize: 20}}>
+          We've built some more complicated builders, and we're looking for others to make more! 
+        </p>
+         <Example><MagicMirrorWithEnterWorld code={`;Let's build 2 rooms beside each other...
 (build (room 2000 1000 600))`} /></Example>
+        <p style={{fontSize: 20}}>
+          There's lots more to come. But first, a quick break. 
+        </p>
+        <p style={{fontSize: 20}}>
+          Did you notice that these interactive slides are like the coolest powerpoint you've seen? They're like Jupyter Notebooks, with an integrated 3D world! Wouldn't you want to use this for your classes?
+        </p>
     </>
     )
 }
@@ -114,6 +230,9 @@ function Slide5(props) {
     return (<>
         <Typography variant="h3">Events</Typography>
         <Typography variant="h5">Projectiles</Typography>
+        <p style={{fontSize: 20}}>
+          Let's write code to make projectiles do something interesting: 
+        </p>
         <Example><MagicMirrorWithEnterWorld code={`;on-projectile-hit lets us subscribe functions to events
 (clear-projectile-functions)
 
@@ -123,6 +242,21 @@ function Slide5(props) {
            ;location where projectile landed
            ;but is it where we want the room to be?
            (event-location e))))`} /></Example>
+        <p style={{fontSize: 20}}>
+          The code above registers an event: 
+        </p>
+      <ArchitecturalDiagram
+        highlightedNodes={[{ id: "React", color: "red" }, { id: "Racket", color: "orange" }]}
+        highlightedEdges={[{ id: "React-Racket", color: "red" }, {id: "Racket-React", color: "orange"}]} />
+        <p style={{fontSize: 20}}>
+          Projectile is fired in Unreal, Racket runs your registered function, stuff builds in Unreal: 
+        </p>
+      <ArchitecturalDiagram
+        highlightedNodes={[{ id: "Unreal", color: "red" }, { id: "Racket", color: "orange" }]}
+        highlightedEdges={[{ id: "Racket-Unreal", color: "orange" }, {id: "Unreal-Racket", color: "red"}]} />
+        <p style={{fontSize: 20}}>
+          Racket can maintain state between events: 
+        </p>
         <Example><MagicMirrorWithEnterWorld code={`;variables get stored between projectile hits!
 (clear-projectile-functions)
 
@@ -137,6 +271,9 @@ function Slide5(props) {
            (event-location e))))`} /></Example>
 
         <Typography variant="h5">Trigger Zones</Typography>
+        <p style={{fontSize: 20}}>
+          Let's see the same concept, but with a different kind of event! 
+        </p>
         <Example><MagicMirrorWithEnterWorld code={`;trigger zones!
 (clear-zone-enter-functions)
 (clear-projectile-functions)
@@ -151,6 +288,9 @@ function Slide5(props) {
     (when (string=? (event-name e) "Trap")
       (build (room 1000 1000 600) 
              (event-location e)))))`} /></Example>
+        <p style={{fontSize: 20}}>
+          Commercial break... If you think CodeSpells is looking kind of a like a game engine, you're not wrong! We want it to be a platform for people to build games, simulations, and other interactive experiences. 
+        </p>
     </>
     )
 }
@@ -158,15 +298,18 @@ function Slide5(props) {
 function Slide6(props){
 
     return(<>
-        <Typography variant="h3">Compiler</Typography>
-         <Example><JSMirror scope={UIScope} code={`//Sometimes code is tedious to write by hand...
-<RoomUI />
-`} /></Example>
-         <Example><JSMirror scope={UIScope} code={`//Blockly...
-<BlocklyIDE height={400} blockIds={[]} />`,`<BlocklyIDE height={400} blockIds={[  
+        <Typography variant="h3">Visual Syntax</Typography>
+        <p style={{fontSize: 20}}>
+          Compiling to S-expressions is easy.
+        </p>
+      <Example>
+        <RoomUI />
+      </Example>
+      <Example>
+        <BlocklyIDE height={400} blockIds={[
           {
             blockName: "build",
-            inputs: ["builder","vec"],
+            inputs: ["builder", "vec"],
             output: false,
             doParens: true,
             doBlockName: true,
@@ -179,15 +322,15 @@ function Slide6(props){
             doParens: true,
             doBlockName: true,
             color: 230
-          } ,
+          },
           {
             blockName: "vec",
-            inputs: ["x #","y #","z #"],
+            inputs: ["x #", "y #", "z #"],
             output: true,
             doParens: true,
             doBlockName: true,
             color: 230
-          } ,
+          },
           {
             blockName: "#",
             takesUserInput: true,
@@ -199,44 +342,63 @@ function Slide6(props){
           }
         ]}
         />
-          `} /></Example>
-         <Example><JSMirror scope={UIScope} code={`//Conway's Game of Life...
-<GameOfLife color={"purple"} />`, `(props)=> {
-  const [cells, setCells] = React.useState([])
+      </Example>
+        <p style={{fontSize: 20}}>
+          What if you wanted to add new Blockly blocks? Or what if you wanted to use the above room building widget to define a function? That's where this React editor comes in handy: 
+        </p>
+        <Example><JSMirror scope={UIScope} code={`<><p>I'm a React editor!</p></>`} /></Example>
+        <p style={{fontSize: 20}}>
+          Wanna know how to use the React or Racket code editors? CodeSpells comes with Docs! <DocModalWithButton/>
+        </p>
+         <Example><JSMirror scope={UIScope} code={`(props)=> {
+  const [cells, setCells] = React.useState([]);
+  let code = cells.map((c)=> 
+  \`(translate 
+    (vec 0 \${c.x * 500} \${-c.y * 500}) 
+    (sphere 250))\`
+  ).join("\\n");
   
   return <>
-    <p>Number of active cells: {cells.length}</p>
-    <GameOfLife color={"purple"} setCells={setCells}/>
-  </>}`, 
-  `(props)=> {
-  const [cells, setCells] = React.useState([])
-  
-  return <>
-    <GameOfLife color={"purple"} setCells={setCells}/>
-    <MagicMirror additionalButtons={[<CloseUIButton/>]} code={\`(build
- (overlay
-  \${cells.map((c)=> \`(translate (vec 0 \${c.x * 500} \${-c.y * 500}) (sphere 250))\`).join("\\n")}
-  ))\`} />    
+    <GameOfLife 
+      color={"purple"} 
+      setCells={setCells}/>
+    <MagicMirror 
+      additionalButtons={[<CloseUIButton/>]} 
+      code={\`(build (overlay \${code}))\`} />    
   </>}`} /></Example>
          <Example><JSMirror scope={UIScope} code={`//Sometimes code is tedious to write by hand...
 
 (props)=>{
-const [magicCode, setMagicCode] = React.useState("")
-const [roomUICode, setRoomUICode] = React.useState("")
-const [finalCode, setFinalCode] = React.useState("")
+const [magicCode, setMagicCode] = useState("");
+const [roomUICode, setRoomUICode] = useState("");
+const [finalCode, setFinalCode] = useState("");
 
 useEffect(()=>{
-  let precompile = magicCode.replace(/\\(HOLE1 [^)]*\\)/, \`(HOLE1 \${roomUICode})\`)
-  prettifyRacketCode(precompile, (c)=>{setFinalCode(c)})
-  
+  let precompile = magicCode.replace(
+    /\\(HOLE1 [^)]*\\)/, 
+    \`(HOLE1 \${roomUICode})\`)
+    
+  prettifyRacketCode(precompile,     
+    (c)=>{ setFinalCode(c) })
   }, [roomUICode, magicCode])
 
 return <>
-  <RoomUI wrapper={false} onCompile={(code)=>{setRoomUICode(code)}}/>
-  <MagicMirror onChange={(editor, data, value)=>{setMagicCode(value)}}/>
-  <MagicMirror code={finalCode}/>
-</>} `
+  <RoomUI 
+    wrapper={false} 
+    onCompile={(code)=>{setRoomUICode(code)}}
+  />
+  <MagicMirror 
+    onChange={
+      (editor, data, value)=>{setMagicCode(value)}}
+  />
+  <MagicMirror 
+    code={finalCode}
+  />
+</>}`
       } /></Example>
+        <p style={{fontSize: 20}}>
+          Commercial break! Can you imagine the cool next generation programming interfaces we could make with the power of React & Racket at our fingertips? Come help us make them! Or you know, write us into your next grant! 
+        </p>
     </>
     )
 }
@@ -245,6 +407,12 @@ function Slide7(props){
 
     return(<>
         <Typography variant="h3">Tools for Building Educational Experiences</Typography>
+        <p style={{fontSize: 20}}>
+          We haven't scratched the surface of what can be done with composable, functional UI components. Making edtech for coding is easy!  
+        </p>
+        <p style={{fontSize: 20}}>
+          Let's look at a kitchen sink example: 
+        </p>
          <Example><JSMirror scope={UIScope} code={`//Here are some components that are useful for educational material
 (props)=>{
 const [next, setNext] = useState(false);
@@ -275,7 +443,9 @@ return(!next ?
   </>)
 }
 `} /></Example>
-        
+      <p style={{ fontSize: 20 }}>
+        While we were writing <i>Don't Teach Coding</i>, we realized how powerful it would be for our coding examples to be interactive and interleaved with prose. We couldn't do it in the form of a book, so we're doing it now with CodeSpells.  Calling all curriculum developers! Can you imagine your curriculum being this cool?
+      </p>
     </>
     )
 }
@@ -283,10 +453,13 @@ return(!next ?
 function Slide8(props) {
 
     return (<>
-        <Typography variant="h3">Isn't this fun?</Typography>
+        <Typography variant="h3">Intermission</Typography>
+      <p style={{ fontSize: 20 }}>
+        Puzzle: What does this code do? 
+      </p>
         <Example><JSMirror scope={UIScope} code={
 `(props)=>{
-  const [start, setStart] = React.useState(false)
+  const [start, setStart] = useState(false)
   
   return start? 
   <>
@@ -296,16 +469,22 @@ function Slide8(props) {
   </> : 
   <Button onClick={()=>{setStart(true)}}>
     Ready to get your mind blown?
-    </Button>}` } /></Example>
+  </Button>}` } /></Example>
     </>
     )
 }
 
 function Slide9(props) {
-    return (<>
-        <Typography variant="h3">Events + UI</Typography>
-        <Example><MagicMirrorWithEnterWorld scope={UIScope} code={
-`
+  return (<>
+    <Typography variant="h3">Events + UI</Typography>
+    <ArchitecturalDiagram
+      highlightedNodes={[{ id: "React", color: "red" }, { id: "Racket", color: "orange" }]}
+      highlightedEdges={[{ id: "React-Racket", color: "red" }, { id: "Racket-React", color: "orange" }]} />
+    <p style={{ fontSize: 20 }}>
+      Projectile is fired in Unreal, Racket runs your registered function, stuff builds in Unreal:
+    </p>
+    <Example><MagicMirrorWithEnterWorld scope={UIScope} code={
+      `
 (clear-projectile-hit-functions)
 (clear-zone-enter-functions)
 
@@ -316,8 +495,8 @@ function Slide9(props) {
     (set! i (add1 i))
     (spawn (zone #:name (~a "Zone" i))
            (event-location e))))`
-      } />
-      </Example>
+    } />
+    </Example>
         <Example><JSMirror scope={UIScope} code={
 `<EventLogger/>` } /></Example>
 
@@ -396,7 +575,11 @@ function Slide12(props) {
   return (<>
     <Typography variant="h3">Call for Cool APIs</Typography>
     <p style={{ fontSize: 20 }}>We got this dragon from the Unreal Marketplace.</p>
-    <Example><MagicMirror code="(spawn (dragon))" additionalButtons={[<CloseUIButton />]} /></Example>
+    <Example notes={"Can we spit fire & sleep in a loop?"}><MagicMirror code={`(define d (spawn (dragon)))
+
+(sleep 5)
+
+(spit-fire d 4)`} additionalButtons={[<CloseUIButton />]} /></Example>
   </>
   )
 }

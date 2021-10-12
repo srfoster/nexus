@@ -31,7 +31,8 @@
  dragon.ShootFireball(@(->unreal-value duration));
 
  return true;
- }))
+ })
+  (sleep duration))
 
 (define (zone #:name name)
   (spawner "MagicCircleZone" name))

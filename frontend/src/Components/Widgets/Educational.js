@@ -44,7 +44,7 @@ export function BlocklyIDE(props) {
   const classes = useStyles();
 
   useEffect(
-    () => { setBlockIds(props.blockIds.map(JSONtoRacketBlock))},
+    () => { if(props.blockIds) setBlockIds(props.blockIds.map(JSONtoRacketBlock))},
     [])
 
   return (!blockIds ? "" : <>
