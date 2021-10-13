@@ -148,7 +148,7 @@ Begin functional API for Voxel Worlds:
 
 
 (define (build b [at (current-location)])
-  (thread (thunk (_build b at)))
+  (_build b at)
   (void))
 
 ;Renderer

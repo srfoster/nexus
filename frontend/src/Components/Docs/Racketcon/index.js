@@ -477,70 +477,73 @@ function Slide8(props) {
 function Slide9(props) {
   return (<>
     <Typography variant="h3">Events + UI</Typography>
-    <ArchitecturalDiagram
-      highlightedNodes={[{ id: "React", color: "red" }, { id: "Racket", color: "orange" }]}
-      highlightedEdges={[{ id: "React-Racket", color: "red" }, { id: "Racket-React", color: "orange" }]} />
     <p style={{ fontSize: 20 }}>
-      Projectile is fired in Unreal, Racket runs your registered function, stuff builds in Unreal:
+       Let's shoot some projectiles!
     </p>
-    <Example><MagicMirrorWithEnterWorld scope={UIScope} code={
-      `
-(clear-projectile-hit-functions)
-(clear-zone-enter-functions)
-
-(define i 0)
-
-(on-projectile-hit
-  (lambda (e)
-    (set! i (add1 i))
-    (spawn (zone #:name (~a "Zone" i))
-           (event-location e))))`
-    } />
-    </Example>
         <Example><JSMirror scope={UIScope} code={
-`<EventLogger/>` } /></Example>
-
+`<EventLogger/>` } /><CloseUIButton/></Example>
+    <p style={{ fontSize: 20 }}>
+      Projectile fired in Unreal, Racket forwards event data to React, React components change state: 
+    </p>
+    <ArchitecturalDiagram
+      highlightedNodes={[{ id: "Unreal", color: "red" }, { id: "Racket", color: "orange" }, { id: "React", color: "yellow" }]}
+      highlightedEdges={[{ id: "Unreal-Racket", color: "red" }, { id: "Racket-React", color: "orange" }]} />
+    <p style={{ fontSize: 20 }}>
+      Here's the same EventLogger, but we are changing the component prop to render Cast Spell buttons instead of raw event data: 
+    </p>
       <Example><JSMirror scope={UIScope} code={`
 <EventLogger
   component={(props)=>{
                return <CastButton 
                          code={\`
-(build (sphere 300)
+(build (sphere 250)
        (event-location \${props.data.racketResponse}))\`} />
                 }}>
 </EventLogger>`
       
-      } /></Example>
+      } /><CloseUIButton/></Example>
+    <ArchitecturalDiagram
+      highlightedNodes={[{ id: "Unreal", color: "red" }, { id: "Racket", color: "orange" }, { id: "React", color: "yellow" }]}
+      highlightedEdges={[{ id: "Unreal-Racket", color: "red" }, { id: "Racket-React", color: "orange" }, { id: "React-Racket", color: "lime" }, { id: "Racket-Unreal", color: "cyan" }]} />
+    <p style={{ fontSize: 20 }}>
+      What if we turned our CastButtons into MagicMirrors? Let's mess with the code before we cast! What if we wanted to spawn dragons?
+    </p>
     </>
     )
 }
 
 function Slide10(props) {
-    return (<>
-        <Typography variant="h3">Events + UI</Typography>
-         <Example><JSMirror scope={UIScope} code={`//Sometimes code is tedious to write by hand...
-
-(props)=>{
-const [magicCode, setMagicCode] = React.useState("")
-const [roomUICode, setRoomUICode] = React.useState("")
-const [finalCode, setFinalCode] = React.useState("")
-
-useEffect(()=>{
-  let precompile = magicCode.replace(/\\(HOLE1 [^)]*\\)/, \`(HOLE1 \${roomUICode})\`)
-  prettifyRacketCode(precompile, (c)=>{setFinalCode(c)})
-  
-  }, [roomUICode, magicCode])
-
-return <>
-  <RoomUI wrapper={false} onCompile={(code)=>{setRoomUICode(code)}}/>
-  <MagicMirror onChange={(editor, data, value)=>{setMagicCode(value)}}/>
-  <MagicMirror code={finalCode}/>
-  <hr/>
-  <JSMirror code={\`<EventLogger type="zone-enter" lastEventOnly component={(props)=>{
-     return props.data.response.name == "Library" ? <DocModalWithButton /> : <MagicMirror code=";Don't know what to do?  Go to the library!!" /> }} />\`}/>
-</>} `
-      } /></Example>
-    </>
+  return (<>
+    <Typography variant="h3">Events + UI</Typography>
+    <Example>
+    <p style={{ fontSize: 20 }}>
+      Let's build a small "palace" with a Library and a Study: 
+    </p>
+      <RoomUI/>
+    <p style={{ fontSize: 20 }}>
+      Let's place trigger zones to let React know which room is which:
+    </p>
+      <MagicMirror code={`(on-projectile-hit 
+  (lambda (e)
+    (spawn (zone #:name "Library")
+           (event-location e))))`} additionalButtons={[<CloseUIButton/>]}/> 
+    <p style={{ fontSize: 20 }}>
+      This component will tell us which zone we just entered: 
+    </p>
+      <JSMirror scope={UIScope} code={`<EventLogger 
+    type="zone-enter" 
+    lastEventOnly component={(props)=>{
+     return props.data.response.name }} />`
+    }/>
+    <p style={{ fontSize: 20 }}>
+      Now, let's edit this component so that it renders documentation when you're in the library and a code editor when you're not. 
+    </p>
+    
+    </Example>
+    <p style={{ fontSize: 20 }}>
+      Commercial Break: Do you want to build mind palaces for your students? Or otherwise place your curriculum into 3d space? CodeSpells is the tool for you!
+    </p>
+  </>
     )
 }
 
@@ -549,24 +552,20 @@ function Slide11(props) {
         <Typography variant="h3">What about infinite loops?</Typography>
         <p style={{fontSize: 20}}>Give users a way to stop spells.</p>
          <Example><MagicMirror code={`(define s (spawn (projectile)))
-(define direction -1)
 
 (let loop ()
   (shoot s 
-         #:with-force (vec 0 0 (* direction 1000)))
-  (sleep 1)
-  (set! direction (- direction))
-  (shoot s 
-         #:with-force (vec 0 0 (* direction 1000)))
-  (sleep 1)
-  (shoot s 
-         #:with-force (vec 0 0 (* direction 1000)))
-  (sleep 1)
-  (set! direction (- direction))
-  (shoot s 
-         #:with-force (vec 0 0 (* direction 1000)))
-  (sleep 1)
+         #:with-force (*vec 200 
+                            (+vec 
+                        		(vec (random) 
+                                     (random) 
+                                     (random)) 
+                      			(vec -0.5 -0.5 -0.5))))
+  (sleep 2)
   (loop))`} additionalButtons={[<CloseUIButton/>]}/></Example>
+    <p style={{ fontSize: 20 }}>
+      Future Work: The interface above is preliminary. We want to give users more powerful UI to understand and control the spells they have running at any given time. 
+    </p>
     </>
     )
 }
@@ -580,6 +579,27 @@ function Slide12(props) {
 (sleep 5)
 
 (spit-fire d 4)`} additionalButtons={[<CloseUIButton />]} /></Example>
+    <p style={{ fontSize: 20 }}>If you make a cool DSL, it will compose with all the other stuff we're making! Like projectile-hit events...</p>
+  </>
+  )
+}
+
+function Slide13(props) {
+
+  return (<>
+    <Typography variant="h3">Let's Connect!</Typography>
+    <p style={{ fontSize: 20 }}>Reach out to us if you're interested in collaborating, helping with funding, or using CodeSpells in classrooms!</p>
+    <p style={{ fontSize: 20 }}>
+      <ul>
+        <li>lindsey@thoughtstem.com</li>
+        <li>stephen@thoughtstem.com</li>
+      </ul>
+    </p>
+    <p style={{ fontSize: 20 }}>You can also chat with us live during our CodeSpells development stream on Twitch, M-F, 9:30am-12pm Pacific Time:</p>
+    <ul style={{ fontSize: 20 }}>
+      <li>https://www.twitch.tv/codespells</li>
+    </ul>
+    <p style={{ fontSize: 20 }}>Visit our website to find out more: https://codespells.org</p>
   </>
   )
 }
@@ -599,6 +619,7 @@ export default function RacketCon (props){
         <Slide10 />,
         <Slide11 />,
         <Slide12 />,
+        <Slide13 />,
     ]
 
     useEffect(() => {
