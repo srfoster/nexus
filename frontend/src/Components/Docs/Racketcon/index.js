@@ -8,6 +8,11 @@ import { useLocalStorage } from '../../../Util';
 import { UIScope } from '../../WorldWidgets/UIScope';
 import { ArchitecturalDiagram } from '../ArchitecturalDiagram';
 import RoomUI from '../../WorldWidgets/RoomUI';
+import DarkModeSwitch from '../../Widgets/DarkModeSwitch';
+import { HamburgerMenu } from '../../WorldWidgets/Util';
+import { prettifyRacketCode } from '../../WorldWidgets/Util';
+
+UIScope.prettifyRacketCode = prettifyRacketCode;
 
 function Example(props){
 
@@ -33,6 +38,7 @@ function MagicMirrorWithEnterWorld(props){
 function Slide1(props){
 
   return (<>
+    <DarkModeSwitch/>
     <Typography variant="h3">Intro</Typography>
     <FadeInButton prompt="Teaser: Summoning a Dragon">
     <p style={{ fontSize: 20 }}>As a teaser for what's to come, let's summon a dragon!</p>
@@ -625,6 +631,9 @@ export default function RacketCon (props){
     useEffect(() => {
         document.body.style.setProperty("background-color", "transparent", "important");
     }, [])
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [currentSlide])
 
     return (<>
         <Container style={{ float: "left", padding: 5 }} maxWidth="sm">
@@ -633,7 +642,7 @@ export default function RacketCon (props){
                     <CardHeader
                         title={"RacketCon Talk"}
                         subheader={"Racket + React + Unreal = CodeSpells"}
-                        action={<DocModalWithButton/>}>
+                        action={<HamburgerMenu/>}>
                     </CardHeader>
                     <CardContent>
                         {slides[currentSlide]}
@@ -645,7 +654,10 @@ export default function RacketCon (props){
                             }}>Back</Button>}
                         {currentSlide < slides.length - 1 ?
                             <Button color="secondary" style={{ marginLeft: "auto" }}
-                                key="continue-button" onClick={() => setCurrentSlide(currentSlide + 1)}>
+                                key="continue-button" onClick={() => 
+                                  {
+                                    setCurrentSlide(currentSlide + 1)
+                                  }}>
                                 Next
                             </Button>
                             : ""}

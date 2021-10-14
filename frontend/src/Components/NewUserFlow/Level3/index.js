@@ -4,18 +4,13 @@ import CardActions from '@material-ui/core/CardActions';
 import { useLocalStorage, spread } from "../../../Util";
 import Button from '@material-ui/core/Button';
 import { SBS, Level, withConfetti, ContinueButton } from '../Level';
-import ExitGameButton from '../../WorldWidgets/ExitGameButton';
 import Page1 from './Puzzle1WholeNewWorld'
 import Page2 from './Puzzle2CodeMemorization';
 import Page3 from './Puzzle3TBD';
 import Page4 from './Puzzle4TBD';
 import Page5 from './Puzzle5TBD';
 import { Level3Puzzle1EducationalContent } from '../EducationalResources';
-import CloseUIButton from '../../WorldWidgets/CloseUIButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { DocModal, DocModalWithButton } from '../../Widgets/Docs';
-import { sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
+import { HamburgerMenu } from '../../WorldWidgets/Util';
 
 // Stephen's widget wishlist:
 // * Calendar?  Trello?  (Meta: time management of learning)
@@ -29,52 +24,6 @@ import { sendOnCodeSpellsSocket } from '../../WorldWidgets/Util';
 // * Tensor Flow - What is an interesting model to use?  How to get it to work with react-tensorflow?
 // * Konva
 
-function HamburgerMenu(props) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [open, setOpen] = useState(false);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  }; 
-
-  const enterWorld = () => {
-    sendOnCodeSpellsSocket("(close-ui)")
-  }
-  
-  const exitGame = () => {
-    sendOnCodeSpellsSocket("(unreal-eval-js \"KismetSystemLibrary.QuitGame(GWorld.GetPlayerController(0))\")")
-  }
-  
-  const openModal = () => {
-    setOpen(true);
-  }
-
-
-  return (
-    <>
-      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
-        Open Menu
-      </Button>
-      <Menu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        <MenuItem onClick={enterWorld}>Enter World</MenuItem>
-        <MenuItem onClick={openModal}>Docs</MenuItem>
-        <hr/>
-        <MenuItem onClick={exitGame}>Exit Game</MenuItem>
-      </Menu>
-      <DocModal open={open} setOpen={setOpen}/>
-    </>
-  )
-}
 
 export function Level3(props) {
   const [currentPart, setCurrentPart] = useLocalStorage("lvl3:currentPart", 0)

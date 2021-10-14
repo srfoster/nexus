@@ -184,8 +184,12 @@
                                           'eventType event-type
                                                         ))))))
                     
-                    (when (not (eof-object? msg))
-                      (loop)))
+                    #;(when (not (eof-object? msg))
+                      (loop))
+                      (when (eof-object? msg)
+                        (displayln "Waiting for websocket connection....")
+                        (sleep 1))
+                      (loop))
                   )]])))
 
 (module+ main

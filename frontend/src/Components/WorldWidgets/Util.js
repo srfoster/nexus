@@ -1,5 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
+import { DocModal } from '../Widgets/Docs';
+import { Menu, MenuItem } from '@material-ui/core';
+
+
+export function HamburgerMenu(props) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  }; 
+
+  const enterWorld = () => {
+    sendOnCodeSpellsSocket("(close-ui)")
+  }
+  
+  const exitGame = () => {
+    sendOnCodeSpellsSocket("(unreal-eval-js \"KismetSystemLibrary.QuitGame(GWorld.GetPlayerController(0))\")")
+  }
+  
+  const openModal = () => {
+    setOpen(true);
+  }
+
+  return (
+    <>
+      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+        Open Menu
+      </Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={enterWorld}>Enter World</MenuItem>
+        <MenuItem onClick={openModal}>Docs</MenuItem>
+        <hr/>
+        <MenuItem onClick={exitGame}>Exit Game</MenuItem>
+      </Menu>
+      <DocModal open={open} setOpen={setOpen}/>
+    </>
+  )
+}
 
 export function SpellThreadManager(props){
   let threadId = props.data.threadId
@@ -92,6 +141,11 @@ export const racketErrorLineNumber = (x) => {
 let codeSpellsWebSocket;
 let settingUpWebSocket = false;
 export const getWebSocket = (afterSetup) => {
+  //if closed, set the web socket to null
+  if (codeSpellsWebSocket && (codeSpellsWebSocket.readyState == WebSocket.CLOSED || codeSpellsWebSocket.readyState == WebSocket.CLOSING)){
+    codeSpellsWebSocket = undefined;
+    settingUpWebSocket = false;
+  }
   if (codeSpellsWebSocket) return afterSetup(codeSpellsWebSocket)
 
   if (settingUpWebSocket) {
@@ -99,7 +153,7 @@ export const getWebSocket = (afterSetup) => {
     setTimeout(()=>{getWebSocket(afterSetup)}, 3000)
   }
   else {
-    settingUpWebSocket = true
+    settingUpWebSocket = true;
 
     let s = new WebSocket("ws://localhost:8082/test");
 
@@ -121,6 +175,7 @@ export const getWebSocket = (afterSetup) => {
         console.log("Sending")
         clearInterval(i)
         codeSpellsWebSocket = s;
+        window.codeSpellsWebSocket = s;
         return afterSetup(s)
       }
     }, 1000);

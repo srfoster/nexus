@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { BlocklyIDE, JSMirror, MultipleChoiceQuestion } from '../Widgets/Educational';
-import { CastButton, EventLogger, prettifyRacketCode, sendOnCodeSpellsSocket, SpellThreadManager } from './Util';
+import { CastButton, EventLogger, sendOnCodeSpellsSocket, SpellThreadManager } from './Util';
 import { AppBar, Badge, Card, ButtonGroup, CardActions, CardContent, CardHeader, Chip, CircularProgress, Paper, Radio, RadioGroup, Slider, Tab, Button, Typography } from '@material-ui/core';
 import { DidYouKnowCard, PleaseWaitWhileSockPuppetCreatesContent } from '../Widgets/NexusVoice';
 import SimpleVideoPlayer from '../Widgets/SimpleVideoPlayer';
@@ -42,5 +42,4 @@ export let UIScope = {
   CircularProgress, Paper, Radio, RadioGroup, Slider,
   Typography,
   MultipleChoiceQuestion,
-  prettifyRacketCode
 }
