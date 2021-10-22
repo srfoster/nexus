@@ -2,9 +2,11 @@
 
 (require unreal
          unreal/tcp/server
-         "../base.rkt")
+         "../base.rkt"
+         "../building/base.rkt")
 
-(provide spawn zone magic-cube 
+(provide (struct-out spawner) 
+        spawn zone magic-cube magic-dodecahedron magic-sphere magic-torus 
         dragon spit-fire
         projectile shoot)
 
@@ -32,9 +34,24 @@
   (spawner "MagicCircleZone" name js-identity))
 
 (define (magic-cube #:name [name ""])
-  (spawner "StemCell" name @unreal-value{
+  (make-basic-builder (spawner "StemCell" name @unreal-value{
     return (sc)=>{sc.BecomeMagicCube()}
-  }))
+  })))
+
+(define (magic-dodecahedron #:name [name ""])
+  (make-basic-builder (spawner "StemCell" name @unreal-value{
+    return (sc)=>{sc.BecomeMagicDodecahedron()}
+  })))
+
+(define (magic-sphere #:name [name ""])
+  (make-basic-builder (spawner "StemCell" name @unreal-value{
+    return (sc)=>{sc.BecomeMagicSphere()}
+  })))
+
+(define (magic-torus #:name [name ""])
+  (make-basic-builder (spawner "StemCell" name @unreal-value{
+    return (sc)=>{sc.BecomeMagicTorus()}
+  })))
 
 (define (projectile #:name [name ""])
   (spawner "Projectile" name js-identity))

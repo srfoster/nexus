@@ -4,9 +4,11 @@
          unreal/libs/actors
          unreal/libs/basic-types
          "../base.rkt"
+         "../spawning/base.rkt"
+         "../building/base.rkt"
 )
 
-(provide empty sphere box builder? 
+(provide empty sphere box  (struct-out builder) 
         width depth height 
         scale rotate above beside/wide beside/deep overlay translate build)
 
@@ -18,7 +20,6 @@ Begin functional API for Voxel Worlds:
 |#
 
 
-(struct builder (t p w d h c))
 
 ;Constructors
 
@@ -164,11 +165,14 @@ Begin functional API for Voxel Worlds:
   (_build b at)
   (void))
 
+;(build (magic-sphere))
+
 ;Renderer
 (define (_build b [at (current-location)])
   (define at-rel (+vec at (builder-p b)))
 
   (void (match (builder-t b)
+    [(spawner class-name name post-spawn) (spawn (spawner class-name name post-spawn) at-rel)]
     ['sphere (build-sphere at-rel (/ (builder-w b) 2))]
     ['box (build-box at-rel (builder-w b) (builder-d b) (builder-h b))]
     ['air-sphere (dig-sphere at-rel (/ (builder-w b) 2))] 

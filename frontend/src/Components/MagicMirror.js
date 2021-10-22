@@ -9,7 +9,6 @@ import Button from '@material-ui/core/Button'
 import { UIScope } from './WorldWidgets/UIScope.js';
 
 export function MagicMirror(props) {
-
     const [code, setCode] = useLocalStorage(props.name + "-magic-mirror-code", props.code) //useState(props.code);
     const [response, setResponse] = useState(undefined);
     const [error, setError] = useState(undefined);
@@ -52,7 +51,7 @@ export function MagicMirror(props) {
         {response === undefined ? "" :
             <Alert severity="success" style={{overflowX: "auto"}}><pre><code>{response}</code></pre></Alert>}
         {output === undefined ? "" :
-            <Alert severity="warning" style={{overflowX: "auto", overflowY: "auto", height: 300}}><pre><code>{output}</code></pre></Alert>} 
+            <Alert severity="warning" style={{overflowX: "auto"}}><pre><code>{output}</code></pre></Alert>} 
         
         <CastButton color="secondary" variant="contained" code={code} 
           onReturn={(fromUnreal) => {
