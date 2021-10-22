@@ -4,7 +4,7 @@
          unreal/tcp/server
          "../base.rkt")
 
-(provide spawn zone 
+(provide spawn zone magic-cube 
         dragon spit-fire
         projectile shoot)
 
@@ -15,14 +15,32 @@
 
  let spawn = new toSpawn(GWorld, @(->unreal-value pos)) 
  if(spawn.SetName) 
-   spawn.SetName(@(->unreal-value (spawner-name s)))
- return spawn 
+   spawn.SetName(@(->unreal-value (spawner-name s)));
+ let postSpawn = @(->unreal-value (spawner-post-spawn s));
+ postSpawn(spawn);
+ return spawn;
     }))
 
-(struct spawner (class-name name))
+(struct spawner (class-name name post-spawn))
+
+(define js-identity
+  @unreal-value{
+    return (x)=>x
+  })
+
+(define (zone #:name name)
+  (spawner "MagicCircleZone" name js-identity))
+
+(define (magic-cube #:name [name ""])
+  (spawner "StemCell" name @unreal-value{
+    return (sc)=>{sc.BecomeMagicCube()}
+  }))
+
+(define (projectile #:name [name ""])
+  (spawner "Projectile" name js-identity))
 
 (define (dragon #:name [name ""])
-  (spawner "Creature" name))
+  (spawner "Creature" name js-identity))
 
 (define (spit-fire dragon [duration 1])
   (unreal-eval-js
@@ -34,12 +52,6 @@
  })
   (sleep duration))
 
-(define (zone #:name name)
-  (spawner "MagicCircleZone" name))
-
-(define (projectile #:name [name ""])
-  (spawner "Projectile" name))
-
 (define (shoot spawn #:with-force vector)
   (unreal-eval-js
    @unreal-value{
@@ -49,11 +61,3 @@
 
  return true;
  }))
-
-
-#;(define (move spawn #:to loc)
-  ;find the vector we want to apply for along (loc - current-location)
-  ;apply a small amount of force along that vector, scaled by distance away
-  ;repeat until current-location is close to loc 
-  ;then stop all forces 
-  )

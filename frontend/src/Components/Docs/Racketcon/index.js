@@ -86,7 +86,7 @@ function Slide2(props){
           <li><i>From competition to metacognition: designing diverse, sustainable educational games.</i> CHI '13. Stephen Foster, Sarah Esper, William Griswold.</li>
         </ul>
       </FadeInButton></li>
-      <li><FadeInButton prompt="Kickstarter">Kickstarter for CodeSpells -> Game on Steam (2015)
+      <li><FadeInButton prompt="Kickstarter">Kickstarter for CodeSpells -> Game on Steam (2015). Big thanks to Adrian Lopez-Mobilia & Jason Rosenstock.
         <img width={"100%"} style={{ paddingTop: 20 }} src="https://codespells.org/images/in-game4.jpg" />
         <img width={"100%"} style={{ paddingTop: 20 }} src="https://codespells.org/images/in-game-coding2.gif" /></FadeInButton></li>
       <li><FadeInButton prompt="Current Version">In 2020, we started a re-write of the project.
@@ -240,7 +240,7 @@ function Slide5(props) {
           Let's write code to make projectiles do something interesting: 
         </p>
         <Example><MagicMirrorWithEnterWorld code={`;on-projectile-hit lets us subscribe functions to events
-(clear-projectile-functions)
+(clear-projectile-hit-functions)
 
 (on-projectile-hit 
   (lambda (e) 
@@ -264,7 +264,7 @@ function Slide5(props) {
           Racket can maintain state between events: 
         </p>
         <Example><MagicMirrorWithEnterWorld code={`;variables get stored between projectile hits!
-(clear-projectile-functions)
+(clear-projectile-hit-functions)
 
 (define size 100)
 
@@ -282,7 +282,7 @@ function Slide5(props) {
         </p>
         <Example><MagicMirrorWithEnterWorld code={`;trigger zones!
 (clear-zone-enter-functions)
-(clear-projectile-functions)
+(clear-projectile-hit-functions)
 
 (on-projectile-hit
   (lambda (e)

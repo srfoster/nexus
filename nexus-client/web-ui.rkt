@@ -124,16 +124,18 @@
                       (define event-type (hash-ref (string->jsexpr msg) 'eventType))
                       (let()
                         (with-handlers
-                              ([exn:fail? (lambda (e)
+                              ([exn? (lambda (e)
                                             (void) 
                                             (displayln e)
                                             )])
-                          (define ret (null-value))                            
+                          (define ret (null-value)) 
+                          (define thread-e (open-output-string))                           
+                          (define thread-o (open-output-string))                           
                           (define eval-thread
                             (thread
                              (thunk
                               (set! ret
-                                    (with-handlers ([exn:fail? (lambda (e)
+                                    (with-handlers ([exn? (lambda (e)
 
                                                                  (displayln e)
 
@@ -159,8 +161,9 @@
                                       (port-count-lines! in)
 
                                       (define stx (read-syntax 'NexusUserCode in))
-
-                                      (eval stx ns)
+                                        (parameterize ([current-error-port thread-e]
+                                                       [current-output-port thread-o])
+                                          (eval stx ns))
                                       )))))
                             
                             ; wait until there's something in ret, or a certain
@@ -181,6 +184,8 @@
                                                         'null
                                                         ret)
                                           'racketResponse (format-racket-code (~v ret))
+                                          'output (get-output-string thread-o)
+                                          'error (get-output-string thread-e)
                                           'eventType event-type
                                                         ))))))
                     

@@ -128,6 +128,13 @@ function DocUILibrary(props) {
           examples: [`<NetworkDiseaseSimulator nodes={["Socks", "Shoes", "Feet"]} edges={[["Feet", "Socks"], ["Socks","Shoes"]]} patientZero="Feet" />`]
         },
         {
+          name: "Pages",
+          examples: [`<Pages name="react-1">
+  <Button>You can put different pages of content...</Button>
+  <Button>Inside of Pages!</Button>
+</Pages>`]
+        },
+        {
           name: "BallPitToy",
           examples: [`<BallPitToy />`]
 

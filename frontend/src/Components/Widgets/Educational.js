@@ -18,8 +18,8 @@ import {
     LivePreview,
     LiveContext
 } from 'react-live'
-import { spread } from '../../Util';
-import { Card, CardContent } from '@material-ui/core';
+import { spread, useLocalStorage } from '../../Util';
+import { Card, CardContent, CardActions } from '@material-ui/core';
 import { BlocklyWorkspace } from "react-blockly";
 import { makeStyles } from '@material-ui/core/styles';
 import Blockly from "blockly";
@@ -29,6 +29,37 @@ import { JSONtoRacketBlock } from '../Dashboard/customBlocks/custom_Blocks';
 import { prettifyRacketCode } from '../WorldWidgets/Util';
 
 
+export function Pages(props){
+    const [currentSlide, setCurrentSlide] = useLocalStorage(props.name + "-current-page", 0);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [currentSlide])
+
+    return (<>
+                <Card elevation={4}>
+                    <CardContent>
+                        {props.children[currentSlide]}
+                    </CardContent>
+                    <CardActions>
+                        {currentSlide == 0 ? "" : <Button key="back-button" color="secondary"
+                            onClick={() => {
+                                setCurrentSlide(currentSlide - 1);
+                            }}>Back</Button>}
+                        {currentSlide < props.children.length - 1 ?
+                            <Button color="secondary" style={{ marginLeft: "auto" }}
+                                key="continue-button" onClick={() => 
+                                  {
+                                    setCurrentSlide(currentSlide + 1)
+                                  }}>
+                                Next
+                            </Button>
+                            : ""}
+                    </CardActions>
+                </Card>
+    </>)
+
+}
 
 export function BlocklyIDE(props) {
   const [blockIds, setBlockIds] = useState([]);
@@ -139,12 +170,17 @@ export function MultipleChoiceQuestion(props) {
 }
 
 export function JSMirror(props) {
-  const [code, setCode] = useState(props.value)
+  const [code, setCode] = useLocalStorage((props.name || Math.random()) + "-js-mirror-code", props.code)
+
+  const [starterCode, setStarterCode] = useState("");
+  useEffect(() => {
+    setStarterCode(code)
+  }, [])
 
   return (
     <>
       <LiveProvider
-        code={props.code} scope={props.scope} alignItems="center" justify="center">
+        code={starterCode} scope={props.scope} alignItems="center" justify="center">
         <LiveContext.Consumer>
           {({ code, language, theme, disabled, onChange }) => {
             return <Grid container spacing={1} direction={"column"} >

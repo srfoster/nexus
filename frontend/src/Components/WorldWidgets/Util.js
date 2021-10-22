@@ -123,11 +123,11 @@ export function EventLogger(props){
 
 //These seem simple now, but we should isolate them here in case things become more complicated.  The more this file and web-ui.rkt are the only files involved in the React/Racket interface, the better.  Protect our newborn abstractions and give them room to grow!!!
 export const isError = (x) => {
-  return x.response && x.response.error
+  return x.error || (x.response && x.response.error)
 }
 
 export const racketErrorMessage = (x) => {
-  return x.response.error
+  return ((x.response && x.response.error) || "") + (x.error || "")
 }
 
 export const racketErrorBlockId = (x) => {
@@ -135,7 +135,7 @@ export const racketErrorBlockId = (x) => {
 }
 
 export const racketErrorLineNumber = (x) => {
-  return x.response.lineNumber
+  return ((x.response && x.response.lineNumber) || undefined)
 }
 
 let codeSpellsWebSocket;

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { BlocklyIDE, JSMirror, MultipleChoiceQuestion } from '../Widgets/Educational';
+import { BlocklyIDE, JSMirror, MultipleChoiceQuestion, Pages } from '../Widgets/Educational';
 import { CastButton, EventLogger, sendOnCodeSpellsSocket, SpellThreadManager } from './Util';
 import { AppBar, Badge, Card, ButtonGroup, CardActions, CardContent, CardHeader, Chip, CircularProgress, Paper, Radio, RadioGroup, Slider, Tab, Button, Typography } from '@material-ui/core';
 import { DidYouKnowCard, PleaseWaitWhileSockPuppetCreatesContent } from '../Widgets/NexusVoice';
@@ -13,11 +13,14 @@ import { defineRacketBlock, defineStatementRacketBlock } from '../Dashboard/cust
 import CloseUIButton from './CloseUIButton';
 import { MagicMirror } from '../MagicMirror';
 import { DocContent, DocModalWithButton } from '../Widgets/Docs'; //Note: circular dependency!
+import Lesson from '../Lessons/Lesson';
 
 export let UIScope = {
   useEffect,
   useState,
   CloseUIButton,
+  Lesson,
+  Pages,
   JSMirror: (props)=>{return <JSMirror code={props.code} onChange={props.onChange} scope={UIScope}/>},
   SpellThreadManager,
   EventLogger,

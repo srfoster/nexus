@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { spread } from '../Util.js';
+import { spread, useLocalStorage } from '../Util.js';
 import ConnectionIndicator from './Client/ConnectionIndicator.js';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
 import { CastButton, isError, racketErrorMessage, racketErrorBlockNumber, racketErrorLineNumber } from './WorldWidgets/Util.js';
@@ -9,15 +9,22 @@ import Button from '@material-ui/core/Button'
 import { UIScope } from './WorldWidgets/UIScope.js';
 
 export function MagicMirror(props) {
-    const [code, setCode] = useState(props.code);
+
+    const [code, setCode] = useLocalStorage(props.name + "-magic-mirror-code", props.code) //useState(props.code);
     const [response, setResponse] = useState(undefined);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(undefined);
+    const [output, setOutput] = useState(undefined);
     const [errorLineNumber, setErrorLineNumber] = useState(false);
+    
+    const [starterCode, setStarterCode] = useState("");
+    useEffect(()=>{
+        setStarterCode(code)
+    },[])
 
     return <>
         <ReactCodeMirror
             value={
-                props.code || props.value
+                starterCode || props.value
             }
             options={
                 spread({
@@ -38,26 +45,35 @@ export function MagicMirror(props) {
             }}
         />
         {!error ? "" :
-            <Alert severity="error">{
-                !errorLineNumber ? "" : <>Error on line {errorLineNumber}<br /></>
-            }{error}</Alert>}
+            <Alert severity="error" style={{overflowX: "auto"}}>
+                {!errorLineNumber ? "" : <>Error on line {errorLineNumber}<br /></>}
+                <pre><code>{error}</code></pre>
+            </Alert>}
         {response === undefined ? "" :
-            <Alert severity="success"><pre><code>{response}</code></pre></Alert>}
-        <CastButton color="secondary" variant="contained" code={code} onReturn={(fromUnreal) => {
+            <Alert severity="success" style={{overflowX: "auto"}}><pre><code>{response}</code></pre></Alert>}
+        {output === undefined ? "" :
+            <Alert severity="warning" style={{overflowX: "auto", overflowY: "auto", height: 300}}><pre><code>{output}</code></pre></Alert>} 
+        
+        <CastButton color="secondary" variant="contained" code={code} 
+          onReturn={(fromUnreal) => {
+            setError(undefined)
+            setResponse(undefined)
+            setOutput(undefined)
+
             if (isError(fromUnreal)) {
                 setError(racketErrorMessage(fromUnreal))
                 setErrorLineNumber(racketErrorLineNumber(fromUnreal))
-                setResponse(undefined)
-            } else {
-                setError(false)
-                setErrorLineNumber(false)
-                if(fromUnreal.response && fromUnreal.response.customReactComponent){
-                    let CustomComponent = UIScope[fromUnreal.response.customReactComponent]
-                    setResponse(<CustomComponent data={fromUnreal.response}/>)
-                }
-                else{
-                    setResponse(fromUnreal.racketResponse)
-                }
+            }
+            if (fromUnreal.response && fromUnreal.response.customReactComponent) {
+                let CustomComponent = UIScope[fromUnreal.response.customReactComponent]
+                setResponse(<CustomComponent data={fromUnreal.response} />)
+            }
+            else {
+                setResponse(fromUnreal.racketResponse)
+            }
+
+            if (fromUnreal.output) {
+                setOutput(fromUnreal.output)
             }
             props.onReturn && props.onReturn(fromUnreal)
         }} />

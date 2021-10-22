@@ -31,17 +31,15 @@ import Docs from './Components/Docs/Docs';
 import FabAddIcon from './Components/Dashboard/FabAddIcon';
 import { DarkModeContext } from './Components/Context';
 import { useLocalStorage } from './Util';
-
 import Level3 from './Components/NewUserFlow/Level3/index';
-
 import LoginForm from './Components/LoginForm';
 import SignupForm from './Components/SignupForm';
 import LevelManager from './Components/LevelManager';
 import SpellIndex from './Components/Dashboard/SpellIndex';
 import RacketCon from './Components/Docs/Racketcon';
+import Clean from './Components/Clean';
 
 require('codemirror/mode/scheme/scheme');
-
 
 
 function App() {
@@ -99,6 +97,10 @@ function App() {
               <Route
                 exact path={'/racketcon'}
                 component={RacketCon}
+              />
+              <Route
+                exact path={'/clean'}
+                component={Clean}
               />
 
               <Route

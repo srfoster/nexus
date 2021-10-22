@@ -6,7 +6,7 @@
          "../base.rkt"
 )
 
-(provide empty sphere builder? 
+(provide empty sphere box builder? 
         width depth height 
         scale rotate above beside/wide beside/deep overlay translate build)
 
@@ -41,6 +41,19 @@ Begin functional API for Voxel Worlds:
   (if (not (eq? material 'voxel)) 
     (builder 'air-sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f)
     (builder 'sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f)
+    ))
+
+(define (box w d h [material 'voxel])
+  (when (not ((between/c 0 2000) w))
+    (raise-user-error "Box's width must be between 0 and 2000."))
+  (when (not ((between/c 0 2000) d))
+    (raise-user-error "Box's depth must be between 0 and 2000."))
+  (when (not ((between/c 0 2000) h))
+    (raise-user-error "Box's height must be between 0 and 2000."))
+  
+  (if (not (eq? material 'voxel)) 
+    (builder 'air-box (vec 0 0 0) w d h #f)
+    (builder 'box (vec 0 0 0) w d h #f)
     ))
 
 ;Getters
@@ -157,6 +170,7 @@ Begin functional API for Voxel Worlds:
 
   (void (match (builder-t b)
     ['sphere (build-sphere at-rel (/ (builder-w b) 2))]
+    ['box (build-box at-rel (builder-w b) (builder-d b) (builder-h b))]
     ['air-sphere (dig-sphere at-rel (/ (builder-w b) 2))] 
     ['empty  (void)] 
     [else (map (curryr _build at-rel) 
@@ -164,6 +178,44 @@ Begin functional API for Voxel Worlds:
 
 
 ;Side-effectful functions we are building our effect-free API atop of
+
+(define/contract (build-box pos w d h)
+  ;If the radius is too big, you end up crashing the game.
+  ;  1000 can probably be bumped up if we wanted to.  
+  (-> vec? (between/c 0 2000) (between/c 0 2000) (between/c 0 2000) any/c)
+  
+  (define unreal-response
+    (unreal-eval-js 
+     @unreal-value{
+ var BS = Root.ResolveClass('VoxelAddEffect');
+
+ let sphere = new BS(GWorld, @(->unreal-value pos))  
+ 
+ var sphere_bounds = GameplayStatics.GetActorArrayBounds([sphere], false); 
+ var sphere_radius = sphere_bounds.BoxExtent.Z
+ var scaling_factor = @(->unreal-value (/ w 2)) / sphere_radius
+
+ sphere.SetActorScale3D({X:scaling_factor, Y:scaling_factor, Z:scaling_factor})
+
+
+ setTimeout(()=>{
+  var C = Root.ResolveClass('JSVoxelManager');
+  var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+  o.BuildBox(@(->unreal-value
+               (hash 'Min
+                     (+vec pos (*vec -0.5 (vec w d h)))
+                     'Max
+                     (+vec pos (*vec 0.5 (vec w d h))))))
+  }, 200)
+ 
+ setTimeout(()=>{
+  sphere.DestroyActor()
+  }, 400)
+
+ return true
+ }))
+  
+  unreal-response)
 
 (define/contract (build-sphere pos r)
   ;If the radius is too big, you end up crashing the game.

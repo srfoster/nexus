@@ -29,6 +29,7 @@ function Room(props){
     props.onRoomChange(props.data.name, {width: size.width, height: size.height, x, y})
   }
 
+
   const onDrag = (event, {x, y}) => {
     setX(x)
     setY(y)
