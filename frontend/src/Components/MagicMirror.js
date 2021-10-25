@@ -9,16 +9,19 @@ import Button from '@material-ui/core/Button'
 import { UIScope } from './WorldWidgets/UIScope.js';
 
 export function MagicMirror(props) {
-    const [code, setCode] = useLocalStorage(props.name + "-magic-mirror-code", props.code) //useState(props.code);
+    const [code, setCode] = useLocalStorage((props.name || Math.random())+ "-magic-mirror-code", props.code) //useState(props.code);
     const [response, setResponse] = useState(undefined);
     const [error, setError] = useState(undefined);
     const [output, setOutput] = useState(undefined);
     const [errorLineNumber, setErrorLineNumber] = useState(false);
-    
-    const [starterCode, setStarterCode] = useState("");
+
+    if (props.code && code != props.code) //Override localstorage if we pass in some code
+        setCode(props.code)
+
+    const [starterCode, setStarterCode] = useState();
     useEffect(()=>{
-        setStarterCode(code)
-    },[])
+        setStarterCode(props.code || code)
+    },[props.code])
 
     return <>
         <ReactCodeMirror

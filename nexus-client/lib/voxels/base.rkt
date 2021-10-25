@@ -193,28 +193,19 @@ Begin functional API for Voxel Worlds:
      @unreal-value{
  var BS = Root.ResolveClass('VoxelAddEffect');
 
- let sphere = new BS(GWorld, @(->unreal-value pos))  
- 
- var sphere_bounds = GameplayStatics.GetActorArrayBounds([sphere], false); 
- var sphere_radius = sphere_bounds.BoxExtent.Z
- var scaling_factor = @(->unreal-value (/ w 2)) / sphere_radius
-
- sphere.SetActorScale3D({X:scaling_factor, Y:scaling_factor, Z:scaling_factor})
-
-
  setTimeout(()=>{
   var C = Root.ResolveClass('JSVoxelManager');
   var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
   o.BuildBox(@(->unreal-value
                (hash 'Min
-                     (+vec pos (*vec -0.5 (vec w d h)))
+                     ;(+vec pos (vec -100 -100 0))
+                     (+vec pos (*vec -1/2 (vec w d h)))
                      'Max
-                     (+vec pos (*vec 0.5 (vec w d h))))))
+                     ;(+vec pos (vec 100 100 200))
+                     (+vec pos (*vec 1/2 (vec w d h)))
+                     )))
   }, 200)
  
- setTimeout(()=>{
-  sphere.DestroyActor()
-  }, 400)
 
  return true
  }))

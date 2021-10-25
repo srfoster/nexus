@@ -3,7 +3,8 @@
 (require 
          "./base.rkt")
 
-(provide floor wall/wide wall/deep room)
+;NOTE: Probably shouldn't provide out "floor" (overrides math floor)
+(provide wall/wide wall/deep room)
 
 ;TODO: Parameterize this
 (define s (sphere 100))
