@@ -157,7 +157,7 @@
                                                                        error-message
                                                                        'blockId blockId
                                                                        'lineNumber lineNumber))])
-                                      (define in (open-input-string (string-append "(let () " code ")")))
+                                      (define in (open-input-string (string-append "(let () " code "\n)")))
                                       (port-count-lines! in)
 
                                       (define stx (read-syntax 'NexusUserCode in))

@@ -3,7 +3,8 @@
 (require unreal
          unreal/tcp/server
          "../base.rkt"
-         "../building/base.rkt")
+         "../building/base.rkt"
+         unreal/libs/physics)
 
 (provide (struct-out spawner) 
          spawn zone magic-cube magic-dodecahedron magic-sphere magic-torus 
@@ -11,6 +12,8 @@
          projectile shoot)
 
 (define (spawn s [pos (current-location)])
+  (when (builder? s)
+    (set! s (builder-t s)))
   (unreal-eval-js 
    @unreal-value{
  var toSpawn = Root.ResolveClass(@(->unreal-value (spawner-class-name s)));
@@ -78,3 +81,15 @@
 
  return true;
  }))
+
+
+(provide magic-force)
+(define (magic-force spawn #:with-force vect)
+  (unreal-eval-js
+    @unreal-value{     
+ var spawn = @(->unreal-value spawn);
+ var scm = spawn.ChildActor.ChildActor.StaticMeshComponent;
+ scm.AddImpulse(@(->unreal-value vect));
+
+ return true;
+    }))

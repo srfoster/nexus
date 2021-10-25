@@ -8,9 +8,57 @@
          "../building/base.rkt"
 )
 
-(provide empty sphere box  (struct-out builder) 
+(provide empty sphere box  (struct-out builder) (struct-out build-result-tree) 
         width depth height 
-        scale rotate above beside/wide beside/deep overlay translate build)
+        scale rotate above beside/wide beside/deep overlay translate build
+        find-first-by-tag find-all-by-tag tag)
+
+(struct build-result-tree (result builder children))
+
+(define (has-tag? brt t)
+  (member t (builder-tags (build-result-tree-builder brt))))
+
+(define (find-all-by-tag brt t)
+  (flatten
+   (if (has-tag? brt t)
+       (cons (build-result-tree-result brt)
+             (map (curryr find-all-by-tag t)
+                  (build-result-tree-children brt)))
+       (map (curryr find-all-by-tag t)
+            (build-result-tree-children brt)))))
+
+(define (find-first-by-tag brt t)
+  (first (find-all-by-tag brt t)))
+
+(define (build b [at (current-location)])
+  (_build b at))
+
+;Renderer
+(define (_build b [at (current-location)])
+  (define at-rel (+vec at (builder-p b)))
+
+  (match (builder-t b)
+    [(spawner class-name name post-spawn)
+     (build-result-tree (spawn (spawner class-name name post-spawn) at-rel)
+                        b
+                        '())]
+    ['sphere (build-result-tree (build-sphere at-rel (/ (builder-w b) 2))
+                                b
+                                '())]
+    ['box (build-result-tree (build-box at-rel (builder-w b) (builder-d b) (builder-h b))
+                             b
+                             '())]
+    ['air-sphere (build-result-tree (dig-sphere at-rel (/ (builder-w b) 2))
+                                    b
+                                    '())]
+    ['empty (build-result-tree (void)
+                                 b
+                                 '())]
+    [else (build-result-tree (void)
+                             b
+                             (map (curryr _build at-rel)
+                                  (builder-c b))
+                             )]))
 
 #|
 Begin functional API for Voxel Worlds:
@@ -24,7 +72,7 @@ Begin functional API for Voxel Worlds:
 ;Constructors
 
 (define (empty w [d w] [h w])
-  (builder 'empty (vec 0 0 0) w d h #f))
+  (builder 'empty (vec 0 0 0) w d h #f '()))
 
 ; @doc[(sphere [radius (between/c 0 1000)] [material (or/c 'voxel 'air) 'voxel]) builder?)]{
 ;   Returns a sphere builder. 
@@ -40,8 +88,8 @@ Begin functional API for Voxel Worlds:
     (raise-user-error "Sphere's radius must be between 0 and 1000."))
   
   (if (not (eq? material 'voxel)) 
-    (builder 'air-sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f)
-    (builder 'sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f)
+    (builder 'air-sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f '())
+    (builder 'sphere (vec 0 0 0) (* 2 r) (* 2 r) (* 2 r) #f '())
     ))
 
 (define (box w d h [material 'voxel])
@@ -53,8 +101,8 @@ Begin functional API for Voxel Worlds:
     (raise-user-error "Box's height must be between 0 and 2000."))
   
   (if (not (eq? material 'voxel)) 
-    (builder 'air-box (vec 0 0 0) w d h #f)
-    (builder 'box (vec 0 0 0) w d h #f)
+    (builder 'air-box (vec 0 0 0) w d h #f '())
+    (builder 'box (vec 0 0 0) w d h #f '())
     ))
 
 ;Getters
@@ -114,7 +162,8 @@ Begin functional API for Voxel Worlds:
            (max (builder-w b1) (builder-w b2))
            (max (builder-d b1) (builder-d b2))
            (max (builder-h b1) (builder-h b2))
-           (list b1 b2)))
+           (list b1 b2)
+           '()))
 
 (define (above_ b1 b2)
   (define recenter (vec 0
@@ -129,7 +178,9 @@ Begin functional API for Voxel Worlds:
            (max (builder-d b1) (builder-d b2))
            (+ (builder-h b1) (builder-h b2))
            (list (builder-translate b1 (+vec recenter (vec 0 0 (/ (builder-h b1) 2)))) 
-                 (builder-translate b2 (+vec recenter (vec 0 0 (/ (builder-h b2) -2)))))))
+                 (builder-translate b2 (+vec recenter (vec 0 0 (/ (builder-h b2) -2)))))
+           '()
+                 ))
 
 (define (beside/wide_ b1 b2)
   (define recenter (vec (/ (- 
@@ -143,7 +194,9 @@ Begin functional API for Voxel Worlds:
            (max (builder-d b1) (builder-d b2))
            (max (builder-h b1) (builder-h b2))
            (list (builder-translate b1 (+vec recenter (vec (/ (builder-w b1) 2) 0 0)))
-                 (builder-translate b2 (+vec recenter (vec (/ (builder-w b2) -2) 0 0))))))
+                 (builder-translate b2 (+vec recenter (vec (/ (builder-w b2) -2) 0 0))))
+           '()
+                 ))
 
 (define (beside/deep_ b1 b2)
   (define recenter (vec 0
@@ -158,27 +211,9 @@ Begin functional API for Voxel Worlds:
            (+ (builder-d b1) (builder-d b2))
            (max (builder-h b1) (builder-h b2))
            (list (builder-translate b1 (+vec recenter (vec 0 (/ (builder-d b1) 2) 0)))
-                 (builder-translate b2 (+vec recenter (vec 0 (/ (builder-d b2) -2) 0))))))
+                 (builder-translate b2 (+vec recenter (vec 0 (/ (builder-d b2) -2) 0))))
+           '()))
 
-
-(define (build b [at (current-location)])
-  (_build b at)
-  (void))
-
-;(build (magic-sphere))
-
-;Renderer
-(define (_build b [at (current-location)])
-  (define at-rel (+vec at (builder-p b)))
-
-  (void (match (builder-t b)
-    [(spawner class-name name post-spawn) (spawn (spawner class-name name post-spawn) at-rel)]
-    ['sphere (build-sphere at-rel (/ (builder-w b) 2))]
-    ['box (build-box at-rel (builder-w b) (builder-d b) (builder-h b))]
-    ['air-sphere (dig-sphere at-rel (/ (builder-w b) 2))] 
-    ['empty  (void)] 
-    [else (map (curryr _build at-rel) 
-               (builder-c b))])))
 
 
 ;Side-effectful functions we are building our effect-free API atop of
