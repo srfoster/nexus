@@ -1,7 +1,6 @@
 #lang at-exp racket
 
 (require unreal
-         unreal/libs/actors
          unreal/libs/basic-types
          "../base.rkt"
          "../spawning/base.rkt"
@@ -39,7 +38,10 @@
 
   (match (builder-t b)
     [(spawner class-name name post-spawn)
-     (build-result-tree (spawn (spawner class-name name post-spawn) at-rel)
+     (build-result-tree (let () 
+                          (define s (spawn (spawner class-name name post-spawn) at-rel))
+                          (spawned-actor-scale-to-dimensions s (hash 'W (builder-w b) 'D (builder-d b) 'H (builder-h b)))
+                          s)
                         b
                         '())]
     ['sphere (build-result-tree (build-sphere at-rel (/ (builder-w b) 2))
@@ -107,9 +109,33 @@ Begin functional API for Voxel Worlds:
 
 ;Getters
 
-(define width builder-w)
-(define depth builder-d)
-(define height builder-h)
+(define (width b-or-a)
+  (if (builder? b-or-a)
+      (builder-w b-or-a)
+      (unreal-eval-js
+       @unreal-value{
+ var actor = @(->unreal-value b-or-a)
+ var bounds = GameplayStatics.GetActorArrayBounds([actor.ChildActor.ChildActor], false);
+ return 2*bounds.BoxExtent.X
+ })))
+(define (depth b-or-a)
+  (if (builder? b-or-a)
+      (builder-d b-or-a)
+      (unreal-eval-js
+       @unreal-value{
+ var actor = @(->unreal-value b-or-a)
+ var bounds = GameplayStatics.GetActorArrayBounds([actor.ChildActor.ChildActor], false);
+ return 2*bounds.BoxExtent.Y
+ })))
+(define (height b-or-a)
+  (if (builder? b-or-a)
+      (builder-h b-or-a)
+      (unreal-eval-js
+       @unreal-value{
+ var actor = @(->unreal-value b-or-a)
+ var bounds = GameplayStatics.GetActorArrayBounds([actor.ChildActor.ChildActor], false);
+ return 2*bounds.BoxExtent.Z
+ })))
 
 ;Setters
 
@@ -120,7 +146,12 @@ Begin functional API for Voxel Worlds:
 (define (translate v b)
   (builder-translate b v))
 
-(define (scale s b)
+(define (scale s b-or-a)
+  (if (builder? b-or-a)
+      (builder-scale s b-or-a)
+      (spawned-actor-scale b-or-a s)))
+
+(define (builder-scale s b)
   (struct-copy builder b 
     [p (*vec s (builder-p b))]
     [w (* s (builder-w b))]
@@ -128,7 +159,7 @@ Begin functional API for Voxel Worlds:
     [h (* s (builder-h b))]
     [c (and 
         (builder-c b)
-        (map (curry scale s) (builder-c b)))]))
+        (map (curry builder-scale s) (builder-c b)))]))
 
 
 (define (rotate b)

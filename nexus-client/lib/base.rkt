@@ -1,7 +1,7 @@
 #lang at-exp racket
 
 (require unreal
-         unreal/libs/actors
+         (prefix-in unreal: unreal/libs/actors)
          unreal/libs/basic-types
 )
 
@@ -11,7 +11,7 @@
   (-> vec?)
   
   (unreal-eval-js 
-   (location (character))))
+   (unreal:location (character))))
 
 (define (character)
   (get-actor-by-exported-class-name "OrbCharacter"))
