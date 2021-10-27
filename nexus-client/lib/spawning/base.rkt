@@ -15,7 +15,7 @@
 
 (define (spawn s [pos (current-location)] [dimensions #f])
   (when (builder? s)
-    (set! s (builder-t s)))
+    (set! s (builder-data s)))
   (unreal-eval-js 
    @unreal-value{
  var toSpawn = Root.ResolveClass(@(->unreal-value (spawner-class-name s)));
@@ -28,7 +28,6 @@
  return spawn;
  }))
 
-
 (struct spawner (class-name name post-spawn))
 
 (define js-identity
@@ -36,14 +35,25 @@
  return (x)=>x
  })
 
-(define (zone #:name name)
-  (make-basic-builder (spawner "MagicCircleZone" name js-identity)))
+(define (build-spawner b at)
+  (let ()
+    (define s (spawn (builder-data b) at))
+    (spawned-actor-scale-to-dimensions s (hash 'W (builder-w b) 'D (builder-d b) 'H (builder-h b)))
+    s))
 
-(provide zone2)
-(define (zone2 #:name name)
-  (make-basic-builder (spawner "StemCell" name @unreal-value{
- return (sc)=>{sc.BecomeMagicCircle()}}))
-)
+(define (zone [appearance (magic-circle)] #:name [name "zone"])
+  (overlay appearance
+           (make-basic-builder (spawner "StemCell"
+                                        name
+                                        @unreal-value{return (sc)=>{sc.BecomeZone()}})
+                               build-spawner)))
+
+(define (magic-circle)
+  (make-basic-builder (spawner "StemCell"
+                               "magic-circle"
+                               @unreal-value{return (sc)=>{sc.BecomeMagicCircle()}})
+                      build-spawner)
+  )
 
 (provide spawned-actor-scale)
 (define (spawned-actor-scale spawn s)
@@ -80,31 +90,35 @@
   )
 
 (define (magic-cube #:name [name ""])
-  (make-basic-builder (spawner "StemCell" name @unreal-value{
- return (sc)=>{sc.BecomeMagicCube()}
- }))
- )
+  (make-basic-builder (spawner "StemCell"
+                               name
+                               @unreal-value{ return (sc)=>{sc.BecomeMagicCube()}})
+                      build-spawner))
 
 (define (magic-dodecahedron #:name [name ""])
-  (make-basic-builder (spawner "StemCell" name @unreal-value{
- return (sc)=>{sc.BecomeMagicDodecahedron()}
- })))
+  (make-basic-builder (spawner "StemCell"
+                               name
+                               @unreal-value{return (sc)=>{sc.BecomeMagicDodecahedron()}})
+                      build-spawner))
 
 (define (magic-sphere #:name [name ""])
-  (make-basic-builder (spawner "StemCell" name @unreal-value{
- return (sc)=>{sc.BecomeMagicSphere()}
- })))
+  (make-basic-builder (spawner "StemCell"
+                               name
+                               @unreal-value{return (sc)=>{sc.BecomeMagicSphere()}})
+                      build-spawner))
 
 (define (magic-torus #:name [name ""])
-  (make-basic-builder (spawner "StemCell" name @unreal-value{
- return (sc)=>{sc.BecomeMagicTorus()}
- })))
+  (make-basic-builder (spawner "StemCell"
+                               name
+                               @unreal-value{return (sc)=>{sc.BecomeMagicTorus()}})
+                      build-spawner))
 
 (define (projectile #:name [name ""])
   (spawner "Projectile" name js-identity))
 
 (define (dragon #:name [name ""])
-  (make-basic-builder (spawner "Creature" name js-identity)))
+  (make-basic-builder (spawner "Creature" name js-identity)
+                      build-spawner))
 
 (define (spit-fire dragon [duration 1])
   (unreal-eval-js
