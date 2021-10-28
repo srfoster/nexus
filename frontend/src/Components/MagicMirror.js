@@ -15,8 +15,8 @@ export function MagicMirror(props) {
     const [output, setOutput] = useState(undefined);
     const [errorLineNumber, setErrorLineNumber] = useState(false);
 
-    if (props.code && code != props.code) //Override localstorage if we pass in some code
-        setCode(props.code)
+    //if (props.code && code != props.code) //Override localstorage if we pass in some code
+     //   setCode(props.code)
 
     const [starterCode, setStarterCode] = useState();
     useEffect(()=>{

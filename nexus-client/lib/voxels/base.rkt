@@ -7,7 +7,7 @@
          "../building/base.rkt"
 )
 
-(provide empty sphere box  (struct-out builder) (struct-out build-result-tree) 
+(provide empty voxel-sphere voxel-box  (struct-out builder) (struct-out build-result-tree) 
         width depth height 
         scale rotate above beside/wide beside/deep overlay translate build
         find-first-by-tag find-all-by-tag tag)
@@ -42,7 +42,7 @@ Begin functional API for Voxel Worlds:
 ;
 ;   `(sphere 500 'air)`
 ;}
-(define (sphere r [material 'voxel])
+(define (voxel-sphere r [material 'voxel])
   (when (not ((between/c 0 1000) r))
     (raise-user-error "Sphere's radius must be between 0 and 1000."))
   
@@ -56,7 +56,7 @@ Begin functional API for Voxel Worlds:
                           (build-sphere at (/ (builder-w b) 2)))
                         #:dimensions (vec (* 2 r) (* 2 r) (* 2 r)))))
 
-(define (box w d h [material 'voxel])
+(define (voxel-box w d h [material 'voxel])
   (when (not ((between/c 0 2000) w))
     (raise-user-error "Box's width must be between 0 and 2000."))
   (when (not ((between/c 0 2000) d))

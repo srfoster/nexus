@@ -7,7 +7,7 @@
 (provide wall/wide wall/deep room)
 
 ;TODO: Parameterize this
-(define s (sphere 100))
+(define s (voxel-sphere 100))
 
 (define (divisible-by-brick-size? x)
     (= (modulo x (width s)) 0))

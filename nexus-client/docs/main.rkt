@@ -33,7 +33,7 @@
       'optional (list #f)
       'parameterDesc (list "The builder to be placed in the 3D world.")
       'desc "Actually places a builder in the world."
-      'example (map format-racket-code (list ";creating a sphere builder doesn't build a sphere \n (define s (sphere 1000))\n ;but this does\n (build s) " ))
+      'example (map format-racket-code (list ";creating a sphere builder doesn't build a sphere \n (define s (voxel-sphere 1000))\n ;but this does\n (build s) " ))
       'returns "void?")
      (hash
       'name "builder?"
@@ -43,7 +43,7 @@
       'optional (list #f)
       'parameterDesc (list "This can be anything.")
       'desc "Returns true if `something` is a builder. Returns false otherwise."
-      'example (map format-racket-code (list "(builder? (sphere 1000))" "(builder? (current-location))"))
+      'example (map format-racket-code (list "(builder? (voxel-sphere 1000))" "(builder? (current-location))"))
       'returns "boolean?")))
    (hash
     'name "Getters"
@@ -57,17 +57,7 @@
       'optional (list #f)
       'parameterDesc (list "The builder you want the width of." )
       'desc "Returns the width of a builder, which is a number."
-      'example (map format-racket-code (list "(width (sphere 1000))" ))
-      'returns "number?")
-     (hash
-      'name "height"
-      'use (format-racket-code "(height [builder builder?])")
-      'parameter (list "builder")
-      'type (list "builder?" )
-      'optional (list #f)
-      'parameterDesc (list "The builder you want the height of." )
-      'desc "Returns the height of a builder, which is a number."
-      'example (map format-racket-code (list "(height (sphere 1000))" ))
+      'example (map format-racket-code (list "(width (voxel-sphere 1000))" ))
       'returns "number?")
      (hash
       'name "depth"
@@ -77,7 +67,17 @@
       'optional (list #f)
       'parameterDesc (list "The builder you want the depth of." )
       'desc "Returns the depth of a builder, which is a number."
-      'example (map format-racket-code (list "(depth (sphere 1000))" ))
+      'example (map format-racket-code (list "(depth (torus))" ))
+      'returns "number?")
+     (hash
+      'name "height"
+      'use (format-racket-code "(height [builder builder?])")
+      'parameter (list "builder")
+      'type (list "builder?" )
+      'optional (list #f)
+      'parameterDesc (list "The builder you want the height of." )
+      'desc "Returns the height of a builder, which is a number."
+      'example (map format-racket-code (list "(height (voxel-box 1000 500 600))" ))
       'returns "number?")))
    (hash
     'name "Transformers"
@@ -91,7 +91,7 @@
       'optional (list #f #f)
       'parameterDesc (list "The factor by which to scale the given builder." "Builder that will be scaled.")
       'desc "Scales a builder by the given factor. For example, scaling by a factor of 2 would double the size of a sphere. There is a limit to the amount you can scale. You'll get an error if you end up trying to place a builder that is too large."
-      'example (map format-racket-code (list "(build (scale 5 (sphere 100)))" ";this will error\n(build (scale 2 (sphere 1000)))" ))
+      'example (map format-racket-code (list "(build (scale 5 (voxel-sphere 100)))" ";this will error\n(build (scale 2 (voxel-sphere 1000)))" ))
       'returns "builder?")
      (hash
       'name "translate"
@@ -101,7 +101,7 @@
       'optional (list #f #f)
       'parameterDesc (list "A vector by which to move the given builder." "Builder that will be moved.")
       'desc "Moves the builder in 3D space using the x, y, z of a given vector."
-      'example (map format-racket-code (list "(build (beside/wide (translate (vec 0 0 400) (sphere 100)) (sphere 100)))" ))
+      'example (map format-racket-code (list "(build (beside/wide (translate (vec 0 0 400) (voxel-sphere 100)) (voxel-sphere 100)))" ))
       'returns "builder?")))
    (hash
     'name "Combiners"
@@ -115,7 +115,7 @@
       'optional (list #f)
       'parameterDesc (list "The builder to be placed above the following builders.")
       'desc "This function takes any number of builders. It will place one builder above the next in the order given."
-      'example (map format-racket-code (list "(build (above (sphere 200)(sphere 400)(sphere 800)))" ))
+      'example (map format-racket-code (list "(build (above (voxel-sphere 200)(voxel-sphere 400)(voxel-sphere 800)))" ))
       'returns "builder?")
      (hash
       'name "beside/wide"
@@ -125,7 +125,7 @@
       'optional (list #f)
       'parameterDesc (list "The builder to be placed next to the following builders in the x-direction.")
       'desc "This function takes any number of builders. It will place one builder next to the following builders in the order given, along the x-axis."
-      'example (map format-racket-code (list "(build (beside/wide (sphere 200)(sphere 400)(sphere 800)))" ))
+      'example (map format-racket-code (list "(build (beside/wide (voxel-sphere 200)(voxel-sphere 400)(voxel-sphere 800)))" ))
       'returns "builder?")
      (hash
       'name "beside/deep"
@@ -135,7 +135,7 @@
       'optional (list #f)
       'parameterDesc (list "The builder to be placed next to the following builders in the y-direction.")
       'desc "This function takes any number of builders. It will place one builder next to the following builders in the order given, along the y-axis."
-      'example (map format-racket-code (list "(build (beside/deep (sphere 200)(sphere 400)(sphere 800)))" ))
+      'example (map format-racket-code (list "(build (beside/deep (voxel-sphere 200)(voxel-sphere 400)(voxel-sphere 800)))" ))
       'returns "builder?")
      (hash
       'name "overlay"
@@ -145,23 +145,33 @@
       'optional (list #f)
       'parameterDesc (list "The builder to be placed at the center of the following builders.")
       'desc "This function takes any number of builders. It will overlay each builder atop the following builders in the order given."
-      'example (map format-racket-code (list "(build (overlay (sphere 1000) (beside/wide (sphere 600 'air)
-                             (sphere 600 'air)
-                             (sphere 600 'air))))" ))
+      'example (map format-racket-code (list "(build (overlay (voxel-sphere 1000) (beside/wide (voxel-sphere 600 'air)
+                             (voxel-sphere 600 'air)
+                             (voxel-sphere 600 'air))))" ))
       'returns "builder?")))
    (hash
     'name "Voxel Primitives"
     'definitions
     (list
      (hash
-      'name "sphere"
-      'use (format-racket-code "(sphere [radius (between/c 0 1000)] [material (or/c 'voxel 'air) 'voxel])")
+      'name "voxel-sphere"
+      'use (format-racket-code "(voxel-sphere [radius (between/c 0 1000)] [material (or/c 'voxel 'air) 'voxel])")
       'parameter (list "radius" "material")
       'type (list "(between/c 0 1000)" "(or/c 'voxel 'air)")
       'optional (list #f #t)
       'parameterDesc (list "Radius of the sphere. Must be between 0 and 1000." "Material of the sphere. Available materials are 'air and 'sphere")
-      'desc "Returns a sphere builder, which when passed into `build` instantiates a voxel sphere into the world."
-      'example (map format-racket-code (list "(build (sphere 1000))" "(build (sphere 500 'air))" ))
+      'desc "Returns a voxel-sphere builder, which when passed into `build` instantiates a voxel sphere into the world."
+      'example (map format-racket-code (list "(build (voxel-sphere 1000))" "(build (overlay (voxel-box 1000 1000 1000) (voxel-sphere 600 'air)))" ))
+      'returns "builder?")
+     (hash
+      'name "voxel-box"
+      'use (format-racket-code "(voxel-box [width (between/c 0 2000)] [depth (between/c 0 2000)] [height (between/c 0 2000)] [material (or/c 'voxel 'air) 'voxel])")
+      'parameter (list "width" "depth" "height" "material")
+      'type (list "(between/c 0 2000)" "(between/c 0 2000)" "(between/c 0 2000)" "(or/c 'voxel 'air)")
+      'optional (list #f #t)
+      'parameterDesc (list "Width of the box. Must be between 0 and 2000." "Depth of the box. Must be between 0 and 2000." "Height of the box. Must be between 0 and 2000." "Material of the sphere. Available materials are 'air and 'sphere")
+      'desc "Returns a voxel-box builder, which when passed into `build` instantiates a voxel box into the world."
+      'example (map format-racket-code (list "(build (voxel-box 1000 500 400))" "(build (overlay (voxel-box 500 1000 500 'air) (voxel-box 800 800 800)))" ))
       'returns "builder?")
      (hash
       'name "empty"
