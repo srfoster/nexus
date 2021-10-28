@@ -12,6 +12,7 @@
          spawn 
          ;stuff you can spawn
          zone cube dodecahedron sphere torus magic-circle
+         energy-ball 
          dragon 
          ;getters and setters on spawned things
          parent
@@ -93,8 +94,13 @@
     @unreal-value{
      var spawn = @(->unreal-value spawn);
      var dimensions = @(->unreal-value dimensions);
-
-     var current_dimensions = GameplayStatics.GetActorArrayBounds([spawn.ChildActor.ChildActor], false); 
+     var current_dimensions; 
+     if(spawn.ChildActor.ChildActor.GetBounds){
+       current_dimensions = spawn.ChildActor.ChildActor.GetBounds();
+     }
+     else{
+       current_dimensions = GameplayStatics.GetActorArrayBounds([spawn.ChildActor.ChildActor], false);
+     }
      var current_width = 2*current_dimensions.BoxExtent.X
      var current_depth = 2*current_dimensions.BoxExtent.Y
      var current_height = 2*current_dimensions.BoxExtent.Z
@@ -109,6 +115,13 @@
      return spawn;
   })
   )
+
+(define (energy-ball #:name [name ""])
+  (make-basic-builder (spawner "StemCell"
+                               name
+                               @unreal-value{ return (sc)=>{sc.BecomeWaterParticle()}})
+                      build-spawner
+                     ))
 
 (define (cube #:name [name ""])
   (make-basic-builder (spawner "StemCell"
@@ -132,7 +145,8 @@
   (make-basic-builder (spawner "StemCell"
                                name
                                @unreal-value{return (sc)=>{sc.BecomeMagicTorus()}})
-                      build-spawner))
+                      build-spawner
+                      #:dimensions (vec 300 300 150)))
 
 (define (projectile #:name [name ""])
   (spawner "Projectile" name js-identity))

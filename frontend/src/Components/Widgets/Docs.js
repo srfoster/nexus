@@ -362,10 +362,12 @@ export function DocContent(props) {
   const [value, setValue] = useState(0);
   const [baseDefinitionCategories, setBaseDefinitionCategories] = useState([])
   const [voxelDefinitionCategories, setVoxelDefinitionCategories] = useState([])
+  const [transmogrifyDefinitionCategories, setTransmogrifyDefinitionCategories] = useState([])
   const [eventDefinitionCategories, setEventDefinitionCategories] = useState([])
 
   const docArray = [<DocLibrary key="base" definitionCategories={baseDefinitionCategories} />,
   <DocLibrary key="voxel" definitionCategories={voxelDefinitionCategories} />,
+  <DocLibrary key="transmogrify" definitionCategories={transmogrifyDefinitionCategories} />,
   <DocLibrary key="events" definitionCategories={eventDefinitionCategories} />,
   <DocUILibrary key="ui" />
   ];
@@ -382,9 +384,16 @@ export function DocContent(props) {
   }, [])
 
   useEffect(() => {
-    sendOnCodeSpellsSocket("(get-voxel-api-docs)",
+    sendOnCodeSpellsSocket("(get-summon-api-docs)",
       (res) => {
         setVoxelDefinitionCategories(res.response)
+      })
+  }, [])
+  
+  useEffect(() => {
+    sendOnCodeSpellsSocket("(get-transmogrification-api-docs)",
+      (res) => {
+        setTransmogrifyDefinitionCategories(res.response)
       })
   }, [])
 
@@ -399,7 +408,8 @@ export function DocContent(props) {
     <>
       <Tabs value={value} onChange={handleTabChange} >
         <Tab label={"Base"}></Tab>
-        <Tab label={"Voxel"}></Tab>
+        <Tab label={"Summon"}></Tab>
+        <Tab label={"Transmogrify"}></Tab>
         <Tab label={"Events"}></Tab>
         <Tab label={"User Interface"}></Tab>
       </Tabs>

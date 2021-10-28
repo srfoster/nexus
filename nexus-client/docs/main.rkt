@@ -4,7 +4,8 @@
 
 (provide format-racket-code
          get-base-api-docs
-         get-voxel-api-docs
+         get-summon-api-docs
+         get-transmogrification-api-docs
          get-events-api-docs
          )
 
@@ -19,10 +20,10 @@
          'descriptions (list))))
 
 ;each API will have its own get-...-docs function
-(define (get-voxel-api-docs)
+(define (get-summon-api-docs)
   (list
    (hash
-    'name "Building Basics"
+    'name "Summoning Basics"
     'definitions
     (list
      (hash
@@ -171,7 +172,7 @@
       'optional (list #f #t)
       'parameterDesc (list "Width of the box. Must be between 0 and 2000." "Depth of the box. Must be between 0 and 2000." "Height of the box. Must be between 0 and 2000." "Material of the sphere. Available materials are 'air and 'sphere")
       'desc "Returns a voxel-box builder, which when passed into `build` instantiates a voxel box into the world."
-      'example (map format-racket-code (list "(build (voxel-box 1000 500 400))" "(build (overlay (voxel-box 500 1000 500 'air) (voxel-box 800 800 800)))" ))
+      'example (map format-racket-code (list "(build (voxel-box 1000 500 400))" "(build (overlay (voxel-box 800 800 800) (voxel-box 400 1000 400 'air)))" ))
       'returns "builder?")
      (hash
       'name "empty"
@@ -181,8 +182,180 @@
       'optional (list #f #t #t)
       'parameterDesc (list "Width of an empty space." "Depth of an empty space. Defaults to width if unspecified." "Height of an empty space. Defaults to depth if unspecified")
       'desc "Returns an empty space builder, which when passed into `build` instantiates an empty space into the world. Useful for spacing other primitives out."
-      'example (map format-racket-code (list "(build (beside/wide (sphere 1000) (empty 2000 2000 2000) (sphere 1000)))" ))
-      'returns "builder?")))))
+      'example (map format-racket-code (list "(build (beside/wide (voxel-sphere 1000) (empty 2000 2000 2000) (voxel-sphere 1000)))" ))
+      'returns "builder?")))
+   (hash
+    'name "Physical Objects"
+    'definitions
+    (list
+     (hash
+      'name "sphere"
+      'use (format-racket-code "(sphere)")
+      'parameter (list )
+      'type (list )
+      'optional (list )
+      'parameterDesc (list )
+      'desc "Returns a sphere with physics, which when passed into `build` instantiates a sphere into the world."
+      'example (map format-racket-code (list "(build (sphere))" "(build (above (sphere) (voxel-box 600 600 600)))" ))
+      'returns "builder?")
+     (hash
+      'name "cube"
+      'use (format-racket-code "(cube)")
+      'parameter (list )
+      'type (list )
+      'optional (list )
+      'parameterDesc (list )
+      'desc "Returns a cube with physics, which when passed into `build` instantiates a cube into the world."
+      'example (map format-racket-code (list "(build (cube))" "(build (above (cube) (voxel-box 600 600 600)))" ))
+      'returns "builder?")
+     (hash
+      'name "torus"
+      'use (format-racket-code "(torus)")
+      'parameter (list )
+      'type (list )
+      'optional (list )
+      'parameterDesc (list )
+      'desc "Returns a torus with physics, which when passed into `build` instantiates a torus into the world."
+      'example (map format-racket-code (list "(build (torus))" "(build (above (torus) (voxel-box 600 600 600)))" ))
+      'returns "builder?")
+     (hash
+      'name "dodecahedron"
+      'use (format-racket-code "(dodecahedron)")
+      'parameter (list )
+      'type (list )
+      'optional (list )
+      'parameterDesc (list )
+      'desc "Returns a dodecahedron with physics, which when passed into `build` instantiates a dodecahedron into the world."
+      'example (map format-racket-code (list "(build (dodecahedron))" "(build (above (dodecahedron) (voxel-box 600 600 600)))" ))
+      'returns "builder?")
+  ))
+  (hash
+    'name "Magical Effects"
+    'definitions
+    (list
+     (hash
+      'name "magic-circle"
+      'use (format-racket-code "(magic-circle)")
+      'parameter (list )
+      'type (list )
+      'optional (list )
+      'parameterDesc (list )
+      'desc "Returns a magic circle which doesn't have physics, which when passed into `build` instantiates a magic circle into the world."
+      'example (map format-racket-code (list "(build (magic-circle))" "(build (above (magic-circle) (magic-circle)))" ))
+      'returns "builder?")
+     (hash
+      'name "energy-ball"
+      'use (format-racket-code "(energy-ball)")
+      'parameter (list )
+      'type (list )
+      'optional (list )
+      'parameterDesc (list )
+      'desc "Returns an energy ball which doesn't have physics, which when passed into `build` instantiates an energy ball into the world."
+      'example (map format-racket-code (list "(build (energy-ball))" "(build (above 
+        (energy-ball) 
+        (magic-circle)
+        (energy-ball)
+        (magic-circle)))"
+        "(define brt (build (above (tag (scale 2 (energy-ball)) \"ball\") (tag (sphere) \"sphere\"))))
+
+         (define b (find-first-by-tag brt \"ball\"))
+         (define s (find-first-by-tag brt \"sphere\"))
+
+         (parent s b)"))
+      'returns "builder?")
+  ))))
+
+(define (get-transmogrification-api-docs)
+  (list
+   (hash 'name "Base"
+         'definitions
+         (list
+          (hash
+           'name "tag"
+           'use (format-racket-code "(tag [builder builder?] [tag-name string?])")
+           'parameter (list "builder" "tag-name")
+           'type (list "builder?" "string?")
+           'optional (list #f #f)
+           'parameterDesc (list "A builder to tag with a tag name." "A tag name to label a specific builder.")
+           'desc "Wrapping a builder in a tag allows the user to later find the object reference by tag and transmogrify that object later."
+           'example (map format-racket-code (list
+                                             "(define brt (build (tag (cube) \"cube\")))
+
+                                              (define magic-cube (find-first-by-tag brt \"cube\"))
+
+                                              (sleep 4)
+
+                                              (force magic-cube (vec 0 0 5000000))"
+                                             ))
+           'returns "void?")
+          (hash
+           'name "parent"
+           'use (format-racket-code "(parent [obj1 summoned?] [obj2 summoned?])")
+           'parameter (list "obj1" "obj2")
+           'type (list "summoned?" "summoned?")
+           'optional (list #f #f)
+           'parameterDesc (list "The parent." "The child, which must not be a physical object.")
+           'desc "This function attaches the second summoned to the first summoned. The second summoned can not be a physical object. It must be a summoned without physics like a (magic-circle)."
+           'example (map format-racket-code (list
+                                             "(define brt (build (above (tag (cube) \"cube\")
+                                                                        (tag (scale 3 (magic-circle)) \"circle\"))))
+
+                                              (define magic-cube (find-first-by-tag brt \"cube\"))
+                                              (define circle (find-first-by-tag brt \"circle\"))
+
+                                              (sleep 4)
+
+                                              (parent magic-cube circle)"
+                                             ))
+           'returns "void?")
+           ))
+   (hash 'name "Magical Forces"
+         'definitions
+         (list
+          (hash
+           'name "force"
+           'use (format-racket-code "(force [builder builder?] [vec vec?])")
+           'parameter (list "builder" "vec")
+           'type (list "builder?" "vec?")
+           'optional (list #f #f)
+           'parameterDesc (list "A builder to apply a force to." "A vector which represents the direction and magnitude of the force to be applied.")
+           'desc "This function applies a force to the builder in the magnitude and direction of the given vector."
+           'example (map format-racket-code (list
+                                             "(define (letter->builder l)
+  (above (tag (cube) \"letter\") (voxel-box 500 500 200)))
+
+(define (list->builder l)
+  (apply beside/wide (map letter->builder l)))
+
+(define rt (build 
+            (beside/wide 
+             (translate (vec 0 0 -100) (tag (magic-circle) \"pointer\"))
+             (list->builder '(a b c a)))))
+
+(define letters (find-all-by-tag rt \"letter\"))
+
+(sleep 5)
+(for ([l letters])
+     (sleep 0.5)
+     (scale 0.5 l)
+     (force l
+            (vec 0 0 1000000)))
+(sleep 2)
+(define pointer (find-first-by-tag rt \"pointer\"))
+(scale 2 pointer)
+
+(teleport pointer (location (first letters)))
+
+(sleep 2)
+
+(teleport pointer (+vec 
+                   (location (first letters)) 
+                   (vec 0 0 (/ (height (first letters)) -2))
+                	))"
+                                             ))
+           'returns "void?")
+           ))
+  ))
 
 (define (get-events-api-docs)
   (list
@@ -201,7 +374,7 @@
                                              "(clear-projectile-hit-functions)
                                              
                                              (on-projectile-hit 
-                                               (lambda (e) (build (sphere 1000) (event-location e))))"
+                                               (lambda (e) (build (voxel-sphere 1000) (event-location e))))"
                                              
                                              "(clear-projectile-hit-functions)
                                              
@@ -211,7 +384,7 @@
                                                (lambda (e) 
                                                  (set! size (+ size 200))
                                                  (when (> size 1000) (set! size 200))
-                                                 (build (sphere size) 
+                                                 (build (voxel-sphere size) 
                                                         (event-location e))))"
                                              ))
            'returns "void?")
@@ -225,7 +398,7 @@
            'desc "This function can be used to cancel a previous call to `on-projectile-hit`.  You must pass in the same function you registered with `on-projectile-hit`.  This will prevent it from being called the next time the character's projectile lands.  This can also be used to make one-off spells (ones that cancel themselves when complete)"
            'example (map format-racket-code (list
                                              "(define (build-once e)
-                                                (build (sphere 1000) (event-location e))
+                                                (build (voxel-sphere 1000) (event-location e))
                                                 (cancel-on-projectile-hit build-once))
 
                                              (on-projectile-hit build-once)"
@@ -234,7 +407,7 @@
                                              
                                               (define (build-thrice e)
                                                 (set! num-builds (add1 num-builds))
-                                                (build (sphere 1000) (event-location e))
+                                                (build (voxel-sphere 1000) (event-location e))
                                                 (when (>= num-builds 3)
                                                   (cancel-on-projectile-hit build-thrice)))
 
@@ -303,7 +476,7 @@
            'example (map format-racket-code (list
                                              "(and #t #t #f)"
                                              "(and #t #t #t)"
-                                             "(and (vec? (vec 100 200 -100)) (builder? (sphere 1000)) (boolean? #f))"))
+                                             "(and (vec? (vec 100 200 -100)) (builder? (voxel-sphere 1000)) (boolean? #f))"))
            'returns "list?")
           (hash
            'name "or"
@@ -317,7 +490,7 @@
                                              "(or #t #t #f)"
                                              "(or #f #t)"
                                              "(or 5 #t #t)"
-                                             "(or (vec? (vec 100 200 -100)) (builder? (sphere 1000)) (boolean? #f))"))
+                                             "(or (vec? (vec 100 200 -100)) (builder? (voxel-sphere 1000)) (boolean? #f))"))
            'returns "list?")
           ))
    (hash 'name "Lists"
@@ -349,7 +522,7 @@
       'optional (list)
       'parameterDesc (list )
       'desc "Returns a vector representing the current location of the user's orb."
-      'example (map format-racket-code (list "(build (sphere 500) (+vec (vec 1000 1000 1000) (current-location)))"))
+      'example (map format-racket-code (list "(build (voxel-sphere 500) (+vec (vec 1000 1000 1000) (current-location)))"))
       'returns "vec?")
      (hash
       'name "vec"
@@ -369,7 +542,7 @@
       'optional (list #f #f)
       'parameterDesc (list "The vector to be added to the second vector." "The vector to be added to the first vector.")
       'desc "Returns a vector that is the addition of the two given vectors."
-      'example (map format-racket-code (list "(build (sphere 500) (+vec (vec 1000 1000 1000) (current-location)))"))
+      'example (map format-racket-code (list "(build (voxel-sphere 500) (+vec (vec 1000 1000 1000) (current-location)))"))
       'returns "vec?")
      (hash
       'name "*vec"
@@ -379,7 +552,7 @@
       'optional (list #f #f)
       'parameterDesc (list "The factor by which to scale each number in the vector." "The vector to be scaled.")
       'desc "Returns a vector that is scaled by the given factor."
-      'example (map format-racket-code (list "(build (sphere 500) (+vec (*vec 10 (vec 100 100 100)) (current-location)))"))
+      'example (map format-racket-code (list "(build (voxel-sphere 500) (+vec (*vec 10 (vec 100 100 100)) (current-location)))"))
       'returns "vec?")
      (hash
       'name "vec?"
@@ -389,6 +562,6 @@
       'optional (list #f)
       'parameterDesc (list "Something you are checking to see if its a vector." )
       'desc "Returns true if `something` is a vector. Returns false otherwise."
-      'example (map format-racket-code (list "(vec? (current-location))" "(vec? (vec 340 2340 123))" "(vec? (sphere 100))"))
+      'example (map format-racket-code (list "(vec? (current-location))" "(vec? (vec 340 2340 123))" "(vec? (voxel-sphere 100))"))
       'returns "boolean?")
      ))))

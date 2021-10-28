@@ -66,9 +66,10 @@ Begin functional API for Voxel Worlds:
   
   (if (not (eq? material 'voxel))
       (make-basic-builder 'air-box
-                          (lambda (b at)  ;DIG BOX NOT YET IMPLEMENTED
-                            (void)#;(dig-box at (builder-w b) (builder-d b) (builder-h b)))
-                          #:dimensions (vec w d h))
+                          (lambda (b at)
+                            (dig-box at (builder-w b) (builder-d b) (builder-h b)))
+                          #:dimensions (vec w d h)
+                          )
       (make-basic-builder 'box
                           (lambda (b at)
                             (build-box at (builder-w b) (builder-d b) (builder-h b)))
@@ -106,6 +107,36 @@ Begin functional API for Voxel Worlds:
  }))
   
   unreal-response)
+
+(define/contract (dig-box pos w d h)
+  ;If the radius is too big, you end up crashing the game.
+  ;  1000 can probably be bumped up if we wanted to.  
+  (-> vec? (between/c 0 2000) (between/c 0 2000) (between/c 0 2000) any/c)
+  
+  (define unreal-response
+    (unreal-eval-js 
+     @unreal-value{
+ var BS = Root.ResolveClass('VoxelAddEffect');
+
+ setTimeout(()=>{
+  var C = Root.ResolveClass('JSVoxelManager');
+  var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+  o.DigBox(@(->unreal-value
+               (hash 'Min
+                     ;(+vec pos (vec -100 -100 0))
+                     (+vec pos (*vec -1/2 (vec w d h)))
+                     'Max
+                     ;(+vec pos (vec 100 100 200))
+                     (+vec pos (*vec 1/2 (vec w d h)))
+                     )))
+  }, 200)
+ 
+
+ return true
+ }))
+  
+  unreal-response)
+
 
 (define/contract (build-sphere pos r)
   ;If the radius is too big, you end up crashing the game.
