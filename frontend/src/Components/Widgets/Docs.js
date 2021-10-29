@@ -406,12 +406,15 @@ export function DocContent(props) {
 
   return (
     <>
-      <Tabs value={value} onChange={handleTabChange} >
+      <Tabs value={value}
+        onChange={handleTabChange}
+        variant="scrollable"
+        scrollButtons="auto" >
         <Tab label={"Base"}></Tab>
         <Tab label={"Summon"}></Tab>
         <Tab label={"Transmogrify"}></Tab>
         <Tab label={"Events"}></Tab>
-        <Tab label={"User Interface"}></Tab>
+        <Tab label={"Spellbook"}></Tab>
       </Tabs>
       {docArray[value]}
     </>

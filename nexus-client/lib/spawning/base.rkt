@@ -11,7 +11,8 @@
 (provide (struct-out spawner)
          spawn 
          ;stuff you can spawn
-         zone cube dodecahedron sphere torus magic-circle
+         zone cube dodecahedron sphere torus 
+         magic-circle magic-circle-color
          energy-ball 
          dragon 
          ;getters and setters on spawned things
@@ -32,10 +33,10 @@
  var toSpawn = Root.ResolveClass(@(->unreal-value (spawner-class-name s)));
                                  
  let spawn = new toSpawn(GWorld, @(->unreal-value pos)) 
- if(spawn.SetName) 
-  spawn.SetName(@(->unreal-value (spawner-name s)));
  let postSpawn = @(->unreal-value (spawner-post-spawn s));
  postSpawn(spawn);
+ if(spawn.ChildActor.ChildActor.SetName) 
+  spawn.ChildActor.ChildActor.SetName(@(->unreal-value (spawner-name s)));
  return spawn;
  }))
 
@@ -50,7 +51,6 @@
   (let ()
     (define s (spawn (builder-data b) at))
     (spawned-actor-scale-to-dimensions s (hash 'W (builder-w b) 'D (builder-d b) 'H (builder-h b)))
-    (displayln (hash 'W (builder-w b) 'D (builder-d b) 'H (builder-h b)))
     s))
 
 ;Do we need ALL these .ChildActors?
@@ -58,18 +58,16 @@
 (define (parent a b)
   (unreal-eval-js
    @unreal-value{
-     var a = @(->unreal-value a);
-     var b = @(->unreal-value b);
-     b.ChildActor.ChildActor.AttachActorToActor(a.ChildActor.ChildActor);
-     b.ChildActor.ChildActor.SetActorRelativeLocation({X:0, Y:0, Z:0});
+ var a = @(->unreal-value a);
+ var b = @(->unreal-value b);
+ a.AttachChild(b.ChildActor.ChildActor);
  }))
 
-(define (zone [appearance (magic-circle)] #:name [name "zone"])
-  (overlay appearance
-           (make-basic-builder (spawner "StemCell"
-                                        name
-                                        @unreal-value{return (sc)=>{sc.BecomeZone()}})
-                               build-spawner)))
+(define (zone #:name [name "zone"])
+  (make-basic-builder (spawner "StemCell"
+                               name
+                               @unreal-value{return (sc)=>{sc.BecomeZone()}})
+                      build-spawner))
 
 (define (magic-circle)
   (make-basic-builder (spawner "StemCell"
@@ -77,6 +75,20 @@
                                @unreal-value{return (sc)=>{sc.BecomeMagicCircle()}})
                       build-spawner
                       #:dimensions (vec 300 300 150)))
+
+(define (magic-circle-color mc color-vec)
+  (unreal-eval-js
+   @unreal-value{
+     let mc = @(->unreal-value mc)
+
+ let magicCircleEffect = mc.ChildActor.ChildActor.ChildActor.ChildActor
+ let customMeshes = magicCircleEffect.CreatedCustomMesh
+ for(let i=0;i<customMeshes.length;i++){
+  let mat = customMeshes[i].GetMaterials()[0]
+  mat.SetVectorParameterValue("MESH_Color", @(->unreal-value color-vec))
+ }
+ return true
+ }))
 
 (define (spawned-actor-scale spawn s)
   (unreal-eval-js

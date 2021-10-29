@@ -5,13 +5,17 @@
          unreal/libs/basic-types
 )
 
-(provide current-location)
+(provide current-location
+         is-player?)
 
 (define/contract (current-location)
   (-> vec?)
   
   (unreal-eval-js 
    (unreal:location (character))))
+
+(define (is-player? actor)
+  (string=? (hash-ref actor 'id) "OrbCharacter2"))
 
 (define (character)
   (get-actor-by-exported-class-name "OrbCharacter"))

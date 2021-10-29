@@ -168,7 +168,7 @@
                             
                             ; wait until there's something in ret, or a certain
                             ; amount of time has passed
-                            (for ([i (in-range 10)]) #:break (not (null-value? ret))
+                            (for ([i (in-range 20)]) #:break (not (null-value? ret))
                               (sleep .05))
                             (when (null-value? ret)
                               (define thread-id (random))
@@ -177,12 +177,13 @@
                                               'message (~a "Call (stop-magic " thread-id ") to stop this spell.")
                                               'customReactComponent "SpellThreadManager")))
                             (displayln ret)
+
                             (ws-send! c (jsexpr->string 
                                          (hash 
                                           'responseFor msg 
                                           'response (if (void? ret)
                                                         'null
-                                                        ret)
+                                                        (if (jsexpr? ret) ret (~v ret)))
                                           'racketResponse (format-racket-code (~v ret))
                                           'output (get-output-string thread-o)
                                           'error (get-output-string thread-e)

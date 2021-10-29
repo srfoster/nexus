@@ -11,6 +11,7 @@
          clear-zone-enter-functions
          event-location
          event-name
+         event-other-actor
          )
 
 (define (on-projectile-hit f #:group [group #f])
@@ -36,4 +37,6 @@
 
 (define (event-name e)
   (hash-ref e 'name))
-  
+
+(define (event-other-actor e)
+  (hash-ref e 'otherActor))

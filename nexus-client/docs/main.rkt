@@ -355,6 +355,47 @@
                                              ))
            'returns "void?")
            ))
+   (hash 'name "Magic Circles"
+         'definitions
+         (list
+          (hash
+           'name "magic-circle-color"
+           'use (format-racket-code "(magic-circle-color [mc obj?] [color-vec hash?])")
+           'parameter (list "mc" "color-vec")
+           'type (list "obj?" "hash?")
+           'optional (list #f #f)
+           'parameterDesc (list "A magic circle to change the color of." "A hash of R, B, G values (from 0 to 1).")
+           'desc "Changes the color of a given magic circle using the given RGB values (in hash form)."
+           'example (map format-racket-code (list
+                                             "(define brt (build (tag (magic-circle) \"circle\")))
+
+                                             (define circle (find-first-by-tag brt \"circle\"))
+
+                                             (magic-circle-color circle (hash 'R 1 'G 1 'B 0))"
+                                             "(define brt (build (above
+                    (tag (magic-circle) \"red\")
+                    (tag (magic-circle) \"orange\")
+                    (tag (magic-circle) \"yellow\")
+                    (tag (magic-circle) \"green\")
+                    (tag (magic-circle) \"blue\")
+                    (tag (magic-circle) \"purple\"))))
+
+(define red (find-first-by-tag brt \"red\"))
+(define orange (find-first-by-tag brt \"orange\"))
+(define yellow (find-first-by-tag brt \"yellow\"))
+(define green (find-first-by-tag brt \"green\"))
+(define blue (find-first-by-tag brt \"blue\"))
+(define purple (find-first-by-tag brt \"purple\"))
+
+(magic-circle-color red (hash 'R 1 'G 0 'B 0))
+(magic-circle-color orange (hash 'R 1 'G 0.5 'B 0))
+(magic-circle-color yellow (hash 'R 1 'G 1 'B 0))
+(magic-circle-color green (hash 'R 0 'G 1 'B 0))
+(magic-circle-color blue (hash 'R 0 'G 0 'B 1))
+(magic-circle-color purple (hash 'R 0.5 'G 0 'B 1))"
+                                             ))
+           'returns "void?")
+           ))
   ))
 
 (define (get-events-api-docs)
@@ -397,13 +438,17 @@
            'parameterDesc (list "Function to run when projectile hits something in the world.")
            'desc "This function can be used to cancel a previous call to `on-projectile-hit`.  You must pass in the same function you registered with `on-projectile-hit`.  This will prevent it from being called the next time the character's projectile lands.  This can also be used to make one-off spells (ones that cancel themselves when complete)"
            'example (map format-racket-code (list
-                                             "(define (build-once e)
+                                             "(clear-projectile-hit-functions)
+                                             
+                                             (define (build-once e)
                                                 (build (voxel-sphere 1000) (event-location e))
                                                 (cancel-on-projectile-hit build-once))
 
                                              (on-projectile-hit build-once)"
                                              
-                                             "(define num-builds 0)
+                                             "(clear-projectile-hit-functions)
+                                             
+                                             (define num-builds 0)
                                              
                                               (define (build-thrice e)
                                                 (set! num-builds (add1 num-builds))
@@ -448,7 +493,52 @@
                                                  (when (string=? \"Trap\" (event-name e))
                                                    (build (room 1000 1000 1000) 
                                                           (event-location e)))))"
-                                             
+                                             "(clear-zone-enter-functions)
+(clear-projectile-hit-functions)
+
+(on-projectile-hit
+ (lambda (e)
+   (define brt (build (overlay 
+                       (tag (zone #:name \"Trap\") \"zone-actor\")
+                       (tag (magic-circle) \"circle\"))
+          (event-location e)))
+   (define zone-actor (find-first-by-tag brt \"zone-actor\"))
+   (define circle (find-first-by-tag brt \"circle\"))
+   (parent zone-actor circle)))
+
+(on-zone-enter
+ (lambda (e)
+   (when (string=? \"Trap\"
+                   (event-name e))
+     (build (room 1000 1000 600)
+            (event-location e)))))"
+
+            "(clear-zone-enter-functions)
+(clear-projectile-hit-functions)
+
+(on-projectile-hit
+ (lambda (e)
+   (define brt
+     (build
+      (overlay
+       (tag (zone #:name \"Trap\")
+            \"zone-actor\")
+       (tag (sphere) \"sph\"))
+      (event-location e)))
+   (define zone-actor
+     (find-first-by-tag brt
+                        \"zone-actor\"))
+   (define sph
+     (find-first-by-tag brt \"sph\"))
+   (parent sph zone-actor)))
+
+(on-zone-enter
+ (lambda (e)
+   (when (and (string=? \"Trap\"
+                        (event-name e))
+              (is-player? (event-other-actor e)))
+     (build (room 1000 1000 600)
+            (event-location e)))))"
                                              ))
            'returns "void?")))))
 

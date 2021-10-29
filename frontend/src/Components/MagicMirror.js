@@ -47,40 +47,41 @@ export function MagicMirror(props) {
             }}
         />
         {!error ? "" :
-            <Alert severity="error" style={{overflowX: "auto"}}>
+            <Alert severity="error" style={{ overflowX: "auto" }}>
                 {!errorLineNumber ? "" : <>Error on line {errorLineNumber}<br /></>}
                 <pre><code>{error}</code></pre>
             </Alert>}
         {response === undefined ? "" :
-            <Alert severity="success" style={{overflowX: "auto"}}><pre><code>{response}</code></pre></Alert>}
+            <Alert severity="success" style={{ overflowX: "auto" }}><pre><code>{response}</code></pre></Alert>}
         {output === undefined ? "" :
-            <Alert severity="warning" style={{overflowX: "auto"}}><pre><code>{output}</code></pre></Alert>} 
-        
-        <CastButton color="secondary" variant="contained" code={code} 
-          onReturn={(fromUnreal) => {
-            setError(undefined)
-            setResponse(undefined)
-            setOutput(undefined)
+            <Alert severity="warning" style={{ overflowX: "auto" }}><pre><code>{output}</code></pre></Alert>}
+        {props.hideButtons ? "" :
+            <>
+                <CastButton color="secondary" variant="contained" code={code}
+                    onReturn={(fromUnreal) => {
+                        setError(undefined)
+                        setResponse(undefined)
+                        setOutput(undefined)
 
-            if (isError(fromUnreal)) {
-                setError(racketErrorMessage(fromUnreal))
-                setErrorLineNumber(racketErrorLineNumber(fromUnreal))
-            }
-            if (fromUnreal.response && fromUnreal.response.customReactComponent) {
-                let CustomComponent = UIScope[fromUnreal.response.customReactComponent]
-                setResponse(<CustomComponent data={fromUnreal.response} />)
-            }
-            else {
-                setResponse(fromUnreal.racketResponse)
-            }
+                        if (isError(fromUnreal)) {
+                            setError(racketErrorMessage(fromUnreal))
+                            setErrorLineNumber(racketErrorLineNumber(fromUnreal))
+                        }
+                        if (fromUnreal.response && fromUnreal.response.customReactComponent) {
+                            let CustomComponent = UIScope[fromUnreal.response.customReactComponent]
+                            setResponse(<CustomComponent data={fromUnreal.response} />)
+                        }
+                        else {
+                            setResponse(fromUnreal.racketResponse)
+                        }
 
-            if (fromUnreal.output) {
-                setOutput(fromUnreal.output)
-            }
-            props.onReturn && props.onReturn(fromUnreal)
-        }} />
-        &nbsp;
-        {props.additionalButtons}
-        <ConnectionIndicator afterConnection="" />
+                        if (fromUnreal.output) {
+                            setOutput(fromUnreal.output)
+                        }
+                        props.onReturn && props.onReturn(fromUnreal)
+                    }} />
+                &nbsp;
+                {props.additionalButtons}
+                <ConnectionIndicator afterConnection="" /></>}
     </>
 }
