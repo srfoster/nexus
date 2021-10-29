@@ -27,24 +27,24 @@
     'definitions
     (list
      (hash
-      'name "build"
-      'use (format-racket-code "(build [builder builder?])")
-      'parameter (list "builder")
-      'type (list "builder?")
+      'name "summon"
+      'use (format-racket-code "(summon [summoner summoner?])")
+      'parameter (list "summoner")
+      'type (list "summoner?")
       'optional (list #f)
-      'parameterDesc (list "The builder to be placed in the 3D world.")
-      'desc "Actually places a builder in the world."
-      'example (map format-racket-code (list ";creating a sphere builder doesn't build a sphere \n (define s (voxel-sphere 1000))\n ;but this does\n (build s) " ))
+      'parameterDesc (list "The summoner to be placed in the 3D world.")
+      'desc "Actually places a summoner in the world."
+      'example (map format-racket-code (list ";creating a sphere summoner doesn't summon a sphere \n (define s (voxel-sphere 1000))\n ;but this does\n (summon s) " ))
       'returns "void?")
      (hash
-      'name "builder?"
-      'use (format-racket-code "(builder? [something any/c])")
+      'name "summoner?"
+      'use (format-racket-code "(summoner? [something any/c])")
       'parameter (list "something")
       'type (list "any/c")
       'optional (list #f)
       'parameterDesc (list "This can be anything.")
-      'desc "Returns true if `something` is a builder. Returns false otherwise."
-      'example (map format-racket-code (list "(builder? (voxel-sphere 1000))" "(builder? (current-location))"))
+      'desc "Returns true if `something` is a summoner. Returns false otherwise."
+      'example (map format-racket-code (list "(summoner? (voxel-sphere 1000))" "(summoner? (current-location))"))
       'returns "boolean?")))
    (hash
     'name "Getters"
@@ -52,32 +52,32 @@
     (list
      (hash
       'name "width"
-      'use (format-racket-code "(width [builder builder?])")
-      'parameter (list "builder")
-      'type (list "builder?" )
+      'use (format-racket-code "(width [summoner summoner?])")
+      'parameter (list "summoner")
+      'type (list "summoner?" )
       'optional (list #f)
-      'parameterDesc (list "The builder you want the width of." )
-      'desc "Returns the width of a builder, which is a number."
+      'parameterDesc (list "The summoner you want the width of." )
+      'desc "Returns the width of a summoner, which is a number."
       'example (map format-racket-code (list "(width (voxel-sphere 1000))" ))
       'returns "number?")
      (hash
       'name "depth"
-      'use (format-racket-code "(depth [builder builder?])")
-      'parameter (list "builder")
-      'type (list "builder?" )
+      'use (format-racket-code "(depth [summoner summoner?])")
+      'parameter (list "summoner")
+      'type (list "summoner?" )
       'optional (list #f)
-      'parameterDesc (list "The builder you want the depth of." )
-      'desc "Returns the depth of a builder, which is a number."
+      'parameterDesc (list "The summoner you want the depth of." )
+      'desc "Returns the depth of a summoner, which is a number."
       'example (map format-racket-code (list "(depth (torus))" ))
       'returns "number?")
      (hash
       'name "height"
-      'use (format-racket-code "(height [builder builder?])")
-      'parameter (list "builder")
-      'type (list "builder?" )
+      'use (format-racket-code "(height [summoner summoner?])")
+      'parameter (list "summoner")
+      'type (list "summoner?" )
       'optional (list #f)
-      'parameterDesc (list "The builder you want the height of." )
-      'desc "Returns the height of a builder, which is a number."
+      'parameterDesc (list "The summoner you want the height of." )
+      'desc "Returns the height of a summoner, which is a number."
       'example (map format-racket-code (list "(height (voxel-box 1000 500 600))" ))
       'returns "number?")))
    (hash
@@ -86,70 +86,70 @@
     (list
      (hash
       'name "scale"
-      'use (format-racket-code "(scale [factor number?] [builder builder?])")
-      'parameter (list "factor" "builder")
-      'type (list "number?" "builder?")
+      'use (format-racket-code "(scale [factor number?] [summoner summoner?])")
+      'parameter (list "factor" "summoner")
+      'type (list "number?" "summoner?")
       'optional (list #f #f)
-      'parameterDesc (list "The factor by which to scale the given builder." "Builder that will be scaled.")
-      'desc "Scales a builder by the given factor. For example, scaling by a factor of 2 would double the size of a sphere. There is a limit to the amount you can scale. You'll get an error if you end up trying to place a builder that is too large."
-      'example (map format-racket-code (list "(build (scale 5 (voxel-sphere 100)))" ";this will error\n(build (scale 2 (voxel-sphere 1000)))" ))
-      'returns "builder?")
+      'parameterDesc (list "The factor by which to scale the given summoner." "Builder that will be scaled.")
+      'desc "Scales a summoner by the given factor. For example, scaling by a factor of 2 would double the size of a sphere. There is a limit to the amount you can scale. You'll get an error if you end up trying to place a summoner that is too large."
+      'example (map format-racket-code (list "(summon (scale 5 (voxel-sphere 100)))" ";this will error\n(summon (scale 2 (voxel-sphere 1000)))" ))
+      'returns "summoner?")
      (hash
       'name "translate"
-      'use (format-racket-code "(translate [vector vec?] [builder builder?])")
-      'parameter (list "vector" "builder")
-      'type (list "vec?" "builder?")
+      'use (format-racket-code "(translate [vector vec?] [summoner summoner?])")
+      'parameter (list "vector" "summoner")
+      'type (list "vec?" "summoner?")
       'optional (list #f #f)
-      'parameterDesc (list "A vector by which to move the given builder." "Builder that will be moved.")
-      'desc "Moves the builder in 3D space using the x, y, z of a given vector."
-      'example (map format-racket-code (list "(build (beside/wide (translate (vec 0 0 400) (voxel-sphere 100)) (voxel-sphere 100)))" ))
-      'returns "builder?")))
+      'parameterDesc (list "A vector by which to move the given summoner." "Builder that will be moved.")
+      'desc "Moves the summoner in 3D space using the x, y, z of a given vector."
+      'example (map format-racket-code (list "(summon (beside/wide (translate (vec 0 0 400) (voxel-sphere 100)) (voxel-sphere 100)))" ))
+      'returns "summoner?")))
    (hash
     'name "Combiners"
     'definitions
     (list
      (hash
       'name "above"
-      'use (format-racket-code "(above [builder builder?] ...)")
-      'parameter (list "builder")
-      'type (list "builder?")
+      'use (format-racket-code "(above [summoner summoner?] ...)")
+      'parameter (list "summoner")
+      'type (list "summoner?")
       'optional (list #f)
-      'parameterDesc (list "The builder to be placed above the following builders.")
-      'desc "This function takes any number of builders. It will place one builder above the next in the order given."
-      'example (map format-racket-code (list "(build (above (voxel-sphere 200)(voxel-sphere 400)(voxel-sphere 800)))" ))
-      'returns "builder?")
+      'parameterDesc (list "The summoner to be placed above the following summoners.")
+      'desc "This function takes any number of summoners. It will place one summoner above the next in the order given."
+      'example (map format-racket-code (list "(summon (above (voxel-sphere 200)(voxel-sphere 400)(voxel-sphere 800)))" ))
+      'returns "summoner?")
      (hash
       'name "beside/wide"
-      'use (format-racket-code "(beside/wide [builder builder?] ...)")
-      'parameter (list "builder")
-      'type (list "builder?")
+      'use (format-racket-code "(beside/wide [summoner summoner?] ...)")
+      'parameter (list "summoner")
+      'type (list "summoner?")
       'optional (list #f)
-      'parameterDesc (list "The builder to be placed next to the following builders in the x-direction.")
-      'desc "This function takes any number of builders. It will place one builder next to the following builders in the order given, along the x-axis."
-      'example (map format-racket-code (list "(build (beside/wide (voxel-sphere 200)(voxel-sphere 400)(voxel-sphere 800)))" ))
-      'returns "builder?")
+      'parameterDesc (list "The summoner to be placed next to the following summoners in the x-direction.")
+      'desc "This function takes any number of summoners. It will place one summoner next to the following summoners in the order given, along the x-axis."
+      'example (map format-racket-code (list "(summon (beside/wide (voxel-sphere 200)(voxel-sphere 400)(voxel-sphere 800)))" ))
+      'returns "summoner?")
      (hash
       'name "beside/deep"
-      'use (format-racket-code "(beside/deep [builder builder?] ...)")
-      'parameter (list "builder")
-      'type (list "builder?")
+      'use (format-racket-code "(beside/deep [summoner summoner?] ...)")
+      'parameter (list "summoner")
+      'type (list "summoner?")
       'optional (list #f)
-      'parameterDesc (list "The builder to be placed next to the following builders in the y-direction.")
-      'desc "This function takes any number of builders. It will place one builder next to the following builders in the order given, along the y-axis."
-      'example (map format-racket-code (list "(build (beside/deep (voxel-sphere 200)(voxel-sphere 400)(voxel-sphere 800)))" ))
-      'returns "builder?")
+      'parameterDesc (list "The summoner to be placed next to the following summoners in the y-direction.")
+      'desc "This function takes any number of summoners. It will place one summoner next to the following summoners in the order given, along the y-axis."
+      'example (map format-racket-code (list "(summon (beside/deep (voxel-sphere 200)(voxel-sphere 400)(voxel-sphere 800)))" ))
+      'returns "summoner?")
      (hash
       'name "overlay"
-      'use (format-racket-code "(overlay [builder builder?] ...)")
-      'parameter (list "builder")
-      'type (list "builder?")
+      'use (format-racket-code "(overlay [summoner summoner?] ...)")
+      'parameter (list "summoner")
+      'type (list "summoner?")
       'optional (list #f)
-      'parameterDesc (list "The builder to be placed at the center of the following builders.")
-      'desc "This function takes any number of builders. It will overlay each builder atop the following builders in the order given."
-      'example (map format-racket-code (list "(build (overlay (voxel-sphere 1000) (beside/wide (voxel-sphere 600 'air)
+      'parameterDesc (list "The summoner to be placed at the center of the following summoners.")
+      'desc "This function takes any number of summoners. It will overlay each summoner atop the following summoners in the order given."
+      'example (map format-racket-code (list "(summon (overlay (voxel-sphere 1000) (beside/wide (voxel-sphere 600 'air)
                              (voxel-sphere 600 'air)
                              (voxel-sphere 600 'air))))" ))
-      'returns "builder?")))
+      'returns "summoner?")))
    (hash
     'name "Voxel Primitives"
     'definitions
@@ -161,9 +161,9 @@
       'type (list "(between/c 0 1000)" "(or/c 'voxel 'air)")
       'optional (list #f #t)
       'parameterDesc (list "Radius of the sphere. Must be between 0 and 1000." "Material of the sphere. Available materials are 'air and 'sphere")
-      'desc "Returns a voxel-sphere builder, which when passed into `build` instantiates a voxel sphere into the world."
-      'example (map format-racket-code (list "(build (voxel-sphere 1000))" "(build (overlay (voxel-box 1000 1000 1000) (voxel-sphere 600 'air)))" ))
-      'returns "builder?")
+      'desc "Returns a voxel-sphere summoner, which when passed into `summon` instantiates a voxel sphere into the world."
+      'example (map format-racket-code (list "(summon (voxel-sphere 1000))" "(summon (overlay (voxel-box 1000 1000 1000) (voxel-sphere 600 'air)))" ))
+      'returns "summoner?")
      (hash
       'name "voxel-box"
       'use (format-racket-code "(voxel-box [width (between/c 0 2000)] [depth (between/c 0 2000)] [height (between/c 0 2000)] [material (or/c 'voxel 'air) 'voxel])")
@@ -171,9 +171,9 @@
       'type (list "(between/c 0 2000)" "(between/c 0 2000)" "(between/c 0 2000)" "(or/c 'voxel 'air)")
       'optional (list #f #t)
       'parameterDesc (list "Width of the box. Must be between 0 and 2000." "Depth of the box. Must be between 0 and 2000." "Height of the box. Must be between 0 and 2000." "Material of the sphere. Available materials are 'air and 'sphere")
-      'desc "Returns a voxel-box builder, which when passed into `build` instantiates a voxel box into the world."
-      'example (map format-racket-code (list "(build (voxel-box 1000 500 400))" "(build (overlay (voxel-box 800 800 800) (voxel-box 400 1000 400 'air)))" ))
-      'returns "builder?")
+      'desc "Returns a voxel-box summoner, which when passed into `summon` instantiates a voxel box into the world."
+      'example (map format-racket-code (list "(summon (voxel-box 1000 500 400))" "(summon (overlay (voxel-box 800 800 800) (voxel-box 400 1000 400 'air)))" ))
+      'returns "summoner?")
      (hash
       'name "empty"
       'use (format-racket-code "(empty [width number?] [depth number? width] [height number? depth])")
@@ -181,9 +181,9 @@
       'type (list "number?" "number?" "number?")
       'optional (list #f #t #t)
       'parameterDesc (list "Width of an empty space." "Depth of an empty space. Defaults to width if unspecified." "Height of an empty space. Defaults to depth if unspecified")
-      'desc "Returns an empty space builder, which when passed into `build` instantiates an empty space into the world. Useful for spacing other primitives out."
-      'example (map format-racket-code (list "(build (beside/wide (voxel-sphere 1000) (empty 2000 2000 2000) (voxel-sphere 1000)))" ))
-      'returns "builder?")))
+      'desc "Returns an empty space summoner, which when passed into `summon` instantiates an empty space into the world. Useful for spacing other primitives out."
+      'example (map format-racket-code (list "(summon (beside/wide (voxel-sphere 1000) (empty 2000 2000 2000) (voxel-sphere 1000)))" ))
+      'returns "summoner?")))
    (hash
     'name "Physical Objects"
     'definitions
@@ -195,9 +195,9 @@
       'type (list )
       'optional (list )
       'parameterDesc (list )
-      'desc "Returns a sphere with physics, which when passed into `build` instantiates a sphere into the world."
-      'example (map format-racket-code (list "(build (sphere))" "(build (above (sphere) (voxel-box 600 600 600)))" ))
-      'returns "builder?")
+      'desc "Returns a sphere with physics, which when passed into `summon` instantiates a sphere into the world."
+      'example (map format-racket-code (list "(summon (sphere))" "(summon (above (sphere) (voxel-box 600 600 600)))" ))
+      'returns "summoner?")
      (hash
       'name "cube"
       'use (format-racket-code "(cube)")
@@ -205,9 +205,9 @@
       'type (list )
       'optional (list )
       'parameterDesc (list )
-      'desc "Returns a cube with physics, which when passed into `build` instantiates a cube into the world."
-      'example (map format-racket-code (list "(build (cube))" "(build (above (cube) (voxel-box 600 600 600)))" ))
-      'returns "builder?")
+      'desc "Returns a cube with physics, which when passed into `summon` instantiates a cube into the world."
+      'example (map format-racket-code (list "(summon (cube))" "(summon (above (cube) (voxel-box 600 600 600)))" ))
+      'returns "summoner?")
      (hash
       'name "torus"
       'use (format-racket-code "(torus)")
@@ -215,9 +215,9 @@
       'type (list )
       'optional (list )
       'parameterDesc (list )
-      'desc "Returns a torus with physics, which when passed into `build` instantiates a torus into the world."
-      'example (map format-racket-code (list "(build (torus))" "(build (above (torus) (voxel-box 600 600 600)))" ))
-      'returns "builder?")
+      'desc "Returns a torus with physics, which when passed into `summon` instantiates a torus into the world."
+      'example (map format-racket-code (list "(summon (torus))" "(summon (above (torus) (voxel-box 600 600 600)))" ))
+      'returns "summoner?")
      (hash
       'name "dodecahedron"
       'use (format-racket-code "(dodecahedron)")
@@ -225,9 +225,9 @@
       'type (list )
       'optional (list )
       'parameterDesc (list )
-      'desc "Returns a dodecahedron with physics, which when passed into `build` instantiates a dodecahedron into the world."
-      'example (map format-racket-code (list "(build (dodecahedron))" "(build (above (dodecahedron) (voxel-box 600 600 600)))" ))
-      'returns "builder?")
+      'desc "Returns a dodecahedron with physics, which when passed into `summon` instantiates a dodecahedron into the world."
+      'example (map format-racket-code (list "(summon (dodecahedron))" "(summon (above (dodecahedron) (voxel-box 600 600 600)))" ))
+      'returns "summoner?")
   ))
   (hash
     'name "Magical Effects"
@@ -240,9 +240,9 @@
       'type (list )
       'optional (list )
       'parameterDesc (list )
-      'desc "Returns a magic circle which doesn't have physics, which when passed into `build` instantiates a magic circle into the world."
-      'example (map format-racket-code (list "(build (magic-circle))" "(build (above (magic-circle) (magic-circle)))" ))
-      'returns "builder?")
+      'desc "Returns a magic circle which doesn't have physics, which when passed into `summon` instantiates a magic circle into the world."
+      'example (map format-racket-code (list "(summon (magic-circle))" "(summon (above (magic-circle) (magic-circle)))" ))
+      'returns "summoner?")
      (hash
       'name "energy-ball"
       'use (format-racket-code "(energy-ball)")
@@ -250,19 +250,19 @@
       'type (list )
       'optional (list )
       'parameterDesc (list )
-      'desc "Returns an energy ball which doesn't have physics, which when passed into `build` instantiates an energy ball into the world."
-      'example (map format-racket-code (list "(build (energy-ball))" "(build (above 
+      'desc "Returns an energy ball which doesn't have physics, which when passed into `summon` instantiates an energy ball into the world."
+      'example (map format-racket-code (list "(summon (energy-ball))" "(summon (above 
         (energy-ball) 
         (magic-circle)
         (energy-ball)
         (magic-circle)))"
-        "(define brt (build (above (tag (scale 2 (energy-ball)) \"ball\") (tag (sphere) \"sphere\"))))
+        "(define brt (summon (above (tag (scale 2 (energy-ball)) \"ball\") (tag (sphere) \"sphere\"))))
 
          (define b (find-first-by-tag brt \"ball\"))
          (define s (find-first-by-tag brt \"sphere\"))
 
          (parent s b)"))
-      'returns "builder?")
+      'returns "summoner?")
   ))))
 
 (define (get-transmogrification-api-docs)
@@ -272,14 +272,14 @@
          (list
           (hash
            'name "tag"
-           'use (format-racket-code "(tag [builder builder?] [tag-name string?])")
-           'parameter (list "builder" "tag-name")
-           'type (list "builder?" "string?")
+           'use (format-racket-code "(tag [summoner summoner?] [tag-name string?])")
+           'parameter (list "summoner" "tag-name")
+           'type (list "summoner?" "string?")
            'optional (list #f #f)
-           'parameterDesc (list "A builder to tag with a tag name." "A tag name to label a specific builder.")
-           'desc "Wrapping a builder in a tag allows the user to later find the object reference by tag and transmogrify that object later."
+           'parameterDesc (list "A summoner to tag with a tag name." "A tag name to label a specific summoner.")
+           'desc "Wrapping a summoner in a tag allows the user to later find the object reference by tag and transmogrify that object later."
            'example (map format-racket-code (list
-                                             "(define brt (build (tag (cube) \"cube\")))
+                                             "(define brt (summon (tag (cube) \"cube\")))
 
                                               (define magic-cube (find-first-by-tag brt \"cube\"))
 
@@ -297,7 +297,7 @@
            'parameterDesc (list "The parent." "The child, which must not be a physical object.")
            'desc "This function attaches the second summoned to the first summoned. The second summoned can not be a physical object. It must be a summoned without physics like a (magic-circle)."
            'example (map format-racket-code (list
-                                             "(define brt (build (above (tag (cube) \"cube\")
+                                             "(define brt (summon (above (tag (cube) \"cube\")
                                                                         (tag (scale 3 (magic-circle)) \"circle\"))))
 
                                               (define magic-cube (find-first-by-tag brt \"cube\"))
@@ -314,23 +314,23 @@
          (list
           (hash
            'name "force"
-           'use (format-racket-code "(force [builder builder?] [vec vec?])")
-           'parameter (list "builder" "vec")
-           'type (list "builder?" "vec?")
+           'use (format-racket-code "(force [summoner summoner?] [vec vec?])")
+           'parameter (list "summoner" "vec")
+           'type (list "summoner?" "vec?")
            'optional (list #f #f)
-           'parameterDesc (list "A builder to apply a force to." "A vector which represents the direction and magnitude of the force to be applied.")
-           'desc "This function applies a force to the builder in the magnitude and direction of the given vector."
+           'parameterDesc (list "A summoner to apply a force to." "A vector which represents the direction and magnitude of the force to be applied.")
+           'desc "This function applies a force to the summoner in the magnitude and direction of the given vector."
            'example (map format-racket-code (list
-                                             "(define (letter->builder l)
+                                             "(define (letter->summoner l)
   (above (tag (cube) \"letter\") (voxel-box 500 500 200)))
 
-(define (list->builder l)
-  (apply beside/wide (map letter->builder l)))
+(define (list->summoner l)
+  (apply beside/wide (map letter->summoner l)))
 
-(define rt (build 
+(define rt (summon 
             (beside/wide 
              (translate (vec 0 0 -100) (tag (magic-circle) \"pointer\"))
-             (list->builder '(a b c a)))))
+             (list->summoner '(a b c a)))))
 
 (define letters (find-all-by-tag rt \"letter\"))
 
@@ -367,12 +367,12 @@
            'parameterDesc (list "A magic circle to change the color of." "A hash of R, B, G values (from 0 to 1).")
            'desc "Changes the color of a given magic circle using the given RGB values (in hash form)."
            'example (map format-racket-code (list
-                                             "(define brt (build (tag (magic-circle) \"circle\")))
+                                             "(define brt (summon (tag (magic-circle) \"circle\")))
 
                                              (define circle (find-first-by-tag brt \"circle\"))
 
                                              (magic-circle-color circle (hash 'R 1 'G 1 'B 0))"
-                                             "(define brt (build (above
+                                             "(define brt (summon (above
                     (tag (magic-circle) \"red\")
                     (tag (magic-circle) \"orange\")
                     (tag (magic-circle) \"yellow\")
@@ -412,10 +412,16 @@
            'parameterDesc (list "Function to stop running when projectile hits something in the world.")
            'desc "This function configures the projectile of your character to execute a given function when it lands. The given function will be called with the location that the projectile hit."
            'example (map format-racket-code (list
+           "(clear-projectile-hit-functions)
+
+           (on-projectile-hit
+             (lambda (e)
+               (summon (light) 
+                       (event-location e))))"
                                              "(clear-projectile-hit-functions)
                                              
                                              (on-projectile-hit 
-                                               (lambda (e) (build (voxel-sphere 1000) (event-location e))))"
+                                               (lambda (e) (summon (voxel-sphere 1000) (event-location e))))"
                                              
                                              "(clear-projectile-hit-functions)
                                              
@@ -425,7 +431,7 @@
                                                (lambda (e) 
                                                  (set! size (+ size 200))
                                                  (when (> size 1000) (set! size 200))
-                                                 (build (voxel-sphere size) 
+                                                 (summon (voxel-sphere size) 
                                                         (event-location e))))"
                                              ))
            'returns "void?")
@@ -440,23 +446,23 @@
            'example (map format-racket-code (list
                                              "(clear-projectile-hit-functions)
                                              
-                                             (define (build-once e)
-                                                (build (voxel-sphere 1000) (event-location e))
-                                                (cancel-on-projectile-hit build-once))
+                                             (define (summon-once e)
+                                                (summon (voxel-sphere 1000) (event-location e))
+                                                (cancel-on-projectile-hit summon-once))
 
-                                             (on-projectile-hit build-once)"
+                                             (on-projectile-hit summon-once)"
                                              
                                              "(clear-projectile-hit-functions)
                                              
-                                             (define num-builds 0)
+                                             (define num-summons 0)
                                              
-                                              (define (build-thrice e)
-                                                (set! num-builds (add1 num-builds))
-                                                (build (voxel-sphere 1000) (event-location e))
-                                                (when (>= num-builds 3)
-                                                  (cancel-on-projectile-hit build-thrice)))
+                                              (define (summon-thrice e)
+                                                (set! num-summons (add1 num-summons))
+                                                (summon (voxel-sphere 1000) (event-location e))
+                                                (when (>= num-summons 3)
+                                                  (cancel-on-projectile-hit summon-thrice)))
 
-                                             (on-projectile-hit build-thrice)"))
+                                             (on-projectile-hit summon-thrice)"))
            'returns "void?")
           (hash
            'name "clear-projectile-hit-functions"
@@ -491,14 +497,14 @@
                                              (on-zone-enter
                                                (lambda (e) 
                                                  (when (string=? \"Trap\" (event-name e))
-                                                   (build (room 1000 1000 1000) 
+                                                   (summon (room 1000 1000 1000) 
                                                           (event-location e)))))"
                                              "(clear-zone-enter-functions)
 (clear-projectile-hit-functions)
 
 (on-projectile-hit
  (lambda (e)
-   (define brt (build (overlay 
+   (define brt (summon (overlay 
                        (tag (zone #:name \"Trap\") \"zone-actor\")
                        (tag (magic-circle) \"circle\"))
           (event-location e)))
@@ -510,7 +516,7 @@
  (lambda (e)
    (when (string=? \"Trap\"
                    (event-name e))
-     (build (room 1000 1000 600)
+     (summon (room 1000 1000 600)
             (event-location e)))))"
 
             "(clear-zone-enter-functions)
@@ -519,7 +525,7 @@
 (on-projectile-hit
  (lambda (e)
    (define brt
-     (build
+     (summon
       (overlay
        (tag (zone #:name \"Trap\")
             \"zone-actor\")
@@ -537,7 +543,7 @@
    (when (and (string=? \"Trap\"
                         (event-name e))
               (is-player? (event-other-actor e)))
-     (build (room 1000 1000 600)
+     (summon (room 1000 1000 600)
             (event-location e)))))"
                                              ))
            'returns "void?")))))
@@ -566,7 +572,7 @@
            'example (map format-racket-code (list
                                              "(and #t #t #f)"
                                              "(and #t #t #t)"
-                                             "(and (vec? (vec 100 200 -100)) (builder? (voxel-sphere 1000)) (boolean? #f))"))
+                                             "(and (vec? (vec 100 200 -100)) (summoner? (voxel-sphere 1000)) (boolean? #f))"))
            'returns "list?")
           (hash
            'name "or"
@@ -580,7 +586,7 @@
                                              "(or #t #t #f)"
                                              "(or #f #t)"
                                              "(or 5 #t #t)"
-                                             "(or (vec? (vec 100 200 -100)) (builder? (voxel-sphere 1000)) (boolean? #f))"))
+                                             "(or (vec? (vec 100 200 -100)) (summoner? (voxel-sphere 1000)) (boolean? #f))"))
            'returns "list?")
           ))
    (hash 'name "Lists"
@@ -612,7 +618,7 @@
       'optional (list)
       'parameterDesc (list )
       'desc "Returns a vector representing the current location of the user's orb."
-      'example (map format-racket-code (list "(build (voxel-sphere 500) (+vec (vec 1000 1000 1000) (current-location)))"))
+      'example (map format-racket-code (list "(summon (voxel-sphere 500) (+vec (vec 1000 1000 1000) (current-location)))"))
       'returns "vec?")
      (hash
       'name "vec"
@@ -632,7 +638,7 @@
       'optional (list #f #f)
       'parameterDesc (list "The vector to be added to the second vector." "The vector to be added to the first vector.")
       'desc "Returns a vector that is the addition of the two given vectors."
-      'example (map format-racket-code (list "(build (voxel-sphere 500) (+vec (vec 1000 1000 1000) (current-location)))"))
+      'example (map format-racket-code (list "(summon (voxel-sphere 500) (+vec (vec 1000 1000 1000) (current-location)))"))
       'returns "vec?")
      (hash
       'name "*vec"
@@ -642,7 +648,7 @@
       'optional (list #f #f)
       'parameterDesc (list "The factor by which to scale each number in the vector." "The vector to be scaled.")
       'desc "Returns a vector that is scaled by the given factor."
-      'example (map format-racket-code (list "(build (voxel-sphere 500) (+vec (*vec 10 (vec 100 100 100)) (current-location)))"))
+      'example (map format-racket-code (list "(summon (voxel-sphere 500) (+vec (*vec 10 (vec 100 100 100)) (current-location)))"))
       'returns "vec?")
      (hash
       'name "vec?"

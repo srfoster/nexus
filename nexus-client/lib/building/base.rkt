@@ -5,6 +5,8 @@
          "../base.rkt")
 
 (provide build (struct-out builder)
+         (rename-out [build summon])
+         summoner?
          make-basic-builder
          (struct-out build-result-tree) 
          builder-w builder-d builder-h builder-scale
@@ -12,7 +14,10 @@
         rotate above beside/wide beside/deep overlay translate 
         tag find-first-by-tag find-all-by-tag)
 
+
 (struct builder (data function position dimensions children tags))
+
+(define summoner? builder?)
 
 (define (make-basic-builder data function #:dimensions [dimensions (vec 300 300 300)] #:children [children '()])
   (builder data function (vec 0 0 0) dimensions children '()))

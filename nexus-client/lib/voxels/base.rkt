@@ -7,7 +7,9 @@
          "../building/base.rkt"
 )
 
-(provide empty voxel-sphere voxel-box  (struct-out builder) (struct-out build-result-tree) 
+(provide empty voxel-sphere voxel-box  (struct-out builder) (struct-out build-result-tree)
+        (rename-out [build summon])
+        summoner?
         width depth height 
         scale rotate above beside/wide beside/deep overlay translate build
         find-first-by-tag find-all-by-tag tag)

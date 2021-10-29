@@ -13,7 +13,8 @@
          ;stuff you can spawn
          zone cube dodecahedron sphere torus 
          magic-circle magic-circle-color
-         energy-ball 
+         energy-ball
+         light 
          dragon 
          ;getters and setters on spawned things
          parent
@@ -35,7 +36,7 @@
  let spawn = new toSpawn(GWorld, @(->unreal-value pos)) 
  let postSpawn = @(->unreal-value (spawner-post-spawn s));
  postSpawn(spawn);
- if(spawn.ChildActor.ChildActor.SetName) 
+ if(spawn.ChildActor && spawn.ChildActor.ChildActor && spawn.ChildActor.ChildActor.SetName) 
   spawn.ChildActor.ChildActor.SetName(@(->unreal-value (spawner-name s)));
  return spawn;
  }))
@@ -67,6 +68,12 @@
   (make-basic-builder (spawner "StemCell"
                                name
                                @unreal-value{return (sc)=>{sc.BecomeZone()}})
+                      build-spawner))
+
+(define (light)
+  (make-basic-builder (spawner "StemCell"
+                               "light"
+                               @unreal-value{return (sc)=>{sc.BecomeLight()}})
                       build-spawner))
 
 (define (magic-circle)
@@ -107,7 +114,7 @@
      var spawn = @(->unreal-value spawn);
      var dimensions = @(->unreal-value dimensions);
      var current_dimensions; 
-     if(spawn.ChildActor.ChildActor.GetBounds){
+     if(spawn.ChildActor && spawn.ChildActor.ChildActor && spawn.ChildActor.ChildActor.GetBounds){
        current_dimensions = spawn.ChildActor.ChildActor.GetBounds();
      }
      else{
