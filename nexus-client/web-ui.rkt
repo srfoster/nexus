@@ -168,7 +168,7 @@
                             
                             ; wait until there's something in ret, or a certain
                             ; amount of time has passed
-                            (for ([i (in-range 20)]) #:break (not (null-value? ret))
+                            (for ([i (in-range 50)]) #:break (not (null-value? ret))
                               (sleep .05))
                             (when (null-value? ret)
                               (define thread-id (random))

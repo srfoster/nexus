@@ -185,21 +185,25 @@ export function JSMirror(props) {
           {({ code, language, theme, disabled, onChange }) => {
             return <Grid container spacing={1} direction={"column"} >
               <Grid item xs>
-                <LiveEditor
-                  style={{ backgroundColor: "rgb(33,33,33)", borderRadius: "5px" }}
-                  onChange={(code) => {
-                    setCode(code)
-                    props.onChange && props.onChange(code)
-                    onChange(code)}
-                  }
-                />
+                  <LiveEditor
+                    style={{ backgroundColor: "rgb(33,33,33)", borderRadius: "5px" }}
+                    onChange={(code) => {
+                      setCode(code)
+                      props.onChange && props.onChange(code)
+                      onChange(code)
+                    }
+                    }
+                  />
               </Grid>
               <Grid item xs>
                 <Card elevation={4}>
-                  <CardContent>
-                    <LiveError />
-                    <LivePreview />
-                  </CardContent>
+                  {props.noEval ? "" :
+                    <>
+                      <CardContent>
+                        <LiveError />
+                        <LivePreview />
+                      </CardContent>
+                    </>}
                 </Card>
               </Grid>
             </Grid>

@@ -23,7 +23,7 @@ export let UIScope = {
   CloseUIButton,
   Lesson,
   Pages,
-  JSMirror: (props) => { return <JSMirror name={props.name} code={props.code} onChange={props.onChange} scope={UIScope}/>},
+  JSMirror: (props) => { return <JSMirror name={props.name} noEval={ props.noEval} code={props.code} onChange={props.onChange} scope={UIScope}/>},
   SpellThreadManager,
   EventLogger,
   MagicMirror,
