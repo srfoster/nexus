@@ -23,6 +23,17 @@ export function MagicMirror(props) {
         setStarterCode(props.code || code)
     },[props.code])
 
+    const includes = () => {
+        if (!props.includes) return ""
+        
+        let ret = ""
+
+        for (let i of props.includes)
+            ret += JSON.parse(localStorage.getItem(i+"-magic-mirror-code"))
+
+        return ret
+    }
+
     return <>
         <ReactCodeMirror
             value={
@@ -57,7 +68,7 @@ export function MagicMirror(props) {
             <Alert severity="warning" style={{ overflowX: "auto" }}><pre><code>{output}</code></pre></Alert>}
         {props.hideButtons ? "" :
             <>
-                <CastButton color="secondary" variant="contained" code={code}
+                <CastButton color="secondary" variant="contained" code={includes()+code}
                     onReturn={(fromUnreal) => {
                         setError(undefined)
                         setResponse(undefined)

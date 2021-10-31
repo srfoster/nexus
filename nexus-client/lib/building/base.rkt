@@ -7,6 +7,7 @@
 (provide build (struct-out builder)
          (rename-out [build summon])
          summoner?
+         summon-at
          make-basic-builder
          (struct-out build-result-tree) 
          builder-w builder-d builder-h builder-scale
@@ -24,7 +25,9 @@
 
 (struct build-result-tree (result builder children))
 
-(define (build b [at (current-location)])
+(define summon-at (make-parameter current-location))
+
+(define (build b [at ((summon-at))])
   (_build b at))
 
 ;Renderer

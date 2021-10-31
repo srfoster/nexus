@@ -7,9 +7,11 @@
          "../building/base.rkt"
 )
 
+;NOTE: This is re-providing a lot of building/base.rkt stuff.  Should it be?
 (provide empty voxel-sphere voxel-box  (struct-out builder) (struct-out build-result-tree)
         (rename-out [build summon])
         summoner?
+        summon-at
         width depth height 
         scale rotate above beside/wide beside/deep overlay translate build
         find-first-by-tag find-all-by-tag tag)

@@ -188,7 +188,7 @@ export default function RoomUI(props){
 
   function compile() {
     let roomCode = rooms.map(e=>`(translate (vec ${Math.floor((e.x + e.width/2) / 10) * 200} ${Math.floor((e.y + e.height/2)/10) * 200} 0) (room ${Math.floor(e.width/10) * 200} ${Math.floor(e.height/10) * 200} 1000))`)
-    let doorCode = doors.map(e=>`(translate (vec ${Math.floor((e.x + 26/2) / 10) * 200} ${Math.floor((e.y + 26/2)/10) * 200} 0) (sphere ${Math.floor(26/2/10) * 200} 'air))`)
+    let doorCode = doors.map(e=>`(translate (vec ${Math.floor((e.x + 26/2) / 10) * 200} ${Math.floor((e.y + 26/2)/10) * 200} 0) (voxel-sphere ${Math.floor(26/2/10) * 200} 'air))`)
 
     let compiledCode = props.wrapper === false ? 
     "(format-racket-code \"(overlay \n" +

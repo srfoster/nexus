@@ -19,14 +19,14 @@ export default function Clean (props){
     
   return (<>
     <Draggable 
-      handle="strong" 
+      handle=".main-handle" 
       //bounds="parent"
       //grid={[25, 25]} 
       >
       <Container style={{ float: "left", padding: 5 }} maxWidth="sm">
         <div style={{ padding: 10 }}>
           <Card>
-            <CardHeader avatar={<strong style={{ cursor: "pointer" }}><OpenWithIcon /></strong>}>
+            <CardHeader avatar={<strong className="main-handle" style={{ cursor: "pointer" }}><OpenWithIcon /></strong>}>
             </CardHeader>
             <CardContent>
               {load ?

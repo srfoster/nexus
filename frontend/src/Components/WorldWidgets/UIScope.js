@@ -14,14 +14,16 @@ import CloseUIButton from './CloseUIButton';
 import { MagicMirror } from '../MagicMirror';
 import { DocContent, DocModalWithButton } from '../Widgets/Docs'; //Note: circular dependency!
 import Lesson from '../Lessons/Lesson';
+import DarkModeSwitch from '../Widgets/DarkModeSwitch';
 
 export let UIScope = {
+  DarkModeSwitch,
   useEffect,
   useState,
   CloseUIButton,
   Lesson,
   Pages,
-  JSMirror: (props)=>{return <JSMirror code={props.code} onChange={props.onChange} scope={UIScope}/>},
+  JSMirror: (props) => { return <JSMirror name={props.name} code={props.code} onChange={props.onChange} scope={UIScope}/>},
   SpellThreadManager,
   EventLogger,
   MagicMirror,
