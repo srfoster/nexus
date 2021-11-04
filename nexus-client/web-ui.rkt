@@ -21,6 +21,7 @@
          unreal/external-runtime/main
          json
          errortrace
+         rackunit
          "lib/base.rkt"
          "lib/voxels/base.rkt"
          "lib/voxels/rooms.rkt"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { spread, useLocalStorage } from '../Util.js';
 import ConnectionIndicator from './Client/ConnectionIndicator.js';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
@@ -7,6 +7,7 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button'
 import { UIScope } from './WorldWidgets/UIScope.js';
+import { ZoomContext } from './Context.js';
 
 export function MagicMirror(props) {
     const [code, setCode] = useLocalStorage((props.name || Math.random())+ "-magic-mirror-code", props.code) //useState(props.code);
@@ -14,6 +15,7 @@ export function MagicMirror(props) {
     const [error, setError] = useState(undefined);
     const [output, setOutput] = useState(undefined);
     const [errorLineNumber, setErrorLineNumber] = useState(false);
+    const [zoom, setZoom] = useContext(ZoomContext);
 
     //if (props.code && code != props.code) //Override localstorage if we pass in some code
      //   setCode(props.code)
@@ -22,6 +24,28 @@ export function MagicMirror(props) {
     useEffect(()=>{
         setStarterCode(props.code || code)
     },[props.code])
+
+    // useEffect(()=>{
+    //    console.log("Does this re-render?")
+        
+    //    //https://github.com/codemirror/CodeMirror/issues/2443
+    //    //$('.CodeMirror-cursors').css({
+    //         //transform: `scale(${1/x})`,
+    //         //transformOrigin: '0 0'
+    //     // });
+    //     //.CodeMirror-cursors,
+    //     //.CodeMirror-measure:nth-child(2) + div{
+    //         //transform:scale(1.1); /* Reverse scale from 0.9 */
+    //         //transform-origin: 0 0;
+    //     //}
+    //     let cursors = document.querySelectorAll(".CodeMirror-cursors, .CodeMirror-measure:nth-child(2) + div");
+    //     for(let c of cursors){
+    //         c.style["-webkit-transform"] = "scale( " + (1 / zoom) + " )"
+    //         c.style["-webkit-transform-origin"] = "0 0"
+    //     }
+            
+    // },[zoom])
+
 
     const includes = () => {
         if (!props.includes) return ""

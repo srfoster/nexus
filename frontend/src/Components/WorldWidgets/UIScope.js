@@ -15,8 +15,10 @@ import { MagicMirror } from '../MagicMirror';
 import { DocContent, DocModalWithButton } from '../Widgets/Docs'; //Note: circular dependency!
 import Lesson from '../Lessons/Lesson';
 import DarkModeSwitch from '../Widgets/DarkModeSwitch';
+import { PrismMirror } from '../PrismMirror';
 
 export let UIScope = {
+  PrismMirror,
   DarkModeSwitch,
   useEffect,
   useState,
