@@ -28,6 +28,24 @@ const handleGet = (req, res) => {
   }
 }
 
+
+const handleGetByUsernameAndTag = (req, res) => {
+  let tag = req.params.tag;
+  let username = req.params.username;
+// Get user ID from username
+// Get user's spells with user ID
+// Find spell tagged with slug:tag
+  req.app.get('db')('users')
+        .where({username: username})
+        .first()
+        .then(user => {
+          res.send(user)
+        })
+
+
+ // res.send({text: "Hello World"})
+}
+
 const handleDelete = async (req, res) => {
   try{
     await helpers.checkIfLocked(req.app.get('db'), req, res)
@@ -80,6 +98,7 @@ const handlePut = async (req, res, next) => {
 
 module.exports = {
   handleGet,
+  handleGetByUsernameAndTag,
   handleDelete,
   handlePut
 }

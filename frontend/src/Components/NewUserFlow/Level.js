@@ -179,7 +179,7 @@ export const AccountCreationReminder = (props) => {
         alignItems="center"
         justify="center">
         <Grid item lg={5} >
-          <SignupForm showSigninMessage={false} />
+          <SignupForm showSigninMessage={false} doNotRedirect={props.doNotRedirect}/>
         </Grid>
         <Hidden mdDown>
           <Grid item lg={2} >
@@ -192,7 +192,7 @@ export const AccountCreationReminder = (props) => {
           </Grid>
         </Hidden>
         <Grid item lg={5} >
-          <LoginForm showSignupMessage={false} />
+          <LoginForm showSignupMessage={false} doNotRedirect={props.doNotRedirect}/>
         </Grid>
       </Grid>
 

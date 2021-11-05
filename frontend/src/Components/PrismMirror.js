@@ -14,45 +14,47 @@ return () => <App />;
 `
 
 export function PrismMirror(props) {
-  let [code, setCode] = useState(exampleCode)
+  // WARNING! Spread operators ahead! Must remove or Unreal React UI will clear screen of death!
 
-  let onValueChange = code => {
-    setCode(code)
-  }
+  // let [code, setCode] = useState(exampleCode)
 
-  const styles = {
-    root: {
-      boxSizing: 'border-box',
-      fontFamily: '"Dank Mono", "Fira Code", monospace',
-      ...theme.plain
-    }
-  }
+  // let onValueChange = code => {
+  //   setCode(code)
+  // }
 
-  let highlight = code => (
-    <Highlight {...defaultProps} theme={theme} code={code} language="jsx">
-      {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <Fragment>
-          {tokens.map((line, i) => (
-            <div {...getLineProps({ line, key: i })}>
-              {line.map((token, key) => {
-                console.log(token)
-                if (token.content == "BUTTON") { return <Button>Button</Button> }
-                return (<span {...getTokenProps({ token, key })} />)
-              })}
-            </div>
-          ))}
-        </Fragment>
-      )}
-    </Highlight>
-  )
+  // const styles = {
+  //   root: {
+  //     boxSizing: 'border-box',
+  //     fontFamily: '"Dank Mono", "Fira Code", monospace',
+  //     ...theme.plain
+  //   }
+  // }
 
-    return (
-      <Editor
-        value={code}
-        onValueChange={onValueChange}
-        highlight={highlight}
-        padding={10}
-        style={styles.root}
-      />
-    )
+  // let highlight = code => (
+  //   <Highlight {...defaultProps} theme={theme} code={code} language="jsx">
+  //     {({ className, style, tokens, getLineProps, getTokenProps }) => (
+  //       <Fragment>
+  //         {tokens.map((line, i) => (
+  //           <div {...getLineProps({ line, key: i })}>
+  //             {line.map((token, key) => {
+  //               console.log(token)
+  //               if (token.content == "BUTTON") { return <Button>Button</Button> }
+  //               return (<span {...getTokenProps({ token, key })} />)
+  //             })}
+  //           </div>
+  //         ))}
+  //       </Fragment>
+  //     )}
+  //   </Highlight>
+  // )
+
+  //   return (
+  //     <Editor
+  //       value={code}
+  //       onValueChange={onValueChange}
+  //       highlight={highlight}
+  //       padding={10}
+  //       style={styles.root}
+  //     />
+  //   )
 }

@@ -7,7 +7,42 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button'
 import { UIScope } from './WorldWidgets/UIScope.js';
-import { ZoomContext } from './Context.js';
+import { FontSizeContext } from './Context.js';
+
+
+//   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
+
+//   useEffect(() => {
+//     let isMounted = true;
+//     // Only running this to check if logged in
+//     let promise_or_false = SpellsApiService.getUserById('me');
+
+//     if (promise_or_false) {
+//       promise_or_false
+//         .then((user) => {if(isMounted) {setIsLoggedIn(true)}})
+//         .catch(() =>    {if(isMounted) {setIsLoggedIn(false)}})
+//     }
+//     return () => {
+//       isMounted = false
+//     }
+//   })
+
+
+    // e.preventDefault()
+// 
+    // AuthApiService.postLogin({
+    //   username: usernameInput.current.value,
+    //   password: passwordInput.current.value,
+    // })
+    //   .then(user => {
+        // usernameInput.current.value = ''
+        // passwordInput.current.value = ''
+        // props.onLoginSuccess()
+        // handleLoginSuccess()
+    //   })
+    //   .catch(res => {
+        // setError(res.error);
+    //   })
 
 export function MagicMirror(props) {
     const [code, setCode] = useLocalStorage((props.name || Math.random())+ "-magic-mirror-code", props.code) //useState(props.code);
@@ -15,7 +50,8 @@ export function MagicMirror(props) {
     const [error, setError] = useState(undefined);
     const [output, setOutput] = useState(undefined);
     const [errorLineNumber, setErrorLineNumber] = useState(false);
-    const [zoom, setZoom] = useContext(ZoomContext);
+    const [size, setSize] = useContext(FontSizeContext);
+    const [editor, setEditor] = useState(undefined);
 
     //if (props.code && code != props.code) //Override localstorage if we pass in some code
      //   setCode(props.code)
@@ -25,26 +61,10 @@ export function MagicMirror(props) {
         setStarterCode(props.code || code)
     },[props.code])
 
-    // useEffect(()=>{
-    //    console.log("Does this re-render?")
-        
-    //    //https://github.com/codemirror/CodeMirror/issues/2443
-    //    //$('.CodeMirror-cursors').css({
-    //         //transform: `scale(${1/x})`,
-    //         //transformOrigin: '0 0'
-    //     // });
-    //     //.CodeMirror-cursors,
-    //     //.CodeMirror-measure:nth-child(2) + div{
-    //         //transform:scale(1.1); /* Reverse scale from 0.9 */
-    //         //transform-origin: 0 0;
-    //     //}
-    //     let cursors = document.querySelectorAll(".CodeMirror-cursors, .CodeMirror-measure:nth-child(2) + div");
-    //     for(let c of cursors){
-    //         c.style["-webkit-transform"] = "scale( " + (1 / zoom) + " )"
-    //         c.style["-webkit-transform-origin"] = "0 0"
-    //     }
-            
-    // },[zoom])
+    useEffect(()=>{
+        editor && editor.refresh();
+        console.log(editor) 
+    },[size])
 
 
     const includes = () => {
@@ -79,6 +99,9 @@ export function MagicMirror(props) {
                 if (props.onChange) {
                     props.onChange(editor, data, value);
                 }
+            }}
+            editorDidMount={(e)=>{
+                setEditor(e)
             }}
         />
         {!error ? "" :

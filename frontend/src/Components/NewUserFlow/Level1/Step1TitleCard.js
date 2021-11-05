@@ -56,6 +56,7 @@ function Step1TitleCard({ setTitleScreenComplete }) {
 						onClick={() => setTitleScreenComplete(true)} />
 				}
 			</CardActions>
+			<img src="https://code.org/api/hour/begin_codespells_nexus.png" style={{visibility: "hidden", width: 1, height: 1}}/>
 		</Card>
 	)
 }

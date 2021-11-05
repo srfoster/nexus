@@ -37,6 +37,7 @@ let epLogin = '/login'
 let epSignup = '/signup'
 let epSpellIndex = '/spells'
 let epSpellDetails = '/spells/:id'
+let epSpellDetailsByUsernameAndTag = '/spells/:username/:tag'
 // TODO: update this endpoint
 let epPublicSpellDetails = '/secret/:id'
 let epPublicSpells = '/gallery'
@@ -63,6 +64,9 @@ app.get(epPublicSpells, PublicSpells.handleGet)
 
 // Retrieve specific spell information
 app.get(`${epSpellDetails}`, requireAuth, SpellDetails.handleGet)
+
+// Retrieve specific spell information by username and tag
+app.get(`${epSpellDetailsByUsernameAndTag}`, SpellDetails.handleGetByUsernameAndTag)
 
 // Retrieve specific spell information if public
 app.get(`${epPublicSpellDetails}`, PublicSpellDetails.handleGet)

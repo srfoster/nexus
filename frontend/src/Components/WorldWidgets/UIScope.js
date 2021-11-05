@@ -16,8 +16,10 @@ import { DocContent, DocModalWithButton } from '../Widgets/Docs'; //Note: circul
 import Lesson from '../Lessons/Lesson';
 import DarkModeSwitch from '../Widgets/DarkModeSwitch';
 import { PrismMirror } from '../PrismMirror';
+import { LogoutButton } from './LogoutButton';
 
 export let UIScope = {
+  LogoutButton,
   PrismMirror,
   DarkModeSwitch,
   useEffect,

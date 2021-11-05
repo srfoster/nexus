@@ -7,12 +7,13 @@ import Draggable from 'react-draggable';
 import OpenWithIcon from '@material-ui/icons/OpenWith';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { ZoomContext } from './Context';
+import { FontSizeContext } from './Context';
+import { AccountCreationReminder } from './NewUserFlow/Level' 
 
 export default function Clean (props){
   //This is here b/c otherwise Unreal sizes the UI too large when it first loads... not sure why
   const [load, setLoad] = useState(false);
-  const [size, setSize] = useState(1);
+  const [size, setSize] = useState(16);
 
   useEffect(() => {
     setTimeout(() => {
@@ -21,15 +22,19 @@ export default function Clean (props){
     document.body.style.setProperty("background-color", "transparent", "important");
   }, [])
 
-  function increaseZoom(event){
-    if(size<2){
-      setSize(size + 0.1);
+  useEffect(() => {
+    document.body.style.fontSize = size + "pt";
+  }, [size])
+
+  function increaseFontSize(event){
+    if(size<30){
+      setSize(size + 2);
     }
   }
   
-  function decreaseZoom(event){
-    if(size>0.5){
-      setSize(size - 0.1);
+  function decreaseFontSize(event){
+    if(size>8){
+      setSize(size - 2);
     }
   }
     
@@ -40,8 +45,8 @@ export default function Clean (props){
     //grid={[25, 25]} 
     >
       <div>
-        <ZoomContext.Provider value={[size, setSize]}>
-          <Container style={{ float: "left", padding: 5, zoom: size }} maxWidth="sm">
+        <FontSizeContext.Provider value={[size, setSize]}>
+          <Container style={{ float: "left", padding: 5 }} maxWidth="sm">
             <div style={{ padding: 10 }}>
               <Card>
                 <CardHeader
@@ -53,8 +58,8 @@ export default function Clean (props){
                     </>}
                   action={
                     <>
-                      <Button onClick={decreaseZoom}><RemoveIcon /></Button>
-                      <Button onClick={increaseZoom}><AddIcon /></Button>
+                      <Button onClick={decreaseFontSize}><RemoveIcon /></Button>
+                      <Button onClick={increaseFontSize}><AddIcon /></Button>
                     </>
                   }>
                 </CardHeader>
@@ -63,10 +68,11 @@ export default function Clean (props){
                     <JSMirror code={"<DocModalWithButton/>"} scope={UIScope} name="main" /> :
                     <></>}
                 </CardContent>
+                <AccountCreationReminder doNotRedirect/>
               </Card>
             </div>
           </Container>
-        </ZoomContext.Provider>
+        </FontSizeContext.Provider>
       </div>
     </Draggable>
   </>)
