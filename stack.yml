@@ -49,29 +49,29 @@ services:
     networks: 
       - dev-codespells-network
 
-  #lang-server:
-  #  image: codespells-lang-server
-  #  build: ./lang-server
-  #  restart: always
-  #  ports:
-  #    - 8091:8090
-  #  volumes:
-  #    - ./lang-server:/usr/src/app
-  #  container_name: lang-server
-  #  networks: 
-  #    - dev-codespells-network
-
-  racket-bridge:
-    image: racket-bridge
-    build: ./nexus-client
-    restart: always
-    ports:
-      - 8082:8082
-      - 8888:8888
-    volumes:
-      - ./nexus-client:/usr/src/app
-    command: "racket main.rkt"
-    container_name: racket-bridge
-    networks: 
-      - dev-codespells-network
-  
+#  #lang-server:
+#  #  image: codespells-lang-server
+#  #  build: ./lang-server
+#  #  restart: always
+#  #  ports:
+#  #    - 8091:8090
+#  #  volumes:
+#  #    - ./lang-server:/usr/src/app
+#  #  container_name: lang-server
+#  #  networks: 
+#  #    - dev-codespells-network
+#
+#  racket-bridge:
+#    image: racket-bridge
+#    build: ./nexus-client
+#    restart: always
+#    ports:
+#      - 8082:8082
+#      - 8888:8888
+#    volumes:
+#      - ./nexus-client:/usr/src/app
+#    command: "racket main.rkt"
+#    container_name: racket-bridge
+#    networks: 
+#      - dev-codespells-network
+#  

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, Route } from "react-router-dom";
 import AuthApiService from '../Services/auth-api-service';
 import Avatar from '@material-ui/core/Avatar';
@@ -13,12 +13,14 @@ import Container from '@material-ui/core/Container';
 import Header from './Header';
 import useStyles from '../styles.js';
 import {Helmet} from "react-helmet";
+import { LoggedInContext } from './Context';
 
 const LoginForm = (props) => {
   const classes = useStyles();
   let usernameInput = React.createRef()
   let passwordInput = React.createRef()
   const [error, setError] = useState(null);
+  const [loginInfo, setLastLoginTime] = useContext(LoggedInContext);
   
   var showSignupMessage = props.showSignupMessage === undefined ? true : props.showSignupMessage;
 
@@ -42,7 +44,8 @@ const LoginForm = (props) => {
 
     const handleLoginSuccess = () => {
       const { history } = props
-      if(!props.doNotRedirect) window.location = "/"; //History.push would be faster but doesn't trigger reload of app component
+      setLastLoginTime(new Date())
+      //if(!props.doNotRedirect) window.location = "/"; //History.push would be faster but doesn't trigger reload of app component
     }
 
     return (

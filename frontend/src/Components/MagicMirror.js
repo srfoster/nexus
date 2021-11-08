@@ -8,6 +8,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button'
 import { UIScope } from './WorldWidgets/UIScope.js';
 import { FontSizeContext } from './Context.js';
+import { LoggedInContext } from './Context.js';
 
 
 //   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
@@ -44,6 +45,8 @@ import { FontSizeContext } from './Context.js';
         // setError(res.error);
     //   })
 
+
+
 export function MagicMirror(props) {
     const [code, setCode] = useLocalStorage((props.name || Math.random())+ "-magic-mirror-code", props.code) //useState(props.code);
     const [response, setResponse] = useState(undefined);
@@ -51,6 +54,7 @@ export function MagicMirror(props) {
     const [output, setOutput] = useState(undefined);
     const [errorLineNumber, setErrorLineNumber] = useState(false);
     const [size, setSize] = useContext(FontSizeContext);
+    const [loginInfo, _] = useContext(LoggedInContext);
     const [editor, setEditor] = useState(undefined);
 
     //if (props.code && code != props.code) //Override localstorage if we pass in some code
@@ -66,6 +70,12 @@ export function MagicMirror(props) {
         console.log(editor) 
     },[size])
 
+    const backupToCloud = (code) => {
+        //service API call to create or update spell with tagname (name)
+        //send a PUT request to /spells/USERNAME/SPELL-NAME
+        //don't send blank spells
+        //debounce
+    }
 
     const includes = () => {
         if (!props.includes) return ""
@@ -79,6 +89,7 @@ export function MagicMirror(props) {
     }
 
     return <>
+        {loginInfo.loggedIn ? <p>Logged In as {JSON.stringify(loginInfo.user)}</p> : <p>Not logged in</p>}
         <ReactCodeMirror
             value={
                 starterCode || props.value
@@ -96,6 +107,7 @@ export function MagicMirror(props) {
             }
             onChange={(editor, data, value) => {
                 setCode(value);
+                backupToCloud(value);
                 if (props.onChange) {
                     props.onChange(editor, data, value);
                 }

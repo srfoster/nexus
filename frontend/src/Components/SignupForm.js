@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link, Route } from "react-router-dom";
 import AuthApiService from '../Services/auth-api-service';
 import Avatar from '@material-ui/core/Avatar';
@@ -12,12 +12,14 @@ import Container from '@material-ui/core/Container';
 import {Helmet} from "react-helmet";
 import Header from './Header';
 import useStyles from '../styles.js';
+import { LoggedInContext } from './Context';
 
 const SignupForm = (props) => {
   const classes = useStyles();
   let usernameInput = React.createRef()
   let passwordInput = React.createRef()
   let passConfirmInput = React.createRef()
+  const [loginInfo, setLastLoginTime] = useContext(LoggedInContext);
   
   var showSigninMessage = props.showSigninMessage === undefined ? true : props.showSigninMessage;
   const [error, setError] = useState(null);
@@ -52,7 +54,8 @@ const SignupForm = (props) => {
   
     const handleSignupSuccess = () => {
       const { history } = props
-      if(!props.doNotRedirect) window.location = "/"; //History.push would be faster but doesn't trigger reload of app component
+      setLastLoginTime(new Date())
+      //if(!props.doNotRedirect) window.location = "/"; //History.push would be faster but doesn't trigger reload of app component
     }
 
     return (

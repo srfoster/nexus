@@ -4,6 +4,7 @@ import { ThemeProvider, createMuiTheme, CssBaseline } from "@material-ui/core";
 
 export const DarkModeContext = React.createContext();
 export const FontSizeContext = React.createContext();
+export const LoggedInContext = React.createContext();
 
 /*
 import TokenService from '../Services/token-service';

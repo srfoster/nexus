@@ -28,20 +28,27 @@ const handleGet = (req, res) => {
   }
 }
 
-
-const handleGetByUsernameAndTag = (req, res) => {
+const handleGetByUsernameAndTag = async (req, res) => {
   let tag = req.params.tag;
   let username = req.params.username;
 // Get user ID from username
 // Get user's spells with user ID
 // Find spell tagged with slug:tag
-  req.app.get('db')('users')
-        .where({username: username})
-        .first()
-        .then(user => {
-          res.send(user)
-        })
+  console.log("Getting in here?")
+  let user = await req.app.get('db')('users')
+    .where({ username: username })
+    .first()
 
+  if (!user) {
+    res.send({ error: "Uh oh! No user found." })
+  } else {
+    console.log(user)
+  }
+
+  let spells = await req.app.get('db')('spells')
+    .where({ user_id: user.id })
+
+  res.send(spells)
 
  // res.send({text: "Hello World"})
 }

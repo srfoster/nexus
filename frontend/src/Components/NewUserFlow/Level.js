@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -14,12 +14,12 @@ import MuiAlert from '@material-ui/lab/Alert';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Fade from '@material-ui/core/Fade';
 import Confetti from 'canvas-confetti';
-import SpellsApiService from '../../Services/spells-api-service';
 import SignupForm from '../SignupForm';
 import Hidden from '@material-ui/core/Hidden';
 import Modal from '@material-ui/core/Modal';
 import LoginForm from '../LoginForm';
 import { spread } from '../../Util';
+import { LoggedInContext } from '../Context';
 
 // Every component from this file is exported!
 
@@ -122,24 +122,9 @@ export const HintButton = (props) => {
 }
 
 export const AccountCreationReminder = (props) => {
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(undefined);
-
-  useEffect(() => {
-    let isMounted = true;
-    // Only running this to check if logged in
-    let promise_or_false = SpellsApiService.getUserById('me');
-
-    if (promise_or_false) {
-      promise_or_false
-        .then((user) => {if(isMounted) {setIsLoggedIn(true)}})
-        .catch(() =>    {if(isMounted) {setIsLoggedIn(false)}})
-    }
-    return () => {
-      isMounted = false
-    }
-  })
+  const [modalStyle] = useState(getModalStyle);
+  const [open, setOpen] = useState(false);
+  const [loginInfo, setLoginInfo] = useContext(LoggedInContext);
 
   function getModalStyle() {
     const top = 50;
@@ -216,7 +201,7 @@ export const AccountCreationReminder = (props) => {
 
   return (
     <>
-      {isLoggedIn ? "" :
+      {loginInfo.loggedIn ? "" :
         <Paper square={true} style={{ background: "#f50057", opacity: 0.8 }}>
           <Box pl={3} pr={3} pt={1} pb={1}>
             <Typography style={{ color: "white" }}>
