@@ -17,9 +17,11 @@ import Lesson from '../Lessons/Lesson';
 import DarkModeSwitch from '../Widgets/DarkModeSwitch';
 import { PrismMirror } from '../PrismMirror';
 import { LogoutButton } from './LogoutButton';
+import Markdown from '../Widgets/Markdown';
 
 export let UIScope = {
   LogoutButton,
+  Markdown,
   PrismMirror,
   DarkModeSwitch,
   useEffect,
