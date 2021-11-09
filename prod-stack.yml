@@ -17,7 +17,7 @@ services:
     build: ./backend
     restart: always
     ports:
-      - 8080:8000
+      - 8000:8000
     depends_on: 
       - prod-db
     volumes:
@@ -29,28 +29,28 @@ services:
     env_file:
       - ./backend/.prod-env
 
-  prod-frontend:
-    image: codespells-frontend
-    build: ./frontend
-    restart: always
-    ports:
-      - 80:3000
-    depends_on: 
-      - prod-backend
-    volumes:
-      - ./frontend:/usr/src/app
-      - ./frontend/.prod-env:/usr/src/app/.env
-      - /usr/src/app/node_modules
-    container_name: prod-frontend
-    env_file:
-      - ./frontend/.prod-env
-
-  prod-lang-server:
-    image: codespells-lang-server
-    build: ./lang-server
-    restart: always
-    ports:
-      - 8090:8090
-    volumes:
-      - ./lang-server:/usr/src/app
-    container_name: prod-lang-server
+#  prod-frontend:
+#    image: codespells-frontend
+#    build: ./frontend
+#    restart: always
+#    ports:
+#      - 80:3000
+#    depends_on: 
+#      - prod-backend
+#    volumes:
+#      - ./frontend:/usr/src/app
+#      - ./frontend/.prod-env:/usr/src/app/.env
+#      - /usr/src/app/node_modules
+#    container_name: prod-frontend
+#    env_file:
+#      - ./frontend/.prod-env
+#
+#  prod-lang-server:
+#    image: codespells-lang-server
+#    build: ./lang-server
+#    restart: always
+#    ports:
+#      - 8090:8090
+#    volumes:
+#      - ./lang-server:/usr/src/app
+#    container_name: prod-lang-server
