@@ -31,10 +31,7 @@ const handleGet = (req, res) => {
 const handleGetByUsernameAndTag = async (req, res) => {
   let tag = req.params.tag;
   let username = req.params.username;
-// Get user ID from username
-// Get user's spells with user ID
-// Find spell tagged with slug:tag
-  console.log("Getting in here?")
+  
   let user = await req.app.get('db')('users')
     .where({ username: username })
     .first()
@@ -47,8 +44,60 @@ const handleGetByUsernameAndTag = async (req, res) => {
 
   let spells = await req.app.get('db')('spells')
     .where({ user_id: user.id })
+  
+  let spell = spells.filter((s) => s.name == tag)[0]
 
-  res.send(spells)
+  res.send(spell)
+}
+
+const handlePutByUsernameAndTag = async (req, res) => {
+  let tag = req.params.tag;
+  let username = req.params.username; //user who owns the spell or wants to create spell
+// Get user ID from username
+// Get user's spells with user ID
+// Find spell tagged with slug:tag
+  let user = await req.app.get('db')('users')
+    .where({ username: username })
+    .first()
+  if (!user) {
+    res.send({ error: "Uh oh! No user found." })
+    return
+  }
+  
+  if(user.id != req.user.id){
+    res.send({error: "You do not own this spell."})
+    return
+  }
+
+  let spells = await req.app.get('db')('spells')
+    .where({ user_id: user.id })
+
+  let spell = spells.filter((s)=>s.name == tag)[0]
+
+  if(spell){
+    console.log("Updating...")
+    req.app.get('db')('spells')
+    .where({id: spell.id})
+    .update({text: req.body.code, date_modified: new Date()})
+    .returning('*')
+    .then((rows) => {
+      res.send(rows[0])
+    })
+  }
+  else{
+    console.log("Creating...")
+    req.app.get('db')('spells')
+    .insert({user_id: user.id, name: tag, description: '',
+              text: req.body.code, date_created: new Date(), date_modified: new Date()})
+    .returning('*')
+    .then((spells) => {
+      res.send(spells[0])
+    })
+  }
+
+
+
+  // res.send(spells)
 
  // res.send({text: "Hello World"})
 }
@@ -106,6 +155,7 @@ const handlePut = async (req, res, next) => {
 module.exports = {
   handleGet,
   handleGetByUsernameAndTag,
+  handlePutByUsernameAndTag,
   handleDelete,
   handlePut
 }

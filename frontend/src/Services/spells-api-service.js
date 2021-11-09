@@ -142,6 +142,35 @@ const SpellsApiService = {
           : res.json()
       )
   },
+  createOrUpdateSpellByUsernameAndSpellName(username, spellName, payload){
+    return fetch(`${config.API_ENDPOINT}/spells/${username}/${spellName}`, {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      },
+      body: JSON.stringify({code: payload})
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
+  getSpellByUsernameAndSpellName(username, spellName){
+    return fetch(`${config.API_ENDPOINT}/spells/${username}/${spellName}`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': `bearer ${TokenService.getAuthToken()}`,
+      }
+    })
+      .then(res =>
+        (!res.ok)
+          ? res.json().then(e => Promise.reject(e))
+          : res.json()
+      )
+  },
   checkForSpellOwnership(spell_id){
     return fetch(`${config.API_ENDPOINT}/check-ownership/${spell_id}`, {
       method: 'GET',

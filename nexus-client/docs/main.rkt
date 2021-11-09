@@ -11,8 +11,9 @@
 
 (define (format-racket-code code)
   (program-format code
-                  standard-formatter-map
-                  #:width 40))
+                  #:formatter-map standard-formatter-map
+                  #:width 40
+                  ))
 
 (define (get-voxel-structures-docs)
   (list

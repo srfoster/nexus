@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button'
 import { UIScope } from './WorldWidgets/UIScope.js';
 import { FontSizeContext } from './Context.js';
 import { LoggedInContext } from './Context.js';
+import SpellsApiService from '../Services/spells-api-service.js';
 
 
 //   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
@@ -44,8 +45,11 @@ import { LoggedInContext } from './Context.js';
     //   .catch(res => {
         // setError(res.error);
     //   })
-
-
+let timeout;
+function debounce(fn){
+    if(timeout) clearTimeout(timeout)
+    timeout = setTimeout(fn, 1000);
+}
 
 export function MagicMirror(props) {
     const [code, setCode] = useLocalStorage((props.name || Math.random())+ "-magic-mirror-code", props.code) //useState(props.code);
@@ -56,6 +60,7 @@ export function MagicMirror(props) {
     const [size, setSize] = useContext(FontSizeContext);
     const [loginInfo, _] = useContext(LoggedInContext);
     const [editor, setEditor] = useState(undefined);
+    const [syncingToBackend, setSyncingToBackend] = useState(false);
 
     //if (props.code && code != props.code) //Override localstorage if we pass in some code
      //   setCode(props.code)
@@ -70,11 +75,45 @@ export function MagicMirror(props) {
         console.log(editor) 
     },[size])
 
+    useEffect(() => {
+        let spellName = props.name;
+        let username = loginInfo && loginInfo.user && loginInfo.user.username
+
+        if (spellName.includes("/")) {
+            let parts = spellName.split("/");
+            username = parts[0];
+            spellName = parts[1];
+        }
+
+        debounce(() => {
+            SpellsApiService.getSpellByUsernameAndSpellName(username, spellName)
+                .then((res) => {
+                    setStarterCode(res.text)
+                    console.log(res)
+                })
+        })
+    }, [])
+
     const backupToCloud = (code) => {
-        //service API call to create or update spell with tagname (name)
-        //send a PUT request to /spells/USERNAME/SPELL-NAME
-        //don't send blank spells
-        //debounce
+        let spellName = props.name;
+        let username = loginInfo && loginInfo.user && loginInfo.user.username
+        
+        if(spellName.includes("/")){
+            let parts = spellName.split("/");
+            username = parts[0];
+            spellName = parts[1];
+        }
+       
+        if(code == ""){
+            return
+        }
+
+        SpellsApiService.createOrUpdateSpellByUsernameAndSpellName(username, spellName, code)
+        .then((res)=>{
+            setSyncingToBackend(false)
+            console.log(res)
+        }).catch((err)=>{
+            console.log(err)})
     }
 
     const includes = () => {
@@ -89,7 +128,7 @@ export function MagicMirror(props) {
     }
 
     return <>
-        {loginInfo.loggedIn ? <p>Logged In as {JSON.stringify(loginInfo.user)}</p> : <p>Not logged in</p>}
+    <div style={{height:40}}>{syncingToBackend ? "Saving..." : ""}</div>
         <ReactCodeMirror
             value={
                 starterCode || props.value
@@ -107,7 +146,8 @@ export function MagicMirror(props) {
             }
             onChange={(editor, data, value) => {
                 setCode(value);
-                backupToCloud(value);
+                setSyncingToBackend(true);
+                debounce(()=>backupToCloud(value));
                 if (props.onChange) {
                     props.onChange(editor, data, value);
                 }

@@ -35,9 +35,9 @@ app.use(jsonBodyParser)
 let epHome = '/'
 let epLogin = '/login'
 let epSignup = '/signup'
+let epSpellDetailsByUsernameAndTag = '/spells/:username/:tag'
 let epSpellIndex = '/spells'
 let epSpellDetails = '/spells/:id'
-let epSpellDetailsByUsernameAndTag = '/spells/:username/:tag'
 // TODO: update this endpoint
 let epPublicSpellDetails = '/secret/:id'
 let epPublicSpells = '/gallery'
@@ -56,23 +56,44 @@ const requireAuthIfMe = (req, res, next) => {
   }
 }
 
+// Retrieve specific user information
+app.get(`${epMageDetails}`, requireAuthIfMe, MageDetails.handleGet)
+
+// Retrieve specific spell information by username and tag
+app.get(`${epSpellDetailsByUsernameAndTag}`, SpellDetails.handleGetByUsernameAndTag)
+app.put(`${epSpellDetailsByUsernameAndTag}`, requireAuth, SpellDetails.handlePutByUsernameAndTag)
+
+//Older stuff below
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Retrieve spells on viewing Dashboard
 app.get(epSpellIndex, requireAuth, SpellIndex.handleGet)
 
 // Retrieve all public spells
 app.get(epPublicSpells, PublicSpells.handleGet)
 
-// Retrieve specific spell information
+//Retrieve specific spell information
 app.get(`${epSpellDetails}`, requireAuth, SpellDetails.handleGet)
-
-// Retrieve specific spell information by username and tag
-app.get(`${epSpellDetailsByUsernameAndTag}`, SpellDetails.handleGetByUsernameAndTag)
 
 // Retrieve specific spell information if public
 app.get(`${epPublicSpellDetails}`, PublicSpellDetails.handleGet)
 
-// Retrieve specific user information
-app.get(`${epMageDetails}`, requireAuthIfMe, MageDetails.handleGet)
 
 // Get all tags on specific spell
 app.get(`${epSpellTagsIndex}`, requireAuth, SpellTagsIndex.handleGet)
