@@ -16,6 +16,7 @@ function Puzzle({ isComplete, code, hint }) {
 }
 
 const Magic = (props) => {
+  console.log(props)
   let unlocked = props.children && JSON.stringify(props.children).includes("Hello, World!")
 
   return <>
@@ -41,14 +42,19 @@ function ThePuzzle(props) {
   return (
     <Fade in={true} timeout={1000}>
       <Puzzle code={
-        <JSMirror code={code}
+        <JSMirror 
+          name="hello-world-button"
+          code={code}
           scope={{
             MagicButton: (userProps) =>
-              React.createElement(Magic, spread(userProps, spread(props, {setComplete, complete})))
+              React.createElement(Magic, 
+                spread(userProps, 
+                  spread(props, {setComplete, complete})))
           }}
           onChange={(code) => {
             //Note: Could statically read code here...
-            setCode(code);
+            console.log(code)
+            //setCode(code);
             return true
           }} />
       }

@@ -79,7 +79,7 @@ export function MagicMirror(props) {
         let spellName = props.name;
         let username = loginInfo && loginInfo.user && loginInfo.user.username
 
-        if (spellName.includes("/")) {
+        if (spellName && spellName.includes && spellName.includes("/")) {
             let parts = spellName.split("/");
             username = parts[0];
             spellName = parts[1];
@@ -98,7 +98,7 @@ export function MagicMirror(props) {
         let spellName = props.name;
         let username = loginInfo && loginInfo.user && loginInfo.user.username
         
-        if(spellName.includes("/")){
+        if(spellName && spellName.includes && spellName.includes("/")){
             let parts = spellName.split("/");
             username = parts[0];
             spellName = parts[1];
@@ -117,7 +117,7 @@ export function MagicMirror(props) {
     }
 
     const includes = () => {
-        if (!props.includes) return ""
+        if (!props.includes || typeof props.includes[Symbol.iterator] !== 'function') return ""
         
         let ret = ""
 

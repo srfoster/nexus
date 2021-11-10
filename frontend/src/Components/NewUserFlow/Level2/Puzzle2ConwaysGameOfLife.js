@@ -86,13 +86,16 @@ const SockPuppetsMessage2 = (props) => {
               <br />
               ~Your Friend, Socky
           </Typography>
-            <JSMirror code={firstCode}
+            <JSMirror 
+              name="conways-game-of-life"
+              code={firstCode}
               scope={{
                 Toy: (props) => { 
                   return React.createElement(Toy, spread(props, {
                     noRun: true,
                     cells: firstGameState,
                     setCells: (cells) => {
+                      console.log(cells)
                       if(typeof cells == "function"){
                         cells = cells(firstGameState); 
                       }
@@ -106,10 +109,12 @@ const SockPuppetsMessage2 = (props) => {
               }}
 
               onChange={(code) => {
-                setFirstCode(code)
+                //setFirstCode(code)
                 return true
               }} />
-            <JSMirror code={secondCode}
+            <JSMirror 
+              name="conways-game-of-life2"
+              code={secondCode}
               scope={{
                 Toy: (props) =>
                   React.createElement(Toy, spread(props,
@@ -128,7 +133,7 @@ const SockPuppetsMessage2 = (props) => {
                     }))
               }}
               onChange={(code) => {
-                setSecondCode(code)
+                //setSecondCode(code)
                 return true
               }} />
           </>

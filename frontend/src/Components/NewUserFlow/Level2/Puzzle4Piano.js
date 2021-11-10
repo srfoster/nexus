@@ -41,7 +41,9 @@ function SockPuppetsMessage4(props) {
               <br />
               ~Your Friend, Socky
           </Typography>
-            <JSMirror code={code}
+            <JSMirror 
+              name="piano"
+              code={code}
               scope={{
                 Toy: (props) => {
                   const [showPiano,setShowPiano] = useState(false)
@@ -90,7 +92,7 @@ function SockPuppetsMessage4(props) {
               }}
 
               onChange={(code) => {
-                setCode(code)
+                //setCode(code)
                 return true
               }} />
             </>

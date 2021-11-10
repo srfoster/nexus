@@ -41,7 +41,9 @@ function SockPuppetsMessage3(props) {
             <Typography paragraph>
               ~Your Friend, Socky
           </Typography>
-            <JSMirror code={code}
+            <JSMirror 
+              name="graph-theory"
+              code={code}
               scope={{
                 Toy: (props) => {
                   let [showSimulator, setShowSimulator] = useState(false);
@@ -70,7 +72,7 @@ function SockPuppetsMessage3(props) {
               }}
 
               onChange={(code) => {
-                setCode(code)
+                //setCode(code)
                 return true
               }} />
             </>

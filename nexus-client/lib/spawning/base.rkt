@@ -51,7 +51,9 @@
 (define (build-spawner b at)
   (let ()
     (define s (spawn (builder-data b) at))
-    (spawned-actor-scale-to-dimensions s (hash 'W (builder-w b) 'D (builder-d b) 'H (builder-h b)))
+    (spawned-actor-scale-to-dimensions s (hash 'W (builder-w b)
+                                               'D (builder-d b)
+                                               'H (builder-h b)))
     s))
 
 ;Do we need ALL these .ChildActors?
@@ -76,11 +78,14 @@
                                @unreal-value{return (sc)=>{sc.BecomeLight()}})
                       build-spawner))
 
-(define (magic-circle)
+(define (magic-circle #:color (col (hash 'R 0 'G 1 'B 0)))
   (make-basic-builder (spawner "StemCell"
                                "magic-circle"
                                @unreal-value{return (sc)=>{sc.BecomeMagicCircle()}})
-                      build-spawner
+                      (compose (lambda (s)
+                                 (magic-circle-color s col)
+                                 s)
+                                 build-spawner)
                       #:dimensions (vec 300 300 150)))
 
 (define (magic-circle-color mc color-vec)

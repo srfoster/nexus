@@ -29,7 +29,7 @@ import Downloads from './Components/Dashboard/Downloads';
 import Follows from './Components/Dashboard/Follows';
 import Docs from './Components/Docs/Docs';
 import FabAddIcon from './Components/Dashboard/FabAddIcon';
-import { DarkModeContext } from './Components/Context';
+import { DarkModeContext, LoggedInContext } from './Components/Context';
 import { useLocalStorage } from './Util';
 import Level3 from './Components/NewUserFlow/Level3/index';
 import LoginForm from './Components/LoginForm';
@@ -38,6 +38,7 @@ import LevelManager from './Components/LevelManager';
 import SpellIndex from './Components/Dashboard/SpellIndex';
 import RacketCon from './Components/Docs/Racketcon';
 import Clean from './Components/Clean';
+import LoginChecker from './Components/LoginChecker';
 
 require('codemirror/mode/scheme/scheme');
 
@@ -85,7 +86,11 @@ function App() {
             <Switch>
               <Route
                 exact path={'/'}
-                component={(props) => <LevelManager isLoggedIn={isLoggedIn} startingLevel={1} endingLevel={2} ></LevelManager >}
+                component={(props) =>
+                   <LoginChecker>
+                     <LevelManager isLoggedIn={isLoggedIn} startingLevel={1} endingLevel={2} ></LevelManager>
+                   </LoginChecker>
+                }
               />
               <Route
                 exact path={'/level3'}
