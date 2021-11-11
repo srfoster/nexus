@@ -32,9 +32,9 @@ const SockPuppetsMessage2 = (props) => {
   const [firstGameState, setFirstGameState] = useState([])
   const [secondGameState, setSecondGameState] = useState([])
 
-  const [firstCode, setFirstCode] = useState("<Toy\n color=\"" + firstColor + "\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
+  const [firstCode, setFirstCode] = useState("<Toy\n color=\"" + "red" + "\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
 
-  const [secondCode, setSecondCode] = useState("<Toy\n color=\"" + secondColor + "\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
+  const [secondCode, setSecondCode] = useState("<Toy\n color=\"" + "lime" + "\"\n boardLabel=\"Edit my squares...\"\n buttonsLabel=\"or try the buttons below....\" /> ")
 
   const [puzzleDone, setPuzzleDone] = useState(false)
 
@@ -100,6 +100,7 @@ const SockPuppetsMessage2 = (props) => {
                         cells = cells(firstGameState); 
                       }
                       if (cells.length !== 0) {
+                        console.log(cells[0].color)
                         setFirstColor(cells[0].color)
                       }
                       setFirstGameState(cells)

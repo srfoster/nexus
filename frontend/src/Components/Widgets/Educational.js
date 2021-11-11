@@ -170,22 +170,17 @@ export function MultipleChoiceQuestion(props) {
 }
 
 export function JSMirror(props) {
-  const [code, setCode] = useLocalStorage((props.name || Math.random()) + 
+  const [code, setCode] = useLocalStorage((props.name || Math.random()) +
     "-js-mirror-code", props.code)
   const [reverting, setReverting] = useState(false);
-  const [starterCode, setStarterCode] = useState("");
-  useEffect(() => {
-    setStarterCode(code)
-  }, [])
 
   const revertButton =
     <Button onClick={() => {
       window.localStorage.setItem(props.name + "-js-mirror-code", props.code)
       setCode(props.code)
-      setStarterCode(props.code)
       setReverting(true)
-      setTimeout(()=>{setReverting(false)},500)
-   }}>
+      setTimeout(() => { setReverting(false) }, 500)
+    }}>
       Revert?
     </Button>
   
@@ -193,7 +188,7 @@ export function JSMirror(props) {
     <>
       {props.code != code ? revertButton : ""}
       <LiveProvider
-        code={starterCode} scope={props.scope} alignItems="center" justify="center">
+        code={code} scope={props.scope} alignItems="center" justify="center">
         <LiveContext.Consumer>
           {({ code, language, theme, disabled, onChange }) => {
             return <Grid container spacing={1} direction={"column"} >
