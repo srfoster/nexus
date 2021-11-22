@@ -16,6 +16,12 @@
         scale rotate above beside/wide beside/deep overlay translate build
         find-first-by-tag find-all-by-tag tag)
 
+;Terrain stuff provides here (maybe move to its own module)
+(provide terrain-switch-to-flat
+         terrain-switch-to-globs
+         terrain-switch-to-caves
+         terrain-switch-to-mountain)
+
 #|
 Begin functional API for Voxel Worlds:
 
@@ -214,4 +220,57 @@ Begin functional API for Voxel Worlds:
 
   unreal-response)
 
+(define (terrain-switch-to-flat [height 10] [floor 0] [seed 1337])
+  (define unreal-response
+    (unreal-eval-js 
+     @unreal-value{
+    var C = Root.ResolveClass('JSVoxelManager');
+    var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+    o.SwitchTerrainToFlat(@(->unreal-value height), 
+                          @(->unreal-value floor), 
+                          @(->unreal-value seed))
 
+ return true
+ }))
+  
+  unreal-response)
+
+(define (terrain-switch-to-globs [floor 0])
+  (define unreal-response
+    (unreal-eval-js 
+     @unreal-value{
+    var C = Root.ResolveClass('JSVoxelManager');
+    var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+    o.SwitchTerrainToGlobs(@(->unreal-value floor))
+
+ return true
+ }))
+  
+  unreal-response)
+
+(define (terrain-switch-to-caves)
+  (define unreal-response
+    (unreal-eval-js 
+     @unreal-value{
+    var C = Root.ResolveClass('JSVoxelManager');
+    var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+    o.SwitchTerrainToCaves()
+
+ return true
+ }))
+  
+  unreal-response)
+
+
+(define (terrain-switch-to-mountain)
+  (define unreal-response
+    (unreal-eval-js 
+     @unreal-value{
+    var C = Root.ResolveClass('JSVoxelManager');
+    var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+    o.SwitchTerrainToMountain()
+
+ return true
+ }))
+  
+  unreal-response)
