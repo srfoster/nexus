@@ -1,0 +1,10 @@
+#lang racket
+
+(provide (struct-out person)
+         make-person)
+
+(struct person (name age))
+
+(define (make-person name age)
+  (displayln "Making person!")
+  (person name age))

@@ -1,0 +1,3 @@
+(import-magic ldhandley/require-reprovide trying-this)
+
+trying-this

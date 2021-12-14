@@ -1,0 +1,6 @@
+#lang racket
+
+(import-magic ldhandley/require-test2 test)
+
+(provide trying-this)
+(define trying-this test)

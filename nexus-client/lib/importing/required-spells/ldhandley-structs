@@ -1,0 +1,6 @@
+#lang racket
+
+(provide (struct-out posn))
+
+(struct posn (x y z)
+        #:transparent)

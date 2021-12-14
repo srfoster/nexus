@@ -17,10 +17,13 @@
         find-first-by-tag find-all-by-tag tag)
 
 ;Terrain stuff provides here (maybe move to its own module)
-(provide terrain-switch-to-flat
+(provide terrain-switch-to-hills
          terrain-switch-to-globs
          terrain-switch-to-caves
-         terrain-switch-to-mountain)
+         terrain-switch-to-mountain
+         terrain-switch-to-cliffs
+         remove-foliage
+         )
 
 #|
 Begin functional API for Voxel Worlds:
@@ -220,7 +223,7 @@ Begin functional API for Voxel Worlds:
 
   unreal-response)
 
-(define (terrain-switch-to-flat [height 10] [floor 0] [seed 1337])
+(define (terrain-switch-to-hills [height 10] [floor 0] [seed 1337])
   (define unreal-response
     (unreal-eval-js 
      @unreal-value{
@@ -269,6 +272,32 @@ Begin functional API for Voxel Worlds:
     var C = Root.ResolveClass('JSVoxelManager');
     var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
     o.SwitchTerrainToMountain()
+
+ return true
+ }))
+  
+  unreal-response)
+
+(define (terrain-switch-to-cliffs)
+  (define unreal-response
+    (unreal-eval-js 
+     @unreal-value{
+    var C = Root.ResolveClass('JSVoxelManager');
+    var o = GWorld.GetAllActorsOfClass(C).OutActors[0]
+    o.SwitchTerrainToCliffs()
+
+ return true
+ }))
+  
+  unreal-response)
+
+(define (remove-foliage)
+  (define unreal-response
+    (unreal-eval-js 
+     @unreal-value{
+    var C = Root.ResolveClass('JSVoxelManager');
+    var o = GWorld.GetAllActorsOfClass(C).OutActors[0];
+    o.RemoveFoliage();
 
  return true
  }))

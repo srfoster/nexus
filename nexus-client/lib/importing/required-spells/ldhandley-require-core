@@ -1,0 +1,5 @@
+#lang racket
+(provide foo
+         goo)
+(define foo "FOoOoooooo!!!!!!")
+(define goo "Gooooooo")

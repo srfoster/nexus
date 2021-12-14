@@ -364,11 +364,13 @@ export function DocContent(props) {
   const [voxelDefinitionCategories, setVoxelDefinitionCategories] = useState([])
   const [transmogrifyDefinitionCategories, setTransmogrifyDefinitionCategories] = useState([])
   const [eventDefinitionCategories, setEventDefinitionCategories] = useState([])
+  const [terrainDefinitionCategories, setTerrainDefinitionCategories] = useState([])
 
   const docArray = [<DocLibrary key="base" definitionCategories={baseDefinitionCategories} />,
   <DocLibrary key="voxel" definitionCategories={voxelDefinitionCategories} />,
   <DocLibrary key="transmogrify" definitionCategories={transmogrifyDefinitionCategories} />,
   <DocLibrary key="events" definitionCategories={eventDefinitionCategories} />,
+  <DocLibrary key="terrain" definitionCategories={terrainDefinitionCategories} />,
   <DocUILibrary key="ui" />
   ];
 
@@ -404,6 +406,13 @@ export function DocContent(props) {
       })
   }, [])
 
+  useEffect(() => {
+    sendOnCodeSpellsSocket("(get-terrain-api-docs)",
+      (res) => {
+        setTerrainDefinitionCategories(res.response)
+      })
+  }, [])
+
   return (
     <>
       <Tabs value={value}
@@ -414,6 +423,7 @@ export function DocContent(props) {
         <Tab label={"Summon"}></Tab>
         <Tab label={"Transmogrify"}></Tab>
         <Tab label={"Events"}></Tab>
+        <Tab label={"Terrain"}></Tab>
         <Tab label={"Spellbook"}></Tab>
       </Tabs>
       {docArray[value]}

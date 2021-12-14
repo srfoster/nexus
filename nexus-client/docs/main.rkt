@@ -7,6 +7,7 @@
          get-summon-api-docs
          get-transmogrification-api-docs
          get-events-api-docs
+         get-terrain-api-docs
          )
 
 (define (format-racket-code code)
@@ -398,6 +399,73 @@
            'returns "void?")
            ))
   ))
+
+(define (get-terrain-api-docs)
+  (list
+   (hash 'name "Terrain"
+         'definitions
+         (list
+          (hash
+           'name "terrain-switch-to-hills"
+           'use (format-racket-code "(terrain-switch-to-hills [height 10 number?] [floor 0 number?] [seed 1337 number?])")
+           'parameter (list "height" "floor" "seed")
+           'type (list "number?" "number?" "number?")
+           'optional (list #t #t #t)
+           'parameterDesc (list "Height of the hills" "The z-value of the floor of the terrain" "A number that seeds the randomness")
+           'desc "Switches the terrain to a world with hills. The world will be flat with a height of 0."
+           'example (map format-racket-code (list
+           "(terrain-switch-to-hills 100 -100 1567)"
+                                             ))
+           'returns "void?")
+          (hash
+           'name "terrain-switch-to-globs"
+           'use (format-racket-code "(terrain-switch-to-globs [floor 0 number?])")
+           'parameter (list "floor")
+           'type (list "number?")
+           'optional (list #t)
+           'parameterDesc (list "The z-value of the floor of the terrain")
+           'desc "Switches the terrain to a world produced by 3D perlin noise, beneath the floor z value."
+           'example (map format-racket-code (list
+           "(terrain-switch-to-globs -100)"
+                                             ))
+           'returns "void?")
+          (hash
+           'name "terrain-switch-to-caves"
+           'use (format-racket-code "(terrain-switch-to-caves)")
+           'parameter (list )
+           'type (list )
+           'optional (list )
+           'parameterDesc (list )
+           'desc "Switches the terrain to a cave world."
+           'example (map format-racket-code (list
+           "(terrain-switch-to-caves)"
+                                             ))
+           'returns "void?")
+          (hash
+           'name "terrain-switch-to-mountain"
+           'use (format-racket-code "(terrain-switch-to-mountain)")
+           'parameter (list )
+           'type (list )
+           'optional (list )
+           'parameterDesc (list )
+           'desc "Switches the terrain to a mountain world."
+           'example (map format-racket-code (list
+           "(terrain-switch-to-mountain)"
+                                             ))
+           'returns "void?")
+          (hash
+           'name "terrain-switch-to-cliffs"
+           'use (format-racket-code "(terrain-switch-to-cliffs)")
+           'parameter (list )
+           'type (list )
+           'optional (list )
+           'parameterDesc (list )
+           'desc "Switches the terrain to a cliffs world."
+           'example (map format-racket-code (list
+           "(terrain-switch-to-cliffs)"
+                                             ))
+           'returns "void?")
+           ))))
 
 (define (get-events-api-docs)
   (list

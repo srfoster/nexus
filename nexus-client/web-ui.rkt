@@ -28,6 +28,8 @@
          "lib/events/base.rkt"
          "lib/spawning/base.rkt"
          "docs/main.rkt"
+         "import-magic.rkt"
+         "lib/importing/util.rkt"
          )
 
 ; Secret Stuff...
@@ -95,6 +97,55 @@
 
 (struct null-value ())
 
+
+(define accumulated-strings
+  (hash))
+
+(define (get-accumulated-string react-port)
+  (get-output-string (hash-ref accumulated-strings react-port)))
+
+(define orig-out (current-output-port))
+
+(define (make-react-port connection event-type program-name)
+  (define output-string (open-output-string))
+
+  (define ret
+    (make-output-port
+     'react-port
+     always-evt
+     (lambda (s start end non-block? breakable?)
+       (define to-send
+         (bytes->string/utf-8 (subbytes s start end)))
+
+       (display to-send output-string)
+
+       (when (string-suffix? to-send "\n")
+         (ws-send! connection
+                   (jsexpr->string
+                    (hash
+                     'response (get-output-string output-string)
+                     'racketResponse (get-output-string output-string)
+                     'programName program-name
+                     'eventType event-type
+                     )))
+         (define new-output-string (open-output-string))
+         (set! accumulated-strings
+               (hash-set accumulated-strings
+                         ret new-output-string))
+         (set! output-string new-output-string))
+
+       (- end start))
+
+     void))
+
+
+  (set! accumulated-strings
+        (hash-set accumulated-strings
+                  ret output-string))
+
+  ret
+  )
+
 ;Change start-ui name to start-websocket-server
 (define (start-ui)
   ;(displayln "spell-language-module...")
@@ -123,6 +174,8 @@
                     (when (not (eof-object? msg))
                       (define code (hash-ref (string->jsexpr msg) 'code))
                       (define event-type (hash-ref (string->jsexpr msg) 'eventType))
+                      (define options (hash-ref (string->jsexpr msg) 'options))
+                      (displayln (list "OPTIONS: " options))
                       (let()
                         (with-handlers
                               ([exn? (lambda (e)
@@ -130,8 +183,12 @@
                                             (displayln e)
                                             )])
                           (define ret (null-value)) 
-                          (define thread-e (open-output-string))                           
-                          (define thread-o (open-output-string))                           
+                          (define thread-e (make-react-port c
+                                                            "std-err"
+                                                            (hash-ref options 'programName "No name")))
+                          (define thread-o (make-react-port c
+                                                            "std-out"
+                                                            (hash-ref options 'programName "No name")))
                           (define eval-thread
                             (thread
                              (thunk
@@ -139,6 +196,7 @@
                                     (with-handlers ([exn? (lambda (e)
 
                                                                  (displayln e)
+                                                                 (displayln e thread-e)
 
                                                                  (define blockId
                                                                    (continuation-mark-set-first
@@ -158,7 +216,8 @@
                                                                        error-message
                                                                        'blockId blockId
                                                                        'lineNumber lineNumber))])
-                                      (define in (open-input-string (string-append "(let () " code "\n)")))
+                                      (define in (open-input-string 
+                                                  (string-append "(let () " code "\n)")))
                                       (port-count-lines! in)
 
                                       (define stx (read-syntax 'NexusUserCode in))
@@ -176,7 +235,13 @@
                               (set! eval-threads (hash-set eval-threads thread-id eval-thread))
                               (set! ret (hash 'threadId thread-id 
                                               'message (~a "Call (stop-magic " thread-id ") to stop this spell.")
-                                              'customReactComponent "SpellThreadManager")))
+                                              'customReactComponent "SpellThreadManager"))
+                              (displayln "Starting thread to send std-out...")
+
+                                        
+
+
+                                        )
                             (displayln ret)
 
                             (ws-send! c (jsexpr->string 
@@ -186,8 +251,8 @@
                                                         'null
                                                         (if (jsexpr? ret) ret (~v ret)))
                                           'racketResponse (format-racket-code (~v ret))
-                                          'output (get-output-string thread-o)
-                                          'error (get-output-string thread-e)
+                                          'output (get-accumulated-string thread-o)
+                                          'error  (get-accumulated-string thread-e)
                                           'eventType event-type
                                                         ))))))
                     

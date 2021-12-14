@@ -1,0 +1,181 @@
+#lang racket
+
+(provide (struct-out search)
+         (struct-out search-node)
+         (struct-out loc)
+         (struct-out grid)
+         (struct-out row)
+         (struct-out cell)
+         make-search
+         step-search!
+         make-grid)
+
+(struct loc (row col) #:transparent)
+(struct cell (value) #:transparent)
+(struct row (cells) #:transparent)
+(struct grid (rows) #:transparent)
+
+(define (make-cell c)
+  (cell c))
+
+(define (make-row l)
+  (row (map make-cell l)))
+
+(define (make-grid lol)
+  (grid (map make-row lol)))
+
+;if cell doesn't exist, return '%
+(define (out-of-bounds? l g)
+  (or
+   (negative? (loc-row l))
+   (negative? (loc-col l))
+   (>= 
+    (loc-row l)
+    (length (grid-rows g)))
+   (>= 
+    (loc-col l)
+    (length 
+     (row-cells 
+      (first (grid-rows g)))))
+   ))
+
+(define (get-cell-at l g)
+  (if (out-of-bounds? l g)
+      '%
+      (let ()
+        (define row
+          (list-ref (grid-rows g)
+                    (loc-row l)))
+
+        (define cell
+          (list-ref (row-cells row) 
+                    (loc-col l)))
+        
+        cell
+        )))
+
+(struct search (start 
+                end 
+                grid 
+                todo 
+                visited
+                iteration) 
+        	    #:transparent
+                #:mutable)
+(struct search-node (loc distance) 
+        #:transparent)
+
+(define (make-search start end grid)
+  (search start 
+          end 
+          grid 
+          (list (search-node 
+                 start
+                 0))
+          '()
+          0))
+
+;WRITE THIS
+; search-node search => list of search-nodes
+(define (get-adjacent sn s)
+  (define visited
+    (search-visited s))
+  (define center 
+    (search-node-loc sn))
+  (define dist
+    (search-node-distance sn))
+  (define center-row
+    (loc-row center))
+  (define center-col
+    (loc-col center))
+  (define g
+    (search-grid s))
+  (define up
+    (loc (+ 1 center-row) 
+         center-col))
+  (define down
+    (loc (- center-row 1) 
+         center-col))
+  (define left
+    (loc center-row 
+         (- center-col 1)))
+  (define right
+    (loc center-row 
+         (+ center-col 1)))
+  (define potential-adj
+    (list up down left right))
+  (define (wall? l)
+    (define val 
+      (cell-value 
+       (get-cell-at l g)))
+    (eq? '% val))
+  (define (visited? l)
+    (define visited-locs 
+      (map search-node-loc 
+           visited))
+    (define ret
+      (member l visited-locs))
+    ret)
+  (define (make-new-search-node l)
+    (search-node l 
+                 (+ 1
+                    dist)))
+  (define adj-locs 
+    (filter (and/c (not/c wall?)
+                 (not/c visited?))
+          potential-adj))
+  (map make-new-search-node adj-locs)
+  )
+
+;search -> search-node
+;mutates search-todo to remove first
+(define (dequeue! s)
+  (define todo (search-todo s))
+  (if (empty? todo)
+      #f
+      (let ()
+        (define ret (first todo))
+        (set-search-todo! 
+         s 
+         (rest todo))
+        ret)))
+
+(define (enqueue! s sn)
+  (set-search-todo!
+   s
+   (append (search-todo s)
+           (list sn))))
+
+(define (add-to-visited! s sn)
+  (set-search-visited!
+   s
+   (cons sn (search-visited s))))
+
+(define (step-search! s)
+  (displayln "Goodbye")
+  (define i (search-iteration s))
+  (set-search-iteration! s
+                         (add1 i))	
+  (define end (search-end s))
+  
+  (define current 
+    (dequeue! s))
+
+  (when current
+    (match-define 
+     (search-node 
+      current-distance 
+      current-loc)
+     current)
+    ;Add current to visited
+    (add-to-visited! s current)
+
+    (define adjacent
+      (get-adjacent 
+       current 
+       s))
+    (map 
+     (curry enqueue! s)
+     adjacent)
+    )
+)

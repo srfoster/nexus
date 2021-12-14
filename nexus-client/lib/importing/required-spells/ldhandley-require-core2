@@ -1,0 +1,7 @@
+#lang racket
+(require nexus-client/import-magic)
+(import-magic ldhandley/require-core foo)
+
+(provide hoo)
+(define hoo 
+  (list foo "Hoo Hoo!!!"))

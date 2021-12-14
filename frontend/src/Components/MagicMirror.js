@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { spread, useLocalStorage } from '../Util.js';
 import ConnectionIndicator from './Client/ConnectionIndicator.js';
 import { UnControlled as ReactCodeMirror } from 'react-codemirror2';
-import { CastButton, isError, racketErrorMessage, racketErrorBlockNumber, racketErrorLineNumber } from './WorldWidgets/Util.js';
+import { CastButton, isError, racketErrorMessage, racketErrorBlockNumber, racketErrorLineNumber, StdOutAndStdErr } from './WorldWidgets/Util.js';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button'
@@ -10,7 +10,8 @@ import { UIScope } from './WorldWidgets/UIScope.js';
 import { FontSizeContext } from './Context.js';
 import { LoggedInContext } from './Context.js';
 import SpellsApiService from '../Services/spells-api-service.js';
-
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 
 //   const [isLoggedIn, setIsLoggedIn] = useState(undefined);
 
@@ -61,6 +62,7 @@ export function MagicMirror(props) {
     const [loginInfo, _] = useContext(LoggedInContext);
     const [editor, setEditor] = useState(undefined);
     const [syncingToBackend, setSyncingToBackend] = useState(false);
+    const [reloading, setReloading] = useState(false);
 
     //if (props.code && code != props.code) //Override localstorage if we pass in some code
      //   setCode(props.code)
@@ -110,6 +112,7 @@ export function MagicMirror(props) {
 
         SpellsApiService.createOrUpdateSpellByUsernameAndSpellName(username, spellName, code)
         .then((res)=>{
+            console.log("Should set syncing to backend false")
             setSyncingToBackend(false)
             console.log(res)
         }).catch((err)=>{
@@ -129,6 +132,7 @@ export function MagicMirror(props) {
 
     return <>
     <div style={{height:40}}>{syncingToBackend ? "Saving..." : ""}</div>
+        <Typography>{props.name}</Typography>
         <ReactCodeMirror
             value={
                 starterCode || props.value
@@ -156,19 +160,33 @@ export function MagicMirror(props) {
                 setEditor(e)
             }}
         />
-        {!error ? "" :
-            <Alert severity="error" style={{ overflowX: "auto" }}>
-                {!errorLineNumber ? "" : <>Error on line {errorLineNumber}<br /></>}
-                <pre><code>{error}</code></pre>
-            </Alert>}
-        {response === undefined ? "" :
-            <Alert severity="success" style={{ overflowX: "auto" }}><pre><code>{response}</code></pre></Alert>}
-        {output === undefined ? "" :
-            <Alert severity="warning" style={{ overflowX: "auto" }}><pre><code>{output}</code></pre></Alert>}
+                <>
+                    {!error ? "" :
+                        <Alert severity="error" style={{ overflowX: "auto" }}>
+                            {!errorLineNumber ? "" : <>Error on line {errorLineNumber}<br /></>}
+                            <pre><code>{error}</code></pre>
+                        </Alert>}
+                    {response === undefined ? "" :
+                        <Alert severity="success" style={{ overflowX: "auto" }}><pre><code>{response}</code></pre></Alert>}
+                    {output === undefined ? "" :
+                        <Alert severity="warning" style={{ overflowX: "auto" }}><pre><code>{output}</code></pre></Alert>}
+                    <StdOutAndStdErr reloading={reloading} programName={props.name}/>
+                </>
         {props.hideButtons ? "" :
             <>
-                <CastButton color="secondary" variant="contained" code={includes()+code}
+                <CastButton 
+                    color="secondary" 
+                    variant="contained" 
+                    code={includes()+code}
+                    programName={props.name}
+                    onClick={()=> {
+                        setReloading(true)
+                        setError(undefined)
+                        setResponse(undefined)
+                        setOutput(undefined)
+                    }}
                     onReturn={(fromUnreal) => {
+                        setReloading(false)
                         setError(undefined)
                         setResponse(undefined)
                         setOutput(undefined)
